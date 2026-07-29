@@ -2,7 +2,7 @@
 
 **Free crypto paper-trading platform + interactive academy. Live markets in, zero real money out.**
 
-🌐 **Live app: [dexladder.com](https://dexladder.com)** · 𝕏 [@DexLadderApp](https://x.com/DexLadderApp) · ✉ dexladder@gmail.com
+🌐 **Live app: [dexladder.com](https://dexladder.com)** · 𝕏 [@dexladder](https://x.com/dexladder) · ✉ dexladder@gmail.com
 
 ---
 
