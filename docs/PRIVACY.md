@@ -34,5 +34,5 @@ Changes to this policy are listed in the public changelog inside the app, and th
 
 ## Contact
 
-[dexladder@gmail.com](mailto:dexladder@gmail.com) · [@DexLadderApp](https://x.com/DexLadderApp) · [github.com/dexladder](https://github.com/dexladder)
+[dexladder@gmail.com](mailto:dexladder@gmail.com) · [@dexladder](https://x.com/dexladder) · [github.com/dexladder](https://github.com/dexladder)
 DexLadder is an independent educational project. Built anonymously and gifted to the community. No company, no VC, no real money — ever.
