@@ -1,0 +1,139 @@
+/* v154m — vertical void killer.
+   A CSS grid row is as tall as its tallest cell, so a short card sitting beside
+   a tall one leaves the rest of its row empty. That is every hole left on the
+   page: Fear & Greed beside Global Market, the portfolio right column running
+   out of cards. Grid cannot pack that (masonry is not shipped anywhere yet), so
+   qualifying card bands are switched to CSS multi-column, which packs exactly.
+   Column count is inherited from what the grid had resolved, so the responsive
+   behaviour already tuned in CSS is preserved. */
+(function () {
+  "use strict";
+  if (window.__DLMSNRY) return; window.__DLMSNRY = 1;
+
+  var DENY = /\b(wrap|coin-grid|p2p-grid|comm-grid|p2xShell|dj-deck|mx-table|tbl-card|txn|blk-row|jrow|dcarow|botrow|alrow|entrow|identicon|dt-h|dt-r|p2x-row|p2x-bh|mx-seg|dl-tabs|nx-tabs|tabs|nav|tape|legend|pf-top)\b/;
+  var GAP = 14;
+
+  function voidOf(g) {
+    /* how much of the band's box is not covered by a child */
+    var r = g.getBoundingClientRect(), area = r.width * r.height;
+    if (area <= 0) return 0;
+    var covered = 0;
+    [].forEach.call(g.children, function (k) {
+      var kr = k.getBoundingClientRect();
+      covered += Math.max(0, kr.width) * Math.max(0, kr.height);
+    });
+    return Math.max(0, area - covered) / area;
+  }
+
+  function eligible(g) {
+    var cs = getComputedStyle(g);
+    if (cs.display.indexOf('grid') < 0) return false;
+    var cls = (g.className || '').toString() + ' ' + (g.id || '');
+    if (DENY.test(cls)) return false;
+    var r = g.getBoundingClientRect();
+    if (r.width < 420 || r.height < 140) return false;
+    var kids = [].filter.call(g.children, function (k) {
+      return getComputedStyle(k).display !== 'none' && k.getBoundingClientRect().height > 8;
+    });
+    if (kids.length < 2) return false;
+    /* a band of cards, not a layout scaffold */
+    var tables = kids.filter(function (k) { return k.querySelector('table'); }).length;
+    if (tables > 1) return false;
+    var hs = kids.map(function (k) { return k.getBoundingClientRect().height; });
+    if (Math.max.apply(null, hs) - Math.min.apply(null, hs) < 40) return false;
+    return voidOf(g) > 0.07;
+  }
+
+  function pack(g) {
+    var cs = getComputedStyle(g);
+    var cols = g.dataset.dlCols
+      ? +g.dataset.dlCols
+      : cs.gridTemplateColumns.split(' ').filter(Boolean).length;
+    if (!g.dataset.dlMsnry) {
+      g.dataset.dlMsnry = '1';
+      g.dataset.dlCols = cols;
+      g.dataset.dlPrevDisplay = g.style.display || '';
+    }
+    g.style.display = 'block';
+    g.style.columnCount = String(Math.max(2, Math.min(cols, 5)));
+    g.style.columnGap = GAP + 'px';
+    [].forEach.call(g.children, function (k) {
+      k.style.breakInside = 'avoid';
+      k.style.webkitColumnBreakInside = 'avoid';
+      k.style.pageBreakInside = 'avoid';
+      k.style.display = 'block';
+      k.style.width = '100%';
+      k.style.marginBottom = GAP + 'px';
+    });
+  }
+
+  function unpack(g) {
+    g.style.display = g.dataset.dlPrevDisplay || '';
+    g.style.columnCount = ''; g.style.columnGap = '';
+    [].forEach.call(g.children, function (k) {
+      k.style.breakInside = ''; k.style.webkitColumnBreakInside = '';
+      k.style.pageBreakInside = ''; k.style.display = '';
+      k.style.width = ''; k.style.marginBottom = '';
+    });
+    delete g.dataset.dlMsnry; delete g.dataset.dlCols;
+  }
+
+
+  /* The portfolio workbench splits cards by meaning, which leaves the shorter
+     column empty. Collect everything after the hero into one packed container
+     so column heights equalise. Reversible, and it keeps DOM order. */
+  function portfolio() {
+    var sec = document.querySelector('#page-portfolio > .wrap.section');
+    if (!sec) return;
+    if (innerWidth < 1200) {
+      var old = sec.querySelector(':scope > .dl-pf-pack');
+      if (old) { while (old.firstChild) sec.insertBefore(old.firstChild, old); old.remove(); }
+      return;
+    }
+    if (sec.querySelector(':scope > .dl-pf-pack')) return;
+    var kids = [].slice.call(sec.children);
+    var startAt = kids.findIndex(function (k) { return k.matches('.pf-top') || k.querySelector('.pf-top'); });
+    if (startAt < 0) return;
+    var tail = kids.slice(startAt).filter(function (k) { return k.nodeType === 1; });
+    if (tail.length < 3) return;
+    var box = document.createElement('div');
+    box.className = 'dl-pf-pack';
+    box.style.cssText = 'display:block;column-count:' + (innerWidth >= 1600 ? 3 : 2) + ';column-gap:16px;margin-top:14px';
+    sec.appendChild(box);
+    tail.forEach(function (k) {
+      k.style.gridColumn = '';
+      k.style.breakInside = 'avoid';
+      k.style.webkitColumnBreakInside = 'avoid';
+      k.style.display = 'block';
+      k.style.width = '100%';
+      k.style.marginBottom = '16px';
+      box.appendChild(k);
+    });
+  }
+
+  function run() {
+    portfolio();
+    var packed = [].slice.call(document.querySelectorAll('[data-dl-msnry]'));
+    packed.forEach(unpack);                       /* re-measure from the CSS truth */
+    var all = document.querySelectorAll('.page:not([hidden]) *, body > *');
+    var seen = [];
+    [].forEach.call(all, function (g) {
+      if (seen.indexOf(g) > -1) return;
+      if (!eligible(g)) return;
+      seen.push(g); pack(g);
+    });
+  }
+
+  var t;
+  function schedule() { clearTimeout(t); t = setTimeout(run, 160); }
+
+  function start() {
+    run();
+    addEventListener('resize', schedule, { passive: true });
+    try { new MutationObserver(schedule).observe(document.body, { childList: true, subtree: true }); } catch (e) {}
+    [600, 1800, 3600, 6000].forEach(function (ms) { setTimeout(run, ms); });
+  }
+
+  if (document.readyState === 'complete') setTimeout(start, 120);
+  else addEventListener('load', function () { setTimeout(start, 120); });
+})();

@@ -1,0 +1,104 @@
+/* ============================================================================
+   v154i — WIDE-VIEWPORT LAYOUT SYSTEM
+   The payload has 151 grid-template-columns declarations and essentially all of
+   them only have DOWNWARD breakpoints. At 1824px a repeat(3,1fr) hands each card
+   ~580px to hold one number, and a 3-tile stat strip occupies 917px of a 1768px
+   row, leaving 850px of nothing. Fix is structural, not per-component:
+   fixed column counts become intrinsic (auto-fit + minmax), so the same rule
+   yields 3 columns at 1280px and 6 at 2200px without another breakpoint.
+   ============================================================================ */
+
+/* ---- 1 · spacing + radius scale (one source, so panels stop disagreeing) ---- */
+:root{
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  --sp-6:24px; --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px;
+  --gutter:clamp(12px,1.1vw,20px);
+  --measure:74ch;
+}
+
+/* ---- 2 · stat / KPI strips: intrinsic, never 3 fat tiles on a wide screen ---- */
+@media (min-width:1100px){
+  .stat-strip,.kpis,.an-kpis,#anStats.an-kpis,.dlt-kpis,.dlq-kpis,.netstats,
+  .hq,.taxgrid,.desk-row,.mods,.optgreeks,.sn-stations,.sn-books,.movers,
+  .dlp-g,.dlr-head,.msig-keys,.gen-stats,.p2x-stats,.nx-strip{
+    grid-template-columns:repeat(auto-fit,minmax(190px,1fr))!important;
+    gap:var(--gutter)!important;
+  }
+  .stat-strip,.kpis,.an-kpis,.netstats,.hq{width:100%!important;max-width:none!important}
+}
+
+/* ---- 3 · card grids: 3-up and 4-up become intrinsic ---- */
+@media (min-width:1100px){
+  .news-grid,.concepts,.disc-grid,.rd-grid,.fam-grid,.xband,.tuberow,
+  .dlq-words,.dlq-phrase,.trk-grid,#cine-tracks .trk-grid,.kf-grid,
+  .kn-facts .kf-grid,.cbb-venues,.cbw-grid,.p2p-list,.sec-grid{
+    grid-template-columns:repeat(auto-fit,minmax(320px,1fr))!important;
+    gap:var(--gutter)!important;
+  }
+  #page-learn .speccards,#learnHub .speccards,.speccards{
+    grid-template-columns:repeat(auto-fit,minmax(300px,1fr))!important;
+    max-width:none!important;
+  }
+  #page-learn #learnHub{max-width:none!important}
+  .csvid-grid,#page-learn .csvid-grid{grid-template-columns:repeat(auto-fit,minmax(230px,1fr))!important}
+}
+
+/* ---- 4 · wide two-up blocks: split further instead of stretching ---- */
+@media (min-width:1500px){
+  #dlCycle,.dls-modes,.dlv-grid,.dlv-out,.willy-grid,.flash-grid,.vkgrid,
+  .lab-btns,.sltp,.two,#page-learn .two,.exp-cols,#gridRow .grange,
+  .cmc-stats,#mktpro .mx-glob,#wsbar,#mktpro .mx-right,.news-head{
+    grid-template-columns:repeat(auto-fit,minmax(420px,1fr))!important;
+    gap:var(--gutter)!important;
+  }
+  #dlQuest .qs{grid-template-columns:repeat(auto-fit,minmax(260px,1fr))!important}
+}
+
+/* ---- 5 · editorial splits get a third zone rather than two fat halves ---- */
+@media (min-width:1600px){
+  .mkt-hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:var(--sp-8)!important}
+  .news-lead,.disc-feat,.secband,.s3d-grid,.regrid,.cmp-grid,.course-dash,.pf-top{
+    grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)!important;gap:var(--sp-6)!important;
+  }
+  .pulse{grid-template-columns:repeat(auto-fit,minmax(360px,1fr))!important}
+  .coin-extra{grid-template-columns:repeat(auto-fit,minmax(340px,1fr))!important}
+}
+
+/* ---- 6 · fixed side rails become fluid; they were pinned for a 1340px shell ---- */
+@media (min-width:1400px){
+  .coin-grid{grid-template-columns:minmax(0,1fr) 8px clamp(356px,23vw,470px)!important}
+  .p2p-grid{grid-template-columns:minmax(0,1fr) clamp(300px,21vw,420px)!important}
+  .comm-grid{grid-template-columns:minmax(0,1fr) clamp(320px,21vw,440px)!important}
+  #p2xShell{grid-template-columns:clamp(272px,17vw,340px) minmax(0,1fr)!important}
+  .dj-deck{grid-template-columns:auto minmax(0,1fr) clamp(252px,17vw,330px)!important}
+  .sn-mine{grid-template-columns:minmax(0,1fr) clamp(240px,17vw,320px)!important}
+  .sn-route{grid-template-columns:minmax(0,1fr) clamp(230px,16vw,310px)!important}
+  .sn-tok{grid-template-columns:clamp(250px,17vw,320px) minmax(0,1fr)!important}
+  .kn-cmp{grid-template-columns:clamp(218px,15vw,300px) minmax(0,1fr)!important}
+  #mktpro .mx-top{grid-template-columns:minmax(210px,280px) minmax(0,1fr) minmax(220px,340px)!important}
+}
+
+/* ---- 7 · measure caps: prose must not run 1700px ---- */
+@media (min-width:1100px){
+  .page p:not([class]),.page .why,.page .lh-src,.page .sub,.page .lede,
+  .page .note,.page .hint,.page .cap,.page blockquote{
+    max-width:var(--measure);
+  }
+  .page .why,.page .lh-src{max-width:88ch}
+}
+
+/* ---- 8 · vertical rhythm + optical alignment across panel families ---- */
+@media (min-width:1100px){
+  .section{padding-block:var(--sp-8)}
+  .section+.section{padding-top:var(--sp-6)}
+  .card,.panel,.gr-panel,.nv-card,.spec,.trk,.tbl-card{
+    border-radius:var(--gr-r-panel,16px);
+  }
+  /* panels sitting in the same row match height so their bottom edges line up */
+  .stat-strip>*,.kpis>*,.an-kpis>*,.netstats>*,.hq>*,.movers>*,
+  .news-grid>*,.disc-grid>*,.rd-grid>*,.fam-grid>*,.concepts>*,.speccards>*{
+    height:100%;
+  }
+  .stat-strip,.kpis,.an-kpis,.netstats,.hq,.movers,.news-grid,
+  .disc-grid,.rd-grid,.fam-grid,.concepts,.speccards{align-items:stretch}
+}

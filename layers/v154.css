@@ -1,0 +1,920 @@
+/* v154 — shared chrome for the new desks (mirrors the on-chain hub look) */
+.dls{position:fixed;inset:0;z-index:4310;display:none;flex-direction:column;background:radial-gradient(120% 80% at 50% -10%,#0b1426,#070a12 60%);color:#e7edf8}
+.dls.on{display:flex}
+html[data-mode="day"] .dls{background:radial-gradient(120% 80% at 50% -10%,#fffdf8,#f3efe7 60%);color:#141a26}
+.dls-head{display:flex;align-items:center;gap:10px;padding:14px clamp(12px,4vw,22px);border-bottom:1px solid var(--gr-hl,rgba(148,163,199,.14))}
+.dls-head .dls-t{flex:1;font:800 16px var(--cmc-sans,sans-serif)}
+.dls-head .dls-sub{font:500 11.5px var(--cmc-sans,sans-serif);color:var(--txt-3,#7c8598);max-width:46%;text-align:right}
+.dls-x{width:38px;height:38px;min-height:38px;border-radius:11px;border:1px solid var(--gr-hl,rgba(148,163,199,.14));background:rgba(255,255,255,.05);color:#b9c6de;font-size:15px;cursor:pointer}
+html[data-mode="day"] .dls-x{background:rgba(0,0,0,.04);color:#333}
+.dls-tabs{display:flex;gap:2px;padding:6px clamp(10px,4vw,20px) 0;overflow-x:auto;scrollbar-width:none;border-bottom:1px solid var(--gr-hl,rgba(148,163,199,.14))}
+.dls-tabs::-webkit-scrollbar{display:none}
+.dls-tabs button{position:relative;flex:none;min-height:44px;padding:0 15px;border:0;background:0 0;cursor:pointer;font:600 13.5px var(--cmc-sans,sans-serif);color:#8b97ad;white-space:nowrap}
+.dls-tabs button.on{color:#fff}
+html[data-mode="day"] .dls-tabs button.on{color:#111}
+.dls-tabs button.on::after{content:"";position:absolute;left:10px;right:10px;bottom:0;height:3px;border-radius:3px 3px 0 0;background:linear-gradient(90deg,var(--cyan),var(--indigo,#5b7cff))}
+.dls-body{flex:1;overflow-y:auto;overscroll-behavior:contain;padding:clamp(12px,4vw,20px) clamp(12px,4vw,20px) 70px;scrollbar-width:thin}
+body.dls-open{overflow:hidden}
+/* chips / pills / provenance */
+.dl-chips{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 12px}
+.dl-chip{flex:none;min-height:34px;padding:0 13px;border-radius:999px;border:1px solid var(--gr-hl,rgba(148,163,199,.14));background:var(--gr-srf,rgba(255,255,255,.035));color:var(--muted);font:600 12px var(--cmc-sans,sans-serif);cursor:pointer;white-space:nowrap}
+.dl-chip.on{background:var(--gr-lift,rgba(255,255,255,.09));color:#fff;border-color:color-mix(in srgb,var(--cyan) 45%,transparent)}
+html[data-mode="day"] .dl-chip{background:rgba(0,0,0,.04);color:#3a4256}html[data-mode="day"] .dl-chip.on{background:rgba(0,0,0,.09);color:#111}
+.dl-prov{display:inline-flex;align-items:center;gap:6px;font:600 10.5px var(--mono,ui-monospace,monospace);letter-spacing:.02em;padding:2px 8px;border-radius:999px;border:1px solid var(--gr-hl,rgba(148,163,199,.14));color:var(--muted);background:rgba(255,255,255,.03);white-space:nowrap}
+.dl-prov::before{content:"";width:6px;height:6px;border-radius:50%;background:#7c8598}
+.dl-prov.live::before{background:#00E676;box-shadow:0 0 6px #00E676}
+.dl-prov.recent::before{background:#FFB300}
+.dl-prov.stale::before{background:#FF5252}
+.dl-prov.stale{color:#c98a8a}
+.dl-sim{display:inline-block;font:700 10px var(--cmc-sans,sans-serif);letter-spacing:.06em;text-transform:uppercase;padding:2px 7px;border-radius:6px;border:1px solid rgba(255,179,0,.4);color:#FFB300;background:rgba(255,179,0,.08);margin-left:6px;vertical-align:middle}
+/* cards on the rails */
+.dl154{margin:12px 0;padding:14px;border-radius:14px;border:1px solid var(--gr-hl,rgba(148,163,199,.14));background:var(--gr-srf,rgba(255,255,255,.03))}
+.dl154 .h{display:flex;align-items:center;gap:8px;font:800 13px var(--cmc-sans,sans-serif);margin-bottom:8px}
+.dl154 .h .sp{flex:1}
+.dl154 .h button,.dl-b{min-height:30px;padding:0 11px;border-radius:9px;border:1px solid var(--gr-hl,rgba(148,163,199,.14));background:rgba(255,255,255,.05);color:#b9c6de;font:600 11.5px var(--cmc-sans,sans-serif);cursor:pointer}
+.dl-b.pri{background:linear-gradient(135deg,var(--cyan),var(--indigo,#5b7cff));color:#04121c;border:0;font-weight:800}
+.dl-b.warn{border-color:rgba(255,82,82,.5);color:#ff8a8a}
+.dl-b:disabled{opacity:.45;cursor:default}
+html[data-mode="day"] .dl154 .h button,html[data-mode="day"] .dl-b{background:rgba(0,0,0,.04);color:#333}
+.dl154 .n{font:500 10.5px var(--cmc-sans,sans-serif);color:var(--muted);margin-top:9px}
+.dl154 .kv{display:flex;justify-content:space-between;gap:10px;font:500 12.5px var(--cmc-sans,sans-serif);padding:4px 0;border-bottom:1px dashed var(--gr-hl2,rgba(148,163,199,.08))}
+.dl154 .kv b{font-variant-numeric:tabular-nums}
+.dl154 .up,.dl-tbl .up,.dl-row .up{color:var(--up)}.dl154 .dn,.dl-tbl .dn,.dl-row .dn{color:var(--down)}
+.dl-gauge{height:8px;border-radius:99px;background:linear-gradient(90deg,#ff6b87,#ffb300,#3ae58f);position:relative;margin:8px 0}
+.dl-gauge i{position:absolute;top:-4px;width:16px;height:16px;border-radius:50%;background:#fff;border:2px solid #0b1426;transform:translateX(-50%)}
+/* tables */
+.dl-tblw{overflow-x:auto;border:1px solid var(--gr-hl,rgba(148,163,199,.14));border-radius:12px}
+.dl-tbl{width:100%;border-collapse:collapse;font:500 12.5px var(--cmc-sans,sans-serif)}
+.dl-tbl th{position:sticky;top:0;background:#0d1524;color:#8b97ad;font:700 10.5px var(--cmc-sans,sans-serif);letter-spacing:.08em;text-transform:uppercase;text-align:left;padding:9px 10px;border-bottom:1px solid var(--gr-hl,rgba(148,163,199,.14));white-space:nowrap}
+html[data-mode="day"] .dl-tbl th{background:#ece7dd;color:#4a5266}
+.dl-tbl td{padding:9px 10px;border-bottom:1px solid var(--gr-hl2,rgba(148,163,199,.08));vertical-align:middle;font-variant-numeric:tabular-nums;white-space:nowrap}
+.dl-tbl tr.click{cursor:pointer}.dl-tbl tr.click:hover td{background:rgba(255,255,255,.03)}
+.dl-tbl td.r{text-align:right}
+.dl-mini{display:inline-block;height:6px;border-radius:99px;background:linear-gradient(90deg,var(--cyan),var(--indigo,#5b7cff));vertical-align:middle}
+/* formula / method box */
+.dl-formula{font:500 11.5px var(--mono,ui-monospace,monospace);color:var(--muted);background:rgba(255,255,255,.03);border:1px dashed var(--gr-hl,rgba(148,163,199,.14));border-radius:10px;padding:9px 11px;margin-top:10px;white-space:pre-wrap}
+/* toggles */
+.dl-tog{display:inline-flex;align-items:center;gap:6px;font:600 11.5px var(--cmc-sans,sans-serif);color:var(--muted);cursor:pointer}
+.dl-tog input{accent-color:var(--cyan)}
+/* pool candles canvas */
+.dl-cv{width:100%;height:220px;display:block;border-radius:12px;background:rgba(255,255,255,.02);border:1px solid var(--gr-hl,rgba(148,163,199,.14))}
+/* two-col */
+.dl-2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+@media(max-width:640px){.dl-2{grid-template-columns:1fr}}
+/* inputs */
+.dl-inp{min-height:40px;padding:0 12px;border-radius:10px;border:1px solid var(--gr-hl,rgba(148,163,199,.14));background:rgba(255,255,255,.05);color:#eaf2ff;font:600 13px var(--cmc-sans,sans-serif);width:100%}
+html[data-mode="day"] .dl-inp{background:#fff;color:#111}
+select.dl-inp{background:#0e1524}html[data-mode="day"] select.dl-inp{background:#fff}
+/* DeXaI */
+.dx-read .why{margin:6px 0}
+.dx-read .cite{font:600 11px var(--cmc-sans,sans-serif);color:#8fd9ff;text-decoration:none;margin-right:6px}
+.dx-read .cite:hover{text-decoration:underline}
+.dx-slot{font-variant-numeric:tabular-nums;font-weight:700;color:#dff7ff}
+.dx-chips{display:flex;gap:6px;flex-wrap:wrap;margin:8px 0 2px}
+.dx-chips button{flex:none;min-height:30px;padding:0 11px;border-radius:999px;border:1px solid color-mix(in srgb,var(--cyan) 35%,transparent);background:color-mix(in srgb,var(--cyan) 7%,transparent);color:#bfe9ff;font:600 11.5px var(--cmc-sans,sans-serif);cursor:pointer}
+.dx-bar{display:flex;gap:6px;align-items:center;padding:6px 10px;border-bottom:1px solid rgba(148,163,199,.12);font:600 11px var(--cmc-sans,sans-serif);color:#8fa4c4;flex-wrap:wrap}
+.dx-bar .seg{display:inline-flex;border:1px solid rgba(148,163,199,.18);border-radius:999px;overflow:hidden}
+.dx-bar .seg button{border:0;background:0 0;color:#8fa4c4;padding:4px 9px;font:600 11px var(--cmc-sans,sans-serif);cursor:pointer}
+.dx-bar .seg button.on{background:rgba(0,229,255,.16);color:#dff7ff}
+.dx-tool{display:inline-block;font:600 10px var(--mono,ui-monospace,monospace);padding:2px 7px;border-radius:6px;background:rgba(91,124,255,.12);border:1px solid rgba(91,124,255,.3);color:#b8c6ff;margin:0 4px 4px 0}
+.dx-foot{font:500 10.5px var(--cmc-sans,sans-serif);color:var(--muted);margin-top:8px}
+.dx-conf{margin-top:8px;padding:10px;border-radius:10px;border:1px solid rgba(255,179,0,.4);background:rgba(255,179,0,.06);font:600 12px var(--cmc-sans,sans-serif)}
+.dx-conf button{margin:6px 6px 0 0}
+/* ---- DeXaI v154 ---- */
+.dx-read p.why{margin:5px 0;font:500 13px/1.55 var(--cmc-sans,sans-serif);color:var(--txt-2,#c3cde0)}
+.dx-read p.why b,.dx-read p.why i{color:#eaf2ff}
+.dx-prose{margin:0 0 8px;padding:8px 10px;border-left:2px solid color-mix(in srgb,var(--indigo,#5b7cff) 60%,transparent);background:rgba(91,124,255,.06);border-radius:0 10px 10px 0;font:500 13px/1.55 var(--cmc-sans,sans-serif);color:#d7e1f2}
+.dx-slot{font-variant-numeric:tabular-nums;font-weight:700;color:#dff7ff;border-bottom:1px dotted rgba(143,217,255,.55);cursor:help;white-space:normal;overflow-wrap:anywhere}
+.dx-slot .up{color:var(--up)}.dx-slot .dn{color:var(--down)}
+.dx-unsrc{color:#ff6b87;text-decoration:line-through;opacity:.8;cursor:help}
+.dx-tag{display:inline-block;font:700 10px var(--mono,ui-monospace,monospace);padding:2px 7px;border-radius:6px;background:rgba(255,107,135,.12);border:1px solid rgba(255,107,135,.35);color:#ffb3c2;margin:0 4px 2px 0;text-transform:uppercase;letter-spacing:.4px}
+.dx-tag.ok{background:rgba(58,229,143,.1);border-color:rgba(58,229,143,.35);color:#9af2c4}
+#dxBar select{border:1px solid rgba(148,163,199,.18);border-radius:999px;background:rgba(255,255,255,.03);color:#8fa4c4;font:600 11px var(--cmc-sans,sans-serif);padding:3px 8px}
+#dxBar span[title="provider"]{font:600 10px var(--mono,ui-monospace,monospace);color:var(--muted)}
+#dlCoinAI.dx .h{display:flex;align-items:center}
+#dlCoinAI.dx button.ask{margin-right:0}
+#dxMarketCard .dx-read p.why{font-size:12.5px}
+#dxTutor{padding:10px 12px;border-radius:12px;border:1px dashed color-mix(in srgb,var(--cyan) 35%,transparent);background:color-mix(in srgb,var(--cyan) 4%,transparent)}
+.dx-brief{margin-top:10px;padding-top:8px;border-top:1px dashed var(--gr-hl2,rgba(148,163,199,.2))}
+.dx-brief .dl-chips{margin:4px 0}
+.nxc-m.a .dx-read a{color:#8fd9ff}
+html[data-mode="day"] .dx-read p.why{color:#3b4660}
+html[data-mode="day"] .dx-read p.why b,html[data-mode="day"] .dx-read p.why i{color:#111827}
+html[data-mode="day"] .dx-slot{color:#0b4f6c;border-bottom-color:rgba(11,79,108,.45)}
+html[data-mode="day"] .dx-prose{color:#25304a;background:rgba(91,124,255,.08)}
+@media (max-width:700px){.dx-bar{gap:4px;padding:6px 8px}.dx-bar .seg button{padding:4px 7px;font-size:10.5px}}
+
+.dx-read.dx-fold p.why:nth-of-type(n+4){display:none}
+.dx-gear{border:1px solid rgba(148,163,199,.18);border-radius:999px;background:rgba(255,255,255,.03);color:#8fa4c4;font:600 11px var(--cmc-sans,sans-serif);padding:4px 10px;cursor:pointer;display:none}
+.dx-sets{display:contents}
+@media (max-width:700px){.dx-gear{display:inline-block}.dx-bar:not(.open) .dx-sets{display:none}.dx-bar.open .dx-sets{display:flex;flex-wrap:wrap;gap:6px;width:100%}.dx-bar span[title="provider"]{display:none}.dx-bar.open span[title="provider"]{display:inline}}
+
+/* ---- v154c · two-mode theme system (Day + Night) ------------------------------- */
+/* Cross-fade only on a real user switch; modeSet adds .dl-theming for 280ms and never
+   during boot, so there is no first-paint flash to transition. */
+html.dl-theming,html.dl-theming body,
+html.dl-theming .card,html.dl-theming .mx-panel,html.dl-theming .tbl-card,
+html.dl-theming .stat,html.dl-theming header.nav,html.dl-theming .nav,
+html.dl-theming .tape,html.dl-theming section.sv82,html.dl-theming .cbw-card{
+  transition:background-color .24s ease,border-color .24s ease,color .24s ease}
+@media(prefers-reduced-motion:reduce){html.dl-theming,html.dl-theming *{transition:none!important}}
+/* the retired Vibe dot strip leaves no orphan void */
+#vibes{display:none!important}
+/* the mode chip is a real two-state toggle now, not a menu opener */
+#modeChip{font-size:14px;line-height:1;cursor:pointer}
+#modeChip:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+
+/* v154f — wide layout. The shell capped content at 1340px, so a 1900px display showed
+   ~280px of dead gutter each side. Fluid container, denser rhythm, more columns as width allows. */
+@media (min-width:1200px){
+  .wrap{max-width:min(1720px,94vw)!important;padding-left:clamp(16px,1.9vw,32px)!important;padding-right:clamp(16px,1.9vw,32px)!important}
+}
+@media (min-width:1500px){
+  #page-learn #learnHub,#page-learn .speccards{max-width:none!important}
+  #page-learn .speccards{grid-template-columns:repeat(4,1fr)!important}
+  .cards,.gcards,.speccards{gap:16px!important}
+}
+@media (min-width:1700px){
+  .wrap{max-width:min(1860px,95vw)!important}
+}
+/* tables and market rows should use the width they are given, not a nested cap */
+@media (min-width:1200px){
+  .mx-table,.mxt,table.mx,.dl-table,#mxRows,#mxMoversHost,#mxRecentHost{max-width:none!important;width:100%!important}
+  .section>.card,.section>.panel{width:100%!important}
+}
+/* ============================================================================
+   v154i — WIDE-VIEWPORT LAYOUT SYSTEM
+   The payload has 151 grid-template-columns declarations and essentially all of
+   them only have DOWNWARD breakpoints. At 1824px a repeat(3,1fr) hands each card
+   ~580px to hold one number, and a 3-tile stat strip occupies 917px of a 1768px
+   row, leaving 850px of nothing. Fix is structural, not per-component:
+   fixed column counts become intrinsic (auto-fit + minmax), so the same rule
+   yields 3 columns at 1280px and 6 at 2200px without another breakpoint.
+   ============================================================================ */
+
+/* ---- 1 · spacing + radius scale (one source, so panels stop disagreeing) ---- */
+:root{
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:20px;
+  --sp-6:24px; --sp-8:32px; --sp-10:40px; --sp-12:48px; --sp-16:64px;
+  --gutter:clamp(12px,1.1vw,20px);
+  --measure:74ch;
+}
+
+/* ---- 2 · stat / KPI strips: intrinsic, never 3 fat tiles on a wide screen ---- */
+@media (min-width:1100px){
+  .stat-strip,.kpis,.an-kpis,#anStats.an-kpis,.dlt-kpis,.dlq-kpis,.netstats,
+  .hq,.taxgrid,.desk-row,.mods,.optgreeks,.sn-stations,.sn-books,.movers,
+  .dlp-g,.dlr-head,.msig-keys,.gen-stats,.p2x-stats,.nx-strip{
+    grid-template-columns:repeat(auto-fit,minmax(min(190px,100%),1fr))!important;
+    gap:var(--gutter)!important;
+  }
+  .stat-strip,.kpis,.an-kpis,.netstats,.hq{width:100%!important;max-width:none!important}
+}
+
+/* ---- 3 · card grids: 3-up and 4-up become intrinsic ---- */
+@media (min-width:1100px){
+  .news-grid,.concepts,.disc-grid,.rd-grid,.fam-grid,.xband,.tuberow,
+  .dlq-words,.dlq-phrase,.trk-grid,#cine-tracks .trk-grid,.kf-grid,
+  .kn-facts .kf-grid,.cbb-venues,.cbw-grid,.p2p-list,.sec-grid{
+    grid-template-columns:repeat(auto-fit,minmax(min(320px,100%),1fr))!important;
+    gap:var(--gutter)!important;
+  }
+  #page-learn .speccards,#learnHub .speccards,.speccards{
+    grid-template-columns:repeat(auto-fit,minmax(min(300px,100%),1fr))!important;
+    max-width:none!important;
+  }
+  #page-learn #learnHub{max-width:none!important}
+  .csvid-grid,#page-learn .csvid-grid{grid-template-columns:repeat(auto-fit,minmax(min(230px,100%),1fr))!important}
+}
+
+/* ---- 4 · wide two-up blocks: split further instead of stretching ---- */
+@media (min-width:1500px){
+  #dlCycle,.dls-modes,.dlv-grid,.dlv-out,.willy-grid,.flash-grid,.vkgrid,
+  .lab-btns,.sltp,.two,#page-learn .two,.exp-cols,#gridRow .grange,
+  .cmc-stats,#wsbar,#mktpro .mx-right,.news-head{
+    grid-template-columns:repeat(auto-fit,minmax(min(420px,100%),1fr))!important;
+    gap:var(--gutter)!important;
+  }
+  #dlQuest .qs{grid-template-columns:repeat(auto-fit,minmax(min(260px,100%),1fr))!important}
+}
+
+/* ---- 5 · editorial splits get a third zone rather than two fat halves ---- */
+@media (min-width:1600px){
+  .mkt-hero{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;gap:var(--sp-8)!important}
+  .news-lead,.disc-feat,.secband,.s3d-grid,.regrid,.cmp-grid,.course-dash,.pf-top{
+    grid-template-columns:minmax(0,1.35fr) minmax(0,1fr)!important;gap:var(--sp-6)!important;
+  }
+  .pulse{grid-template-columns:repeat(auto-fit,minmax(min(360px,100%),1fr))!important}
+  .coin-extra{grid-template-columns:repeat(auto-fit,minmax(min(340px,100%),1fr))!important}
+}
+
+/* ---- 6 · fixed side rails become fluid; they were pinned for a 1340px shell ---- */
+@media (min-width:1400px){
+  .coin-grid{grid-template-columns:minmax(0,1fr) 8px clamp(356px,23vw,470px)!important}
+  .p2p-grid{grid-template-columns:minmax(0,1fr) clamp(300px,21vw,420px)!important}
+  .comm-grid{grid-template-columns:minmax(0,1fr) clamp(320px,21vw,440px)!important}
+  #p2xShell{grid-template-columns:clamp(272px,17vw,340px) minmax(0,1fr)!important}
+  .dj-deck{grid-template-columns:auto minmax(0,1fr) clamp(252px,17vw,330px)!important}
+  .sn-mine{grid-template-columns:minmax(0,1fr) clamp(240px,17vw,320px)!important}
+  .sn-route{grid-template-columns:minmax(0,1fr) clamp(230px,16vw,310px)!important}
+  .sn-tok{grid-template-columns:clamp(250px,17vw,320px) minmax(0,1fr)!important}
+  .kn-cmp{grid-template-columns:clamp(218px,15vw,300px) minmax(0,1fr)!important}
+  #mktpro .mx-top{grid-template-columns:minmax(210px,280px) minmax(0,1fr) minmax(220px,340px)!important}
+}
+
+/* ---- 7 · measure caps: prose must not run 1700px ---- */
+@media (min-width:1100px){
+  .page p:not([class]),.page .why,.page .lh-src,.page .sub,.page .lede,
+  .page .note,.page .hint,.page .cap,.page blockquote{
+    max-width:var(--measure);
+  }
+  .page .why,.page .lh-src{max-width:88ch}
+}
+
+/* ---- 8 · vertical rhythm + optical alignment across panel families ---- */
+@media (min-width:1100px){
+  .section{padding-block:var(--sp-8)}
+  .section+.section{padding-top:var(--sp-6)}
+  .card,.panel,.gr-panel,.nv-card,.spec,.trk,.tbl-card{
+    border-radius:var(--gr-r-panel,16px);
+  }
+  /* panels sitting in the same row match height so their bottom edges line up */
+  .stat-strip>*,.kpis>*,.an-kpis>*,.netstats>*,.hq>*,.movers>*,
+  .news-grid>*,.disc-grid>*,.rd-grid>*,.fam-grid>*,.concepts>*,.speccards>*,
+  #mktpro .mx-top>*,.pulse>*,.front-pkg>*,.mkt-hero>*,.sec-grid>*,.cbb-venues>*{
+    height:100%;
+  }
+  .stat-strip,.kpis,.an-kpis,.netstats,.hq,.movers,.news-grid,
+  .disc-grid,.rd-grid,.fam-grid,.concepts,.speccards,
+  #mktpro .mx-top,.pulse,.front-pkg,.mkt-hero,.sec-grid,.cbb-venues{align-items:stretch!important}
+}
+
+/* v154j — tall side rails stop looking abandoned: they travel with the scroll */
+@media (min-width:1200px){
+  .coin-grid>aside,.coin-grid>.side,.p2p-grid>aside,.comm-grid>aside,
+  .comm-grid>.side,#mktpro .mx-right{
+    position:sticky; top:96px; align-self:start;
+  }
+}
+
+/* ===== v154l · PORTFOLIO — curation, rhythm, motion ======================== */
+@media (min-width:1400px){
+  #page-portfolio>.wrap.section{
+    display:grid;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);
+    column-gap:18px;align-items:start;
+  }
+  #page-portfolio .pf-top{grid-template-columns:minmax(0,1.45fr) minmax(0,1fr)!important;gap:18px}
+}
+/* hero reads as the headline number, not another card */
+#page-portfolio .pf-hero{
+  position:relative;overflow:hidden;
+  background:
+    radial-gradient(120% 160% at 0% 0%, color-mix(in srgb,var(--cyan) 12%,transparent), transparent 58%),
+    radial-gradient(120% 160% at 100% 100%, color-mix(in srgb,var(--indigo) 14%,transparent), transparent 60%),
+    var(--surface);
+  border:1px solid var(--line-2);
+}
+#page-portfolio .pf-hero .big{font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+#page-portfolio .pf-hero .k{letter-spacing:.10em;text-transform:uppercase;font-size:11px;color:var(--muted);font-weight:700}
+#page-portfolio .pf-actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+#page-portfolio .an-kpis>*{
+  background:var(--surface-2);border:1px solid var(--line);border-radius:var(--r-sm,12px);
+  padding:12px 14px;transition:border-color .18s ease,transform .18s ease;
+}
+#page-portfolio .an-kpis>*:hover{border-color:var(--line-2);transform:translateY(-1px)}
+#page-portfolio table td,#page-portfolio table th{font-variant-numeric:tabular-nums}
+#page-portfolio tbody tr{transition:background .16s ease}
+#page-portfolio tbody tr:hover{background:var(--surface-2)}
+#page-portfolio .card+.card{margin-top:14px}
+
+/* motion — every rule below is switched off under prefers-reduced-motion */
+@media (prefers-reduced-motion:no-preference){
+  #page-portfolio .dlpf-rise{opacity:0;transform:translateY(10px);
+    transition:opacity .42s var(--smooth,ease),transform .42s var(--smooth,ease);transition-delay:var(--dlpf-d,0ms)}
+  #page-portfolio .dlpf-rise.dlpf-in{opacity:1;transform:none}
+  #page-portfolio .dlpf-row{animation:dlpfRow .34s var(--smooth,ease) both;animation-delay:var(--dlpf-d,0ms)}
+  @keyframes dlpfRow{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+  #page-portfolio .dlpf-draw{animation:dlpfDraw .7s var(--smooth,ease) both}
+  @keyframes dlpfDraw{from{opacity:0;clip-path:inset(0 100% 0 0)}to{opacity:1;clip-path:inset(0 0 0 0)}}
+  #pf-total.dlpf-up{animation:dlpfUp .5s ease}
+  #pf-total.dlpf-dn{animation:dlpfDn .5s ease}
+  @keyframes dlpfUp{0%{color:var(--up);text-shadow:0 0 18px color-mix(in srgb,var(--up) 45%,transparent)}100%{color:inherit;text-shadow:none}}
+  @keyframes dlpfDn{0%{color:var(--down);text-shadow:0 0 18px color-mix(in srgb,var(--down) 45%,transparent)}100%{color:inherit;text-shadow:none}}
+}
+
+/* v155-C · the canonical snapshot's universe qualifier.
+   Every displayed market figure names the universe it was measured over, so a
+   tracked-set sum can never again render under the same label as a whole-market
+   one. No new colour tokens: --muted on --surface-2 is the pair the bars already
+   uses, and the freshness chip reuses .dl-prov.live/.recent/.stale unchanged. */
+.gs-u{display:inline-flex;align-items:center;font:600 10px var(--cmc-sans,var(--body));
+  letter-spacing:.04em;text-transform:uppercase;padding:1px 6px;border-radius:5px;
+  border:1px solid var(--line);color:var(--muted);background:var(--surface-2);
+  white-space:nowrap;vertical-align:middle}
+.dl-snapfoot{display:flex;flex-wrap:wrap;align-items:center;gap:8px;
+  grid-column:1/-1;margin-top:8px}
+
+/* v155-E · uncertainty is surfaced, never hidden.
+   .dl-age  the part of a provenance chip provRefresh() rewrites; it must inherit,
+            so the chip's own colour (live/recent/stale/contested) still governs.
+   .dl-prov.contested  the witnesses behind this figure do not agree. The chip keeps
+            its freshness word — freshness and agreement are orthogonal facts — and
+            takes the --down foreground plus a --down dot, so it can no longer read
+            as the clean green "live" it used to.
+   .dl-dis / .dl-flag  the mark that travels WITH the figure at the point of display.
+   .dl-src  a figure on a strip whose witness list is not the strip chip's.
+   Colours are tokens only: --down on --down-soft is the pair the a11y pass already
+   proved in both modes (night 5.16 after the #FF7A7A re-cast, day 4.64), and
+   --muted on --surface-2 is the pair .gs-u beside it already uses. */
+.dl-age{display:inline;color:inherit;font:inherit}
+.dl-prov.contested{color:var(--down)}
+.dl-prov.contested::before{background:var(--down);box-shadow:none}
+.dl-dis,.dl-flag{display:inline-flex;align-items:center;gap:3px;
+  font:700 10px var(--cmc-sans,var(--body));letter-spacing:.02em;
+  padding:1px 6px;border-radius:5px;margin-left:6px;vertical-align:middle;
+  border:1px solid var(--down);color:var(--down);background:var(--down-soft);
+  white-space:nowrap;cursor:help}
+.dl-src{display:inline-flex;align-items:center;font:600 10px var(--cmc-sans,var(--body));
+  letter-spacing:.02em;padding:1px 6px;border-radius:5px;margin-left:6px;
+  border:1px solid var(--line);color:var(--muted);background:var(--surface-2);
+  white-space:nowrap;vertical-align:middle;cursor:help}
+
+/* ============================================================================
+   v154i — accent text that sits on a tint of itself.
+
+   A dozen surfaces share one pattern: a per-item accent hue is used BOTH as the
+   text colour and, at 12-20%, as the chip behind it — `.nx-tv-tag` is the clearest
+   case, `color:var(--tvc)` on `color-mix(var(--tvc) 15%, transparent)`. On a dark
+   panel that reads. In Day the panel is white, so the chip is a near-white wash and
+   the saturated accent lands at 1.4-2.2 on it. The accent never passed through the
+   token system, so no token check could see it, and it is set per item, so no static
+   substitution can name the colour.
+
+   The fix stays on the accent's own hue and moves lightness only: in Day mix the
+   accent toward ink, in Night toward paper. The mix percentages are the ones that
+   clear 4.5 for the LIGHTEST accent in the set (cyan #00E5FF in Day, violet #8B5CF6
+   in Night); every other hue in the set clears by more.
+   ========================================================================= */
+
+html[data-mode=day] .nx-tv-tag,
+html[data-mode=day] .nx-tv-pos .pg,
+html[data-mode=day] .nx-tv-pos .pm{color:color-mix(in srgb,var(--tvc,#8b5cf6) 46%,#0B1220)!important}
+html[data-mode=day] #cine-tracks .trk-head .tg,
+html[data-mode=day] #cine-tracks .acard .ast{color:color-mix(in srgb,var(--ta,#00dcff) 46%,#0B1220)!important}
+html[data-mode=day] .kick{color:color-mix(in srgb,var(--kc,var(--cyan)) 46%,#0B1220)!important}
+html[data-mode=day] .nxd-post .r{color:color-mix(in srgb,#ff8a5c 46%,#0B1220)!important}
+html[data-mode=day] .pp-lo{color:color-mix(in srgb,#2ec16a 46%,#0B1220)!important}
+html[data-mode=day] .pp-mid{color:color-mix(in srgb,#3a97e8 46%,#0B1220)!important}
+html[data-mode=day] .pp-hi{color:color-mix(in srgb,#e8a33d 46%,#0B1220)!important}
+html[data-mode=day] .dx-tool{color:var(--indigo)!important}
+
+/* In Night the same accents sit on a 12-20% tint over a near-black panel, which lifts
+   the chip enough that the darker accents (violet #8B5CF6 = 4.24) fall just under.
+   Same hue, lightness only, in the other direction. */
+html:not([data-mode=day]) .nx-tv-tag,
+html:not([data-mode=day]) #cine-tracks .trk-head .tg,
+html:not([data-mode=day]) #cine-tracks .acard .ast,
+html:not([data-mode=day]) .atag,
+html:not([data-mode=day]) .kick{color:color-mix(in srgb,var(--tvc,var(--ta,var(--kc,#8b5cf6))) 70%,#FFFFFF)!important}
+
+/* The "go" link on each Academy card carried its own hand-picked hue, eight of which
+   were chosen against a dark card and are 1.8-3.5 on the Day card. They are one
+   repeated call to action, so in Day they take the one accent the tokens already
+   guarantee on a light surface. */
+html[data-mode=day] #page-learn .spec .sgo,
+html[data-mode=day] .spec .sgo,
+html[data-mode=day] #sqSeed .sgo,
+html[data-mode=day] #sqFee .sgo{color:color-mix(in srgb,var(--sa,var(--indigo)) 46%,#0B1220)!important}
+
+/* Accents these rules cannot reach: the chip's colour is written inline by script
+   (`<span class="p2av" style="background:<hue>22;color:<hue>">`), so no stylesheet can
+   read the hue to mix it. The chip keeps its hue; the glyph on it takes ink, which is
+   legible on every tint in the set. */
+html[data-mode=day] .p2av,
+html[data-mode=day] .dj-box b,
+html[data-mode=day] #mktpro .mx-fg .g-num,
+html[data-mode=day] .fng-val b{color:var(--ink)!important}
+
+/* `.badge2026` declares `color:#0a0f18` on a lime->cyan gradient — correct in both
+   modes — but a later muted rule outranked it, so the badge rendered mid-grey on a
+   bright fill (1.46). Restore the colour the badge already asked for. */
+.badge2026{color:#0A0F18!important}
+
+/* Two "on"-state chips fill with a bright brand colour and kept white text (1.54 / 1.72). */
+.src-chip.on,.src-chip.on span,#chainTog button.on{color:#04121B!important}
+
+/* In Day `--brand` resolves to a DARK gradient (#00728F -> #2F4BD0), so the dark text
+   these two were given for the Night gradient inverts: 2.74 and 2.32. */
+html[data-mode=day] .dlx-skip,
+html[data-mode=day] #djGo{color:#FFFFFF!important}
+
+/* ---- last mile: surfaces whose Day colour was pinned by an earlier pass ------------------ */
+
+/* `.bal-pill .av` fills with --cyan in Night (light, wants dark text) and --indigo in Day
+   (dark, wants light text). It had one colour for both, so whichever mode lost sat at 1.5-2.7. */
+html[data-mode=day] .bal-pill .av{color:#FFFFFF!important}
+
+/* Pinned to #6d7a8c by an earlier Day pass; 3.61 on the chip it actually sits on. */
+html[data-mode=day] #mktpro .mx-chip .n{color:var(--muted)!important}
+
+/* --txt-2 is read with a hard-coded light fallback (`var(--txt-2,#a1a9bd)`) but was never
+   defined, so every reader got the Night-only fallback in both modes. Define it. */
+:root{--txt-2:var(--ink-2)}
+
+/* Gauge readouts whose colour is written inline by script from the score itself. */
+html[data-mode=day] #dlCycle .cg .v,
+html[data-mode=day] #fngLab{color:var(--ink)!important}
+
+html[data-mode=day] #cine-learn .cine-lh .eyebrow{color:color-mix(in srgb,#f7931a 46%,#0B1220)!important}
+
+/* Two marginal cases on their own tinted chips: --up on the completed-step green (4.36) and
+   the terminal tab's rust on its rose chip (4.30). Same hue, lightness only. */
+html[data-mode=day] #dlQuest .dlq-step.done .tk{color:#0A6B41!important}
+html[data-mode=day] #wsbar button.on{color:#A8380A!important}
+
+/* Night: a cyan-filled action button that kept white text (1.54). */
+html:not([data-mode=day]) #raceBtn{color:#04121B!important}
+
+/* ===== v155-C · LAYOUT — no orphan voids ==================================
+   Measured audit, Chromium 1440x900 on the mocked harness. Every rule below
+   closes a void that the audit could put a number on. Geometry only: nothing
+   here changes a colour token, and every motion rule stays behind the
+   prefers-reduced-motion guard the payload already carries. */
+
+/* --- L5 · the tail void on all eight views -------------------------------
+   footer{padding-bottom:112px} reserves a landing strip for #nxbn, the fixed
+   bottom nav, which is display:none above 640px. Above the breakpoint the
+   strip is dead document. The footer also painted no surface at all, so its
+   379px of real content read as void to the eye and to the audit alike. */
+/* --surface, not --surface-2: in Day the trust creed's blue reads 4.46 on the
+   tinted surface and 4.95 on the plain one, and the render-contrast gate holds
+   the line at 4.5. In Night --surface is the lighter of the two, which is what a
+   footer wants anyway. */
+footer{background:var(--surface)}
+@media (min-width:641px){footer{padding-bottom:34px!important}}
+
+/* --- L4 · the heatmap's honest empty state -------------------------------
+   #dlHeat starts life data-heat="empty" and earns "ok" only by actually
+   drawing. Until then the canvas is out of the flow and the panel says what
+   is true, in words, the way every other unavailable surface in the payload
+   does. The canvas keeps its height only while it has something on it. */
+#dlHeat .hx{display:none}
+#dlHeat:not([data-heat="ok"]) #dlHeatCv{display:none}
+#dlHeat:not([data-heat="ok"]) .hx{
+  display:grid;place-items:center;min-height:112px;padding:18px 14px;
+  border:1px dashed var(--line-2);border-radius:var(--r-sm,12px);
+  background:var(--surface-2);color:var(--muted);
+  font:600 13px var(--cmc-sans,var(--body));text-align:center;
+}
+
+/* --- L1/L6 · the balanced column hosts -----------------------------------
+   layers/zzz-columns.js measures each card and drops it into whichever column
+   is currently shortest. These two rules are all the CSS it needs; every other
+   dimension it sets is inline and reversible. */
+.dlc-host{align-items:start}
+.dlc-wide{grid-column:1/-1}
+
+/* --- L5b · community: the feed widens where the rail ends ----------------
+   The rail is 1,680px against a 2,482px feed, so the last third of the page
+   was a 320px empty gutter. The feed's tail now spans the full width instead
+   of running down one 968px column beside nothing. */
+#page-community .comm-grid>.dlc-wide{margin-top:10px}
+
+/* ==================== v155-F · the two Day-blind foregrounds ====================
+   The runtime Day retint (layers/zz-day-surfaces.js) repairs a foreground only when the
+   SAME rule also declares a dark background. Both of these declare a colour and nothing
+   else, so the panel under them went white and the colour stayed put:
+
+     .chart-card.pro .pairlbl {color:#eaf0ff}   "BTC / USDT" above the coin chart   1.14:1
+     #dlCoinAI button.ask     {color:#cff6ff}   Ask DeXaI · Forecast · Wire · Alert  1.15:1
+
+   Each takes a Day value from the token system on its own hue — the pair label is primary
+   text, the ask buttons are the accent — so Night keeps the exact colours it shipped with.
+   Measured with test/gate-contrast.js against every opaque Day surface:
+     var(--txt-1) = #1C2D4A  13.78 on #FFFFFF · 11.40 on the darkest Day chip (#E5EAF1)
+     var(--cyan)  = #00728F   5.52 on #FFFFFF ·  4.57 on the darkest Day chip     */
+
+/* ============= v155-F · the pairings the walk found once it left the eight routes =========
+   Extending test/gate-render-contrast.js past the top-level routes rendered the coin page,
+   the ticket, the book, a lesson, the palette, the AI console, the P2P room and the welcome
+   sheet for the first time, and each of these pairs had never been measured. Every ratio is
+   from test/gate-contrast.js; the pre-fix reading is on each line.
+
+   1 · text on the accent gradient. --brand is BRIGHT in Night (#00E5FF→#5B7CFF) and DEEP in
+       Day (#00728F→#2F4BD0), and the buttons on it hard-code one foreground for both. Night
+       wants dark ink, Day wants white, and neither side may borrow the other's. */
+html:not([data-mode=day]) .cybtn{color:#04121C!important}            /* was #fff, 1.54 on #00E5FF */
+/* Only the sizer button is asserted here. The same #04121c-on-var(--brand) shape appears on
+   a dozen other controls, and a blanket answer over all of them was measured to BREAK one:
+   .dl-b.pri is retinted to a light plate in Day by an earlier pass, where white reads 1.15.
+   A pairing is fixed where the walk proves it wrong, one control at a time. */
+html[data-mode=day] #dlRisk .rr .go{color:#FFFFFF!important}         /* was #04121c, 2.74 on #2F4BD0 */
+html[data-mode=day] .nxc-in button{color:#FFFFFF!important}          /* was #04121c, 2.74 on #2F4BD0 */
+/* and the Day primary button, pinned last so nothing downstream can strand var(--ink-2)
+   on its orange plate (1.73). White on #C2410C reads 4.85. */
+html[data-mode=day] .btn.primary{color:#FFFFFF!important}
+
+/* 2 · text on the direction accents. Same shape: --up/--down are bright in Night and deep in
+      Day, so the order buttons need the opposite foreground in each mode.
+      #04120A on #00E676 = 11.48 · on #FF7A7A = 7.94 · white on #0B7346 = 5.91 · on #C0182B = 6.16 */
+html:not([data-mode=day]) .place,
+html:not([data-mode=day]) #dlPerp .go .sh{color:#04120A!important}    /* was #fff, 1.67 / 2.52 */
+html[data-mode=day] .place,
+html[data-mode=day] #dlPerp .go .lg,
+html[data-mode=day] #dlPerp .go .sh{color:#FFFFFF!important}          /* was #04140b, 3.20 on #0B7346 */
+
+/* 3 · the Academy's "plain English" green was a single literal that failed in BOTH modes —
+      3.25 on the Night plate, 3.89 on the Day one. The direction token already answers for
+      both: #00E676 on the Night plate = 7.96, #0B7346 on the Day one = 5.62. */
+#page-learn .simple b{color:var(--up)}
+
+/* 4 · the two Day-blind foregrounds the runtime retint cannot reach, because it repairs a
+      foreground only when the SAME rule declares a dark background and neither of these does.
+      !important so these deliberate answers win over the generic sweep in
+      layers/zz-day-surfaces.js, which now also re-casts a light literal on a rule with no
+      opaque background of its own.
+        var(--txt-1) = #1C2D4A  13.78 on #FFFFFF · 11.40 on the darkest Day chip (#E5EAF1)
+        var(--cyan)  = #00728F   5.52 on #FFFFFF ·  4.57 on the darkest Day chip     */
+html[data-mode=day] .chart-card.pro .pairlbl,
+html[data-mode=day] #cv-pairlabel{color:var(--txt-1)!important}       /* was #eaf0ff, 1.14 */
+html[data-mode=day] #dlCoinAI button.ask{color:var(--cyan)!important} /* was #cff6ff, 1.06 */
+
+/* 5 · --fa2 is read a dozen times with a hard-coded #00dcff fallback and, except where a
+      lesson stamps one inline, never defined anywhere — so every other reader took the
+      Night-only fallback in BOTH modes, the same shape --txt-2 had. Define it.
+      var(--cyan) = #00E5FF in Night (what the fallback already was) and #00728F in Day. */
+:root{--fa2:var(--cyan)}
+/* And where a lesson DOES stamp one, it stamps a Night accent from a four-colour track
+   palette (#00DCFF #F7931A #8B5CF6 #00E676) straight onto the element, so no token and no
+   sweep can reach it: the field-data eyebrow read 1.66 on the white Day card. The coloured
+   rule beside it keeps the lesson's accent; the words take one that can be read. */
+html[data-mode=day] .kn-facts .kf-eye em{color:var(--cyan)!important}
+/* Same shape one level up: the lab eyebrow reads --la, which the lessons stamp inline from
+   the same Night accent set (#00DCFF #F7931A #8B5CF6 #00E676 #FFB020 #14C8D2). The rule
+   beside it keeps the lesson's accent; the words take one that can be read on a white card. */
+html[data-mode=day] .sn-eye{color:var(--cyan)!important}
+html[data-mode=day] .sn-btn.ghost{color:var(--cyan)!important}
+
+/* ============================================================================
+   v155-G · VERTICAL RHYTHM
+   Measured by test/gate-rhythm.js at 1280 / 1440 / 1728 / 2000 / 2560 in both
+   modes. The previous layout pass declared markets fixed on a HORIZONTAL metric
+   (dead-rail %, band fill) taken at 1440 only. Every defect below is vertical and
+   none of them could be seen by that metric: at 2000px the five panels of the
+   markets overview band ended at five different heights (spread 374px = 80% of
+   the tallest), one of them was 469px tall for four numbers (ink density 0.101
+   beside 0.497 in the card next to it), a strip scrolled 975px sideways with its
+   scrollbar suppressed so nothing said so, and two market-figure bars stood 92px
+   apart stating the same market cap.
+
+   The rules below are the classes those defects belong to, not the instances:
+     G1  an auto-fit grid may never demand more width than its container has
+         (applied above, on every minmax in this file)
+     G2  a panel that lives inside a five-up band is not a "wide two-up block"
+     G3  a band of sibling cards is a ROW: its members end on one line
+     G4  a card given a row's height must SPEND it — the equalised card fills
+         with content, it does not open a hole (gate-rhythm measures both, so
+         neither can be traded for the other)
+     G5  a scroller states that it scrolls
+     G6  the market figures are stated once, in one bar, with the other universe
+         reachable rather than simultaneous
+   ============================================================================ */
+
+/* ---- G4 · the markets overview band ---------------------------------------
+   #mxTopHost is 3 panels at 1280/1440 and 5 at 1728+. Every one of them now ends
+   on the row's line (G3) and spends the height it is given. */
+#mktpro .mx-top>.mx-panel{min-height:0}
+
+/* the tracked-set card. It was inheriting `repeat(auto-fit,minmax(420px,1fr))`
+   — a rule written for full-width blocks — inside a 325px panel: ONE 420px track
+   overflowing its own card by 95px, five rows of 20px gap, 10px/12px tiles. 469px
+   of card for four numbers. It is a two-column stat plate, and it fills the card. */
+#mktpro .mx-glob{
+  display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr))!important;
+  gap:8px!important;align-content:stretch!important;min-height:0;
+}
+#mktpro .mx-glob .mx-ph{grid-column:1/-1;margin-bottom:0;align-self:center}
+#mktpro .mx-glob .gg:last-child,#mktpro .mx-glob .dl-snapfoot{grid-column:1/-1}
+#mktpro .mx-glob .gg{padding:8px 11px;justify-content:center;gap:2px;min-height:0}
+#mktpro .mx-glob .gg:last-child{
+  flex-direction:row;flex-wrap:wrap;align-items:center;gap:6px;
+  background:none;border:0;padding:2px 0;justify-content:flex-start;
+}
+
+/* trending. Seven coins in a horizontal strip 325px wide: the second one was cut
+   at the card edge and the scrollbar was suppressed, so nothing said there were
+   five more. A vertical list inside the card reads all of them, and what does not
+   fit scrolls against a scrollbar you can see. */
+#mktpro .mx-trend{display:flex;flex-direction:column}
+#mktpro .mx-trend .t-scroll{
+  flex-direction:column;flex:1 1 auto;gap:6px;padding-bottom:0;
+  overflow-x:hidden;overflow-y:auto;scrollbar-width:thin;
+  scrollbar-color:var(--mx-line) transparent;
+  /* contain:size is what stops the list DICTATING the band's height. Seven coins
+     stacked want 344px; the rest of the band wants 252px, and a list is the one
+     thing here that can honestly be shortened because it scrolls — against a
+     scrollbar you can now see. Without this the band grew to 393px and every
+     other card in it had 250px of nothing to spend, which gate-rhythm measured
+     as a 266px hole inside the network-fees card. min-height is the floor if a
+     browser does not honour the containment. */
+  contain:size;min-height:132px;
+}
+#mktpro .mx-trend .t-scroll::-webkit-scrollbar{display:block!important;width:7px;height:7px}
+#mktpro .mx-trend .t-scroll::-webkit-scrollbar-thumb{background:var(--mx-line);border-radius:4px}
+#mktpro .mx-trend .t-card{flex:0 0 auto;justify-content:space-between;padding:6px 10px 6px 8px}
+#mktpro .mx-trend .t-card .t-nm{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+
+/* fear & greed, network fees: they spend the row's height instead of pooling it
+   at the bottom of the card. */
+#mktpro .mx-fg{align-items:center;justify-content:flex-start}
+#mktpro .mx-fees{display:flex;flex-direction:column}
+/* three fee readings in a card sized by the row. `space-between` put all of the
+   spare height into ONE 132px gap between two grid rows — gate-rhythm's internal
+   whitespace check caught it. Even rows with the reading centred in each spend the
+   same height as three evenly spaced readings, which is what a card looks like when
+   it was designed rather than stretched. */
+#mktpro .mx-fees .fee-g{flex:1;min-height:0;align-content:stretch;grid-auto-rows:minmax(0,1fr);row-gap:6px}
+#mktpro .mx-fees .fee-g>*{display:flex;flex-direction:column;justify-content:center;min-height:0}
+#mktpro .mx-fees .fee-note{margin-top:8px}
+#mktpro .mx-gl2{display:flex;flex-direction:column}
+#mktpro .mx-gl2 .glrow{flex:0 0 auto}
+
+/* the hero. `.hero-copy` runs 555px beside a 275px spotlight card, and the 944x256
+   rectangle under the card was the single largest void the audit found on the view.
+   The card takes the row's height (G3) and the chart takes the card's — drawArea()
+   already measures its own box when it is not handed a magic number. */
+.mkt-hero>#spotlight{display:flex;flex-direction:column}
+.mkt-hero>#spotlight .chart-host{flex:1;min-height:150px;display:flex}
+.mkt-hero>#spotlight #spotChart{width:100%;height:100%;flex:1;min-height:150px}
+
+/* ---- G5 · a scroller states that it scrolls -------------------------------
+   `scrollbar-width:none` on a container that overflows by 400-1100px is a silent
+   truncation: the content is reachable and nothing tells the reader. Where the
+   content can wrap, it wraps; where it cannot, the scrollbar comes back. */
+#mktpro #mxMoversHost.mx-movers,#mktpro #mxRecentHost.mx-recent,
+#mktpro .dl-tabs,#mktpro .mx-segrow,#mktpro .mx-scroll{scrollbar-width:thin;scrollbar-color:var(--mx-line) transparent}
+#mktpro #mxMoversHost.mx-movers::-webkit-scrollbar,
+#mktpro #mxRecentHost.mx-recent::-webkit-scrollbar,
+#mktpro .dl-tabs::-webkit-scrollbar,
+#mktpro .mx-scroll::-webkit-scrollbar,
+#mktpro .mx-segrow::-webkit-scrollbar{display:block!important;height:7px;width:7px}
+#mktpro #mxMoversHost.mx-movers::-webkit-scrollbar-thumb,
+#mktpro #mxRecentHost.mx-recent::-webkit-scrollbar-thumb,
+#mktpro .dl-tabs::-webkit-scrollbar-thumb,
+#mktpro .mx-scroll::-webkit-scrollbar-thumb,
+#mktpro .mx-segrow::-webkit-scrollbar-thumb{background:var(--mx-line);border-radius:4px}
+
+/* ---- G7 · the Day sweep painted the spinning coin's EDGE over its own FACE -----
+   Found by gate-rhythm's occlusion hit test, not by geometry: three of three samples
+   on the ₿ glyph in the spotlight coin returned .c3l, in Day only. The coin is seven
+   stacked edge layers behind two faces; the warm-day purge re-cast those edge layers
+   to a near-white plate (#F1F4F7), which is opaque, so in Day the edge covered the
+   face and the glyph with it. An edge is the same object as the face and takes the
+   coin's own colour in both modes. Night is untouched. */
+html[data-mode=day] .c3coin .c3l{
+  background:color-mix(in srgb,var(--c3col,#f7931a) 52%,#241703)!important;
+  border-color:transparent!important;
+}
+
+/* ---- G6 · the market figures are stated once ------------------------------
+   Three surfaces rendered a whole-market cap, a BTC dominance and a Fear & Greed
+   within 160px of one another: #cbCmd (the terminal command bar, chrome, every
+   view), #tape (the price ribbon, chrome, every view) and #dlGstat (the Markets record,
+   removed in v159). Every one of them was correct and every one of them was labelled
+   with the universe it measured — and a visitor read three market caps as the app
+   contradicting itself.
+
+   ONE BAR OWNS THE FIGURES, and it is the one that can carry their provenance:
+     · everywhere   #cbCmd — the command bar. It carries BOTH universes behind a
+                    two-segment switch, so the whole market and the tracked set are
+                    never simultaneous, plus the witness list, the ±spread of a
+                    contested figure and the source note. v159 removed #dlGstat, the
+                    Markets-only record that used to own this on that one route, so
+                    the bar is no longer hidden there — it is the only bar left.
+     · never        #tape. A marquee is the wrong surface for a contested figure:
+                    it moves, it can be mid-scroll, and it has nowhere to put a
+                    witness. It goes back to being the price ribbon. Every figure
+                    it carried is stated by the command bar on the same screen, so
+                    nothing is deleted and no view loses a number.
+   Nothing here is display:none'd out of the DOM's meaning: the hidden universe is
+   a real, labelled, provenance-chipped group one click away, and the tape's items
+   still exist on every view where the bar that replaced them is the only one. */
+#tape .ti[data-agg]{display:none}
+
+/* the universe switch. Two segments, one pressed; the unpressed universe's group
+   is [hidden] and one click brings it back. Tokens only — the pair --muted on
+   --surface-2 is what .gs-u beside it already uses. */
+.gs-uni{display:inline-flex;align-items:center;gap:2px;flex:none;
+  border:1px solid var(--line);border-radius:7px;padding:1px;background:var(--surface-2)}
+.gs-uni button{appearance:none;border:0;background:none;cursor:pointer;
+  font:700 10px var(--cmc-sans,var(--body));letter-spacing:.04em;text-transform:uppercase;
+  color:var(--muted);padding:2px 7px;border-radius:5px;white-space:nowrap}
+.gs-uni button[aria-pressed="true"]{background:var(--surface);color:var(--ink);
+  box-shadow:0 1px 0 rgba(0,0,0,.18)}
+.gs-uni button:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+#cbCmd .gs-uni{margin-right:2px}
+#cbCmd .gs-uni button{font-size:9px;padding:1px 5px}
+
+/* ---- Terminal chart panel (v156, owner report 11 Sep 2026) --------------------------------
+   The DexLadder chart host was flex:1 with no height of its own, and the canvas takes its
+   intrinsic size from the width/height it was last drawn at — so the chart grew with every
+   redraw until it ran 1,700-1,900px down the page (price, volume and RSI stretched across
+   several screens). It is now a bounded panel exactly like the TradingView panel beside it:
+   560px on desktop, 430px on phones, with the same 12px frame. The canvas fills the panel and
+   draws its volume and RSI panes inside it. */
+#page-coin #coinHost{flex:0 0 auto;height:560px;min-height:0;border:1px solid var(--line);border-radius:12px;
+  background:#141619;box-shadow:inset 0 0 0 1px #2A2E39;overflow:hidden}
+#page-coin #coinHost>#coinChart{flex:1 1 auto;height:100%!important;min-height:0;border-radius:11px}
+/* the same box as the TradingView panel (#tvChart: #141619 ground, var(--line) frame, and the
+   widget's own #2A2E39 inner line), so switching engines changes the chart, not the panel */
+@media(max-width:760px){#page-coin #coinHost{height:430px}}
+
+/* the canonical DexLadder mark wherever a small mark sits inline (v156 · buildlib/v156.py) */
+img.dl-mark{display:inline-block;border-radius:22%;flex:none}
+/* Blog links under the footer blurb */
+.foot .dl-foot-blog{margin:10px 0 0;font-size:13px}
+.foot .dl-foot-blog a{color:var(--cyan);text-decoration:underline;text-underline-offset:3px}
+
+/* ---- CMC Spot Rail (layers/42-cmc.js) ------------------------------------------------------
+   The rail shipped with 15 inline style attributes, which pushed the gate-arch legacy ratchet
+   (inlineStyleAttrs <= 1125) over budget the moment it merged with the rest of the night's work.
+   The ratchet may only go DOWN, so the styles moved here instead of the budget moving up. */
+.dl-row.dlc-row-click{cursor:pointer}
+.dlc-xs{font-size:10.5px}
+.dlc-mt10{margin-top:10px}
+.dlc-mt8{margin-top:8px}
+.dlc-mb6{margin-bottom:6px}
+.dlc-mrow{margin:10px 0 6px}
+.dl-note.dlc-m0,.dl-formula.dlc-m0{margin:0}
+.dlc-p10{padding:10px}
+.dlc-faint{opacity:.6}
+.dlc-inline{display:flex;gap:6px}
+.dlc-book{font:600 11.5px var(--cmc-sans,sans-serif);color:var(--muted)}
+
+/* ---- v157a · the two Markets panels that covered a phone screen (layers/44-strips.js) -----
+   Owner report, 12 Sep 2026, two screenshots at 390px:
+   1. #dlNew, the What's-New banner, is a flex row that never wrapped: the release summary
+      was squeezed into a 54px column 224px tall and the dismiss ✕ sat at x=410 on a 390px
+      viewport (measured in the harness before the fix: 244px tall).
+   2. The hero .stat-strip put three cards on a two-column grid with the third alone beside a
+      void: .stat:last-child{grid-column:1/-1} stopped matching the moment 21-snapshot appended
+      .dl-snapfoot after it (measured: 289px tall, BTC card 177px wide beside 177px of nothing).
+   Under 640px both are ONE line that a chevron extends. 641–920px: the banner may wrap and
+   the strip is three-up. Nothing here touches 921px and up. The JS adds only the chevron,
+   the short labels (data-short) and the is-open class — no inline styles. */
+.dl-more{appearance:none;border:0;background:none;color:var(--muted);cursor:pointer;
+  display:none;align-items:center;justify-content:center;padding:4px;border-radius:8px;
+  min-width:28px;min-height:28px;line-height:0}
+.dl-more:hover{color:var(--ink);background:var(--surface-2)}
+.dl-more:focus-visible{outline:2px solid var(--cyan);outline-offset:1px}
+.dl-more svg{transition:transform .2s ease}
+[aria-expanded="true"].dl-more svg{transform:rotate(180deg)}
+@media (prefers-reduced-motion:reduce){.dl-more svg{transition:none}}
+@media (max-width:920px){
+  #dlNew.dl-compact{flex-wrap:wrap;row-gap:6px}
+  #dlNew.dl-compact>span{flex:1 1 220px;min-width:0}
+  .stat-strip.dl-compact{grid-template-columns:repeat(3,1fr)}
+  .stat-strip.dl-compact .stat:nth-child(3){grid-column:auto}
+}
+@media (max-width:640px){
+  /* 1 · the banner: one line — ✨ title · summary… · chevron · ✕ */
+  #dlNew.dl-compact{flex-wrap:wrap;gap:6px;padding:7px 8px 7px 12px;cursor:pointer}
+  #dlNew.dl-compact>b{flex:none;white-space:nowrap}
+  #dlNew.dl-compact>span{flex:1 1 40px;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  #dlNew.dl-compact .go{display:none;margin-left:0;padding:6px 10px;border:1px solid color-mix(in srgb,var(--cyan) 40%,transparent);border-radius:9px}
+  #dlNew.dl-compact .x{margin-left:0;order:3;padding:4px}
+  #dlNew.dl-compact .dl-more{display:inline-flex;order:2;margin-left:auto}
+  /* extended: the summary takes its own line, the two links a third */
+  #dlNew.dl-compact.is-open{cursor:default}
+  #dlNew.dl-compact.is-open>span{flex-basis:100%;order:5;white-space:normal;line-height:1.5}
+  #dlNew.dl-compact.is-open .go{display:inline-block;order:6}
+  /* 2 · the hero strip: one row of three, no chip text, no foot — the chevron extends it */
+  .stat-strip.dl-compact:not(.is-open){grid-template-columns:1fr 1fr 1fr auto;gap:6px;align-items:stretch}
+  .stat-strip.dl-compact:not(.is-open) .stat{padding:7px 8px 6px 10px;min-width:0;border-radius:10px!important}
+  .stat-strip.dl-compact:not(.is-open) .stat .k{font-size:0!important;letter-spacing:0;white-space:nowrap}
+  .stat-strip.dl-compact:not(.is-open) .stat .k::before{content:none}
+  .stat-strip.dl-compact:not(.is-open) .stat .k::after{content:attr(data-short);font-size:9px;letter-spacing:.12em}
+  .stat-strip.dl-compact:not(.is-open) .stat .v{font-size:14px;margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  /* a contested figure keeps its mark AT the number (v155-E law); only the words fold away */
+  .stat-strip.dl-compact:not(.is-open) .dl-dis,.stat-strip.dl-compact:not(.is-open) .dl-flag{font-size:0;padding:0 3px;margin-left:3px;min-height:14px}
+  .stat-strip.dl-compact:not(.is-open) .dl-dis::before,.stat-strip.dl-compact:not(.is-open) .dl-flag::before{content:"⚠";font-size:9px;line-height:1}
+  .stat-strip.dl-compact:not(.is-open) .dl-src{display:none}
+  .stat-strip.dl-compact:not(.is-open) .dl-snapfoot{display:none}
+  .stat-strip.dl-compact .dl-more{display:inline-flex;order:99}
+  .stat-strip.dl-compact:not(.is-open) .dl-more{align-self:center;grid-column:4}
+  /* extended: the original cards, the third spanning the row (no void), the foot back */
+  .stat-strip.dl-compact.is-open{grid-template-columns:1fr 1fr;gap:9px}
+  .stat-strip.dl-compact.is-open .stat:nth-child(3){grid-column:1/-1}
+  .stat-strip.dl-compact.is-open .dl-snapfoot{display:flex}
+  .stat-strip.dl-compact.is-open .dl-more{grid-column:1/-1;justify-self:end;margin-top:-2px}
+}
+
+/* ============================================================================
+   v158 · tidy — the owner's seven screenshots (12 Sep 2026), the chrome half.
+   Payload half: buildlib/v158.py · series: layers/23-sevenday.js · marks:
+   layers/20-core.js + layers/21-snapshot.js · board: layers/zzz-columns.js.
+   Every rule here is pinned at runtime by test/gate154.js "== v158".
+   ============================================================================ */
+
+/* ---- 1 · the command palette ------------------------------------------------
+   A late reset (`.cmdk input,.sbox input,…{padding:1px 2px;border:0}`) had shrunk
+   the palette's search field to a 20px strip at the top of a 20px-radius panel,
+   and the global `:focus-visible` ring then drew a 2px cyan rectangle around that
+   strip — a box cutting across the panel's rounded top. The field is a field
+   again (a proper height, a search glyph, a hairline under it), the ring is off
+   the field and on the panel (`:focus-within`), and the palette states its keys
+   in a footer like every command palette a trader already knows. */
+.cmdk{display:flex;flex-direction:column;max-height:min(74vh,760px)}
+.cmdk input,.cmdk input:focus{flex:0 0 auto!important;padding:0 18px 0 46px!important;min-height:52px!important;height:52px!important;box-sizing:border-box!important;
+  border:0!important;border-bottom:1px solid var(--line)!important;border-radius:0!important;box-shadow:none!important;
+  outline:0!important;font-size:15.5px;line-height:1.35;color:var(--ink);
+  background:transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%237E8CA8' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.6-3.6'/%3E%3C/svg%3E") 18px 50%/17px 17px no-repeat!important}
+html[data-mode=day] .cmdk input,html[data-mode=day] .cmdk input:focus{background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%236F6254' stroke-width='2.2' stroke-linecap='round'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m20 20-3.6-3.6'/%3E%3C/svg%3E")!important}
+.cmdk input:focus-visible{outline:0!important;outline-offset:0!important;box-shadow:none!important;border-radius:0!important}
+.cmdk input::placeholder{color:var(--faint)}
+.cmdk:focus-within{border-color:color-mix(in srgb,var(--cyan) 50%,transparent);
+  box-shadow:0 0 0 1px color-mix(in srgb,var(--cyan) 28%,transparent),0 30px 90px -20px rgba(0,0,0,.9),0 1px 0 rgba(255,255,255,.09) inset}
+.cmdk-list{flex:1 1 auto;min-height:0;max-height:none;overflow:auto;padding:8px}
+.cmdk-item{padding:10px 12px;border-radius:9px;transition:background .12s}
+.cmdk-item.sel{background:color-mix(in srgb,var(--cyan) 12%,transparent);box-shadow:inset 3px 0 0 var(--cyan)}
+.cmdk-grp{padding:10px 12px 5px}
+.cmdk::after{content:"↑↓ navigate · ↵ open · esc close";display:block;flex:none;padding:9px 18px;
+  border-top:1px solid var(--line);font:600 10.5px/1.2 var(--mono,ui-monospace,monospace);
+  letter-spacing:.07em;text-transform:uppercase;color:var(--faint)}
+
+/* ---- 2 · the Proof ledger's actions stay inside their card ---------------------
+   Five buttons sat in an inline-flex span with margin-left:auto: it could not wrap,
+   so at a 442px column "Independent auditor" ran 9px past the card's edge and the
+   card clipped it (screenshots 3 and 5). The span is a wrapping action row of its
+   own now (buildlib/v158.py gives it the class), the buttons never break mid-label,
+   and nothing in the body may leave the card. */
+#chainCard>div:first-child{flex-wrap:wrap;row-gap:2px;white-space:nowrap}
+#chainCard>div:first-child>span{white-space:normal}
+#chainCard>div:first-child>span:first-of-type{flex:1 1 220px;min-width:0}
+#chainCard>div:first-child>.ord-hact{margin-left:auto;white-space:nowrap}
+.chainstat{gap:10px 14px}
+.chainstat .chainacts{flex:1 0 100%;display:flex;flex-wrap:wrap;gap:8px;margin:4px 0 0;min-width:0}
+.chainstat .chainacts .btn.sm{white-space:nowrap;flex:0 0 auto;padding:7px 11px;font-size:12px;line-height:1.25;min-height:0}
+#chainBody{overflow:hidden;min-width:0}
+.chainrow{min-width:0}
+
+/* ---- 3 · results, not a row of red chips ------------------------------------------
+   Screenshot 6: "Market Cap $2.71T [⚠ sources differ ±2.0%] ▼2.8% [WHOLE CRYPTO
+   MARKET] · 24h Vol $74.53B [⚠ sources differ ±30.6%] · BTC 57.1% [⚠ sources differ
+   ±2.0%] · ETH 11.6% [CoinGecko only] … [● CoinGecko + Coinpaprika · 45s ago · sources
+   differ]". Every one of those marks is an honest fact and the owner is right that a
+   strip of seven figures cannot carry five explanations. Nothing is deleted: the
+   record, the data-* attributes, the tooltips and the accessible names are exactly
+   what they were (the gate reads them). What changes is the VOLUME — the words go
+   to screen readers (.dl-dis-w, a visually-hidden span), the eye gets a small muted
+   "±2.0%" beside a contested figure, a "†" on a subset flag, and an amber dot with a
+   "±" on a contested chip. The universe chip and the source note inside the bar
+   that carries the universe SWITCH are hidden the same way — the switch already names
+   the universe, and the note is the figure's tooltip. */
+.dl-dis-w,#cbCmd .gs-u,#cbCmd .dl-src{position:absolute!important;width:1px!important;height:1px!important;
+  margin:-1px!important;padding:0!important;overflow:hidden!important;clip:rect(0 0 0 0)!important;
+  clip-path:inset(50%)!important;white-space:nowrap!important;border:0!important}
+.dl-dis,.dl-flag{border:0;background:none;padding:0 1px;margin-left:5px;border-radius:0;
+  font:600 10.5px var(--mono,ui-monospace,monospace);letter-spacing:0;color:var(--muted);
+  border-bottom:1px dotted color-mix(in srgb,var(--muted) 55%,transparent);cursor:help;vertical-align:baseline}
+.dl-flag::before{content:"†";font-weight:700}
+.dl-prov.contested{color:var(--muted)}
+.dl-prov.contested::before{background:#FFB300;box-shadow:none}
+.dl-prov.contested::after{content:"±";font-weight:700;opacity:.85;margin-left:-3px}
+
+/* ---- 4 · the board's bottom edge ----------------------------------------------------
+   layers/zzz-columns.js packs the portfolio cards into height-balanced columns and
+   nudges the tallest; the columns still ended 100–160px apart (screenshots 4 and 7).
+   The columns now stretch to one bottom line and each card in a column takes a share
+   of its column's slack in proportion to its own height (--dl-grow = the card's natural
+   height, set by the layer) — a tall desk absorbs most of it, a small card a few px,
+   and the board ends on one edge like every trading dashboard's does. A card in its
+   declared empty state takes none. The rule below is the CSS half;
+   the layer switches the state on (data-dl-even) once placement is final. */
+.dlc-host[data-dl-even]{align-items:stretch!important}
+.dlc-host[data-dl-even]>.dlc-col{display:flex;flex-direction:column;min-height:0}
+.dlc-host[data-dl-even]>.dlc-col>*{flex:var(--dl-grow,1) 1 auto;min-height:0}
+.dlc-host[data-dl-even]>.dlc-col>[data-heat="empty"]{flex-grow:0!important}
+.dlc-host[data-dl-even]>.dlc-col>.dlc-pair{display:flex;flex-direction:column}
+.dlc-host[data-dl-even]>.dlc-col>.dlc-pair>:last-child{flex:1 1 auto}
+
+/* ---- v159 · the Liquidity Desk's presentation, out of the markup ----------------------
+   layers/45-defi.js built its labels, sliders, canvases and sub-lines with inline
+   style="" attributes. test/gate-arch.js keeps a RATCHET on that count — legacy inline
+   styles may only ever go DOWN — and the desk pushed it from 1125 to 1146 the moment it
+   entered the payload. Same pass the CMC rail took in v157: the thirty attributes become
+   twelve classes here, with no visual change (every declaration is copied verbatim). */
+.df-lab{display:block;margin:8px 0}
+.df-lab2{display:block;margin:10px 0}
+.df-cap{font:600 11px var(--cmc-sans,sans-serif);color:var(--muted)}
+.df-val{color:var(--ink,#e7edf8)}
+.df-rng{width:100%;accent-color:var(--cyan)}
+.df-w100{width:100%}
+.df-mt8{margin-top:8px}
+.df-mt10{margin-top:10px}
+.df-mt12{margin-top:12px}
+.df-sub{opacity:.6;font-size:11px}
+.df-h150{height:150px}
+.df-h180{height:180px}
+.df-h190{height:190px}
+.df-h200{height:200px}
