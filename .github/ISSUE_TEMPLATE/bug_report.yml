@@ -1,0 +1,40 @@
+name: Bug report
+description: Something in the simulator, charts or academy behaves incorrectly.
+labels: ["bug", "needs triage"]
+body:
+  - type: markdown
+    attributes:
+      value: "One file, no server — so a bug report needs the build id and the browser. Both are below."
+  - type: input
+    id: build
+    attributes:
+      label: Build
+      description: "Open the app → Trust Center → Build. Or paste the version string from the page footer."
+      placeholder: "v159"
+    validations: { required: true }
+  - type: dropdown
+    id: browser
+    attributes:
+      label: Browser
+      options: [Chrome, Safari, Firefox, Edge, Brave, iOS app, Android, Other]
+    validations: { required: true }
+  - type: textarea
+    id: what
+    attributes:
+      label: What happened
+      description: What you did, what you expected, what you got.
+    validations: { required: true }
+  - type: textarea
+    id: console
+    attributes:
+      label: Console output
+      description: "DevTools → Console. Paste any red lines."
+      render: shell
+  - type: checkboxes
+    id: offline
+    attributes:
+      label: Conditions
+      options:
+        - label: It also happens in a private/incognito window
+        - label: It also happens offline
+        - label: It also happens with a fresh profile (cleared localStorage)

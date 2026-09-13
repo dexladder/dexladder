@@ -1,0 +1,36 @@
+name: Feature request
+description: Propose a capability for the simulator, charts, desks or data layer.
+labels: ["enhancement"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Before you write: DexLadder will never connect to real funds, never add
+        accounts, never add a server, and never add ads or a token. Proposals
+        that need any of those will be closed. Everything else is fair game.
+  - type: textarea
+    id: problem
+    attributes:
+      label: The problem
+      description: What can a learner not do today?
+    validations: { required: true }
+  - type: textarea
+    id: proposal
+    attributes:
+      label: The proposal
+    validations: { required: true }
+  - type: dropdown
+    id: area
+    attributes:
+      label: Area
+      options: [Execution engine, Charts, Market data, Academy, Portfolio, Desks, Tax ledger, Offline/PWA, Accessibility, Build]
+    validations: { required: true }
+  - type: checkboxes
+    id: constraints
+    attributes:
+      label: Constraints
+      options:
+        - label: This works with no backend and no account
+          required: true
+        - label: This involves no real money
+          required: true

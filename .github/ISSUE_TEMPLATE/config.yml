@@ -1,0 +1,11 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Question or idea
+    url: https://github.com/dexladder/dexladder/discussions
+    about: Ask anything about markets, the simulator or the academy.
+  - name: Security vulnerability
+    url: https://github.com/dexladder/dexladder/security/advisories/new
+    about: Report privately. Please do not open a public issue.
+  - name: Try the live app
+    url: https://dexladder.com
+    about: No signup, no wallet, no email.

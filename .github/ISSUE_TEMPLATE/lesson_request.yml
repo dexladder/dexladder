@@ -1,0 +1,25 @@
+name: Academy lesson
+description: Propose or write a lesson for the interactive academy.
+labels: ["academy", "good first issue"]
+body:
+  - type: input
+    id: title
+    attributes: { label: Lesson title }
+    validations: { required: true }
+  - type: dropdown
+    id: level
+    attributes:
+      label: Level
+      options: [Beginner, Intermediate, Advanced]
+    validations: { required: true }
+  - type: textarea
+    id: outline
+    attributes:
+      label: Outline
+      description: "Three to six beats. What should the reader be able to do afterwards?"
+    validations: { required: true }
+  - type: textarea
+    id: sim
+    attributes:
+      label: Interactive element
+      description: "Which simulator surface does the lesson drive — order book, depth, slippage, funding, liquidation, tax ledger?"
