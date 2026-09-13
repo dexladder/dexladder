@@ -1,0 +1,19 @@
+# The single-file build is generated output, not source.
+# Marking it keeps GitHub from treating a 2.7 MB artifact as the repository's
+# source of truth in diffs, language stats and code search.
+
+dist/index.html   linguist-generated=true -diff -merge
+dist/*.html      linguist-generated=true -diff -merge
+*.min.js         linguist-generated=true -diff
+*.min.css        linguist-generated=true -diff
+
+# Keep line endings sane across contributors.
+* text=auto eol=lf
+
+# Binary assets.
+*.png  binary
+*.jpg  binary
+*.webp binary
+*.ico  binary
+*.woff  binary
+*.woff2 binary
