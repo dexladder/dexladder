@@ -1,0 +1,8 @@
+# static pages pinned ahead of the SPA fallback — Apple checks these
+/support        /support/index.html   200
+/support/       /support/index.html   200
+/privacy        /privacy/index.html   200
+/privacy/       /privacy/index.html   200
+/terms          /terms/index.html     200
+/terms/         /terms/index.html     200
+/*              /index.html           200

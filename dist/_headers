@@ -1,0 +1,68 @@
+# DexLadder — response headers (v155 stabilisation, 2026-09-07)
+#
+# Audit finding 20. A full policy already existed in site/_headers, but the file the deploy
+# bundles actually carry was this one, which had no CSP, no HSTS and no Permissions-Policy.
+# Both hosts were therefore serving the app with none of them.
+#
+# The CSP ships REPORT-ONLY. Report-only is not enforcement: it blocks nothing. It is here so
+# violations can be collected from real browsers before the policy is switched to
+# Content-Security-Policy. No reporting endpoint is configured, deliberately — violations are
+# read from the browser console, so no user request is sent to a third party.
+
+/*
+# v159b · LOOPBACK IS IN connect-src, and it has to be.
+#   Two shipped features talk to a server the user runs on their own machine: the
+#   Bring-Your-Own-Bot signal endpoint (lib/bots/signal.ts polls one URL per closed
+#   bar) and the Local Fork sandbox (layers/43-fork.js sends JSON-RPC to Anvil or
+#   Hardhat). Both are documented to use http://127.0.0.1 — signal.ts's own doctor
+#   text tells the user to prefer it over localhost — and `connect-src 'self' https:`
+#   blocked every one of those calls on the live site from v157 onward. Measured in
+#   the browser on www.dexladder.com: a fetch to http://127.0.0.1 raised a
+#   securitypolicyviolation with violatedDirective "connect-src".
+#   WHAT THIS DOES NOT WIDEN: only loopback is added, and only for http/ws. No
+#   public host gains anything. Loopback is reachable only by software already
+#   running on the reader's own machine, and script-src here already carries
+#   'unsafe-inline' — an attacker who can run script in this page does not need a
+#   CSP hole to reach the reader's own localhost. The alternative was shipping two
+#   features that cannot work.
+  Content-Security-Policy-Report-Only: default-src 'none'; script-src 'self' 'unsafe-inline' https://s3.tradingview.com; style-src 'self' 'unsafe-inline'; img-src 'self' https: data: blob:; font-src 'self' https: data:; connect-src 'self' https: wss://fstream.binance.com http://127.0.0.1:* http://localhost:* http://[::1]:* ws://127.0.0.1:* ws://localhost:* ws://[::1]:*; frame-src https://www.youtube-nocookie.com https://s3.tradingview.com https://www.tradingview.com; media-src 'self' https: blob:; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
+  Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
+  X-Content-Type-Options: nosniff
+  X-Frame-Options: SAMEORIGIN
+  Referrer-Policy: strict-origin-when-cross-origin
+  Permissions-Policy: camera=(), microphone=(), geolocation=(), payment=(), usb=()
+
+/sw.js
+  Cache-Control: no-cache, no-store, must-revalidate
+  Service-Worker-Allowed: /
+
+/index.html
+  Cache-Control: no-cache
+
+/manifest.webmanifest
+  Cache-Control: no-cache
+  Content-Type: application/manifest+json
+
+/robots.txt
+  Content-Type: text/plain; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/sitemap.xml
+  Content-Type: application/xml; charset=utf-8
+  Cache-Control: public, max-age=3600
+
+/og.png
+  Content-Type: image/png
+  Cache-Control: public, max-age=86400
+
+/icon-512.png
+  Cache-Control: public, max-age=31536000, immutable
+
+/icon.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/icon-maskable.svg
+  Cache-Control: public, max-age=31536000, immutable
+
+/api/*
+  Cache-Control: no-store
