@@ -1,0 +1,54 @@
+name: verify
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  schedule:
+    - cron: "17 4 * * *"
+  workflow_dispatch:
+
+jobs:
+  reproducible-build:
+    name: reproducible build + gates
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with: { python-version: "3.12" }
+      - uses: actions/setup-node@v4
+        with: { node-version: "20" }
+
+      - name: Record the committed artifact
+        run: |
+          echo "committed_bytes=$(wc -c < dist/index.html)" >> "$GITHUB_ENV"
+          echo "committed_sha=$(sha256sum dist/index.html | cut -d' ' -f1)" >> "$GITHUB_ENV"
+
+      - name: Rebuild from source
+        run: python3 build154.py
+
+      - name: The rebuild must match the committed artifact
+        run: |
+          rebuilt_sha=$(sha256sum dist/index.html | cut -d' ' -f1)
+          echo "committed : $committed_sha ($committed_bytes bytes)"
+          echo "rebuilt   : $rebuilt_sha ($(wc -c < dist/index.html) bytes)"
+          test "$rebuilt_sha" = "$committed_sha"
+
+      - name: Gates
+        run: |
+          cd test
+          npm ci --no-audit --no-fund || npm install --no-audit --no-fund
+          npx playwright install --with-deps chromium
+          node gate154.js
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### DexLadder build"
+            echo ""
+            echo "| field | value |"
+            echo "| --- | --- |"
+            echo "| bytes | $committed_bytes |"
+            echo "| sha256 | \`$committed_sha\` |"
+          } >> "$GITHUB_STEP_SUMMARY"
