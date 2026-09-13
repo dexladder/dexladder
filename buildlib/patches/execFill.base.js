@@ -1,0 +1,1 @@
+function execFill(side,sym,quote,amt,px,label,silent){return DLAPP.legacy.paper.execFill(S,.001,side,sym,quote,amt,px,label,silent,!0)}

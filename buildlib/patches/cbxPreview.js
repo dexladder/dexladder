@@ -1,0 +1,1 @@
+window.CBXpreview=function(){DLAPP.legacy.ticket.preview({TIF:TIF,POST:POST,n:n})}

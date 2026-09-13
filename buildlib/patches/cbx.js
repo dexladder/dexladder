@@ -1,0 +1,1 @@
+window.CBX=(DLAPP.legacy.bind({state:function(){return S},coin:function(s){try{return bySym[s]||null}catch(e){return null}}}),DLAPP.legacy.paper.cbx())

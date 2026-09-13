@@ -1,0 +1,1 @@
+function basisSell(sym,amt,pxUSD){return DLAPP.legacy.paper.basisSell(S,sym,amt,pxUSD)}

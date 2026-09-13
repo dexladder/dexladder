@@ -1,0 +1,51 @@
+'use strict';
+const { launch } = require('./harness');
+const fs = require('fs');
+(async () => {
+  const dir = 'shots'; fs.mkdirSync(dir, { recursive: true });
+  const h = await launch(process.argv[2] || 'dist/index.html');
+  const { page } = h;
+  const overflow = async (label) => { const o = await page.evaluate(() => ({ sw: document.documentElement.scrollWidth, cw: document.documentElement.clientWidth, wide: [...document.querySelectorAll('body *')].filter(e => { const r = e.getBoundingClientRect(); return r.width > 0 && r.right > document.documentElement.clientWidth + 2 && getComputedStyle(e).position !== 'fixed' && !e.closest('canvas'); }).slice(0, 6).map(e => (e.id ? '#' + e.id : e.tagName + '.' + String(e.className).split(' ')[0]) + ' ' + Math.round(e.getBoundingClientRect().right)) })); console.log(label, o.sw > o.cw + 1 ? 'OVERFLOW ' + JSON.stringify(o) : 'ok'); };
+  const shot = async (name, full) => { await page.screenshot({ path: `${dir}/${name}.png`, fullPage: !!full }); };
+  const ev = (fn, ...a) => page.evaluate(fn, ...a);
+  await page.waitForTimeout(6500);
+  await ev(() => { const b = [...document.querySelectorAll('#cb-welcome button')].find(b => /Start exploring/.test(b.textContent)); b && b.click(); try { localStorage.setItem('coinbridge.welcomed', '1'); } catch (e) {} const w = document.getElementById('cb-welcome'); w && w.remove(); const st = document.createElement('style'); st.textContent = 'html,body,*{scroll-behavior:auto!important}'; document.head.appendChild(st); }); await page.waitForTimeout(600);
+  // desktop
+  await page.setViewportSize({ width: 1440, height: 900 });
+  await ev(() => nav('markets')); await page.waitForTimeout(2500);
+  await ev(() => { window.scrollTo(0, 0); }); await shot('d-markets-top');
+  await ev(() => { const r = document.getElementById('dlDesksRail'); r && r.scrollIntoView({ block: 'center' }); }); await page.waitForTimeout(400); await shot('d-markets-desks');
+  await ev(() => { document.getElementById('dlRungRail').scrollIntoView({ block: 'center' }); }); await page.waitForTimeout(400); await shot('d-markets-rungs');
+  await ev(() => DLRADAR.open('trend')); await page.waitForTimeout(2000); await shot('d-radar'); await ev(() => DLCORE.close('dlRadar'));
+  await ev(() => DLWEATHER.open()); await page.waitForTimeout(2000); await shot('d-weather'); await ev(() => DLCORE.close('dlWeather'));
+  await ev(() => DLODDS.open('crypto')); await page.waitForTimeout(2000); await shot('d-odds'); await ev(() => DLCORE.close('dlOdds'));
+  await ev(() => openCoin('BTC')); await page.waitForTimeout(3500); await ev(() => document.getElementById('dlCoinAI').scrollIntoView({ block: 'start' })); await page.waitForTimeout(300); await shot('d-coin-read');
+  await ev(() => document.getElementById('dlDossier').scrollIntoView({ block: 'start' })); await page.waitForTimeout(300); await shot('d-coin-dossier');
+  await ev(() => { NXCHAT.open(); setTimeout(() => NXCHAT.ask('Read BTC'), 300); }); await page.waitForTimeout(2200); await shot('d-desk');
+  await ev(() => { NXCHAT.ask('coach me'); }); await page.waitForTimeout(1500); await shot('d-desk-coach'); await ev(() => NXCHAT.close());
+  await ev(() => DEXAI.coach()); await page.waitForTimeout(800); await shot('d-coach-sheet'); await ev(() => DLCORE.close('dlCoach'));
+  await ev(() => DLTRUST.open('dexai')); await page.waitForTimeout(600); await shot('d-trust'); await ev(() => DLTRUST.close());
+  // day mode
+  await ev(() => { document.documentElement.setAttribute('data-mode', 'day'); nav('markets'); }); await page.waitForTimeout(2000); await ev(() => window.scrollTo(0, 0)); await shot('d-day-markets');
+  await ev(() => { NXCHAT.open(); setTimeout(() => NXCHAT.ask('market state'), 300); }); await page.waitForTimeout(2000); await shot('d-day-desk'); await ev(() => { NXCHAT.close(); document.documentElement.removeAttribute('data-mode'); });
+  // mobile
+  await page.setViewportSize({ width: 390, height: 844 });
+  await ev(() => nav('markets')); await page.waitForTimeout(2500); await ev(() => window.scrollTo(0, 0));
+  await overflow('m-markets'); await shot('m-markets-top');
+  await ev(() => { document.getElementById('dxMarketCard').scrollIntoView({ block: 'start' }); }); await page.waitForTimeout(300); await shot('m-market-read');
+  await ev(() => { document.getElementById('dlDesksRail').scrollIntoView({ block: 'start' }); }); await page.waitForTimeout(300); await shot('m-desks'); await overflow('m-desks');
+  await ev(() => { document.getElementById('dlRungRail').scrollIntoView({ block: 'start' }); }); await page.waitForTimeout(300); await shot('m-rungs'); await overflow('m-rungs');
+  await ev(() => DLRADAR.open('trend')); await page.waitForTimeout(2000); await shot('m-radar'); await overflow('m-radar'); await ev(() => DLCORE.close('dlRadar'));
+  await ev(() => DLWEATHER.open()); await page.waitForTimeout(2000); await shot('m-weather'); await overflow('m-weather'); await ev(() => DLCORE.close('dlWeather'));
+  await ev(() => DLODDS.open('crypto')); await page.waitForTimeout(2000); await shot('m-odds'); await overflow('m-odds'); await ev(() => DLCORE.close('dlOdds'));
+  await ev(() => DLDESKS.chainLadder()); await page.waitForTimeout(1500); await shot('m-chains'); await overflow('m-chains'); await ev(() => DLCORE.close('dlChains'));
+  await ev(() => DLLEDGERS.eraSheet()); await page.waitForTimeout(1000); await shot('m-era'); await overflow('m-era'); await ev(() => DLCORE.close('dlEra'));
+  await ev(() => openCoin('BTC')); await page.waitForTimeout(3500); await overflow('m-coin'); await ev(() => document.getElementById('dlCoinAI').scrollIntoView({ block: 'start' })); await page.waitForTimeout(300); await shot('m-coin-read');
+  await ev(() => document.getElementById('dlVenues').scrollIntoView({ block: 'start' })); await page.waitForTimeout(300); await shot('m-coin-venues'); await overflow('m-coin-venues');
+  await ev(() => { NXCHAT.open(); setTimeout(() => NXCHAT.ask('Read BTC'), 300); }); await page.waitForTimeout(2200); await shot('m-desk'); await overflow('m-desk'); await ev(() => NXCHAT.close());
+  await ev(() => { openAlerts(); }); await page.waitForTimeout(800); await shot('m-sentinel'); await overflow('m-sentinel'); await ev(() => { try { closeModal(); } catch (e) {} });
+  await ev(() => nav('learn')); await page.waitForTimeout(1200); await ev(() => { try { enterLesson(2); } catch (e) {} }); await page.waitForTimeout(800); await ev(() => { const t = document.getElementById('dxTutor'); t && t.scrollIntoView({ block: 'center' }); }); await page.waitForTimeout(300); await shot('m-tutor'); await overflow('m-tutor');
+  await ev(() => DLTRUST.open('dexai')); await page.waitForTimeout(600); await shot('m-trust'); await overflow('m-trust'); await ev(() => DLTRUST.close());
+  console.log('errors', h.errors);
+  await h.close();
+})().catch(e => { console.error(e); process.exit(99); });

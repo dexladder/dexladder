@@ -1,0 +1,1 @@
+function basisBuy(sym,amt,pxUSD){DLAPP.legacy.paper.basisBuy(S,sym,amt,pxUSD)}

@@ -1,0 +1,1 @@
+window.__cbxFee=null,window.execFill=function(side,sym,quote,amt,px,label,silent){var f=window.__cbxFee;if(null==f)return _exec.apply(this,arguments);return DLAPP.legacy.paper.execFill(S,f,side,sym,quote,amt,px,label,silent,!1)}

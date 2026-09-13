@@ -1,0 +1,1 @@
+window.placeOrder=function(){var t=S.ordType;if("dca"===t||"grid"===t)return _place.apply(this,arguments);DLAPP.legacy.ticket.place({TIF:TIF,POST:POST,REDUCE:REDUCE,fillWith:fillWith,n:n})}

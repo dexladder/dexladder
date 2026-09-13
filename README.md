@@ -194,7 +194,8 @@ Security reports: **[SECURITY.md](SECURITY.md)**.
 
 ## Licence
 
-Not yet chosen. Until one is added, the default applies: all rights reserved, and you should not assume permission to reuse the code. Reading, running, and reporting bugs are all fine.
+**MIT.** Fork it, teach with it, embed it, sell something built on it — keep the
+copyright notice. See [LICENSE](LICENSE).
 
 ---
 
