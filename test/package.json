@@ -1,1 +1,1 @@
-{"name":"dexladder-v154-gate","private":true,"description":"v154 gate + visual pass (Playwright, mocked hosts)","dependencies":{"playwright":"^1.56.0"}}
+{"name":"dexladder-v154-gate","private":true,"description":"v154 gate + visual pass (Playwright, mocked hosts)","dependencies":{"playwright":"1.56.0"}}

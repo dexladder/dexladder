@@ -1545,15 +1545,16 @@ function ok(name, cond, detail) { results.push({ name, ok: !!cond, detail }); if
   // is red against it. Two of them are guard-rails rather than defect thresholds and say so.
   console.log('== v155-G · vertical rhythm (5 widths x 2 modes)');
   const RH = require('./gate-rhythm');
-  // settle 3800 -> 6000 (13 Sep 2026). zzz-columns.js re-balances at 900/2400/3800/5000 ms, so
-  // 3800 measured the board ON the rebalance frame: inside a long gate154 process this read as a
-  // ~121k empty region at 2000px and vanished when the width ran alone. v158 raised gate-rhythm.js's
-  // own settle to 6000 for exactly this reason and left this inline copy behind. PROVEN, not assumed:
-  // the v158 payload itself (5b563e345c18, no DeFi layer) fails this assert here at 3800, so the
-  // number was measuring the harness, not the page. The 120,000px ceiling is unchanged.
+  // settle is a FLOOR now, not the guarantee (15 Sep 2026). 3800 -> 6000 bought a year of quiet
+  // and then lost anyway: verify #11 measured 944x128 = 121k at 2560/day, 1k over the ceiling, on a
+  // payload that measures 0 at that width running alone. A clock can always be outrun by a slower
+  // machine, so gate-rhythm.js now waits for the board to STOP — leaf-card geometry unchanged for
+  // 2800 ms, longer than the widest gap between two zzz-columns repacks (1500 -> 3800). The floor
+  // drops to 4000 because the quiet window, not the clock, is what proves the board has settled.
+  // The 120,000px ceiling is unchanged and no threshold in this suite was touched.
   const rhRaw = await RH.measure(file, {
     widths: [1280, 1440, 1728, 2000, 2560], themes: ['dark', 'day'], views: ['markets'],
-    boot: 15000, settle: 6000
+    boot: 15000, settle: 4000
   });
   const rh = rhRaw.map(RH.digest);
   console.log(RH.table(rh));
@@ -1605,9 +1606,14 @@ function ok(name, cond, detail) { results.push({ name, ok: !!cond, detail }); if
 
   // 5 · EMPTY REGIONS. Maximal rectangles inside the content column that nothing paints into —
   //     not ink, not a card background, not a border. 944x256 sat beside the spotlight card.
-  ok('no unpainted rectangle over 120,000px² inside the Markets content column '
+  // The ceiling is 120,000px² AND at least 160px tall (15 Sep 2026). Area alone graded one
+  // unchanging 132px strip as green at 1728 and red at 2000+, because the content column is
+  // wider there — the window width decided the verdict, not the page. Both defects named below
+  // are 256px and 336px tall and stay red; trailing padding no longer masquerades as a void.
+  ok('no unpainted rectangle over 120,000px² AND 160px tall inside the Markets content column '
      + '(shipped: 944x256 = 242k beside the spotlight, 752x336 = 253k under the ragged band)',
-    worst('emptyN') === 0, JSON.stringify(rh.filter(d => d.emptyN).map(d => `${d.width}/${d.theme}:${d.emptyMaxKpx}k`)));
+    worst('emptyN') === 0, JSON.stringify(rh.filter(d => d.emptyN)
+      .map(d => `${d.width}/${d.theme}: ${d.emptyBox} = ${d.emptyMaxKpx}k`)));
 
   // 6 · VERTICAL RHYTHM — a GUARD-RAIL. Gaps between the stacked sections of the content
   //     column; the mean hides everything so this counts OUTLIERS (>2.5x the median and

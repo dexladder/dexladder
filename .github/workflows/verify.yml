@@ -11,13 +11,13 @@ on:
 jobs:
   reproducible-build:
     name: reproducible build + gates
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - uses: actions/checkout@v4
-      - uses: actions/setup-python@v5
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
         with: { python-version: "3.12" }
-      - uses: actions/setup-node@v4
-        with: { node-version: "20" }
+      - uses: actions/setup-node@v7
+        with: { node-version: "22" }
 
       - name: Record the committed artifact
         run: |
@@ -34,9 +34,14 @@ jobs:
           echo "rebuilt   : $rebuilt_sha ($(wc -c < dist/index.html) bytes)"
           test "$rebuilt_sha" = "$committed_sha"
 
+      # The browser is part of the build's evidence, so it is pinned like everything else:
+      # `npm ci` installs the exact playwright in test/package-lock.json and nothing else, and
+      # `playwright install` then fetches the one Chromium build that version ships with. The old
+      # `|| npm install` fallback silently re-resolved ^1.56.0 to whatever was newest that morning,
+      # which is drift wearing a lockfile. If the lockfile is wrong, fail here and say so.
       - name: Gates
         run: |
-          npm --prefix test ci --no-audit --no-fund || npm --prefix test install --no-audit --no-fund
+          npm --prefix test ci --no-audit --no-fund
           (cd test && npx playwright install --with-deps chromium)
           node test/gate154.js dist/index.html
 
