@@ -58,7 +58,7 @@ Most crypto apps are a funnel. This one has nowhere to funnel you to.
 
 > Every crypto app wants your money. This one won't take it.
 
-Built anonymously, gifted to the community. Don't trust — verify. (Instructions for exactly that are below.)
+Don't trust — verify. (Instructions for exactly that are below.)
 
 ---
 
@@ -139,7 +139,9 @@ dist/index.html   3,241,037 bytes
 sha256            96f28df0eb485f8718f1ed1ab9568157e0e3b1cc150eb6b02573074569d45567
 ```
 
-That is the same file served at dexladder.com. Fetch it, hash it, build it here, hash that — all three should agree.
+That is the tagged release artifact. Download it, hash it, build it here, hash that — those three should agree.
+
+dexladder.com runs continuously from the same tree and is usually ahead of the last tag, so the file the site serves will not always match the hash above. Verify against the release you downloaded, not against the live page.
 
 Recent work that came out of that discipline:
 
