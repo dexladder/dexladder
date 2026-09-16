@@ -12,6 +12,10 @@
 
 **[Open the live app](https://dexladder.com)** · **[Download the single file](https://github.com/dexladder/dexladder/releases/latest)** · **[Verify the build](docs/VERIFY.md)** · **[Discussions](https://github.com/dexladder/dexladder/discussions)**
 <!-- /badges -->
+<p align="center">
+  <img src="brand/desks-contact-sheet.jpg" alt="Pool Radar, Liquidity Desk, Leverage Weather, Rewind, Bots and the Odds Desk, captured live on dexladder.com" width="100%">
+</p>
+
 **The gateway to Web 3.0.**
 
 The whole on-chain market — every pool, every chain, every venue — opened in
@@ -85,6 +89,10 @@ Fills are not "price × quantity." Every order goes through a deterministic engi
 
 On top of that sit perpetuals with funding and liquidation, Black-Scholes options with correctly scaled greeks, DCA and grid bots, and a replay engine with four historical eras and injectable black swan events. A quant desk runs Monte Carlo on your portfolio. A FIFO/LIFO tax estimator produces numbers *and* publishes its own nine limitations, because an estimator that hides its assumptions is a liability.
 
+<p align="center">
+  <img src="brand/fill-model.jpg" alt="The four stages of a fill: latency window, book walk, impact hole, queue drain" width="100%">
+</p>
+
 ### The Web3 desks
 
 This is the half nothing else in the category has, and each one is a shipped
@@ -116,6 +124,10 @@ A 500-coin markets screen. A 15-chain explorer with a cross-chain mempool radar.
 ---
 
 ## The verification culture
+
+<p align="center">
+  <img src="brand/verification-plate.jpg" alt="337 gate assertions, 64 token-contrast checks, ~20,600 rendered-contrast assertions, 40 rhythm contexts, zero failures" width="100%">
+</p>
 
 This is the part worth caring about.
 
@@ -207,6 +219,10 @@ copyright notice. See [LICENSE](LICENSE).
 ---
 
 ## Reproduce this build
+
+<p align="center">
+  <img src="brand/architecture-map.jpg" alt="31 layers into build154.py, out one 3,241,037-byte file with one sha256" width="100%">
+</p>
 
 Don't trust the binary in Releases — rebuild it and compare the hash. CI does
 exactly this on every push, on a clean Ubuntu runner, and goes red if the bytes
