@@ -1,6 +1,6 @@
 # Architecture
 
-DexLadder is a **single-file application**. `dist/index.html` is 3,241,037 bytes of
+DexLadder is a **single-file application**. `dist/index.html` is 3,648,352 bytes of
 self-contained HTML, CSS and JavaScript with no runtime dependency, no module
 loader, no bundler output and no network origin it must reach to start.
 
@@ -21,7 +21,7 @@ There is no dependency graph to reason about and no import resolution to break.
 
 | concern | how |
 | --- | --- |
-| State | one `localStorage` blob, exportable as a signed bundle |
+| State | `localStorage` working set (capped, synchronous, what every renderer reads) + append-only `IndexedDB` archive `dexladder-vault` (uncapped history, written after the save, never read by existing code paths); both exported together as one signed, SHA-256-checksummed bundle |
 | Identity | none — there is no user record anywhere |
 | Backend | none — the browser reads public market APIs directly, so there is no DexLadder server and no DexLadder log |
 | Offline | service worker (`dist/sw.js`) pins the payload by content hash |

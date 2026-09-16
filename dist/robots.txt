@@ -1,0 +1,18 @@
+User-agent: *
+Allow: /
+Disallow: /*?utm_
+Disallow: /*?ref=
+
+# Answer engines are distribution, not competition — this product has nothing to sell.
+User-agent: GPTBot
+Allow: /
+User-agent: OAI-SearchBot
+Allow: /
+User-agent: ClaudeBot
+Allow: /
+User-agent: PerplexityBot
+Allow: /
+User-agent: Google-Extended
+Allow: /
+
+Sitemap: https://www.dexladder.com/sitemap.xml

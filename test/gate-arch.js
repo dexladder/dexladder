@@ -298,7 +298,10 @@ for (const [k, [now, max]] of Object.entries(R)) ok(`ratchet · legacy ${k} ${no
       // the release story, the footer, the palette
       DLAPP.legacy.blog.story(); await wait(700);
       out.story = { page: pageOn(), hash: location.hash };
-      out.footer = [...document.querySelectorAll('footer .dl-foot-blog a')].map(a => a.getAttribute('href'));
+      // v162 · the footer is a column grid (layers/47-footer.js); the Blog links live in its
+      // Learn column, not in the flat .dl-foot-blog run. What is asserted is reachability FROM
+      // THE FOOTER, so the selector is the footer, not one shape of it.
+      out.footer = [...document.querySelectorAll('footer a[href]')].map(a => a.getAttribute('href'));
       out.cmdk = typeof cmdkBuild === 'function' ? cmdkBuild('blog').filter(i => i.grp === 'Commands').map(i => i.label) : [];
       // Advanced mode's preview links the engine article; Beginner's does not
       nav('coin'); S.ordType = 'market'; S.side = 'buy';

@@ -476,52 +476,6 @@ function PROBE(viewName) {
   };
 }
 
-/* ============================================================== quiet settle
-   v162 · A FIXED wait is a race, and it lost on CI on 15 Sep 2026.
-   layers/zzz-columns.js re-packs the board at 200 / 1500 / 3800 ms after every nav()
-   (and at 900 / 2400 / 5000 ms after start). A clock-based settle only has to be shorter
-   than one repack under load to sample the board mid-flight: the run that failed measured
-   944x128 = 121k at 2560/day, 1k over the 120,000 ceiling, and the SAME payload measured
-   0 at that width running alone. The hole was the harness blinking, not the page.
-   So stop guessing how slow the machine is. Wait until the board has actually STOPPED:
-   sample the leaf-card geometry, require it unchanged for longer than the widest gap
-   between two repacks (2300 ms), and cap it so a genuinely animating page still ends. */
-const CARD_SEL = '.card,.mx-panel,.dl154,.tbl-card,.panel,.nv-card';
-function LAYOUT_SIG(sel) {
-  var page = document.querySelector('main.page.active') ||
-             document.querySelector('main.page:not([hidden])') ||
-             document.querySelector('main.page');
-  if (!page) return 'nopage';
-  var col = page.querySelector(':scope > .wrap') || page;
-  var out = [Math.round(col.scrollHeight), Math.round(col.getBoundingClientRect().height)];
-  var ns = page.querySelectorAll(sel), lim = Math.min(ns.length, 400);
-  for (var i = 0; i < lim; i++) {
-    var r = ns[i].getBoundingClientRect();
-    out.push((r.left | 0) + ',' + (r.top | 0) + ',' + (r.width | 0) + ',' + (r.height | 0));
-  }
-  return out.join('|');
-}
-async function settleQuiet(page, floorMs, opts) {
-  opts = opts || {};
-  const quiet = opts.quiet || 2800;   /* > 2300 ms, the widest gap between two repacks */
-  const step  = opts.step  || 400;
-  const cap   = opts.cap   || 30000;
-  const t0 = Date.now();
-  let last = null, stableSince = null;
-  for (;;) {
-    const sig = await page.evaluate(LAYOUT_SIG, CARD_SEL);
-    const now = Date.now();
-    if (sig === last) { if (stableSince === null) stableSince = now; }
-    else { last = sig; stableSince = null; }
-    const elapsed = now - t0;
-    if (elapsed >= cap) return { elapsed, quiet: false };
-    if (elapsed >= floorMs && stableSince !== null && now - stableSince >= quiet) {
-      return { elapsed, quiet: true };
-    }
-    await page.waitForTimeout(step);
-  }
-}
-
 /* ============================================================== driver */
 async function measure(file, opts) {
   opts = opts || {};
@@ -547,8 +501,7 @@ async function measure(file, opts) {
         }
         for (const v of views) {
           await h.page.evaluate(x => { try { nav(x); } catch (e) {} window.scrollTo(0, 0); }, v);
-          const q = await settleQuiet(h.page, settle, opts.quiet ? { quiet: opts.quiet } : null);
-          if (!q.quiet) console.log(`  ! ${w}/${theme}/${v}: board still moving after ${q.elapsed}ms (cap hit)`);
+          await h.page.waitForTimeout(settle);
           await h.page.evaluate(() => window.scrollTo(0, 0));
           await h.page.waitForTimeout(250);
           const m = await h.page.evaluate(PROBE, v);
@@ -575,22 +528,8 @@ function digest(m) {
   const worstDens = rows.reduce((a, r) => Math.max(a, r.densRatio === 999 ? 0 : r.densRatio), 0);
   const worstGap = (m.cards || []).reduce((a, c) => Math.max(a, c.gap), 0);
   const clipN = (m.clip.hard.length) + (m.clip.noAffordance.length) + (m.clip.truncated.length);
-  /* v162 · an AREA alone is width-blind, and that shipped a false positive on 15 Sep 2026.
-     The Markets hero leaves a 132px strip under the stat tiles at every width. The content
-     column caps at 1860px, so that ONE strip measures 765x128 = 98k at 1728 (green) and
-     944x128 = 120,832 at 2000 and 2560 (red) — the identical pixel state, graded by how wide
-     the window happened to be. A hole a reader notices is TALL, not merely wide: both defects
-     this check was written against were 256px and 336px tall. So a rectangle now has to be
-     both big AND tall to count. The 120,000px ceiling is unchanged; 160px is below either
-     original defect and above trailing padding, and it makes the verdict width-invariant. */
-  const EMPTY_MIN_AREA = 120000, EMPTY_MIN_H = 160;
-  const emptyN = (m.empty || []).filter(e => e.w * e.h >= EMPTY_MIN_AREA && e.h >= EMPTY_MIN_H).length;
+  const emptyN = (m.empty || []).filter(e => e.w * e.h >= 120000).length;
   const emptyMax = (m.empty || []).reduce((a, e) => Math.max(a, e.w * e.h), 0);
-  /* a bare area told us nothing on 15 Sep 2026 — "121k" could have been a 944x128 strip or a
-     256x472 column, and the two are different bugs. Carry the geometry so a red run explains
-     itself in the log instead of needing a bisect to find out what shape the hole was. */
-  const emptyWorst = (m.empty || []).slice().sort((a, b) => b.w * b.h - a.w * a.h)[0] || null;
-  const emptyTall = (m.empty || []).filter(e => e.h >= EMPTY_MIN_H).sort((a, b) => b.w * b.h - a.w * a.h)[0] || null;
   return {
     view: m.view, width: m.width, theme: m.theme,
     rowSpread: worstSpread, bandSpread: bandSpread, rowSpreadFrac: +worstFrac.toFixed(3),
@@ -600,7 +539,6 @@ function digest(m) {
     clip: clipN, hardClip: m.clip.hard.length, noAff: m.clip.noAffordance.length, trunc: m.clip.truncated.length,
     occl: (m.occlusion || []).length,
     emptyN, emptyMaxKpx: Math.round(emptyMax / 1000),
-    emptyBox: (emptyTall || emptyWorst) ? (e => `${e.w}x${e.h}@${e.x},${e.y}`)(emptyTall || emptyWorst) : '',
     barCollide: (m.statBars && m.statBars.collisions.length) || 0
   };
 }
@@ -612,7 +550,7 @@ function table(ds) {
   return [line(cols), line(wds.map(w => '-'.repeat(w))), ...ds.map(d => line(cols.map(c => d[c])))].join('\n');
 }
 
-module.exports = { measure, digest, table, PROBE, settleQuiet, WIDTHS, THEMES, VIEWS };
+module.exports = { measure, digest, table, PROBE, WIDTHS, THEMES, VIEWS };
 
 if (require.main === module) {
   (async () => {

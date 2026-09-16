@@ -8,6 +8,20 @@ import { tierFor } from './spec';
 import type { PerpMode, PerpPosition, PerpSpec } from './types';
 
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+/**
+ * v162 · a v:2 tag is a claim, not a guarantee. positions() trusted it and cast
+ * the record straight through, so a row missing qty, mmr or cum — a partial write,
+ * a hand-edited store, an older field set — reached liqPrice() and printed NaN as a
+ * liquidation price and NaN% as the distance to it. Every field the arithmetic
+ * actually reads is checked here.
+ */
+export function isPerpV2(p: any): boolean {
+  return !!p && typeof p === 'object' && p.v === 2
+    && typeof p.sym === 'string' && (p.side === 'long' || p.side === 'short')
+    && +p.qty > 0 && +p.entry > 0 && isFinite(+p.margin)
+    && isFinite(+p.mmr) && isFinite(+p.cum);
+}
 export function migrate(raw: any, specOf: (sym: string) => PerpSpec, mode: PerpMode, venue: string, now: number): PerpPosition | null {
   if (!raw || typeof raw !== 'object') return null;
   const qty = +raw.qty, entry = +raw.entry, margin = +raw.margin;

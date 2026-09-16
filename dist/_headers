@@ -4,10 +4,14 @@
 # bundles actually carry was this one, which had no CSP, no HSTS and no Permissions-Policy.
 # Both hosts were therefore serving the app with none of them.
 #
-# The CSP ships REPORT-ONLY. Report-only is not enforcement: it blocks nothing. It is here so
-# violations can be collected from real browsers before the policy is switched to
-# Content-Security-Policy. No reporting endpoint is configured, deliberately — violations are
-# read from the browser console, so no user request is sent to a third party.
+# v162 · THE POLICY IS NOW ENFORCED. It shipped report-only from v155 so violations could be
+# collected from real browsers first; report-only blocks nothing, so for that week the site had
+# a policy it did not apply. The identical policy is now sent as Content-Security-Policy, with
+# the report-only copy kept beside it so the console keeps naming violations. Verified before
+# the flip: the built payload was served under this exact policy in headless Chromium, with
+# network on and network off, and raised zero securitypolicyviolation events. No reporting
+# endpoint is configured, deliberately — violations are read from the browser console, so no
+# user request is sent to a third party.
 
 /*
 # v159b · LOOPBACK IS IN connect-src, and it has to be.
@@ -25,6 +29,7 @@
 #   'unsafe-inline' — an attacker who can run script in this page does not need a
 #   CSP hole to reach the reader's own localhost. The alternative was shipping two
 #   features that cannot work.
+  Content-Security-Policy: default-src 'none'; script-src 'self' 'unsafe-inline' https://s3.tradingview.com; style-src 'self' 'unsafe-inline'; img-src 'self' https: data: blob:; font-src 'self' https: data:; connect-src 'self' https: wss://fstream.binance.com http://127.0.0.1:* http://localhost:* http://[::1]:* ws://127.0.0.1:* ws://localhost:* ws://[::1]:*; frame-src https://www.youtube-nocookie.com https://s3.tradingview.com https://www.tradingview.com; media-src 'self' https: blob:; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
   Content-Security-Policy-Report-Only: default-src 'none'; script-src 'self' 'unsafe-inline' https://s3.tradingview.com; style-src 'self' 'unsafe-inline'; img-src 'self' https: data: blob:; font-src 'self' https: data:; connect-src 'self' https: wss://fstream.binance.com http://127.0.0.1:* http://localhost:* http://[::1]:* ws://127.0.0.1:* ws://localhost:* ws://[::1]:*; frame-src https://www.youtube-nocookie.com https://s3.tradingview.com https://www.tradingview.com; media-src 'self' https: blob:; worker-src 'self' blob:; manifest-src 'self'; object-src 'none'; frame-ancestors 'self'; base-uri 'self'; form-action 'self'
   Strict-Transport-Security: max-age=31536000; includeSubDomains; preload
   X-Content-Type-Options: nosniff

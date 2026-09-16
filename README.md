@@ -43,7 +43,7 @@ Or take it with you:
 3. That's the whole install.
 ```
 
-One file. **3,241,037 bytes.** No bundler output, no module loader, no npm dependency, no build step required to *run* it, and no DexLadder server anywhere — there is no backend to call home to. It works offline — on a plane, in a lecture hall, on a laptop that has never met this repo. Your entire state is one `localStorage` blob you can export as a signed bundle and carry to another machine.
+One file. **3,648,352 bytes.** No bundler output, no module loader, no npm dependency, no build step required to *run* it, and no DexLadder server anywhere — there is no backend to call home to. It works offline — on a plane, in a lecture hall, on a laptop that has never met this repo. Your desk lives in two stores on your own machine: a `localStorage` working set, and an append-only `IndexedDB` archive (`dexladder-vault`) that keeps the full history of fills, journal entries, alerts and the equity curve past the limits a single browser key can hold. Both leave together, as one signed and SHA-256-checksummed bundle you carry to another machine yourself.
 
 ---
 
@@ -55,7 +55,7 @@ Most crypto apps are a funnel. This one has nowhere to funnel you to.
 - **No server.** There is no backend that holds your data, because there is no backend.
 - **No ads, no affiliate links, no referral codes, no token, no upsell.**
 - **No real money, ever.** You cannot deposit. There is no deposit.
-- **Your data never leaves your device.** Portfolio, lesson progress and trade history live in your browser and are sent nowhere.
+- **Your data never leaves your device.** Portfolio, lesson progress and trade history live in your browser — the working desk in `localStorage`, the full history in the `dexladder-vault` IndexedDB archive — and are sent nowhere. You do not have to take that on trust: open the console on dexladder.com and run `await DLVAULT.ready; DLVAULT.writable()`, then `DLVAULT.stats()`. No network call is made, because there is nothing to call.
 - **No telemetry, no analytics, no tracker, no fingerprinting.** Nothing measures you.
 
 > One honest caveat, stated plainly rather than buried: live prices come from public market APIs (CoinGecko, Binance, OKX, CryptoCompare, Coinpaprika, Blockstream and a few others), so those providers see your IP the same way any website you open does. The optional TradingView chart and the embedded video lessons load from their own hosts when — and only when — you open them. Turn the network off and the desks, the academy and your portfolio all keep working.
@@ -144,11 +144,11 @@ The current build:
 
 The build is byte-for-byte reproducible from source. Same input, same output, same hash — anyone can confirm the file they downloaded is the file this repo describes.
 
-The current release, `v159`:
+The current release, `v163`:
 
 ```
-dist/index.html   3,241,037 bytes
-sha256            96f28df0eb485f8718f1ed1ab9568157e0e3b1cc150eb6b02573074569d45567
+dist/index.html   3,648,352 bytes
+sha256            b85f0c42138829221b1b394fd0d31addbc527632b37ecd2ef859ab0b63703ec2
 ```
 
 That is the tagged release artifact. Download it, hash it, build it here, hash that — those three should agree.
@@ -237,8 +237,8 @@ shasum -a 256 dist/index.html
 
 | field | value |
 | --- | --- |
-| bytes | `3,241,037` |
-| sha256 | `96f28df0eb485f8718f1ed1ab9568157e0e3b1cc150eb6b02573074569d45567` |
+| bytes | `3,648,352` |
+| sha256 | `b85f0c42138829221b1b394fd0d31addbc527632b37ecd2ef859ab0b63703ec2` |
 | build input | `build154.py` + `layers/` + `src/` |
 | runtime dependencies | none |
 | network calls at build time | none |

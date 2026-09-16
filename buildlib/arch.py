@@ -53,25 +53,41 @@ PATCH_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'patches')
 
 def cut(s, start, suffix=''):
     """Return s[i:k] for the unique `start`, through its balanced closing brace (+ `suffix`)."""
+    # v162 · a backtick used to be treated as an opaque quote like " or ', so a
+    # NESTED template literal — `a ${`b`} c` — closed the outer string early and
+    # every following brace was counted structurally. cut() then returned a
+    # silently truncated body instead of raising. The scanner now carries a
+    # context stack: quotes, template literals, and the ${ } interpolations
+    # inside them, which are code and may contain braces and further templates.
+    # Every cut in this build is sha-pinned, so if this ever returns a different
+    # slice than before, the pin fails loudly rather than shipping the change.
     assert s.count(start) == 1, f'anchor must be unique: {start!r} x{s.count(start)}'
-    i = s.index(start); j = s.index('{', i); d = 0; q = None; k = j
-    while k < len(s):
-        ch = s[k]
-        if q:
-            if ch == '\\': k += 2; continue
-            if ch == q: q = None
-        elif ch in '"\'`': q = ch
-        elif ch == '{': d += 1
-        elif ch == '}':
-            d -= 1
-            if d == 0:
-                end = k + 1
-                if suffix:
-                    assert s[end:end + len(suffix)] == suffix, f'expected {suffix!r} after {start!r}'
-                    end += len(suffix)
-                return s[i:end]
+    i = s.index(start); k = s.index('{', i) + 1
+    stack = ['{']
+    while k < len(s) and stack:
+        ch = s[k]; top = stack[-1]
+        if top in ('"', "'", '`'):
+            if ch == '\\':
+                k += 2; continue
+            if ch == top:
+                stack.pop()
+            elif top == '`' and ch == '$' and s[k + 1:k + 2] == '{':
+                stack.append('${'); k += 2; continue
+        else:                       # code context: the body, or a ${ } hole
+            if ch in '"\'`':
+                stack.append(ch)
+            elif ch == '{':
+                stack.append('{')
+            elif ch == '}':
+                stack.pop()
         k += 1
-    raise AssertionError('unbalanced: ' + start)
+    if stack:
+        raise AssertionError('unbalanced: ' + start)
+    end = k
+    if suffix:
+        assert s[end:end + len(suffix)] == suffix, f'expected {suffix!r} after {start!r}'
+        end += len(suffix)
+    return s[i:end]
 
 
 def body(name):

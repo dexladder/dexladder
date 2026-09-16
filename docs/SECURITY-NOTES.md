@@ -49,8 +49,20 @@ continue to work from the service-worker cache.
 
 ## Storage
 
-State is one `localStorage` blob. It is never transmitted. The export path
-produces a signed bundle that you move yourself.
+State is a `localStorage` working set plus an append-only `IndexedDB`
+archive (`dexladder-vault`). Neither is ever transmitted. The export path
+produces one bundle that you move yourself: it carries every DexLadder
+localStorage key and the whole archive, a SHA-256 checksum over the
+canonical JSON of the payload, and a secp256k1 signature from the key held
+on that device.
+
+The checksum is verified **before** the signature, so a truncated or edited
+file is refused even on a browser where signature verification is
+unavailable. The signing key itself is excluded from an export unless the
+operator explicitly asks for it — that option exists to clone a desk onto
+another device you own, and a bundle you send to someone else should not
+carry it. An import writes the desk it replaced into the archive first, so
+it is reversible.
 
 ## Reporting
 

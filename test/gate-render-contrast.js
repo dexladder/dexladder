@@ -80,7 +80,7 @@ const SURFACES = [
             "if(!tr)throw new Error('no markets row to click');(tr.querySelector('td.c-coin')||tr).click()})()",
         wait: 7000 }
     ],
-    must: ['.cmc-stats .cs .v', '.cs-range .rk-head b', '#cv-pairlabel', '#dlCoinAI button.ask', '#dlAskAI'],
+    must: ['.mkt-stats .cs .v', '.cs-range .rk-head b', '#cv-pairlabel', '#dlCoinAI button.ask', '#dlAskAI'],
     close: [] },
 
   { id: 'trade-ticket',

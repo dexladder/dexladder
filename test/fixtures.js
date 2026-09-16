@@ -126,4 +126,23 @@ const TICKERS = { tickers:[ {base:'BTC',target:'USDT',market:{name:'Binance',ide
   {base:'BTC',target:'USDT',market:{name:'TinyDex',identifier:'tinydex'},last:67700,volume:12,converted_volume:{usd:800000},trust_score:'yellow',bid_ask_spread_percentage:0.9,cost_to_move_up_usd:9000,cost_to_move_down_usd:8000,is_stale:true,trade_url:''} ] };
 const EXCHANGES = [ {id:'binance',name:'Binance',year_established:2017,country:'Cayman Islands',trust_score:10,trust_score_rank:1,trade_volume_24h_btc:280000,image:''},{id:'gdax',name:'Coinbase Exchange',year_established:2012,country:'United States',trust_score:10,trust_score_rank:2,trade_volume_24h_btc:45000,image:''},{id:'kraken',name:'Kraken',year_established:2011,country:'United States',trust_score:10,trust_score_rank:3,trade_volume_24h_btc:20000,image:''} ];
 function marketChart(days){ const prices=[]; let px=60000; const n=days; for(let i=n;i>=0;i--){ px*=1+(seeded(i*3)-0.5)*0.04; prices.push([Date.now()-i*864e5, px]); } return {prices, market_caps:prices.map(p=>[p[0],p[1]*1.97e7]), total_volumes:prices.map(p=>[p[0],3e10])}; }
-module.exports = { PAPRIKA_GLOBAL, COINS, markets, GLOBAL, TRENDING, FNG, RATES, CATEGORIES, gtPools, gtOhlcv, GOPLUS, LLAMA_CHAINS, LLAMA_DEXS, LLAMA_FEES, LLAMA_YIELDS, TREASURY, HL_META, DVOL, POLY_EVENTS, POLY_MID, MEMPOOL_DA, TIP_HEIGHT, WIKI, COINLORE, COINLORE_TICKER, RSS, RSS2JSON, NEWS_ITEMS, COIN_DETAIL, TICKERS, EXCHANGES, marketChart };
+
+/* Venue klines for the chart engine: [openTime, o, h, l, c, v, ...] oldest first, a real
+   shape (every bar satisfies h >= max(o,c) and l <= min(o,c)) so candles, Heikin Ashi,
+   Renko, every study and the no-lookahead checks all have something honest to read. */
+const KLINE_MS = { '1m':6e4,'3m':18e4,'5m':3e5,'15m':9e5,'30m':18e5,'1h':36e5,'2h':72e5,'4h':144e5,'6h':216e5,'8h':288e5,'12h':432e5,'1d':864e5,'3d':2592e5,'1w':6048e5,'1M':2592e6 };
+function klines(symbol, interval, limit){
+  const step = KLINE_MS[interval] || 36e5, n = Math.max(30, limit || 500);
+  const base = /^BTC/.test(symbol) ? 67850 : /^ETH/.test(symbol) ? 3521 : /^SOL/.test(symbol) ? 142.31 : 605;
+  const end = Math.floor(Date.now() / step) * step, rows = [];
+  let p = base * 0.88;
+  for (let i = 0; i < n; i++) {
+    const o = p;
+    p = p * (1 + 0.0035 * Math.sin(i / 13) + 0.0018 * Math.cos(i / 5) + (i % 47 === 0 ? 0.006 : 0) + 0.00025);
+    const c = p, h = Math.max(o, c) * 1.0022, l = Math.min(o, c) * 0.9978, t = end - (n - 1 - i) * step;
+    rows.push([t, o.toFixed(6), h.toFixed(6), l.toFixed(6), c.toFixed(6), (900 + (i % 37) * 41).toFixed(4), t + step - 1, '0', 100, '0', '0', '0']);
+  }
+  return rows;
+}
+
+module.exports = { klines, PAPRIKA_GLOBAL, COINS, markets, GLOBAL, TRENDING, FNG, RATES, CATEGORIES, gtPools, gtOhlcv, GOPLUS, LLAMA_CHAINS, LLAMA_DEXS, LLAMA_FEES, LLAMA_YIELDS, TREASURY, HL_META, DVOL, POLY_EVENTS, POLY_MID, MEMPOOL_DA, TIP_HEIGHT, WIKI, COINLORE, COINLORE_TICKER, RSS, RSS2JSON, NEWS_ITEMS, COIN_DETAIL, TICKERS, EXCHANGES, marketChart };

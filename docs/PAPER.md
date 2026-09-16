@@ -8,7 +8,7 @@ DexLadder is a **client-side crypto market simulator and academy**. Live market 
 
 ## 2 · Architecture: one file, no server
 
-There is no backend. The file carries its own design system, its own charting, its own routing, and a service worker for offline use. Because nothing executes server-side, the app cannot collect your data even in principle: there is nowhere to send it. State — paper balances, trades, journal, XP, watchlists — persists in the browser's `localStorage` under keys you can inspect and delete at any time.
+There is no backend. The file carries its own design system, its own charting, its own routing, and a service worker for offline use. Because nothing executes server-side, the app cannot collect your data even in principle: there is nowhere to send it. State — paper balances, trades, journal, XP, watchlists — persists in the browser's `localStorage` under keys you can inspect and delete at any time. That working set is capped so it fits a browser key, so the full history of fills, journal entries, alerts and the equity curve is kept beside it in an append-only `IndexedDB` archive named `dexladder-vault`. Both are on your disk, both are yours to read or delete, and both leave together in one signed export.
 
 ## 3 · Market data: the five-source ladder
 

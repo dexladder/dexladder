@@ -10,7 +10,7 @@ Effective: 29 July 2026 · Contact: [dexladder@gmail.com](mailto:dexladder@gmail
 
 ## About the "Google / Apple" sign-in buttons
 
-The in-app account feature creates a **local identity that never leaves your device**. The "Continue with Google" and "Continue with Apple" buttons are **simulated** — pressing them does not open a real Google or Apple sign-in, sends no request to Google or Apple, and never asks for a password. They exist so the academy can teach account flows safely. Your profile (a display name and a locally generated key) is stored only in your browser's localStorage.
+The in-app account feature creates a **local identity that never leaves your device**. The "Continue with Google" and "Continue with Apple" buttons are **simulated** — pressing them does not open a real Google or Apple sign-in, sends no request to Google or Apple, and never asks for a password. They exist so the academy can teach account flows safely. Your profile (a display name and a locally generated key) is stored only on your device, in your browser's localStorage.
 
 ## Optional Google Wallet pass
 
@@ -22,7 +22,23 @@ To show live markets, the app requests public data directly from: CoinGecko, Coi
 
 ## What is stored on your device
 
-Browser localStorage holds your paper portfolio and trades, journal, alerts, academy progress and XP, certificate name (if you set one), display preferences (theme, mode, contrast), cached prices, and a locally generated signing key. **To erase everything:** clear this site's data in your browser, or uninstall the app. Nothing survives, because nothing was ever anywhere else.
+Two stores, both on your device and nowhere else.
+
+**Browser localStorage** holds the working desk: your paper portfolio and open trades, journal, alerts, academy progress and XP, certificate name (if you set one), display preferences (theme, mode, contrast), cached prices, and a locally generated signing key.
+
+**IndexedDB**, in a database named `dexladder-vault`, holds the archive: the full history of fills, journal entries, alerts and the equity curve — kept past the limits the working desk has to prune to in order to fit a single browser key.
+
+**To erase everything:** clear this site's data in your browser, or uninstall the app. That clears both. Nothing survives, because nothing was ever anywhere else.
+
+**To check this rather than believe it,** open your browser console on dexladder.com:
+
+```js
+await DLVAULT.ready; DLVAULT.writable()  // true when the archive is on
+DLVAULT.stats()                          // rows archived, bytes held, quota reported
+DLVAULT.panel()                          // the same figures, with export and import
+```
+
+None of those calls reach a network. There is no server to reach.
 
 ## Children
 

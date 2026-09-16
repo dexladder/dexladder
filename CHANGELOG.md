@@ -4,6 +4,7 @@ The build tag in the bottom-left corner of the app shows the version you are run
 
 | Version | Codename | What changed |
 |---|---|---|
+| v163 | the vault | Append-only `IndexedDB` archive (`dexladder-vault`) beside the existing `localStorage` working set — full history of fills, journal, alerts and the equity curve, past the caps a single browser key forces · sovereign export raised to `dexladder/sovereign-export/v2`: every desk key and the whole archive, SHA-256 checksum verified before the signature, same secp256k1 key and scheme so older readers still verify it and older bundles still import · signing key excluded from an export unless asked for · imports snapshot the desk they replace, so they are reversible · storage figures measured on the device rather than assumed · 52-assertion browser gate (`test/gate-vault.js`) |
 | v149 | provenance | Trust Center (About · Paper · Privacy · Terms · Disclaimer · Contact · Changelog · Roadmap · Sources · My stats) · Simulated badges on every paper surface · live "data updated" timestamps · CSV export · certificate Save-as-PDF · high-contrast mode · report-a-bug button · X + GitHub links · rich link previews |
 | v148 | sentry | Display-mode menu names all four themes · blank-card & invisible-text sentry · community feed self-heals |
 | v147 | circuit | Cybernetic display mode |

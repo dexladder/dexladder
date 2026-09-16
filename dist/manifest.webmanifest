@@ -1,0 +1,18 @@
+{
+  "name": "DexLadder",
+  "short_name": "DexLadder",
+  "description": "Live crypto prices with a full paper-trading desk — bots, alerts, journal, and a hands-on academy. Real market data, zero real money.",
+  "id": "/",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#05080E",
+  "theme_color": "#0B1220",
+  "icons": [
+    { "src": "/icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any" },
+    { "src": "/icon-maskable.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "maskable" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any" },
+    { "src": "/icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "maskable" }
+  ]
+}

@@ -24,7 +24,7 @@ window.DLDESKS = (function () {
   function mountRail() {
     var host = $("dlIntelCard") || $("dlSignals"); if (!host || $("dlDesksRail")) return;
     var box = document.createElement("div"); box.id = "dlDesksRail"; box.className = "dl154";
-    box.innerHTML = '<div class="h">🗂 Desks <span style="font:500 11px var(--cmc-sans,sans-serif);color:var(--muted)">· named after the question, not the coin</span></div><div class="dl-chips" style="margin:0"></div>';
+    box.innerHTML = '<div class="h">🗂 Desks <span style="font:500 11px var(--ui-sans,sans-serif);color:var(--muted)">· named after the question, not the coin</span></div><div class="dl-chips" style="margin:0"></div>';
     host.insertAdjacentElement("afterend", box);
     box.addEventListener("click", function (e) { var b = e.target.closest("[data-desk]"); if (!b) return; var d = DESKS.filter(function (x) { return x.id === b.getAttribute("data-desk"); })[0]; d && d.fn(); });
     paintRail();

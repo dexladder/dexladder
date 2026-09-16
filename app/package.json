@@ -1,0 +1,17 @@
+{
+  "name": "dexladder-app",
+  "private": true,
+  "description": "DexLadder web — typed source of record for the pure cores (math, indicators, paper engine, design tokens, components, navigation). Bundled into the single-file payload by tools/bundle.mjs.",
+  "type": "module",
+  "scripts": {
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "node tools/test.mjs",
+    "bundle": "node tools/bundle.mjs",
+    "check": "npm run typecheck && npm run test && node tools/bundle.mjs --verify"
+  },
+  "devDependencies": {
+    "@types/node": "^22.20.2",
+    "esbuild": "0.25.10",
+    "typescript": "5.9.3"
+  }
+}

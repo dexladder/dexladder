@@ -133,7 +133,7 @@ window.DLRUNGS = (function () {
   function mount() {
     var ctl = $("mxCtlHost"); if (!ctl || $("dlRungRail")) { paint(); return; }
     var box = document.createElement("div"); box.id = "dlRungRail"; box.className = "dl154";
-    box.innerHTML = '<div class="h">🪜 Rungs <span style="font:500 11px var(--cmc-sans,sans-serif);color:var(--muted)">· lenses over the ladder, yours and curated</span><span class="sp"></span><span class="rg-tools" style="display:flex;gap:6px;flex-wrap:wrap"></span></div><div class="dl-chips" style="margin:0"></div>';
+    box.innerHTML = '<div class="h">🪜 Rungs <span style="font:500 11px var(--ui-sans,sans-serif);color:var(--muted)">· lenses over the ladder, yours and curated</span><span class="sp"></span><span class="rg-tools" style="display:flex;gap:6px;flex-wrap:wrap"></span></div><div class="dl-chips" style="margin:0"></div>';
     ctl.parentNode.insertBefore(box, ctl);
     box.addEventListener("click", function (e) {
       var b = e.target.closest("[data-rung]");

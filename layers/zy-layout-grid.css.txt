@@ -47,7 +47,7 @@
 @media (min-width:1500px){
   #dlCycle,.dls-modes,.dlv-grid,.dlv-out,.willy-grid,.flash-grid,.vkgrid,
   .lab-btns,.sltp,.two,#page-learn .two,.exp-cols,#gridRow .grange,
-  .cmc-stats,#mktpro .mx-glob,#wsbar,#mktpro .mx-right,.news-head{
+  .mkt-stats,#mktpro .mx-glob,#wsbar,#mktpro .mx-right,.news-head{
     grid-template-columns:repeat(auto-fit,minmax(420px,1fr))!important;
     gap:var(--gutter)!important;
   }

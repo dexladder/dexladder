@@ -116,25 +116,43 @@
        of the tallest column most reduces the spread into the shortest, and stops
        the moment no move improves it. Order inside a masonry is column-major
        already, so moving a card is a placement decision, not a reordering one. */
+    /* v162 · this used to read getBoundingClientRect inside the same loop that
+       appended cards, so every pass forced a synchronous reflow — up to 24 of
+       them on each Portfolio render and on every resize. Same greedy algorithm,
+       but all measuring happens first, the passes run against a model, and the
+       moves are applied in one batch at the end. A card's height does not change
+       when it moves between equal-width columns, so the model is exact. */
+    for (var round = 0; round < 3; round++) {
+    var model = cols.map(function (c) { return [].slice.call(c.children); });
+    var hs = cols.map(function (c) { return c.getBoundingClientRect().height; });
+    var CH = new Map();
+    model.forEach(function (list) { list.forEach(function (el) { CH.set(el, el.getBoundingClientRect().height + GAP); }); });
+    var moves = [];
     for (var pass = 0; pass < 24; pass++) {
-      var hs = cols.map(function (c) { return c.getBoundingClientRect().height; });
       var tall = 0, short = 0;
       for (var i = 1; i < n; i++) {
         if (hs[i] > hs[tall]) tall = i;
         if (hs[i] < hs[short]) short = i;
       }
       var spread = hs[tall] - hs[short];
-      if (spread < 40 || cols[tall].children.length < 2) break;
-      var best = null, bestSpread = spread;
-      [].forEach.call(cols[tall].children, function (el) {
-        var h = el.getBoundingClientRect().height + GAP;
+      if (spread < 40 || model[tall].length < 2) break;
+      var best = null, bestSpread = spread, bestAt = -1;
+      for (var j = 0; j < model[tall].length; j++) {
+        var h = CH.get(model[tall][j]) || 0;
         var trial = hs.slice();
         trial[tall] -= h; trial[short] += h;
         var sp = Math.max.apply(null, trial) - Math.min.apply(null, trial);
-        if (sp < bestSpread - 1) { bestSpread = sp; best = el; }
-      });
+        if (sp < bestSpread - 1) { bestSpread = sp; best = model[tall][j]; bestAt = j; }
+      }
       if (!best) break;
-      cols[short].appendChild(best);
+      model[tall].splice(bestAt, 1);
+      model[short].push(best);
+      var bh = CH.get(best) || 0;
+      hs[tall] -= bh; hs[short] += bh;
+      moves.push([short, best]);
+    }
+    moves.forEach(function (mv) { cols[mv[0]].appendChild(mv[1]); });
+    if (!moves.length) break;   /* converged */
     }
 
     /* v158 · one bottom edge. Packing and nudging still left the columns 100–160px

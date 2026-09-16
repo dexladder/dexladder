@@ -32,7 +32,7 @@
   /* Structural grids: their column meaning is fixed (rail + body, table rows,
      ledger lines). Never touched. Everything else that looks like a card band
      is balanced, so this keeps working for grids added later. */
-  var DENY = /\b(wrap|coin-grid|p2p-grid|comm-grid|p2xShell|dj-deck|mx-table|tbl-card|txn|blk-row|jrow|dcarow|botrow|alrow|entrow|identicon|dt-h|dt-r|p2x-row|p2x-bh|sn-vend|sn-tok|kn-cmp|sn-mine|sn-route|ih-how|ncard|corr|mx-seg|dl-tabs|nx-tabs|dlx-art-lay|dlx-art-nav)\b/;   /* the Blog: reading column + contents, prev/next */
+  var DENY = /\b(wrap|coin-grid|p2p-grid|comm-grid|p2xShell|dj-deck|mx-table|tbl-card|txn|blk-row|jrow|dcarow|botrow|alrow|entrow|identicon|dt-h|dt-r|p2x-row|p2x-bh|sn-vend|sn-tok|kn-cmp|sn-mine|sn-route|ih-how|ncard|corr|mx-seg|dl-tabs|nx-tabs|dlx-art-lay|dlx-art-nav|dlf-top)\b/;   /* the Blog: reading column + contents, prev/next; dlf-top: the footer's brand + four named link columns, a fixed meaning per track */
 
   function unbalance(g) {
     g.style.removeProperty('grid-template-columns'); g.style.removeProperty('align-items');

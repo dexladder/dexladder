@@ -51,10 +51,13 @@
 'use strict';
 
 /* --- version ------------------------------------------------------------------------- */
-const SW_BUILD    = 'v159';    // asserted by build154.py to equal <meta name="cb:build">
-const SW_REV = 19;        // bump for worker-only changes (strategy, TTL, bounds)
-const PAYLOAD_SHA = '96f28df0eb485f8718f1ed1ab9568157e0e3b1cc150eb6b02573074569d45567';
+const SW_BUILD    = 'v163';    // asserted by build154.py to equal <meta name="cb:build">
+const SW_REV = 5;        // bump for worker-only changes (strategy, TTL, bounds)
+const PAYLOAD_SHA = 'b85f0c42138829221b1b394fd0d31addbc527632b37ecd2ef859ab0b63703ec2';
 const V           = 'dl-' + SW_BUILD + '-r' + SW_REV + '-' + PAYLOAD_SHA.slice(0, 12);
+// Static content served beside the app: the SEO layer, the legal pages and the support page.
+// Never cached as the shell, never answered from it.
+const CONTENT_ROUTE = /^\/(about|backtesting|blog|crypto-tax|defi|dex-pool-radar|features|fork-sandbox|guides|learn|methodology|onchain-explorer|order-types|paper-trading|perpetuals|privacy|proof-ledger|support|terms|tools|trading-bots|web3)(\/|$)/;
 const SHELL_CACHE = V + '-shell';
 const DATA_CACHE  = V + '-data';
 
@@ -281,6 +284,15 @@ self.addEventListener('fetch', (e) => {
 
   // The worker script is the browser's business and is served no-store; never shadow it.
   if (url.origin === self.location.origin && /(^|\/)sw\.js$/.test(url.pathname)) return;
+
+  // CONTENT ROUTES ARE NOT THE APP SHELL.
+  // navigateFirst() stores every successful navigation as './index.html' — the shell. That is
+  // correct for the app and wrong for every static page beside it: visiting /support/ or a
+  // glossary page would overwrite the cached shell with that page, so the next offline boot
+  // would open a document instead of DexLadder. It also means a returning visitor could be
+  // served the app shell for a content URL, which is exactly the failure App Review hit on the
+  // support URL. These paths are therefore not intercepted at all: plain network, no store.
+  if (url.origin === self.location.origin && CONTENT_ROUTE.test(url.pathname)) return;
 
   if (req.mode === 'navigate') { e.respondWith(navigateFirst(e, req)); return; }
 

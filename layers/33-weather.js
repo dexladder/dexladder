@@ -105,9 +105,9 @@ window.DLWEATHER = (function () {
     var ladder = new Set(C.coinsAll().map(function (c) { return c.sym; }));
     var oiTot = d.perps.reduce(function (s, x) { return s + (x.oiUsd || 0); }, 0);
     var fs = d.perps.filter(function (x) { return x.fund8h != null; }), pos = fs.filter(function (x) { return x.fund8h > 0; }).length;
-    return '<div class="dl-2"><div class="dl154"><div class="h">Open interest <span class="sp"></span>' + C.prov(d.src, d.at, d.stale) + '</div><div style="font:800 26px var(--cmc-sans,sans-serif)">' + (oiTot ? C.big(oiTot) : "—") + '</div><div class="n">Notional across ' + d.perps.length + " perps on " + esc(d.src) + '. One venue, not the whole market — the honest number we can get without a key.</div></div>' +
-      '<div class="dl154"><div class="h">Funding skew</div><div style="font:800 26px var(--cmc-sans,sans-serif)">' + (fs.length ? Math.round(100 * pos / fs.length) + "% positive" : "—") + '</div><div class="n">' + (fs.length ? pos + " of " + fs.length + " perps pay longs → shorts. High positive skew = crowded longs." : "Funding not exposed by this venue.") + (D.ls ? " · BTC long/short accounts " + D.ls.ratio.toFixed(2) + " (" + esc(D.ls.src) + ")" : "") + (D.dvol ? " · DVOL " + D.dvol.v.toFixed(1) : "") + "</div></div></div>" +
-      '<div class="dl154"><div class="h">🧯 Liquidation tape <span class="sp"></span><span id="dlLqSum" style="font:600 11.5px var(--cmc-sans,sans-serif);color:var(--muted)">connecting…</span></div><div id="dlLqTape" style="max-height:180px;overflow:auto;font:500 12px var(--mono,ui-monospace,monospace)"><div class="dl-empty" style="padding:8px">Waiting for the Binance Futures public stream (opens only while this desk is visible).</div></div></div>' +
+    return '<div class="dl-2"><div class="dl154"><div class="h">Open interest <span class="sp"></span>' + C.prov(d.src, d.at, d.stale) + '</div><div style="font:800 26px var(--ui-sans,sans-serif)">' + (oiTot ? C.big(oiTot) : "—") + '</div><div class="n">Notional across ' + d.perps.length + " perps on " + esc(d.src) + '. One venue, not the whole market — the honest number we can get without a key.</div></div>' +
+      '<div class="dl154"><div class="h">Funding skew</div><div style="font:800 26px var(--ui-sans,sans-serif)">' + (fs.length ? Math.round(100 * pos / fs.length) + "% positive" : "—") + '</div><div class="n">' + (fs.length ? pos + " of " + fs.length + " perps pay longs → shorts. High positive skew = crowded longs." : "Funding not exposed by this venue.") + (D.ls ? " · BTC long/short accounts " + D.ls.ratio.toFixed(2) + " (" + esc(D.ls.src) + ")" : "") + (D.dvol ? " · DVOL " + D.dvol.v.toFixed(1) : "") + "</div></div></div>" +
+      '<div class="dl154"><div class="h">🧯 Liquidation tape <span class="sp"></span><span id="dlLqSum" style="font:600 11.5px var(--ui-sans,sans-serif);color:var(--muted)">connecting…</span></div><div id="dlLqTape" style="max-height:180px;overflow:auto;font:500 12px var(--mono,ui-monospace,monospace)"><div class="dl-empty" style="padding:8px">Waiting for the Binance Futures public stream (opens only while this desk is visible).</div></div></div>' +
       '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Perp</th><th class="r">Mark</th><th class="r">Funding 8h</th><th class="r">Open interest</th><th class="r">24h vol</th><th></th></tr></thead><tbody>' + top.map(function (x) { return '<tr' + (ladder.has(x.sym) ? ' class="click" data-coin="' + esc(x.sym) + '"' : "") + "><td><b>" + esc(x.sym) + '</b></td><td class="r">' + C.money(x.mark) + '</td><td class="r">' + fmtF(x.fund8h) + '</td><td class="r">' + (x.oiUsd ? C.big(x.oiUsd) : "—") + '</td><td class="r">' + (x.vol24 ? C.big(x.vol24) : "—") + '</td><td>' + (ladder.has(x.sym) ? '<button class="dl-b" data-perp="' + esc(x.sym) + '">Practise perp</button>' : "") + "</td></tr>"; }).join("") + "</tbody></table></div>" +
       '<div class="dl-formula">funding 8h = venue hourly rate × 8 (Hyperliquid) or the venue’s 8h rate · the DLSIM perps desk now charges THIS rate instead of a synthetic one when it is fresh (&lt; 1 h)\nliquidations: Binance Futures !forceOrder stream — a SELL order means a long was liquidated\nnot a recommendation; leverage in DexLadder is paper and stays paper</div>';
   }
@@ -127,7 +127,7 @@ window.DLWEATHER = (function () {
   function weatherView(body) {
     loadPerps(false).catch(function () {}).then(function () { return dvol().catch(function () {}); }).then(function () {
       var w = weather();
-      body.innerHTML = '<div class="dl154"><div class="h">🌤 Weather <span class="sp"></span><b style="font-size:22px">' + w.w.toFixed(0) + '</b></div><div class="dl-gauge"><i style="left:' + w.w.toFixed(0) + '%"></i></div><div style="font:700 14px var(--cmc-sans,sans-serif);margin:6px 0">' + esc(w.label) + "</div>" +
+      body.innerHTML = '<div class="dl154"><div class="h">🌤 Weather <span class="sp"></span><b style="font-size:22px">' + w.w.toFixed(0) + '</b></div><div class="dl-gauge"><i style="left:' + w.w.toFixed(0) + '%"></i></div><div style="font:700 14px var(--ui-sans,sans-serif);margin:6px 0">' + esc(w.label) + "</div>" +
         w.parts.map(function (p) { return '<div class="kv"><span>' + esc(p.name) + ' <span style="opacity:.6">' + esc(p.note) + '</span></span><b>' + (p.z >= 0 ? "+" : "") + (p.w * p.z).toFixed(1) + "</b></div>"; }).join("") +
         (w.missing.length ? '<div class="n">Unavailable right now: ' + esc(w.missing.join(", ")) + " — weights renormalised over what we have.</div>" : "") +
         '<div class="dl-formula">Weather = 50 + 0.25·(breadth−50) + 0.25·clamp(2.5·mom7) + 0.20·clamp(5·funding_bp) − 0.15·clamp(0.8·(DVOL−55)) + 0.15·(F&amp;G−50), each term clamped to ±25, result clamped to 0–100\nThis is a printed formula over live inputs, not a proprietary index. Change nothing about your book because of it.</div></div>';
@@ -137,9 +137,9 @@ window.DLWEATHER = (function () {
     body.innerHTML = C.skel(3);
     cycle().then(function (c) {
       body.innerHTML = '<div class="dl-2">' +
-        '<div class="dl154"><div class="h">Pi-Cycle top</div><div style="font:800 20px var(--cmc-sans,sans-serif)">' + esc(c.pi) + '</div><div class="n">111-day SMA ' + C.money(c.ma111, 0) + (c.ma350x2 ? " vs 2×350-day SMA " + C.money(c.ma350x2, 0) : "") + ". A cross has marked cycle tops in the past; the past is not a promise.</div></div>" +
-        '<div class="dl154"><div class="h">Mayer Multiple</div><div style="font:800 20px var(--cmc-sans,sans-serif)">' + (c.mayer ? c.mayer.toFixed(2) : "—") + '</div><div class="n">price ÷ 200-day SMA. Historically &lt;0.8 has been "cheap", &gt;2.4 "hot".</div></div>' +
-        '<div class="dl154"><div class="h">Puell Multiple</div><div style="font:800 20px var(--cmc-sans,sans-serif)">' + (c.puell ? c.puell.toFixed(2) : "—") + '</div><div class="n">today’s USD issuance (3.125 BTC × 144 blocks) ÷ its 365-day mean — miner-revenue stress vs euphoria.</div></div>' +
+        '<div class="dl154"><div class="h">Pi-Cycle top</div><div style="font:800 20px var(--ui-sans,sans-serif)">' + esc(c.pi) + '</div><div class="n">111-day SMA ' + C.money(c.ma111, 0) + (c.ma350x2 ? " vs 2×350-day SMA " + C.money(c.ma350x2, 0) : "") + ". A cross has marked cycle tops in the past; the past is not a promise.</div></div>" +
+        '<div class="dl154"><div class="h">Mayer Multiple</div><div style="font:800 20px var(--ui-sans,sans-serif)">' + (c.mayer ? c.mayer.toFixed(2) : "—") + '</div><div class="n">price ÷ 200-day SMA. Historically &lt;0.8 has been "cheap", &gt;2.4 "hot".</div></div>' +
+        '<div class="dl154"><div class="h">Puell Multiple</div><div style="font:800 20px var(--ui-sans,sans-serif)">' + (c.puell ? c.puell.toFixed(2) : "—") + '</div><div class="n">today’s USD issuance (3.125 BTC × 144 blocks) ÷ its 365-day mean — miner-revenue stress vs euphoria.</div></div>' +
         '</div><div class="dl-formula">' + c.n + ' daily closes from CoinGecko (public plan caps history at 365 days, so Pi-Cycle can show today’s status but not its own history) · ' + esc("as of " + C.ago(c.at)) + "</div>";
     }).catch(function (e) { body.innerHTML = '<div class="dl-empty">' + esc(e.message || e) + "</div>"; });
   }
@@ -150,6 +150,10 @@ window.DLWEATHER = (function () {
       var tr = e.target.closest("tr[data-coin]"); if (tr) { C.close("dlWeather"); openCoin(tr.getAttribute("data-coin")); }
     }); }
     var _close = el.querySelector(".dls-x"); if (_close && !_close.__ws) { _close.__ws = 1; _close.addEventListener("click", wsClose); }
+    /* v162 · the x button is not the only way out. closeSheet() calls this on
+       Escape and on every other close path, so the liquidation stream cannot
+       outlive the desk. */
+    el.__onClose = wsClose;
   }
   /* ---------------------------------------------------------- Markets card */
   function mount() {

@@ -159,7 +159,14 @@ export function poolExecute(ctx: PoolCtx, side: Side, qty: number, opts: ExecOpt
   const impact = moved ? Math.abs(avg / s.facts.p0 - 1) * 100 : 0;
   const facts: AmmFacts = m ? { ...s.facts, impactPct: impact, p1, movePct: Math.abs(p1 / s.facts.p0 - 1) * 100, sandwich: m.facts } : s.facts;
   return {
-    dent: moved ? { move: p1 / (ctx.mid * (1 + (opts.driftPct || 0))) - 1, t: ctx.now } : keep,
+    // v162 · the dent is read back against a FRESH oracle mid on the next call,
+    // and that mid never carries driftPct. Dividing the drift out here therefore
+    // snapped the pool back to its pre-drift price the moment a drifted swap
+    // completed: with mid 142.37 and a 5% pending-swap drift, p1 ≈ 149.49 stored a
+    // move of 0, and the next preview quoted 142.37 again — the on-chain feature
+    // this models teaching the opposite of what it exists to show. What the dent
+    // records is the displacement of p1 against the mid it will be applied to.
+    dent: moved ? { move: p1 / ctx.mid - 1, t: ctx.now } : keep,
     exec: {
       ok: moved, filled: s.filled, remaining: s.remaining, avg, mid: ctx.mid, slipBps: impact * 100, levels: 0,
       feeRate: fees.taker, maker: false, tif, exhausted: s.facts.rangeExhausted, naiveAvg: ctx.mid, naiveCost: qty * ctx.mid, realCost: cost, amm: facts,

@@ -59,7 +59,7 @@ window.DLCORE = (function () {
   function hostOf(u) { try { return new URL(u).host; } catch (e) { return u.slice(0, 40); } }
   function hstate(h) { return H[h] || (H[h] = { fails: 0, cool: 0, ok: 0, lat: 0, n: 0 }); }
   function tmo(ms) { try { if (window.AbortSignal && AbortSignal.timeout) return AbortSignal.timeout(ms); } catch (e) {} return undefined; }
-  var MEM = {};
+  var MEM = {}, INF = {};
   /* jget(url, {ms, ttl, key, init, text}) → Promise<{data, at, src, stale}> */
   function jget(u, o) {
     o = o || {};
@@ -70,9 +70,14 @@ window.DLCORE = (function () {
       if (m) return Promise.resolve({ data: m.d, at: m.at, src: host, stale: true, cached: true });
       return Promise.reject(new Error("cooling " + host));
     }
+    /* v162 · MEM is only written when a response lands, so a second caller for
+       the same key while the first is still in flight used to miss the cache and
+       fetch again. Openers that mount a card and a desk off the same feed did
+       exactly that. Concurrent callers now share the pending promise. */
+    if (INF[key] && !o.force) return INF[key];
     var t0 = now();
     var init = Object.assign({ headers: { accept: o.text ? "*/*" : "application/json" }, signal: tmo(o.ms || 8000) }, o.init || {});
-    return fetch(u, init).then(function (r) {
+    var _p = fetch(u, init).then(function (r) {
       if (!r.ok) throw new Error("HTTP " + r.status);
       return o.text ? r.text() : r.json();
     }).then(function (d) {
@@ -84,6 +89,10 @@ window.DLCORE = (function () {
       if (m) return { data: m.d, at: m.at, src: host, stale: true, cached: true, err: hs.err };
       throw e;
     });
+    INF[key] = _p;
+    var _done = function () { delete INF[key]; };
+    _p.then(_done, _done);
+    return _p;
   }
   function health() { var o = {}; for (var k in H) o[k] = Object.assign({}, H[k]); return o; }
 
@@ -171,12 +180,29 @@ window.DLCORE = (function () {
   function sheet(id, o) {
     var el = $(id);
     if (!el) {
-      el = doc.createElement("div"); el.id = id; el.className = "dls"; el.setAttribute("role", "dialog"); el.setAttribute("aria-label", o.title || id);
+      el = doc.createElement("div"); el.id = id; el.className = "dls"; el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", o.title || id);
       el.innerHTML = '<div class="dls-head"><b class="dls-t"></b><span class="dls-sub"></span><button class="dls-x" aria-label="Close">✕</button></div><div class="dls-tabs"></div><div class="dls-body"></div>';
       doc.body.appendChild(el);
       el.querySelector(".dls-x").onclick = function () { closeSheet(id); };
       el.addEventListener("click", function (e) { var b = e.target.closest(".dls-tabs button[data-t]"); if (b) { el.dataset.tab = b.getAttribute("data-t"); paintTabs(el); o.onTab && o.onTab(el.dataset.tab, el.querySelector(".dls-body"), el); } });
-      doc.addEventListener("keydown", function (e) { if (e.key === "Escape" && el.classList.contains("on")) closeSheet(id); });
+      /* v162 · one delegated key handler for every sheet, registered once.
+         Before this, sheet() added a document keydown listener per sheet id — 17
+         permanent near-identical listeners after a full tour of the desks. */
+      if (!doc.__dlsKeys) {
+        doc.__dlsKeys = 1;
+        doc.addEventListener("keydown", function (e) {
+          var open = doc.querySelector(".dls.on");
+          if (!open) return;
+          if (e.key === "Escape") { closeSheet(open.id); return; }
+          if (e.key !== "Tab") return;
+          var f = [].slice.call(open.querySelectorAll('a[href],button,input,select,textarea,[tabindex]:not([tabindex="-1"])'))
+            .filter(function (x) { return !x.disabled && x.offsetParent !== null; });
+          if (!f.length) return;
+          var first = f[0], last = f[f.length - 1];
+          if (e.shiftKey && doc.activeElement === first) { e.preventDefault(); last.focus(); }
+          else if (!e.shiftKey && doc.activeElement === last) { e.preventDefault(); first.focus(); }
+        });
+      }
       el.__o = o;
     }
     el.__o = o;
@@ -199,9 +225,28 @@ window.DLCORE = (function () {
     var body = el.querySelector(".dls-body"); body.scrollTop = 0;
     try { o.onTab && o.onTab(el.dataset.tab, body, el); } catch (e) { body.innerHTML = '<div class="dl-empty">' + esc(e.message || e) + "</div>"; }
     try { typeof sfx === "function" && sfx("open"); } catch (e) {}
+    /* v162 · a dialog that opens without moving focus is unreachable by keyboard.
+       The trigger is remembered so closeSheet can hand focus back to it. */
+    try {
+      el.__prev = doc.activeElement;
+      var _f = el.querySelector('.dls-tabs button, .dls-body a[href], .dls-body button, .dls-body input, .dls-body select') || el.querySelector(".dls-x");
+      _f && _f.focus();
+    } catch (e) {}
     return el;
   }
-  function closeSheet(id) { var el = $(id); if (el) el.classList.remove("on"); if (!doc.querySelector(".dls.on")) doc.body.classList.remove("dls-open"); }
+  function closeSheet(id) {
+    var el = $(id);
+    if (el) {
+      el.classList.remove("on");
+      /* v162 · every close path runs the sheet's own teardown. The Leverage
+         Weather liquidation websocket used to be closed only by a click on the
+         x button, so closing with Escape left it streaming for the session. */
+      try { typeof el.__onClose === "function" && el.__onClose(); } catch (e) {}
+      try { el.__prev && el.__prev.focus && el.__prev.focus(); } catch (e) {}
+      el.__prev = null;
+    }
+    if (!doc.querySelector(".dls.on")) doc.body.classList.remove("dls-open");
+  }
   function skel(n) { var s = ""; for (var i = 0; i < (n || 5); i++) s += '<div class="dl-skel"></div>'; return s; }
 
   /* ---------------------------------------------------------- mounts (idempotent, re-run on nav + DOM churn) */

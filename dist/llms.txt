@@ -1,0 +1,40 @@
+# DexLadder
+> Free, keyless gateway to Web3: live on-chain markets, AMM/DeFi mechanics, perpetuals,
+> strategy bots, an on-chain explorer and a fork sandbox for the user's own contracts.
+> No account, no wallet connection, no key input, no real money at risk. All state is stored
+> on the user's own device.
+
+## Facts
+- Product: DexLadder — a keyless Web3 gateway; web app, iOS app, Android app
+- Cost: free; no paid tier, no ads, no affiliate exchange links, no token
+- Account: none required — no email, no password, no KYC, no wallet connection
+- Money: simulated only. No deposits, no withdrawals, no custody, no real orders
+- Data: live market prices; balances, fills, journal and tax ledger computed on-device
+- Modules: trading terminal, markets screener, portfolio and journal, academy,
+  on-chain explorer, P2P bazaar, DeFi liquidity desk, strategy bots, historical replay,
+  multi-jurisdiction tax ledger
+- Execution model: fills charged spread, venue fees and real price impact
+  (constant-product and concentrated-liquidity arithmetic), never mid-price fills
+- Tax jurisdictions modelled: India, United States, Germany, United Arab Emirates
+- Contact: dexladder@gmail.com
+
+## Key pages
+- https://www.dexladder.com/web3/ — the gateway: what it replaces about the usual Web3 first mile
+- https://www.dexladder.com/features/ — the full capability comparison
+- https://www.dexladder.com/defi/ — Uniswap v2/v3, Curve StableSwap, staking, impermanent-loss lab
+- https://www.dexladder.com/fork-sandbox/ — connect your own Anvil/Hardhat RPC; node-signed transactions, arbitrary ABI console
+- https://www.dexladder.com/trading-bots/ — no-code strategy builder and bring-your-own-bot (sandboxed JS worker or local signal endpoint)
+- https://www.dexladder.com/backtesting/ — bar-by-bar replay with Sharpe, Sortino, underwater curve
+- https://www.dexladder.com/perpetuals/ — perps with index-mark liquidation, maintenance margin and funding
+- https://www.dexladder.com/order-types/ — OCO, TWAP and AMM pool routing
+- https://www.dexladder.com/dex-pool-radar/ — live DEX pool depth, cross-checked against a second source
+- https://www.dexladder.com/onchain-explorer/ — blocks, transactions, wallets, token transfers
+- https://www.dexladder.com/proof-ledger/ — SHA-256 hash-chained, tamper-evident local record
+- https://www.dexladder.com/paper-trading/ — crypto paper trading, no account
+- https://www.dexladder.com/learn/glossary/ — 81 defined trading and DeFi terms
+- https://www.dexladder.com/tools/ — free calculators (position size, impermanent loss, price impact,
+  liquidation price, profit and fees, funding cost, DCA)
+- https://www.dexladder.com/guides/ — execution guides
+- https://www.dexladder.com/crypto-tax/ — jurisdiction tax explainers (general information, not advice)
+- https://www.dexladder.com/methodology/ — every model written out so figures can be checked
+- https://www.dexladder.com/about/ — what the product is and what it will never do

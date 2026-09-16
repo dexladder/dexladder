@@ -73,13 +73,20 @@ This is the claim that matters most, and it is the easiest to check.
 
 Reload the file with the machine offline. The app opens, your saved state is there, the academy runs, and the simulator executes orders. An app that needed a backend could not do that.
 
-**Check the storage yourself.** In the console:
+**Check the storage yourself.** There are two stores. In the console:
 
 ```js
-Object.keys(localStorage)
+Object.keys(localStorage)               // the working desk
+await DLVAULT.ready; DLVAULT.writable() // true when the archive is on
+DLVAULT.stats()                         // rows archived, bytes held, quota reported
+await DLVAULT.page('txns', 0, 10)       // the ten most recent fills, out of the archive
 ```
 
 That is the entire footprint. Everything the app remembers about you is in there, on your disk, readable by you, deletable by you.
+
+Watch the Network tab while you run them. Nothing is sent, because there is nowhere to send it.
+
+**Check the export.** `DLVAULT.panel()` writes one file. Reopen it in a text editor: it is JSON, and every field is legible — the keys it carries, the archive row counts, a SHA-256 checksum over the canonical JSON of the payload, and a secp256k1 signature. Change one character of it and import it again; the app refuses the file on the checksum, before it looks at the signature at all.
 
 ---
 

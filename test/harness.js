@@ -70,7 +70,13 @@ async function mockNetwork(page, log){
       if (/binance\.(com|vision)\/fapi/.test(u)) return json(route, []);
       if (/data-api\.binance\.vision\/api\/v3\/ticker\/price/.test(u)) return json(route, [{symbol:'BTCUSDT',price:'67852'},{symbol:'ETHUSDT',price:'3521'}]);
       if (/data-api\.binance\.vision\/api\/v3\/ticker\/24hr/.test(u)) return json(route, []);
-      if (/data-api\.binance\.vision\/api\/v3\/klines/.test(u)) return json(route, []);
+      // Klines answered with a REAL series, not []. DexChart (layers/46-dexchart.js) draws
+      // from these: an empty array sent it down its on-device fallback, so the runtime gate
+      // was measuring the fallback and never the venue path.
+      if (/data-api\.binance\.vision\/api\/v3\/klines/.test(u)) {
+        const q = new URL(u).searchParams;
+        return json(route, F.klines(q.get('symbol') || 'BTCUSDT', q.get('interval') || '1h', Math.min(1000, +q.get('limit') || 500)));
+      }
       if (/api\.binance\.com/.test(u)) { log && log.push('!!BINANCE-CORS-HOST:'+u); return route.abort(); }
       // Polymarket
       if (/gamma-api\.polymarket\.com\/events\?slug=/.test(u)) { const slug=decodeURIComponent(u.split('slug=')[1]); return json(route, F.POLY_EVENTS.data.filter(e=>e.slug===slug)); }
