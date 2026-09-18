@@ -1111,3 +1111,2050 @@ html[data-mode=day] .dxc-seg{background:rgba(11,16,32,.05);border-color:rgba(11,
 @media(prefers-reduced-motion:reduce){
   .dxc-modal,.dxc-fly{backdrop-filter:none}
 }
+
+/* ═══════════════════════════════════════════════════════════════════════════
+   DEPTH & OUTLINE — one elevation system, every panel in the build.
+
+   Reported: the account panel's close glyph floats naked in the corner and the
+   stat tiles, the profile plate and the note each carry a different border,
+   radius and padding. That is not one panel's bug — the payload had three
+   unrelated edge treatments (a bare --line, a tinted cyan line, an untinted
+   rgba) and one blur for a shadow, so every dialog in the app reads flat.
+
+   The system, applied here once and inherited by ~750 panel rules:
+     · hairline    a single --line / --line-2 pair, legible in both modes
+     · edge        1px inner top highlight — what makes a dark plate physical
+     · elevation   contact shadow + ambient shadow, never one blur
+     · sunken      tiles INSIDE a card sit below it, not beside it
+   Day is not the dark ladder with a lighter alpha: it is its own ladder, warm
+   and shallow, because zz-day-surfaces.js recasts every dark rule onto
+   --nv-e1 / --line, and a 40%-black contact shadow on cream reads as dirt.
+   ═════════════════════════════════════════════════════════════════════════ */
+
+/* ── the edge, on every surface that is a plate ───────────────────────────
+   Named, not inferred: each of these is a container the user reads as an
+   object. box-shadow composes, so the ladder value stays and the edge is
+   added in front of it. */
+.card,
+.modal,
+.toast,
+.cmdk,
+.skelcard,
+.deskcard,
+.dlt-card,
+.dlv-card,
+.dlv-sheet,
+.dxc-sheet,
+.gcard,
+.acct-bn,
+.au-prof,
+.au-note,
+.dj-card,
+.cbw-card,
+.cbb-paper,
+.acard,
+.ncard,
+.concept,
+.block,
+.feed,
+#mktpro .mx-panel,
+#mktpro .t-card,
+#mktpro .rc,
+#mktpro .mx-tablewrap,
+#nxChat,
+#dxTutor,
+#dlQuest,
+#dlRisk,
+#dlHeat,
+#dlNew,
+#dlPfAI,
+#dlCoinAI,
+#p2xRail,
+#cbAcct,
+#dlxw .dlxw-card{
+  box-shadow:var(--dl-edge), var(--nv-e2);
+}
+.toast,
+.cmdk,
+.dlv-sheet,
+.dxc-sheet,
+.modal{
+  box-shadow:var(--dl-edge), var(--nv-e3);
+}
+
+/* ── sunken plates: a stat tile inside a card must read as cut INTO it ──── */
+.p2x-prof>div,
+#anStats .kpi,
+.dlt-kpi,
+.gstat,
+#page-portfolio .an-kpis>*,
+.mkt-stats>*{
+  background:var(--dl-sunk);
+  border:1px solid var(--line);
+  box-shadow:var(--dl-edge-soft);
+}
+
+/* ── dialog chrome ──────────────────────────────────────────────────────── */
+.overlay{background:rgba(4,7,14,.58);backdrop-filter:blur(7px) saturate(1.1);-webkit-backdrop-filter:blur(7px) saturate(1.1)}
+html[data-mode=day] .overlay{background:rgba(48,36,20,.34)}
+
+.modal{
+  border:1px solid var(--line-2);
+  border-radius:var(--r-lg);
+  padding:26px;
+}
+
+/* THE CLOSE CONTROL — one spec, every dismiss affordance in the build.
+   Seven different ones shipped: 24px, 25x31, 26, 34, 36, 38 and 40; three of them with no
+   box at all; radii of none, 8, 10, 11 and 50%; and four unrelated greys (#b9c6de, #8C97C4,
+   --muted, --ink). A bare glyph in a corner is the loudest unfinished detail a product can
+   have, and this build had it in five places. They are all the same control now: one box,
+   one hairline, one radius, hover / press / focus, and a 44px touch target behind a 34px
+   face. Position is deliberately NOT set here — each one keeps where its own panel puts it. */
+.mx,
+.dlc-x,
+.dlh-x,
+.dls-x,
+.dlv-x,
+.dxc-x,
+.dlxw-x,
+.abs-x,
+.s3d-x,
+.cine-top .x,
+.kcine .kc-top .x,
+#dlNew .x{
+  display:inline-grid;
+  place-items:center;
+  width:34px;
+  height:34px;
+  min-width:34px;
+  min-height:34px;
+  padding:0;
+  border-radius:11px;
+  border:1px solid var(--line);
+  background:var(--dl-sunk);
+  box-shadow:var(--dl-edge-soft);
+  color:var(--muted);
+  font:600 14px/1 var(--body);
+  cursor:pointer;
+  transition:color .16s var(--smooth),background .16s var(--smooth),border-color .16s var(--smooth),transform .12s var(--smooth);
+}
+.mx{position:absolute;top:14px;right:14px}
+/* #dlxw injects its own stylesheet at runtime, after this layer, so the class alone loses
+   the cascade to its own `border:none`. One element-qualified selector settles it by
+   specificity instead of by order, which a runtime injection cannot undo. */
+#dlxw button.dlxw-x{border:1px solid var(--line);background:var(--dl-sunk);min-height:34px;padding:0}
+#dlxw button.dlxw-x:hover{border-color:var(--line-2)}
+/* the two full-screen dismissers sit on artwork rather than on a panel, so they keep a
+   larger face — a deliberate second size in the same spec, not a seventh accident */
+.abs-x,
+.s3d-x{width:40px;height:40px;min-width:40px;min-height:40px;border-radius:13px;font-size:15px}
+.mx::after,
+.dlxw-x::after,
+#dlNew .x::after{content:"";position:absolute;top:-5px;right:-5px;bottom:-5px;left:-5px}
+.mx:hover,
+.dlc-x:hover,
+.dlh-x:hover,
+.dls-x:hover,
+.dlv-x:hover,
+.dxc-x:hover,
+.dlxw-x:hover,
+.abs-x:hover,
+.s3d-x:hover,
+.cine-top .x:hover,
+.kcine .kc-top .x:hover,
+#dlNew .x:hover{color:var(--ink);background:var(--dl-sunk-h);border-color:var(--line-2)}
+.mx:active,
+.dlc-x:active,
+.dlh-x:active,
+.dls-x:active,
+.dlv-x:active,
+.dxc-x:active,
+.dlxw-x:active,
+.abs-x:active,
+.s3d-x:active,
+.cine-top .x:active,
+.kcine .kc-top .x:active,
+#dlNew .x:active{transform:scale(.93)}
+.mx:focus-visible,
+.dlc-x:focus-visible,
+.dlh-x:focus-visible,
+.dls-x:focus-visible,
+.dlv-x:focus-visible,
+.dxc-x:focus-visible,
+.dlxw-x:focus-visible,
+.abs-x:focus-visible,
+.s3d-x:focus-visible,
+.cine-top .x:focus-visible,
+.kcine .kc-top .x:focus-visible,
+#dlNew .x:focus-visible{outline:2px solid var(--cyan);outline-offset:2px;color:var(--ink)}
+
+/* and the gutter it needs. Without this the control overlaps whatever the
+   dialog opens with — a heading, or the account panel's profile plate. */
+.modal>.mx+*{margin-top:26px}
+.modal>.mx+h2,.modal>.mx+h3{margin-top:22px}
+
+/* A dialog with a close control and no title opens on an empty band with one glyph
+   floating in the corner. The eyebrow gives that row a left-hand anchor and names the
+   dialog, and it is baseline-matched to the control rather than stacked above it. */
+.modal>.mx+.dlg-eyebrow{
+  margin:0 0 16px;
+  min-height:34px;
+  display:flex;
+  align-items:center;
+  padding-right:44px;
+  font:700 10.5px/1 var(--mono);
+  letter-spacing:.18em;
+  text-transform:uppercase;
+  color:var(--muted);
+}
+
+/* ── the account panel ──────────────────────────────────────────────────── */
+.au-wrap{max-width:430px}
+.au-prof{
+  padding:15px;
+  border-radius:14px;
+  border:1px solid var(--line-2);
+  margin-bottom:10px;
+}
+.au-wrap .p2x-prof{
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:10px;
+  margin:0 0 12px;
+}
+.au-wrap .p2x-prof>div{
+  border-radius:14px;
+  padding:12px 13px;
+  min-height:64px;
+  display:flex;
+  flex-direction:column;
+  justify-content:center;
+  gap:5px;
+}
+.au-wrap .p2x-prof b{font-size:16px;letter-spacing:-.01em}
+.au-wrap .p2x-prof span{font-size:8px;letter-spacing:.15em;color:var(--muted)}
+.au-wrap .au-note{
+  margin-top:0;
+  padding:13px 14px;
+  border-radius:14px;
+}
+.au-wrap .lnbtns{gap:10px;margin-top:12px}
+.au-wrap .lnbtns .btn{flex:1 1 0;min-width:0;justify-content:center;border-radius:12px}
+
+/* ── phones: the control and the plates keep their proportions ─────────── */
+@media(max-width:480px){
+  .modal{padding:22px 18px;border-radius:16px}
+  .mx{top:11px;right:11px;width:32px;height:32px}
+  .modal>.mx+*{margin-top:24px}
+  .au-wrap .p2x-prof{gap:8px}
+  .au-wrap .p2x-prof>div{padding:11px 10px;min-height:58px}
+  .au-wrap .p2x-prof b{font-size:15px}
+}
+
+/* v164 · the What's-New banner is a flex row whose summary had a clamp only
+   under 640px, so at desktop widths the LENGTH OF THE RELEASE NOTE set the
+   row's width and pushed the close button past the Markets content column
+   (+5px, caught by gate-arch's overflow assert — the release text should
+   never be able to move the page). MEASURED: the title is 135px at v164 and
+   129px at v163 — six pixels of a proportional font, against a row with no
+   shrinkable child anywhere in it. The collapsed summary is now the row's
+   flexible element at every width and clamps with an ellipsis; opened, it
+   still takes its own line and wraps normally. */
+#dlNew.dl-compact:not(.is-open)>span{flex:1 1 0;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+#dlNew>b{min-width:0}
+
+/* ---------------------------------------------------------------- v165 · DLSOR
+   The Execution desk. Tables, inputs and the two-column form reuse the existing
+   .dl-tbl / .dl-inp / .dl-2 families, so they inherit both modes already. Only
+   the chrome this desk adds is declared here, and every rule that paints a
+   surface or ink is paired with its Day sibling. No token is declared here. */
+#dlSor .sor-note,#dlSor .sor-legend,#dlSor .sor-strip,#dlSor .sor-fork{
+  font:500 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  line-height:1.55;margin:10px 0}
+#dlSor .sor-strip,#dlSor .sor-fork{
+  background:var(--dl-sunk,rgba(148,163,199,.06));border:1px solid var(--dl-edge-soft,rgba(148,163,199,.10));
+  border-radius:var(--r-lg,14px);padding:10px 12px}
+html[data-mode="day"] #dlSor .sor-note,html[data-mode="day"] #dlSor .sor-legend,
+html[data-mode="day"] #dlSor .sor-strip,html[data-mode="day"] #dlSor .sor-fork{color:#5a6274}
+
+#dlSor .sor-sub{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad);margin:18px 0 8px}
+html[data-mode="day"] #dlSor .sor-sub{color:#4a5266}
+
+#dlSor .sor-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;
+  justify-content:space-between;margin:2px 0 12px}
+#dlSor .sor-pair{font:800 15px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlSor .sor-mid{font:600 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);font-variant-numeric:tabular-nums}
+html[data-mode="day"] #dlSor .sor-pair{color:#141a26}
+html[data-mode="day"] #dlSor .sor-mid{color:#5a6274}
+
+#dlSor .sor-verdict{font:600 13px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);
+  background:var(--dl-sunk,rgba(148,163,199,.06));border:1px solid var(--dl-edge,rgba(148,163,199,.14));
+  border-radius:var(--r-lg,14px);padding:12px 14px;margin:0 0 14px;line-height:1.5}
+html[data-mode="day"] #dlSor .sor-verdict{color:#141a26;background:#f3efe7;border-color:rgba(0,0,0,.09)}
+
+#dlSor .sor-warn{font:600 12.5px var(--ui-sans,sans-serif);color:var(--down,#ff6b6b);
+  border:1px solid var(--down,#ff6b6b);border-radius:var(--r-lg,14px);
+  padding:10px 12px;margin:12px 0;line-height:1.5}
+html[data-mode="day"] #dlSor .sor-warn{color:#b0202a;border-color:rgba(176,32,42,.35)}
+
+/* the winning row, and the classes of venue */
+#dlSor .dl-tbl tr[data-best="1"] td{background:var(--dl-sunk,rgba(148,163,199,.06))}
+#dlSor .dl-tbl tr[data-best="1"] td.sor-all{color:var(--up,#22e39a);font-weight:800}
+html[data-mode="day"] #dlSor .dl-tbl tr[data-best="1"] td{background:#ece7dd}
+html[data-mode="day"] #dlSor .dl-tbl tr[data-best="1"] td.sor-all{color:#0a7a52}
+#dlSor .dl-tbl td.sor-n{font-weight:700}
+#dlSor .dl-tbl td.sor-all{font-variant-numeric:tabular-nums;font-weight:700}
+#dlSor .sor-flag{font:700 9.5px var(--ui-sans,sans-serif);letter-spacing:.06em;
+  text-transform:uppercase;margin-left:6px;padding:2px 5px;border-radius:5px;
+  background:var(--dl-sunk,rgba(148,163,199,.06));color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlSor .sor-flag{background:rgba(0,0,0,.06);color:#5a6274}
+#dlSor .sor-mev{color:var(--down,#ff6b6b);font-weight:700}
+html[data-mode="day"] #dlSor .sor-mev{color:#b0202a}
+
+/* the ticket form */
+#dlSor .sor-f{display:flex;flex-direction:column;gap:6px}
+#dlSor .sor-fl{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.07em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlSor .sor-fl{color:#4a5266}
+#dlSor .sor-form{margin:12px 0 4px}
+
+/* the venue checklist */
+#dlSor .sor-vrow{display:grid;grid-template-columns:auto 1fr auto auto;gap:10px;
+  align-items:center;padding:9px 11px;border-radius:10px;cursor:pointer;
+  border:1px solid var(--dl-edge-soft,rgba(148,163,199,.10));margin-bottom:6px}
+#dlSor .sor-vn{font:700 12.5px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlSor .sor-vf,#dlSor .sor-vd{font:600 11px var(--ui-sans,sans-serif);
+  color:var(--txt-3,#8b97ad);font-variant-numeric:tabular-nums;white-space:nowrap}
+html[data-mode="day"] #dlSor .sor-vn{color:#141a26}
+html[data-mode="day"] #dlSor .sor-vf,html[data-mode="day"] #dlSor .sor-vd{color:#5a6274}
+@media(max-width:560px){
+  #dlSor .sor-vrow{grid-template-columns:auto 1fr;row-gap:4px}
+  #dlSor .sor-vf,#dlSor .sor-vd{grid-column:2}
+}
+
+/* method + assumptions */
+#dlSor .sor-mrow{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:12px;
+  padding:11px 0;border-bottom:1px solid var(--dl-edge-soft,rgba(148,163,199,.10))}
+#dlSor .sor-mrow b{font:800 12px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlSor .sor-mrow span{font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.6}
+html[data-mode="day"] #dlSor .sor-mrow b{color:#141a26}
+html[data-mode="day"] #dlSor .sor-mrow span{color:#3a4256}
+@media(max-width:560px){#dlSor .sor-mrow{grid-template-columns:1fr;gap:4px}}
+#dlSor .sor-assume,#dlSor .sor-drop{margin:8px 0 0;padding-left:18px}
+#dlSor .sor-assume li,#dlSor .sor-drop li{font:500 12px var(--ui-sans,sans-serif);
+  color:var(--txt-2,#b6c2d6);line-height:1.6;margin-bottom:9px}
+html[data-mode="day"] #dlSor .sor-assume li,html[data-mode="day"] #dlSor .sor-drop li{color:#3a4256}
+
+#dlSor .sor-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0 4px}
+#dlSor .sor-sendnote{font:500 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlSor .sor-sendnote{color:#5a6274}
+#dlSor .sor-empty{font:600 13px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  padding:26px 4px;line-height:1.6}
+html[data-mode="day"] #dlSor .sor-empty{color:#5a6274}
+
+/* v165 · Day contrast — the markets-stats down pill.
+   `--down:#C0182B` reads 4.32 on the #E5D3DE the pill's own --down-soft wash composites
+   to in Day, i.e. under the 4.5:1 floor this build asserts (gate-render-contrast, n=8).
+   It shipped that way in v164 and earlier; measured, not adjusted by eye:
+   #B01126 on #E5D3DE = 4.98, on #FFFFFF = 7.11. Night is untouched. */
+html[data-mode=day] .pill.dn{color:#B01126!important}
+
+/* v165a · 18 Sep 2026 — the touch target needs its own containing block.
+   The 44px tap area behind these 34px faces is an inset:-5px ::after. `.mx` sets
+   position:absolute, so its pseudo stays on the button; `.dlxw-x` and `#dlNew .x`
+   are static, and an absolutely positioned ::after on a static box resolves against
+   the initial containing block instead. Measured on the live v165 apex:
+   #dlNew .x::after computed to 1522x815 and document.elementsFromPoint(220,466)
+   returned that BUTTON.x on top of the Markets tab strip — so every click on the
+   Screener / News & pulse tabs (and on anything else under the What's-New banner)
+   was eaten by the banner's dismiss ✕. Owner report, 18 Sep 2026.
+   position:relative adds no offset: it only gives the pseudo the box it meant. */
+.dlxw-x,
+#dlNew .x{position:relative}
+
+
+/* ===== v166 · the depth — desk styles, one block per layer ==================
+   Appended by the release build from _v166css/*.css. Rules only: every token used here
+   is declared above, and every selector is scoped to its own sheet id. */
+
+/* ---- 55-lending.css ---- */
+/* ============================================================================
+   DLLEND · layer 55 · v166 — the Lending desk
+   Rules only. No token is declared here: every colour is either an existing
+   token or a literal paired with its Day sibling, and every pair was picked to
+   clear 4.5:1 against the surface it sits on in that mode. Everything is
+   prefixed with #dlLend so nothing leaks into another desk.
+   ============================================================================ */
+
+#dlLend .lnd-note,#dlLend .lnd-strip,#dlLend .lnd-sendnote{
+  font:500 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  line-height:1.55;margin:10px 0}
+#dlLend .lnd-strip{
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--dl-edge,rgba(148,163,199,.14));
+  border-radius:var(--r-lg,14px);padding:10px 12px}
+html[data-mode="day"] #dlLend .lnd-note,
+html[data-mode="day"] #dlLend .lnd-strip,
+html[data-mode="day"] #dlLend .lnd-sendnote{color:#5a6274}
+html[data-mode="day"] #dlLend .lnd-strip{background:#f3efe7;border-color:rgba(0,0,0,.09)}
+
+#dlLend .lnd-sub{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad);margin:20px 0 8px}
+html[data-mode="day"] #dlLend .lnd-sub{color:#4a5266}
+
+/* ---------------------------------------------------------------- the form */
+#dlLend .lnd-form{margin:12px 0 4px}
+#dlLend .lnd-f{display:flex;flex-direction:column;gap:6px}
+#dlLend .lnd-fl{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.07em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+#dlLend .lnd-fn{font:500 11px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);line-height:1.45}
+html[data-mode="day"] #dlLend .lnd-fl{color:#4a5266}
+html[data-mode="day"] #dlLend .lnd-fn{color:#5a6274}
+#dlLend .lnd-actions{display:flex;flex-wrap:wrap;gap:10px 14px;align-items:center;margin:14px 0 6px}
+#dlLend .lnd-actions .dl-b{flex:0 0 auto}
+
+/* ------------------------------------------------------------- the readout */
+#dlLend .lnd-grid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:8px;margin:12px 0}
+#dlLend .lnd-kv{display:flex;flex-direction:column;gap:4px;min-width:0;
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--dl-edge,rgba(148,163,199,.14));
+  border-radius:var(--r-lg,14px);padding:10px 12px}
+#dlLend .lnd-kv span{font:600 10.5px var(--ui-sans,sans-serif);letter-spacing:.05em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad);line-height:1.3}
+#dlLend .lnd-kv b{font:800 15px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);
+  font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#dlLend .lnd-kv b.ok{color:var(--up,#22e39a)}
+#dlLend .lnd-kv b.bad{color:var(--down,#ff6b6b)}
+#dlLend .lnd-kv b.warn{color:#d9a020}
+html[data-mode="day"] #dlLend .lnd-kv{background:#f3efe7;border-color:rgba(0,0,0,.09)}
+html[data-mode="day"] #dlLend .lnd-kv span{color:#5a6274}
+html[data-mode="day"] #dlLend .lnd-kv b{color:#141a26}
+html[data-mode="day"] #dlLend .lnd-kv b.ok{color:#0a7a52}
+html[data-mode="day"] #dlLend .lnd-kv b.bad{color:#b0202a}
+html[data-mode="day"] #dlLend .lnd-kv b.warn{color:#7a5300}
+
+#dlLend .lnd-verdict{font:600 13px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--dl-edge,rgba(148,163,199,.14));
+  border-radius:var(--r-lg,14px);padding:12px 14px;margin:12px 0;line-height:1.5}
+html[data-mode="day"] #dlLend .lnd-verdict{color:#141a26;background:#f3efe7;border-color:rgba(0,0,0,.09)}
+
+/* ------------------------------------------------------------ table accents */
+#dlLend .dl-tbl tr[data-kink="1"] td{background:var(--dl-sunk,rgba(148,163,199,.06));font-weight:700}
+#dlLend .dl-tbl tr[data-hit="1"] td{background:var(--dl-sunk,rgba(148,163,199,.06))}
+#dlLend .dl-tbl tr[data-net="1"] td{font-weight:800;border-top:1px solid var(--line,rgba(148,163,199,.18))}
+#dlLend .dl-tbl tr[data-rep="1"] td{opacity:.9}
+html[data-mode="day"] #dlLend .dl-tbl tr[data-kink="1"] td,
+html[data-mode="day"] #dlLend .dl-tbl tr[data-hit="1"] td{background:#ece7dd}
+#dlLend .dl-tbl td,#dlLend .dl-tbl th{font-variant-numeric:tabular-nums}
+#dlLend .lnd-flag{font:700 9.5px var(--ui-sans,sans-serif);letter-spacing:.06em;
+  text-transform:uppercase;margin-left:6px;padding:2px 5px;border-radius:5px;
+  background:var(--dl-sunk,rgba(148,163,199,.06));color:var(--txt-3,#8b97ad);
+  border:1px solid var(--dl-edge,rgba(148,163,199,.14));white-space:nowrap}
+html[data-mode="day"] #dlLend .lnd-flag{background:rgba(0,0,0,.06);color:#4a5266;border-color:rgba(0,0,0,.12)}
+#dlLend .lnd-dim{color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlLend .lnd-dim{color:#5a6274}
+
+/* -------------------------------------------------------- the constraints */
+#dlLend .lnd-cons{list-style:none;margin:10px 0;padding:0;display:grid;gap:8px}
+#dlLend .lnd-cons li{font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);
+  line-height:1.55;padding:10px 12px;border-radius:var(--r-lg,14px);
+  border:1px solid var(--dl-edge,rgba(148,163,199,.14));
+  background:var(--dl-sunk,rgba(148,163,199,.06))}
+#dlLend .lnd-cons li b{color:var(--txt-1,#eaf2ff);font-weight:800}
+#dlLend .lnd-cons li[data-ok="0"]{border-color:var(--down,#ff6b6b)}
+#dlLend .lnd-cons li[data-ok="0"] b{color:var(--down,#ff6b6b)}
+html[data-mode="day"] #dlLend .lnd-cons li{color:#3a4152;background:#f3efe7;border-color:rgba(0,0,0,.09)}
+html[data-mode="day"] #dlLend .lnd-cons li b{color:#141a26}
+html[data-mode="day"] #dlLend .lnd-cons li[data-ok="0"]{border-color:rgba(176,32,42,.45)}
+html[data-mode="day"] #dlLend .lnd-cons li[data-ok="0"] b{color:#b0202a}
+
+/* -------------------------------------------------------------- the method */
+#dlLend .lnd-method{display:grid;gap:10px;margin:12px 0}
+#dlLend .lnd-mrow{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:12px;
+  align-items:start}
+#dlLend .lnd-mrow b{font:800 12px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);line-height:1.5}
+#dlLend .lnd-mrow span{font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.6}
+html[data-mode="day"] #dlLend .lnd-mrow b{color:#141a26}
+html[data-mode="day"] #dlLend .lnd-mrow span{color:#3a4152}
+#dlLend .lnd-assume{margin:10px 0;padding-left:18px;display:grid;gap:8px}
+#dlLend .lnd-assume li{font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.6}
+html[data-mode="day"] #dlLend .lnd-assume li{color:#3a4152}
+
+/* ---------------------------------------------------------------- narrow */
+@media (max-width:760px){
+  #dlLend .lnd-grid3{grid-template-columns:repeat(2,minmax(0,1fr))}
+}
+@media (max-width:440px){
+  #dlLend .lnd-grid3{grid-template-columns:1fr}
+  #dlLend .lnd-mrow{grid-template-columns:1fr;gap:4px}
+  #dlLend .lnd-kv b{font-size:14px}
+  #dlLend .lnd-actions{flex-direction:column;align-items:stretch}
+  #dlLend .lnd-actions .dl-b{width:100%}
+}
+
+/* ---- 56-options.css ---- */
+/* ============================================================================
+   DexLadder v166 · layer 56 · Options desk (#dlOpt)
+   Rules only. No token definitions here — the palette is v154's, and every
+   rule below has to read in Day and in Night without being told which.
+   Every selector is prefixed with the sheet id so nothing leaks into the app.
+   ============================================================================ */
+
+#dlOpt .opt-head {
+  display: flex; flex-wrap: wrap; align-items: baseline; gap: var(--sp-2);
+  padding: var(--sp-2) 0 var(--sp-1); border-bottom: 1px solid var(--line);
+}
+#dlOpt .opt-pair { font: 700 15px var(--ui-sans, sans-serif); color: var(--txt-1); }
+#dlOpt .opt-meta { font: 500 11.5px var(--mono, monospace); color: var(--txt-3); }
+
+#dlOpt .opt-strip,
+#dlOpt .opt-legend,
+#dlOpt .opt-note {
+  font: 500 11.5px var(--body, sans-serif); color: var(--txt-2);
+  line-height: 1.55; margin: var(--sp-2) 0;
+}
+#dlOpt .opt-strip {
+  border-left: 2px solid var(--cyan); padding: var(--sp-2);
+  background: var(--surface-2); border-radius: var(--r-sm);
+}
+#dlOpt .opt-legend { color: var(--txt-3); }
+#dlOpt .opt-legend b, #dlOpt .opt-note b { color: var(--txt-1); }
+
+#dlOpt .opt-sub {
+  font: 700 11px var(--ui-sans, sans-serif); letter-spacing: .08em; text-transform: uppercase;
+  color: var(--txt-3); margin: var(--sp-4) 0 var(--sp-2);
+}
+
+#dlOpt .opt-form { display: flex; flex-wrap: wrap; gap: var(--sp-2); margin: var(--sp-2) 0; }
+#dlOpt .opt-f { display: flex; flex-direction: column; gap: 4px; min-width: 120px; flex: 1 1 120px; }
+#dlOpt .opt-fl { font: 600 10.5px var(--ui-sans, sans-serif); color: var(--txt-3); }
+#dlOpt .opt-f .dl-inp { width: 100%; }
+
+#dlOpt .opt-actions {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--sp-2); margin: var(--sp-3) 0;
+}
+#dlOpt .opt-sendnote { font: 500 11px var(--body, sans-serif); color: var(--txt-3); }
+
+#dlOpt .opt-empty {
+  padding: var(--sp-6) var(--sp-3); text-align: center; border: 1px dashed var(--line-2);
+  border-radius: var(--r-lg); color: var(--txt-3); font: 500 12px var(--body, sans-serif);
+}
+
+/* ---- key/value grid ---------------------------------------------------- */
+#dlOpt .opt-grid {
+  display: grid; grid-template-columns: repeat(auto-fit,minmax(min(190px,100%),1fr));
+  gap: var(--sp-2); margin: var(--sp-2) 0;
+}
+#dlOpt .opt-kv {
+  display: flex; justify-content: space-between; align-items: baseline; gap: var(--sp-2);
+  padding: var(--sp-2); border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--surface-2); min-width: 0;
+}
+#dlOpt .opt-kv span { font: 500 11px var(--body, sans-serif); color: var(--txt-3); }
+#dlOpt .opt-kv b {
+  font: 700 12px var(--mono, monospace); color: var(--txt-1);
+  text-align: right; overflow-wrap: anywhere;
+}
+
+/* ---- the chain --------------------------------------------------------- */
+#dlOpt table.opt-chain { font: 500 11.5px var(--mono, monospace); }
+#dlOpt table.opt-chain td, #dlOpt table.opt-chain th { white-space: nowrap; }
+#dlOpt .opt-k { font-weight: 700; color: var(--txt-1); }
+#dlOpt table.opt-chain tr[data-atm="1"] { background: var(--surface-2); }
+#dlOpt table.opt-chain tr[data-atm="1"] .opt-k { color: var(--cyan); }
+#dlOpt .opt-trade { display: flex; gap: 3px; }
+#dlOpt .opt-t { padding: 2px 6px; font: 700 10.5px var(--mono, monospace); min-width: 30px; }
+
+/* ---- verdicts ---------------------------------------------------------- */
+#dlOpt .opt-ok { color: var(--up); font-weight: 700; }
+#dlOpt .opt-bad { color: var(--down); font-weight: 700; }
+#dlOpt .opt-unb {
+  color: var(--down); font-weight: 700; letter-spacing: .04em; text-transform: uppercase;
+  font-size: 11px;
+}
+
+/* ---- payoff chart ------------------------------------------------------ */
+#dlOpt .opt-chart {
+  margin: var(--sp-3) 0; border: 1px solid var(--line); border-radius: var(--r-sm);
+  background: var(--surface-2); padding: var(--sp-2); overflow: hidden;
+}
+#dlOpt .opt-chart svg { display: block; width: 100%; height: 170px; }
+#dlOpt .opt-pl { fill: none; stroke: var(--cyan); stroke-width: 2; vector-effect: non-scaling-stroke; }
+#dlOpt .opt-zero { stroke: var(--line-2); stroke-width: 1; vector-effect: non-scaling-stroke; }
+#dlOpt .opt-spot {
+  stroke: var(--txt-3); stroke-width: 1; stroke-dasharray: 3 3;
+  vector-effect: non-scaling-stroke; opacity: .7;
+}
+#dlOpt .opt-axis {
+  display: flex; justify-content: space-between; gap: var(--sp-2);
+  font: 500 10.5px var(--mono, monospace); color: var(--txt-3); margin-top: 4px;
+}
+
+/* ---- method + assumptions ---------------------------------------------- */
+#dlOpt .opt-method { display: flex; flex-direction: column; gap: var(--sp-2); }
+#dlOpt .opt-mrow {
+  display: grid; grid-template-columns: 170px 1fr; gap: var(--sp-3);
+  padding: var(--sp-2) 0; border-bottom: 1px solid var(--line);
+}
+#dlOpt .opt-mrow b { font: 700 12px var(--ui-sans, sans-serif); color: var(--txt-1); }
+#dlOpt .opt-mrow span { font: 500 12px var(--body, sans-serif); color: var(--txt-2); line-height: 1.6; }
+#dlOpt .opt-assume { margin: var(--sp-2) 0 0; padding-left: var(--sp-4); }
+#dlOpt .opt-assume li {
+  font: 500 12px var(--body, sans-serif); color: var(--txt-2);
+  line-height: 1.6; margin-bottom: var(--sp-2);
+}
+
+/* ---- narrow screens: 360px with no horizontal page scroll --------------- */
+@media (max-width: 560px) {
+  #dlOpt .opt-mrow { grid-template-columns: 1fr; gap: 4px; }
+  #dlOpt .opt-grid { grid-template-columns: 1fr; }
+  #dlOpt .opt-f { flex: 1 1 100%; }
+  #dlOpt .opt-head { gap: 4px; }
+  #dlOpt .opt-chart svg { height: 140px; }
+  #dlOpt .opt-trade { flex-wrap: wrap; }
+}
+
+/* ---- 57-chains.css ---- */
+/* ============================================================================
+   DexLadder v166 · layer 57 · DLCHAIN — "⛓ Cross-chain"
+   Rules only. No token definitions. Every selector is prefixed #dlChain so
+   nothing leaks into another desk. Day and Night are paired on every rule that
+   sets a colour, and every pairing holds 4.5:1 against its own surface.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------- prose */
+#dlChain .ch-note,#dlChain .ch-legend,#dlChain .ch-strip,#dlChain .ch-fork,
+#dlChain .ch-src,#dlChain .ch-sub2b{
+  font:500 12px/1.55 var(--ui-sans,sans-serif);color:var(--txt-2,#b7c2d6);
+  margin:var(--sp-2,8px) 0}
+#dlChain .ch-strip,#dlChain .ch-fork,#dlChain .ch-src{color:var(--txt-3,#8b97ad)}
+#dlChain .ch-note b,#dlChain .ch-legend b,#dlChain .ch-branch b{color:var(--txt-1,#eaf2ff)}
+html[data-mode="day"] #dlChain .ch-note,html[data-mode="day"] #dlChain .ch-legend,
+html[data-mode="day"] #dlChain .ch-strip,html[data-mode="day"] #dlChain .ch-fork,
+html[data-mode="day"] #dlChain .ch-src,html[data-mode="day"] #dlChain .ch-sub2b{color:#4a5266}
+html[data-mode="day"] #dlChain .ch-note b,html[data-mode="day"] #dlChain .ch-legend b,
+html[data-mode="day"] #dlChain .ch-branch b{color:#141a26}
+
+#dlChain .ch-strip{
+  border-top:1px solid var(--line,rgba(148,163,199,.16));
+  padding-top:var(--sp-2,8px);margin-top:var(--sp-4,16px);font-size:11.5px}
+#dlChain .ch-fork{
+  border:1px dashed var(--line-2,rgba(148,163,199,.24));
+  border-radius:var(--r-sm,6px);padding:var(--sp-2,8px) var(--sp-3,12px)}
+
+#dlChain .ch-sub{
+  font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--txt-3,#8b97ad);margin:var(--sp-4,16px) 0 var(--sp-2,8px)}
+html[data-mode="day"] #dlChain .ch-sub{color:#4a5266}
+
+/* ---------------------------------------------------------------- header */
+#dlChain .ch-head{
+  display:flex;flex-wrap:wrap;gap:6px 14px;align-items:baseline;
+  margin:var(--sp-3,12px) 0 var(--sp-2,8px)}
+#dlChain .ch-pair{font:800 15px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlChain .ch-mid{font:600 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  font-variant-numeric:tabular-nums}
+html[data-mode="day"] #dlChain .ch-pair{color:#141a26}
+html[data-mode="day"] #dlChain .ch-mid{color:#5a6274}
+
+#dlChain .ch-sig{
+  font:500 11.5px/1.5 var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--line,rgba(148,163,199,.16));border-radius:var(--r-sm,6px);
+  padding:var(--sp-2,8px) var(--sp-3,12px);margin:var(--sp-2,8px) 0}
+#dlChain .ch-sig b{color:var(--txt-1,#eaf2ff);font-variant-numeric:tabular-nums}
+html[data-mode="day"] #dlChain .ch-sig{background:#f3efe7;border-color:rgba(0,0,0,.09);color:#4a5266}
+html[data-mode="day"] #dlChain .ch-sig b{color:#141a26}
+
+/* ---------------------------------------------------------------- ticket */
+#dlChain .ch-form{gap:var(--sp-2,8px);margin:var(--sp-2,8px) 0}
+#dlChain .ch-f{display:flex;flex-direction:column;gap:4px;min-width:0}
+#dlChain .ch-fl{
+  font:700 10px var(--ui-sans,sans-serif);letter-spacing:.06em;text-transform:uppercase;
+  color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlChain .ch-fl{color:#4a5266}
+#dlChain .ch-actions{display:flex;flex-wrap:wrap;gap:var(--sp-2,8px);align-items:center;
+  margin:var(--sp-3,12px) 0}
+
+/* ---------------------------------------------------------------- tables */
+#dlChain .dl-tbl td,#dlChain .dl-tbl th{vertical-align:top}
+#dlChain .dl-tbl td.ch-n{font-weight:700;color:var(--txt-1,#eaf2ff)}
+html[data-mode="day"] #dlChain .dl-tbl td.ch-n{color:#141a26}
+#dlChain .ch-dex{font-size:11px;color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlChain .ch-dex{color:#5a6274}
+#dlChain .ch-tier{display:block;font-size:10.5px;opacity:.85;font-variant-numeric:tabular-nums}
+#dlChain .ch-sub2{display:block;font:500 10.5px/1.45 var(--ui-sans,sans-serif);
+  color:var(--txt-3,#8b97ad);margin-top:2px;max-width:46ch;white-space:normal}
+html[data-mode="day"] #dlChain .ch-sub2{color:#5a6274}
+#dlChain .ch-how{font:500 11px/1.5 var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  max-width:56ch;white-space:normal}
+html[data-mode="day"] #dlChain .ch-how{color:#4a5266}
+#dlChain .ch-all{font-weight:800;font-variant-numeric:tabular-nums}
+#dlChain .ch-none{color:var(--txt-3,#8b97ad);font-style:italic}
+#dlChain .ch-seed{font:500 10.5px var(--mono,monospace);color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlChain .ch-seed,html[data-mode="day"] #dlChain .ch-none{color:#5a6274}
+
+#dlChain .dl-tbl tr[data-best="1"] td{background:var(--dl-sunk,rgba(148,163,199,.06))}
+#dlChain .dl-tbl tr[data-best="1"] td.ch-all{color:var(--up,#22e39a)}
+html[data-mode="day"] #dlChain .dl-tbl tr[data-best="1"] td{background:#ece7dd}
+html[data-mode="day"] #dlChain .dl-tbl tr[data-best="1"] td.ch-all{color:#0a7a52}
+#dlChain .dl-tbl tr[data-blocked="1"] td{background:rgba(255,107,107,.07)}
+html[data-mode="day"] #dlChain .dl-tbl tr[data-blocked="1"] td{background:#f7e4e2}
+#dlChain .dl-tbl tr[data-cross="1"] td{border-top:1px solid var(--line-2,rgba(148,163,199,.24))}
+#dlChain .ch-x{font:700 9.5px var(--ui-sans,sans-serif);letter-spacing:.05em;
+  text-transform:uppercase;color:var(--cyan,#4dd2ff);margin-left:4px}
+html[data-mode="day"] #dlChain .ch-x{color:#0b6c88}
+#dlChain .dl-tbl tr.ch-tot td{border-top:1px solid var(--line-2,rgba(148,163,199,.24))}
+#dlChain .ch-state td:nth-child(odd){color:var(--txt-3,#8b97ad);font-size:11.5px}
+html[data-mode="day"] #dlChain .ch-state td:nth-child(odd){color:#4a5266}
+
+#dlChain .ch-flag{
+  display:inline-block;margin-left:6px;padding:1px 5px;border-radius:999px;
+  font:700 9.5px var(--ui-sans,sans-serif);letter-spacing:.04em;text-transform:uppercase;
+  color:var(--down,#ff6b6b);border:1px solid rgba(255,107,107,.45)}
+html[data-mode="day"] #dlChain .ch-flag{color:#a81d27;border-color:rgba(168,29,39,.45)}
+
+/* trust is a statement, not a rating — so it is set in one weight and one
+   colour per class, with no ordering implied by hue temperature */
+#dlChain .ch-trust{
+  display:inline-block;padding:2px 7px;border-radius:999px;
+  font:700 10px var(--ui-sans,sans-serif);letter-spacing:.03em;
+  border:1px solid var(--line-2,rgba(148,163,199,.24));color:var(--txt-2,#b7c2d6)}
+#dlChain .ch-trust[data-t="native"]{color:var(--cyan,#4dd2ff);border-color:rgba(77,210,255,.45)}
+#dlChain .ch-trust[data-t="external"]{color:var(--indigo,#9b8cff);border-color:rgba(155,140,255,.45)}
+#dlChain .ch-trust[data-t="optimistic"]{color:#f0b429;border-color:rgba(240,180,41,.45)}
+#dlChain .ch-trust[data-t="local"]{color:var(--txt-2,#b7c2d6)}
+#dlChain .ch-trust[data-t="none"]{color:var(--txt-3,#8b97ad);font-style:italic}
+html[data-mode="day"] #dlChain .ch-trust{color:#4a5266;border-color:rgba(0,0,0,.14)}
+html[data-mode="day"] #dlChain .ch-trust[data-t="native"]{color:#0b6c88;border-color:rgba(11,108,136,.4)}
+html[data-mode="day"] #dlChain .ch-trust[data-t="external"]{color:#4b3ec4;border-color:rgba(75,62,196,.4)}
+html[data-mode="day"] #dlChain .ch-trust[data-t="optimistic"]{color:#84550a;border-color:rgba(132,85,10,.45)}
+html[data-mode="day"] #dlChain .ch-trust[data-t="local"]{color:#4a5266}
+html[data-mode="day"] #dlChain .ch-trust[data-t="none"]{color:#5a6274}
+
+/* ---------------------------------------------------------------- cards */
+#dlChain .ch-card{
+  border:1px solid var(--line,rgba(148,163,199,.16));border-radius:var(--r-lg,10px);
+  padding:var(--sp-3,12px);margin:var(--sp-3,12px) 0;background:var(--dl-sunk,rgba(148,163,199,.04))}
+html[data-mode="day"] #dlChain .ch-card{border-color:rgba(0,0,0,.09);background:#f6f2ea}
+#dlChain .ch-cardh{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:baseline;
+  justify-content:space-between;margin-bottom:var(--sp-2,8px)}
+#dlChain .ch-cardh b{font:800 13px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlChain .ch-cardh span{font:600 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  font-variant-numeric:tabular-nums}
+html[data-mode="day"] #dlChain .ch-cardh b{color:#141a26}
+html[data-mode="day"] #dlChain .ch-cardh span{color:#5a6274}
+
+#dlChain .ch-branch{
+  font:500 12px/1.6 var(--ui-sans,sans-serif);color:var(--txt-2,#b7c2d6);
+  border-left:2px solid var(--line-2,rgba(148,163,199,.24));
+  padding:var(--sp-1,4px) 0 var(--sp-1,4px) var(--sp-3,12px);margin:var(--sp-3,12px) 0}
+html[data-mode="day"] #dlChain .ch-branch{color:#4a5266;border-left-color:rgba(0,0,0,.14)}
+
+#dlChain .ch-warn{
+  font:600 12px/1.55 var(--ui-sans,sans-serif);color:var(--down,#ff6b6b);
+  border:1px solid rgba(255,107,107,.35);border-radius:var(--r-sm,6px);
+  padding:var(--sp-2,8px) var(--sp-3,12px);margin:var(--sp-2,8px) 0}
+html[data-mode="day"] #dlChain .ch-warn{color:#a81d27;border-color:rgba(168,29,39,.35)}
+#dlChain .ch-warnlist{margin:0 0 var(--sp-2,8px);padding-left:1.15em}
+#dlChain .ch-warnlist li{font:500 12px/1.6 var(--ui-sans,sans-serif);
+  color:var(--txt-2,#b7c2d6);margin-bottom:4px}
+#dlChain .ch-warnlist li b{color:var(--txt-1,#eaf2ff)}
+html[data-mode="day"] #dlChain .ch-warnlist li{color:#4a5266}
+html[data-mode="day"] #dlChain .ch-warnlist li b{color:#141a26}
+
+/* the batch-size bar — width is the datum, so it is the one thing set inline
+   via a data attribute rather than a style attribute */
+#dlChain .ch-bar{display:block;height:8px;border-radius:2px;
+  background:var(--cyan,#4dd2ff);opacity:.55;min-width:2px}
+html[data-mode="day"] #dlChain .ch-bar{background:#0b6c88;opacity:.5}
+#dlChain .ch-bar[data-w="1"]{width:1%}#dlChain .ch-bar[data-w="2"]{width:2%}
+#dlChain .ch-bar[data-w="3"]{width:3%}#dlChain .ch-bar[data-w="4"]{width:4%}
+#dlChain .ch-bar[data-w="5"]{width:5%}#dlChain .ch-bar[data-w="10"]{width:10%}
+#dlChain .ch-bar[data-w="20"]{width:20%}#dlChain .ch-bar[data-w="30"]{width:30%}
+#dlChain .ch-bar[data-w="40"]{width:40%}#dlChain .ch-bar[data-w="50"]{width:50%}
+#dlChain .ch-bar[data-w="60"]{width:60%}#dlChain .ch-bar[data-w="70"]{width:70%}
+#dlChain .ch-bar[data-w="80"]{width:80%}#dlChain .ch-bar[data-w="90"]{width:90%}
+#dlChain .ch-bar[data-w="100"]{width:100%}
+
+/* ---------------------------------------------------------------- method */
+#dlChain .ch-method{display:flex;flex-direction:column;gap:var(--sp-3,12px)}
+#dlChain .ch-mrow{display:flex;flex-direction:column;gap:3px}
+#dlChain .ch-mrow b{font:800 12px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlChain .ch-mrow span{font:500 12.5px/1.65 var(--body,var(--ui-sans,sans-serif));
+  color:var(--txt-2,#b7c2d6);max-width:82ch}
+html[data-mode="day"] #dlChain .ch-mrow b{color:#141a26}
+html[data-mode="day"] #dlChain .ch-mrow span{color:#4a5266}
+#dlChain .ch-assume{margin:0;padding-left:1.15em}
+#dlChain .ch-assume li{font:500 12.5px/1.65 var(--body,var(--ui-sans,sans-serif));
+  color:var(--txt-2,#b7c2d6);margin-bottom:var(--sp-2,8px);max-width:82ch}
+html[data-mode="day"] #dlChain .ch-assume li{color:#4a5266}
+
+#dlChain .ch-empty{
+  font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  padding:var(--sp-4,16px) 0;text-align:center}
+html[data-mode="day"] #dlChain .ch-empty{color:#5a6274}
+
+/* ---------------------------------------------------------------- mobile */
+@media (max-width:560px){
+  #dlChain .ch-form{grid-template-columns:1fr}
+  #dlChain .ch-how,#dlChain .ch-sub2{max-width:none}
+  #dlChain .ch-head{gap:2px 10px}
+  #dlChain .ch-pair{font-size:13.5px}
+  #dlChain .dl-tbl td,#dlChain .dl-tbl th{padding-left:6px;padding-right:6px}
+  #dlChain .ch-card{padding:var(--sp-2,8px)}
+}
+
+/* ---- 58-orders.css ---- */
+/* ---------------------------------------------------------------- v166 · DLORD
+   The Order Lab desk (layers/58-orders.js, #dlOrd). Tables, inputs and the
+   two-column form reuse the existing .dl-tbl / .dl-inp / .dl-2 / .dl-tblw
+   families, so they inherit both appearances already. Only the chrome this
+   desk adds is declared here, every rule that paints a surface or ink is
+   paired with its Day sibling, and no token is declared anywhere below.
+   Mobile: the KPI strip and the forms collapse to one column at 560px and
+   nothing here can produce horizontal overflow at 360px. */
+
+#dlOrd .ord-note,#dlOrd .ord-legend,#dlOrd .ord-strip{
+  font:500 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  line-height:1.55;margin:10px 0}
+#dlOrd .ord-strip{
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--dl-edge-soft,rgba(148,163,199,.10));
+  border-radius:var(--r-lg,14px);padding:10px 12px;margin-top:20px}
+html[data-mode="day"] #dlOrd .ord-note,
+html[data-mode="day"] #dlOrd .ord-legend,
+html[data-mode="day"] #dlOrd .ord-strip{color:#5a6274}
+html[data-mode="day"] #dlOrd .ord-strip{background:#f3efe7;border-color:rgba(0,0,0,.09)}
+
+#dlOrd .ord-sub{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad);margin:20px 0 8px}
+html[data-mode="day"] #dlOrd .ord-sub{color:#4a5266}
+
+#dlOrd .ord-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;
+  justify-content:space-between;margin:2px 0 12px}
+#dlOrd .ord-pair{font:800 15px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlOrd .ord-mid{font:600 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  font-variant-numeric:tabular-nums;min-width:0;overflow-wrap:anywhere}
+html[data-mode="day"] #dlOrd .ord-pair{color:#141a26}
+html[data-mode="day"] #dlOrd .ord-mid{color:#5a6274}
+
+/* the stated rule — a claim the desk is making, not a number it measured */
+#dlOrd .ord-rule{font:600 12.5px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--dl-edge,rgba(148,163,199,.14));
+  border-left-width:3px;border-radius:var(--r-lg,14px);
+  padding:11px 13px;margin:10px 0 14px;line-height:1.55}
+html[data-mode="day"] #dlOrd .ord-rule{color:#141a26;background:#f3efe7;border-color:rgba(0,0,0,.09)}
+#dlOrd .ord-rule.ord-dis{border-left-color:var(--down,#ff6b6b)}
+html[data-mode="day"] #dlOrd .ord-rule.ord-dis{border-left-color:#b0202a}
+
+/* KPI strip */
+#dlOrd .ord-kpis{display:grid;gap:8px;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));
+  margin:10px 0 4px}
+#dlOrd .ord-kpi{display:flex;flex-direction:column;gap:4px;min-width:0;
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--dl-edge-soft,rgba(148,163,199,.10));
+  border-radius:var(--r-lg,14px);padding:10px 12px}
+#dlOrd .ord-kl{font:700 9.5px var(--ui-sans,sans-serif);letter-spacing:.07em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+#dlOrd .ord-kv{font:700 13px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);
+  font-variant-numeric:tabular-nums;line-height:1.35;overflow-wrap:anywhere}
+#dlOrd .ord-kpi.ord-bad .ord-kv{color:var(--down,#ff6b6b)}
+html[data-mode="day"] #dlOrd .ord-kpi{background:#f3efe7;border-color:rgba(0,0,0,.09)}
+html[data-mode="day"] #dlOrd .ord-kl{color:#4a5266}
+html[data-mode="day"] #dlOrd .ord-kv{color:#141a26}
+html[data-mode="day"] #dlOrd .ord-kpi.ord-bad .ord-kv{color:#b0202a}
+
+/* tables */
+#dlOrd .dl-tbl tr[data-best="1"] td{background:var(--dl-sunk,rgba(148,163,199,.06))}
+#dlOrd .dl-tbl tr[data-best="1"] td.ord-all{color:var(--up,#22e39a);font-weight:800}
+html[data-mode="day"] #dlOrd .dl-tbl tr[data-best="1"] td{background:#ece7dd}
+html[data-mode="day"] #dlOrd .dl-tbl tr[data-best="1"] td.ord-all{color:#0a7a52}
+#dlOrd .dl-tbl td.ord-n{font-weight:700}
+#dlOrd .dl-tbl td.ord-all{font-variant-numeric:tabular-nums;font-weight:700}
+#dlOrd .dl-tbl td.ord-why{font:500 11.5px var(--ui-sans,sans-serif);
+  color:var(--txt-3,#8b97ad);line-height:1.45;min-width:0}
+html[data-mode="day"] #dlOrd .dl-tbl td.ord-why{color:#5a6274}
+#dlOrd .ord-bad{color:var(--down,#ff6b6b);font-weight:700}
+html[data-mode="day"] #dlOrd .ord-bad{color:#b0202a}
+
+/* forms */
+#dlOrd .ord-f{display:flex;flex-direction:column;gap:6px;min-width:0}
+#dlOrd .ord-fl{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.07em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlOrd .ord-fl{color:#4a5266}
+#dlOrd .ord-form{margin:10px 0 4px}
+#dlOrd .ord-form .dl-inp{width:100%;min-width:0;box-sizing:border-box}
+
+#dlOrd .ord-actions{display:flex;flex-wrap:wrap;gap:10px 12px;align-items:center;margin:16px 0 4px}
+#dlOrd .ord-sendnote{font:500 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);min-width:0}
+html[data-mode="day"] #dlOrd .ord-sendnote{color:#5a6274}
+
+#dlOrd .ord-empty{font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px dashed var(--dl-edge,rgba(148,163,199,.14));
+  border-radius:var(--r-lg,14px);padding:14px;margin:10px 0;line-height:1.55}
+html[data-mode="day"] #dlOrd .ord-empty{color:#5a6274;background:#f3efe7;border-color:rgba(0,0,0,.14)}
+
+/* Method tab */
+#dlOrd .ord-method{display:flex;flex-direction:column;gap:12px;margin:10px 0}
+#dlOrd .ord-mrow{display:flex;flex-direction:column;gap:5px;min-width:0}
+#dlOrd .ord-mrow b{font:800 12.5px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlOrd .ord-mrow span{font:500 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);line-height:1.6}
+html[data-mode="day"] #dlOrd .ord-mrow b{color:#141a26}
+html[data-mode="day"] #dlOrd .ord-mrow span{color:#5a6274}
+#dlOrd .ord-assume{margin:8px 0 0;padding-left:18px}
+#dlOrd .ord-assume li{font:500 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  line-height:1.6;margin-bottom:9px}
+html[data-mode="day"] #dlOrd .ord-assume li{color:#5a6274}
+
+@media (max-width:560px){
+  #dlOrd .ord-kpis{grid-template-columns:1fr}
+  #dlOrd .ord-head{flex-direction:column;align-items:flex-start}
+  #dlOrd .ord-actions{flex-direction:column;align-items:stretch}
+}
+
+/* ---- 59-risk.css ---- */
+/* ============================================================================
+   DexLadder v166 · layer 59 · DLRISK — the Risk desk
+   Rules only. No token definitions, no :root block. Every selector is scoped
+   to #dlRiskDesk. Night is the default appearance; every rule that carries colour
+   has its Day pair under html[data-mode="day"], and both sides were chosen to
+   clear 4.5:1 against the surface they sit on.
+   ============================================================================ */
+
+/* ---------------------------------------------------------------- banner */
+#dlRiskDesk .rk-banner{
+  font:700 11px var(--ui-sans,sans-serif);letter-spacing:.04em;
+  color:var(--txt-2,#b7c2d6);background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--line,rgba(148,163,199,.18));border-radius:var(--r-sm,6px);
+  padding:8px 10px;margin:0 0 10px
+}
+html[data-mode="day"] #dlRiskDesk .rk-banner{color:#3d4557;background:#efeae1;border-color:rgba(0,0,0,.10)}
+
+#dlRiskDesk .rk-strip{
+  font:500 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  border-left:2px solid var(--line-2,rgba(148,163,199,.28));padding:2px 0 2px 9px;margin:0 0 12px
+}
+html[data-mode="day"] #dlRiskDesk .rk-strip{color:#5a6274;border-left-color:rgba(0,0,0,.18)}
+
+/* ------------------------------------------------------------------- KPIs */
+#dlRiskDesk .rk-kpis{
+  display:grid;grid-template-columns:repeat(auto-fit,minmax(min(160px,100%),1fr));
+  gap:8px;margin:10px 0 14px
+}
+#dlRiskDesk .rk-kpi{
+  display:flex;flex-direction:column;gap:3px;min-width:0;
+  border:1px solid var(--line,rgba(148,163,199,.18));border-radius:var(--r-sm,6px);
+  background:var(--dl-sunk,rgba(148,163,199,.05));padding:8px 10px
+}
+html[data-mode="day"] #dlRiskDesk .rk-kpi{border-color:rgba(0,0,0,.10);background:#f3efe7}
+#dlRiskDesk .rk-kl{font:700 9.5px var(--ui-sans,sans-serif);letter-spacing:.09em;text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+#dlRiskDesk .rk-kv{font:800 17px var(--mono,ui-monospace,monospace);color:var(--txt-1,#eaf2ff);font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+#dlRiskDesk .rk-kn{font:500 10.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);line-height:1.35}
+html[data-mode="day"] #dlRiskDesk .rk-kl,html[data-mode="day"] #dlRiskDesk .rk-kn{color:#5a6274}
+html[data-mode="day"] #dlRiskDesk .rk-kv{color:#141a26}
+
+/* ------------------------------------------------------- headings + prose */
+#dlRiskDesk .rk-sub{
+  font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.09em;text-transform:uppercase;
+  color:var(--txt-2,#b7c2d6);margin:18px 0 8px
+}
+html[data-mode="day"] #dlRiskDesk .rk-sub{color:#3d4557}
+
+#dlRiskDesk .rk-note{font:500 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);line-height:1.5;margin:8px 0}
+html[data-mode="day"] #dlRiskDesk .rk-note{color:#5a6274}
+
+#dlRiskDesk .rk-warn{
+  font:600 11.5px var(--ui-sans,sans-serif);line-height:1.5;color:var(--down,#ff6b6b);
+  border:1px solid var(--line-2,rgba(148,163,199,.28));border-left:3px solid var(--down,#ff6b6b);
+  border-radius:var(--r-sm,6px);padding:8px 10px;margin:10px 0
+}
+html[data-mode="day"] #dlRiskDesk .rk-warn{color:#a81e28;border-color:rgba(0,0,0,.10);border-left-color:#a81e28}
+
+#dlRiskDesk .rk-refuse{
+  font:600 12px var(--ui-sans,sans-serif);line-height:1.5;color:var(--txt-2,#b7c2d6);
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px dashed var(--line-2,rgba(148,163,199,.28));border-radius:var(--r-sm,6px);
+  padding:10px 12px;margin:10px 0
+}
+#dlRiskDesk .rk-refuse b{color:var(--txt-1,#eaf2ff);letter-spacing:.06em;text-transform:uppercase;font-size:10.5px}
+html[data-mode="day"] #dlRiskDesk .rk-refuse{color:#3d4557;background:#efeae1;border-color:rgba(0,0,0,.18)}
+html[data-mode="day"] #dlRiskDesk .rk-refuse b{color:#141a26}
+
+#dlRiskDesk .rk-verdict{
+  font:700 12.5px var(--ui-sans,sans-serif);line-height:1.5;color:var(--txt-1,#eaf2ff);
+  background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--line,rgba(148,163,199,.18));border-left:3px solid var(--line-2,rgba(148,163,199,.28));
+  border-radius:var(--r-sm,6px);padding:9px 11px;margin:10px 0
+}
+#dlRiskDesk .rk-verdict[data-tone="good"]{border-left-color:var(--up,#22e39a)}
+#dlRiskDesk .rk-verdict[data-tone="bad"]{border-left-color:var(--down,#ff6b6b)}
+#dlRiskDesk .rk-verdict[data-tone="warn"]{border-left-color:var(--cyan,#4fd1ff)}
+html[data-mode="day"] #dlRiskDesk .rk-verdict{color:#141a26;background:#f3efe7;border-color:rgba(0,0,0,.10)}
+html[data-mode="day"] #dlRiskDesk .rk-verdict[data-tone="good"]{border-left-color:#0a7a52}
+html[data-mode="day"] #dlRiskDesk .rk-verdict[data-tone="bad"]{border-left-color:#a81e28}
+
+/* the identity check: the one line on the desk that is allowed to shout */
+#dlRiskDesk .rk-ident{
+  font:600 11.5px var(--mono,ui-monospace,monospace);line-height:1.55;
+  color:var(--txt-2,#b7c2d6);border:1px solid var(--line,rgba(148,163,199,.18));
+  border-radius:var(--r-sm,6px);padding:9px 11px;margin:10px 0
+}
+#dlRiskDesk .rk-ident b{font:700 10px var(--ui-sans,sans-serif);letter-spacing:.09em;text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+#dlRiskDesk .rk-ident[data-ok="1"]{border-left:3px solid var(--up,#22e39a)}
+#dlRiskDesk .rk-ident[data-ok="0"]{border-left:3px solid var(--down,#ff6b6b);color:var(--down,#ff6b6b)}
+html[data-mode="day"] #dlRiskDesk .rk-ident{color:#3d4557;border-color:rgba(0,0,0,.10)}
+html[data-mode="day"] #dlRiskDesk .rk-ident b{color:#5a6274}
+html[data-mode="day"] #dlRiskDesk .rk-ident[data-ok="1"]{border-left-color:#0a7a52}
+html[data-mode="day"] #dlRiskDesk .rk-ident[data-ok="0"]{border-left-color:#a81e28;color:#a81e28}
+
+/* ----------------------------------------------------------------- tables */
+#dlRiskDesk .dl-tbl td.rk-n,#dlRiskDesk .dl-tbl th{font-weight:700}
+#dlRiskDesk .dl-tbl td.rk-n{white-space:nowrap}
+#dlRiskDesk .dl-tbl td.rk-usd{font-variant-numeric:tabular-nums;font-weight:700}
+#dlRiskDesk .dl-tbl td.rk-w{
+  font:500 11px var(--ui-sans,sans-serif);line-height:1.45;color:var(--txt-3,#8b97ad);
+  min-width:180px;max-width:460px
+}
+html[data-mode="day"] #dlRiskDesk .dl-tbl td.rk-w{color:#5a6274}
+#dlRiskDesk .rk-up{color:var(--up,#22e39a)}
+#dlRiskDesk .rk-dn{color:var(--down,#ff6b6b)}
+html[data-mode="day"] #dlRiskDesk .rk-up{color:#0a7a52}
+html[data-mode="day"] #dlRiskDesk .rk-dn{color:#a81e28}
+#dlRiskDesk .rk-liq{
+  font:800 9.5px var(--ui-sans,sans-serif);letter-spacing:.08em;
+  color:var(--down,#ff6b6b);border:1px solid var(--down,#ff6b6b);
+  border-radius:var(--r-sm,6px);padding:1px 5px;white-space:nowrap
+}
+html[data-mode="day"] #dlRiskDesk .rk-liq{color:#a81e28;border-color:#a81e28}
+#dlRiskDesk .dl-tbl tr[data-yours="1"] td{background:var(--dl-sunk,rgba(148,163,199,.08));font-weight:700}
+html[data-mode="day"] #dlRiskDesk .dl-tbl tr[data-yours="1"] td{background:#ece7dd}
+
+/* the correlation matrix: banded by strength, readable in both appearances
+   without relying on colour alone — the number is always printed */
+#dlRiskDesk .rk-mx td,#dlRiskDesk .rk-mx th{font-variant-numeric:tabular-nums;text-align:right}
+#dlRiskDesk .rk-mx td[data-r="hi"]{background:rgba(255,107,107,.20);font-weight:700}
+#dlRiskDesk .rk-mx td[data-r="mid"]{background:rgba(255,107,107,.10)}
+#dlRiskDesk .rk-mx td[data-r="neg"]{background:rgba(34,227,154,.14)}
+html[data-mode="day"] #dlRiskDesk .rk-mx td[data-r="hi"]{background:#f4d9d9}
+html[data-mode="day"] #dlRiskDesk .rk-mx td[data-r="mid"]{background:#f7e9e5}
+html[data-mode="day"] #dlRiskDesk .rk-mx td[data-r="neg"]{background:#dcece2}
+
+/* ------------------------------------------------------------------ forms */
+#dlRiskDesk .rk-form{margin:12px 0 4px}
+#dlRiskDesk .rk-f{display:flex;flex-direction:column;gap:6px;min-width:0}
+#dlRiskDesk .rk-fl{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlRiskDesk .rk-fl{color:#4a5266}
+#dlRiskDesk .rk-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:12px 0 4px}
+#dlRiskDesk .rk-sendnote{font:500 11px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);flex:1 1 200px;min-width:0}
+html[data-mode="day"] #dlRiskDesk .rk-sendnote{color:#5a6274}
+
+/* ----------------------------------------------------- scenario selector */
+#dlRiskDesk .rk-scen{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(150px,100%),1fr));gap:8px;margin:8px 0 14px}
+#dlRiskDesk .rk-sb{
+  display:flex;flex-direction:column;gap:3px;text-align:left;cursor:pointer;min-width:0;
+  font:inherit;color:var(--txt-2,#b7c2d6);background:var(--dl-sunk,rgba(148,163,199,.05));
+  border:1px solid var(--line,rgba(148,163,199,.18));border-radius:var(--r-sm,6px);padding:8px 10px
+}
+#dlRiskDesk .rk-sb b{font:700 12px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlRiskDesk .rk-sb span{font:500 10.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad)}
+#dlRiskDesk .rk-sb em{font:700 11.5px var(--mono,ui-monospace,monospace);font-style:normal;color:var(--down,#ff6b6b)}
+#dlRiskDesk .rk-sb.on{border-color:var(--cyan,#4fd1ff);background:var(--dl-edge,rgba(79,209,255,.08))}
+#dlRiskDesk .rk-sb:focus-visible{outline:2px solid var(--cyan,#4fd1ff);outline-offset:2px}
+html[data-mode="day"] #dlRiskDesk .rk-sb{color:#3d4557;background:#f3efe7;border-color:rgba(0,0,0,.10)}
+html[data-mode="day"] #dlRiskDesk .rk-sb b{color:#141a26}
+html[data-mode="day"] #dlRiskDesk .rk-sb span{color:#5a6274}
+html[data-mode="day"] #dlRiskDesk .rk-sb em{color:#a81e28}
+html[data-mode="day"] #dlRiskDesk .rk-sb.on{border-color:#0d6e91;background:#e6eef2}
+
+/* -------------------------------------------------------- underwater curve */
+#dlRiskDesk .rk-uw{
+  display:flex;align-items:flex-start;gap:1px;height:96px;overflow:hidden;
+  border:1px solid var(--line,rgba(148,163,199,.18));border-radius:var(--r-sm,6px);
+  background:var(--dl-sunk,rgba(148,163,199,.05));padding:4px
+}
+#dlRiskDesk .rk-uw i{flex:1 1 0;min-width:1px;background:var(--down,#ff6b6b);opacity:.78;border-radius:0 0 1px 1px}
+html[data-mode="day"] #dlRiskDesk .rk-uw{border-color:rgba(0,0,0,.10);background:#f3efe7}
+html[data-mode="day"] #dlRiskDesk .rk-uw i{background:#a81e28;opacity:.85}
+#dlRiskDesk .rk-uw i[data-h="0"]{height:1px;opacity:.35}
+#dlRiskDesk .rk-uw i[data-h="5"]{height:5%}
+#dlRiskDesk .rk-uw i[data-h="10"]{height:10%}
+#dlRiskDesk .rk-uw i[data-h="15"]{height:15%}
+#dlRiskDesk .rk-uw i[data-h="20"]{height:20%}
+#dlRiskDesk .rk-uw i[data-h="25"]{height:25%}
+#dlRiskDesk .rk-uw i[data-h="30"]{height:30%}
+#dlRiskDesk .rk-uw i[data-h="35"]{height:35%}
+#dlRiskDesk .rk-uw i[data-h="40"]{height:40%}
+#dlRiskDesk .rk-uw i[data-h="45"]{height:45%}
+#dlRiskDesk .rk-uw i[data-h="50"]{height:50%}
+#dlRiskDesk .rk-uw i[data-h="55"]{height:55%}
+#dlRiskDesk .rk-uw i[data-h="60"]{height:60%}
+#dlRiskDesk .rk-uw i[data-h="65"]{height:65%}
+#dlRiskDesk .rk-uw i[data-h="70"]{height:70%}
+#dlRiskDesk .rk-uw i[data-h="75"]{height:75%}
+#dlRiskDesk .rk-uw i[data-h="80"]{height:80%}
+#dlRiskDesk .rk-uw i[data-h="85"]{height:85%}
+#dlRiskDesk .rk-uw i[data-h="90"]{height:90%}
+#dlRiskDesk .rk-uw i[data-h="95"]{height:95%}
+#dlRiskDesk .rk-uw i[data-h="100"]{height:100%}
+
+/* ------------------------------------------------------------ method tab */
+#dlRiskDesk .rk-method{display:flex;flex-direction:column;gap:10px;margin:10px 0}
+#dlRiskDesk .rk-mrow{
+  display:flex;flex-direction:column;gap:4px;
+  border-left:2px solid var(--line-2,rgba(148,163,199,.28));padding:2px 0 2px 10px
+}
+#dlRiskDesk .rk-mrow b{font:700 12px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlRiskDesk .rk-mrow span{font:500 11.5px var(--ui-sans,sans-serif);line-height:1.55;color:var(--txt-2,#b7c2d6)}
+html[data-mode="day"] #dlRiskDesk .rk-mrow{border-left-color:rgba(0,0,0,.18)}
+html[data-mode="day"] #dlRiskDesk .rk-mrow b{color:#141a26}
+html[data-mode="day"] #dlRiskDesk .rk-mrow span{color:#3d4557}
+#dlRiskDesk .rk-assume{margin:8px 0 0;padding-left:18px}
+#dlRiskDesk .rk-assume li{font:500 11.5px var(--ui-sans,sans-serif);line-height:1.55;color:var(--txt-2,#b7c2d6);margin:0 0 7px}
+html[data-mode="day"] #dlRiskDesk .rk-assume li{color:#3d4557}
+
+/* ----------------------------------------------------------------- phone */
+@media (max-width:420px){
+  #dlRiskDesk .rk-kpis{grid-template-columns:repeat(auto-fit,minmax(min(132px,100%),1fr))}
+  #dlRiskDesk .rk-kv{font-size:15px}
+  #dlRiskDesk .rk-scen{grid-template-columns:1fr 1fr}
+  #dlRiskDesk .dl-tbl td.rk-w{min-width:140px;font-size:10.5px}
+  #dlRiskDesk .rk-uw{height:72px}
+  #dlRiskDesk .rk-form{grid-template-columns:1fr}
+}
+
+/* ---- 60-path.css ---- */
+/* ---------------------------------------------------------------- v166 · DLPATH
+   The Path desk: curriculum graph, evidence ledger and the inline SVG map.
+   Tables, chips, inputs and buttons reuse the existing .dl-tbl / .dl-chip /
+   .dl-inp / .dl-b / .dl-dis families, so they inherit both appearances already.
+   Only the chrome this desk adds is declared here, and every rule that paints a
+   surface or ink is paired with its Day sibling. No token is declared here. */
+
+#dlPath .pth-note,#dlPath .pth-legend,#dlPath .pth-barnote,#dlPath .pth-sched{
+  font:500 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  line-height:1.55;margin:10px 0}
+html[data-mode="day"] #dlPath .pth-note,html[data-mode="day"] #dlPath .pth-legend,
+html[data-mode="day"] #dlPath .pth-barnote,html[data-mode="day"] #dlPath .pth-sched{color:#5a6274}
+
+#dlPath .pth-hon{font:600 12px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);
+  background:var(--dl-sunk,rgba(148,163,199,.06));border:1px solid var(--dl-edge,rgba(148,163,199,.14));
+  border-radius:var(--r-lg,14px);padding:10px 12px;margin:12px 0;line-height:1.55}
+html[data-mode="day"] #dlPath .pth-hon{color:#3a4252;background:#f3efe7;border-color:rgba(0,0,0,.09)}
+
+#dlPath .pth-sub{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad);margin:18px 0 8px}
+html[data-mode="day"] #dlPath .pth-sub{color:#4a5266}
+
+#dlPath .pth-kind{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.09em;
+  text-transform:uppercase;color:var(--cyan,#4fd1ff);margin:2px 0 4px}
+html[data-mode="day"] #dlPath .pth-kind{color:#0a6a8c}
+
+#dlPath .pth-title{font:800 18px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);margin:0 0 6px;line-height:1.25}
+html[data-mode="day"] #dlPath .pth-title{color:#141a26}
+
+#dlPath .pth-one{font:500 13.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.6;margin:0 0 10px}
+html[data-mode="day"] #dlPath .pth-one{color:#3a4252}
+
+#dlPath .pth-why{font:600 12.5px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);
+  background:var(--dl-sunk,rgba(148,163,199,.06));border:1px solid var(--dl-edge,rgba(148,163,199,.14));
+  border-radius:var(--r-lg,14px);padding:11px 13px;margin:0 0 6px;line-height:1.5}
+html[data-mode="day"] #dlPath .pth-why{color:#141a26;background:#f3efe7;border-color:rgba(0,0,0,.09)}
+
+#dlPath .pth-warn{font:600 12.5px var(--ui-sans,sans-serif);color:var(--down,#ff6b6b);
+  border:1px solid var(--down,#ff6b6b);border-radius:var(--r-lg,14px);
+  padding:12px 14px;margin:12px 0;line-height:1.55}
+html[data-mode="day"] #dlPath .pth-warn{color:#b0202a;border-color:rgba(176,32,42,.35)}
+
+#dlPath .pth-empty{font:600 13px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  padding:22px 14px;text-align:center;line-height:1.6}
+html[data-mode="day"] #dlPath .pth-empty{color:#5a6274}
+
+/* ------------------------------------------------------------------ tracks */
+#dlPath .pth-tracks{margin:8px 0 14px}
+#dlPath .pth-thead{display:flex;flex-direction:column;gap:4px;margin:2px 0 10px}
+#dlPath .pth-thead b{font:800 15px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);line-height:1.3}
+#dlPath .pth-thead span{font:500 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);line-height:1.5}
+html[data-mode="day"] #dlPath .pth-thead b{color:#141a26}
+html[data-mode="day"] #dlPath .pth-thead span{color:#5a6274}
+
+#dlPath .pth-stat{display:flex;flex-wrap:wrap;gap:6px 18px;margin:0 0 4px;
+  font:600 12px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);font-variant-numeric:tabular-nums}
+html[data-mode="day"] #dlPath .pth-stat{color:#3a4252}
+
+#dlPath .pth-week{border:1px solid var(--dl-edge,rgba(148,163,199,.14));border-radius:var(--r-lg,14px);
+  padding:12px 14px;margin:10px 0}
+#dlPath .pth-week.is-now{border-color:var(--cyan,#4fd1ff)}
+html[data-mode="day"] #dlPath .pth-week{border-color:rgba(0,0,0,.09)}
+html[data-mode="day"] #dlPath .pth-week.is-now{border-color:#0a6a8c}
+
+#dlPath .pth-wk{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad);margin:0 0 6px}
+#dlPath .pth-week.is-now .pth-wk{color:var(--cyan,#4fd1ff)}
+html[data-mode="day"] #dlPath .pth-wk{color:#4a5266}
+html[data-mode="day"] #dlPath .pth-week.is-now .pth-wk{color:#0a6a8c}
+
+#dlPath .pth-wo{font:600 13px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);line-height:1.5;margin:0 0 10px}
+html[data-mode="day"] #dlPath .pth-wo{color:#141a26}
+
+#dlPath .pth-gate{font:500 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  margin:10px 0 0;line-height:1.5}
+html[data-mode="day"] #dlPath .pth-gate{color:#5a6274}
+
+#dlPath .pth-wn{display:flex;flex-wrap:wrap;gap:8px}
+#dlPath .pth-chip{display:inline-flex;align-items:center;gap:8px;cursor:pointer;
+  font:700 12px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);
+  background:var(--dl-sunk,rgba(148,163,199,.06));border:1px solid var(--dl-edge,rgba(148,163,199,.14));
+  border-radius:999px;padding:7px 12px;line-height:1.2;transition:border-color .15s var(--smooth,ease)}
+#dlPath .pth-chip span{font:600 10.5px var(--mono,monospace);color:var(--txt-3,#8b97ad);font-variant-numeric:tabular-nums}
+#dlPath .pth-chip:hover,#dlPath .pth-chip:focus-visible{border-color:var(--cyan,#4fd1ff)}
+#dlPath .pth-chip.is-met{border-color:var(--up,#22e39a);color:var(--txt-1,#eaf2ff)}
+#dlPath .pth-chip.is-ready{border-color:var(--cyan,#4fd1ff)}
+#dlPath .pth-chip.is-locked{opacity:.62}
+html[data-mode="day"] #dlPath .pth-chip{color:#3a4252;background:#f3efe7;border-color:rgba(0,0,0,.09)}
+html[data-mode="day"] #dlPath .pth-chip span{color:#5a6274}
+html[data-mode="day"] #dlPath .pth-chip.is-met{border-color:#0d7a4f;color:#141a26}
+html[data-mode="day"] #dlPath .pth-chip.is-ready{border-color:#0a6a8c}
+
+/* ---------------------------------------------------------------- evidence */
+#dlPath .pth-ev{list-style:none;margin:8px 0 0;padding:0;display:flex;flex-direction:column;gap:8px}
+#dlPath .pth-ev li{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 10px;
+  font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.55;
+  border-left:2px solid var(--dl-edge,rgba(148,163,199,.14));padding:2px 0 2px 10px}
+#dlPath .pth-ev li b{font:700 9.5px var(--ui-sans,sans-serif);letter-spacing:.09em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+#dlPath .pth-ev li.is-have{border-left-color:var(--up,#22e39a)}
+#dlPath .pth-ev li.is-have b{color:var(--up,#22e39a)}
+#dlPath .pth-ev li.is-miss{border-left-color:var(--txt-3,#8b97ad)}
+#dlPath .pth-ev li span{font:500 11.5px var(--mono,monospace);color:var(--txt-3,#8b97ad)}
+#dlPath .pth-ev li span.pth-miss{flex:1 1 100%;font:500 12px var(--ui-sans,sans-serif);
+  color:var(--txt-3,#8b97ad);line-height:1.55}
+html[data-mode="day"] #dlPath .pth-ev li{color:#3a4252;border-left-color:rgba(0,0,0,.12)}
+html[data-mode="day"] #dlPath .pth-ev li b,html[data-mode="day"] #dlPath .pth-ev li span{color:#5a6274}
+html[data-mode="day"] #dlPath .pth-ev li.is-have{border-left-color:#0d7a4f}
+html[data-mode="day"] #dlPath .pth-ev li.is-have b{color:#0d7a4f}
+html[data-mode="day"] #dlPath .pth-ev li span.pth-miss{color:#5a6274}
+
+#dlPath .pth-acts{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:8px 0 4px}
+#dlPath .pth-preset{max-width:120px}
+#dlPath .pth-dead{font:600 11.5px var(--ui-sans,sans-serif);line-height:1.4;
+  padding:7px 11px;border-radius:999px;display:inline-block}
+
+#dlPath .pth-method{display:flex;flex-direction:column;gap:12px;margin:10px 0 0}
+#dlPath .pth-mrow{display:grid;grid-template-columns:minmax(120px,170px) 1fr;gap:12px;align-items:start}
+#dlPath .pth-mrow b{font:800 12px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);line-height:1.4}
+#dlPath .pth-mrow span{font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.6}
+html[data-mode="day"] #dlPath .pth-mrow b{color:#141a26}
+html[data-mode="day"] #dlPath .pth-mrow span{color:#3a4252}
+
+#dlPath .pth-assume{margin:8px 0 0;padding-left:18px}
+#dlPath .pth-assume li{font:500 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  line-height:1.6;margin:0 0 8px}
+html[data-mode="day"] #dlPath .pth-assume li{color:#5a6274}
+
+/* --------------------------------------------------------------- the map */
+#dlPath .pth-legend{display:flex;flex-wrap:wrap;gap:8px 14px;margin:8px 0 10px}
+#dlPath .pth-key{display:inline-flex;align-items:center;gap:7px;
+  font:600 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad)}
+#dlPath .pth-key::before{content:"";width:12px;height:12px;border-radius:4px;
+  border:1.5px solid var(--dl-edge,rgba(148,163,199,.14));background:var(--dl-sunk,rgba(148,163,199,.06))}
+#dlPath .pth-key.is-met::before{border-color:var(--up,#22e39a)}
+#dlPath .pth-key.is-due::before{border-color:var(--indigo,#8a8cff)}
+#dlPath .pth-key.is-ready::before{border-color:var(--cyan,#4fd1ff)}
+#dlPath .pth-key.is-locked::before{opacity:.45}
+html[data-mode="day"] #dlPath .pth-key{color:#5a6274}
+html[data-mode="day"] #dlPath .pth-key::before{border-color:rgba(0,0,0,.18);background:#f3efe7}
+html[data-mode="day"] #dlPath .pth-key.is-met::before{border-color:#0d7a4f}
+html[data-mode="day"] #dlPath .pth-key.is-due::before{border-color:#4b3fd4}
+html[data-mode="day"] #dlPath .pth-key.is-ready::before{border-color:#0a6a8c}
+
+/* The graph is wider than a phone. It scrolls inside its own frame rather than
+   scaling the labels down to nothing or pushing the page sideways. */
+#dlPath .pth-mapw{overflow-x:auto;overflow-y:hidden;-webkit-overflow-scrolling:touch;
+  border:1px solid var(--dl-edge,rgba(148,163,199,.14));border-radius:var(--r-lg,14px);
+  background:var(--dl-sunk,rgba(148,163,199,.06));padding:6px}
+html[data-mode="day"] #dlPath .pth-mapw{border-color:rgba(0,0,0,.09);background:#f3efe7}
+
+#dlPath .pth-map{display:block;max-width:none}
+#dlPath .pth-e{fill:none;stroke:var(--line,rgba(148,163,199,.30));stroke-width:1.4}
+#dlPath .pth-e.is-met{stroke:var(--up,#22e39a);stroke-width:1.8}
+html[data-mode="day"] #dlPath .pth-e{stroke:rgba(0,0,0,.22)}
+html[data-mode="day"] #dlPath .pth-e.is-met{stroke:#0d7a4f}
+
+#dlPath .pth-n{cursor:pointer}
+#dlPath .pth-n rect{fill:var(--surface,#11161f);stroke:var(--dl-edge,rgba(148,163,199,.22));stroke-width:1.4}
+#dlPath .pth-n text{font:700 11.5px var(--ui-sans,sans-serif);fill:var(--txt-1,#eaf2ff)}
+#dlPath .pth-n text.pth-nsub{font:600 9.5px var(--mono,monospace);fill:var(--txt-3,#8b97ad)}
+#dlPath .pth-n.is-met rect{stroke:var(--up,#22e39a);stroke-width:2}
+#dlPath .pth-n.is-due rect{stroke:var(--indigo,#8a8cff);stroke-width:2}
+#dlPath .pth-n.is-ready rect{stroke:var(--cyan,#4fd1ff);stroke-width:2}
+#dlPath .pth-n.is-locked rect{stroke-dasharray:4 3}
+#dlPath .pth-n.is-locked text{fill:var(--txt-3,#8b97ad)}
+#dlPath .pth-n:hover rect,#dlPath .pth-n:focus-visible rect{stroke-width:2.6}
+#dlPath .pth-n:focus-visible{outline:none}
+html[data-mode="day"] #dlPath .pth-n rect{fill:#fffaf2;stroke:rgba(0,0,0,.20)}
+html[data-mode="day"] #dlPath .pth-n text{fill:#141a26}
+html[data-mode="day"] #dlPath .pth-n text.pth-nsub{fill:#5a6274}
+html[data-mode="day"] #dlPath .pth-n.is-met rect{stroke:#0d7a4f}
+html[data-mode="day"] #dlPath .pth-n.is-due rect{stroke:#4b3fd4}
+html[data-mode="day"] #dlPath .pth-n.is-ready rect{stroke:#0a6a8c}
+html[data-mode="day"] #dlPath .pth-n.is-locked text{fill:#5a6274}
+
+@media (max-width:480px){
+  #dlPath .pth-mrow{grid-template-columns:1fr;gap:4px}
+  #dlPath .pth-title{font-size:16px}
+  #dlPath .pth-stat{gap:4px 12px}
+}
+
+/* ---- 61-replay.css ---- */
+/* ---------------------------------------------------------------- v166 · DLREPLAY
+   The Replay desk (layers/61-replay.js, sheet #dlReplay). Tables, inputs and the
+   two-column form reuse the existing .dl-tbl / .dl-inp / .dl-2 / .dl-tblw families
+   so they inherit both appearances already; only the chrome this desk adds is
+   declared here. Every rule that paints ink or a surface is paired with its Day
+   sibling, and no token is declared in this file. */
+
+#dlReplay .rp-note,#dlReplay .rp-legend,#dlReplay .rp-thr{
+  font:500 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  line-height:1.55;margin:10px 0}
+#dlReplay .rp-thr{
+  background:var(--dl-sunk,rgba(148,163,199,.06));border:1px solid var(--dl-edge-soft,rgba(148,163,199,.10));
+  border-radius:var(--r-lg,14px);padding:11px 13px}
+#dlReplay .rp-legend{
+  background:var(--dl-sunk,rgba(148,163,199,.06));border:1px solid var(--dl-edge-soft,rgba(148,163,199,.10));
+  border-radius:var(--r-lg,14px);padding:11px 13px}
+html[data-mode="day"] #dlReplay .rp-note,html[data-mode="day"] #dlReplay .rp-legend,
+html[data-mode="day"] #dlReplay .rp-thr{color:#4a5266}
+html[data-mode="day"] #dlReplay .rp-thr,html[data-mode="day"] #dlReplay .rp-legend{
+  background:#ece7dd;border-color:rgba(0,0,0,.09)}
+
+#dlReplay .rp-sub{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad);margin:18px 0 8px}
+html[data-mode="day"] #dlReplay .rp-sub{color:#4a5266}
+
+#dlReplay .rp-head{display:flex;flex-wrap:wrap;gap:8px 14px;align-items:baseline;
+  justify-content:space-between;margin:14px 0 12px}
+#dlReplay .rp-pair{font:800 15px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlReplay .rp-mid{font:600 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  font-variant-numeric:tabular-nums}
+html[data-mode="day"] #dlReplay .rp-pair{color:#141a26}
+html[data-mode="day"] #dlReplay .rp-mid{color:#4a5266}
+
+/* the loud one: a sample too small to mean anything, or windows that overlap */
+#dlReplay .rp-warn{font:600 12.5px var(--ui-sans,sans-serif);color:var(--down,#ff6b6b);
+  border:1px solid var(--down,#ff6b6b);border-radius:var(--r-lg,14px);
+  padding:10px 12px;margin:12px 0;line-height:1.5}
+html[data-mode="day"] #dlReplay .rp-warn{color:#b01126;border-color:rgba(176,17,38,.35)}
+
+#dlReplay .rp-empty{font:600 13px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  padding:24px 4px;line-height:1.6}
+html[data-mode="day"] #dlReplay .rp-empty{color:#4a5266}
+
+/* the header form */
+#dlReplay .rp-form{margin:12px 0 4px}
+#dlReplay .rp-f{display:flex;flex-direction:column;gap:6px}
+#dlReplay .rp-fl{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.07em;
+  text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlReplay .rp-fl{color:#4a5266}
+#dlReplay .rp-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:16px 0 4px}
+#dlReplay .rp-actions .rp-note{margin:0;flex:1 1 220px;min-width:0}
+
+/* the regime table: the label is the measurement, so it reads as an identifier */
+#dlReplay .dl-tbl td.rp-id{font:600 11.5px var(--mono,ui-monospace,monospace);
+  color:var(--txt-1,#eaf2ff);letter-spacing:.01em}
+html[data-mode="day"] #dlReplay .dl-tbl td.rp-id{color:#141a26}
+#dlReplay .dl-tbl td.rp-edge{font-variant-numeric:tabular-nums;font-weight:800;
+  color:var(--txt-1,#eaf2ff)}
+html[data-mode="day"] #dlReplay .dl-tbl td.rp-edge{color:#141a26}
+#dlReplay .dl-tbl td.rp-arith{font:500 10.5px var(--mono,ui-monospace,monospace);
+  color:var(--txt-3,#8b97ad);white-space:nowrap}
+html[data-mode="day"] #dlReplay .dl-tbl td.rp-arith{color:#4a5266}
+#dlReplay .rp-dist td{font-variant-numeric:tabular-nums}
+
+#dlReplay .rp-tag{font:700 9.5px var(--ui-sans,sans-serif);letter-spacing:.06em;
+  text-transform:uppercase;margin-left:6px;padding:2px 5px;border-radius:5px;
+  background:var(--dl-sunk,rgba(148,163,199,.06));color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlReplay .rp-tag{background:rgba(0,0,0,.06);color:#4a5266}
+
+#dlReplay .rp-pick{min-height:30px;padding:0 11px;border-radius:9px;
+  border:1px solid var(--dl-edge,rgba(148,163,199,.14));background:rgba(255,255,255,.05);
+  color:var(--txt-2,#b6c2d6);font:600 11.5px var(--ui-sans,sans-serif);cursor:pointer;white-space:nowrap}
+html[data-mode="day"] #dlReplay .rp-pick{background:rgba(0,0,0,.05);color:#3a4256;border-color:rgba(0,0,0,.12)}
+
+/* the shock stack */
+#dlReplay .rp-shocks{margin:12px 0 4px}
+#dlReplay .rp-shock{display:grid;grid-template-columns:auto minmax(120px,190px) 1fr auto;
+  gap:10px;align-items:center;padding:10px 12px;border-radius:var(--r-lg,14px);cursor:pointer;
+  border:1px solid var(--dl-edge-soft,rgba(148,163,199,.10));margin-bottom:6px}
+#dlReplay .rp-sn{font:700 12.5px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlReplay .rp-sm{font:500 11px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);line-height:1.5}
+#dlReplay .rp-si{display:flex;gap:6px;justify-content:flex-end}
+#dlReplay .rp-si .dl-inp{max-width:130px}
+html[data-mode="day"] #dlReplay .rp-sn{color:#141a26}
+html[data-mode="day"] #dlReplay .rp-sm{color:#4a5266}
+@media(max-width:620px){
+  #dlReplay .rp-shock{grid-template-columns:auto 1fr;row-gap:6px}
+  #dlReplay .rp-sm{grid-column:2}
+  #dlReplay .rp-si{grid-column:2;justify-content:flex-start;flex-wrap:wrap}
+  #dlReplay .rp-si .dl-inp{max-width:100%}
+}
+
+/* method + assumptions */
+#dlReplay .rp-method{margin:4px 0 0}
+#dlReplay .rp-mrow{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:12px;
+  padding:11px 0;border-bottom:1px solid var(--dl-edge-soft,rgba(148,163,199,.10))}
+#dlReplay .rp-mrow b{font:800 12px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlReplay .rp-mrow span{font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.6}
+html[data-mode="day"] #dlReplay .rp-mrow b{color:#141a26}
+html[data-mode="day"] #dlReplay .rp-mrow span{color:#3a4256}
+@media(max-width:560px){#dlReplay .rp-mrow{grid-template-columns:1fr;gap:4px}}
+#dlReplay .rp-assume{margin:8px 0 0;padding-left:18px}
+#dlReplay .rp-assume li{font:500 12px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);
+  line-height:1.6;margin-bottom:9px}
+html[data-mode="day"] #dlReplay .rp-assume li{color:#3a4256}
+
+/* nothing on this desk may push the sheet sideways at 360px */
+#dlReplay .dl-tblw{max-width:100%}
+#dlReplay .rp-thr,#dlReplay .rp-legend,#dlReplay .rp-note,#dlReplay .rp-warn{overflow-wrap:anywhere}
+
+/* ---- 62-carry.css ---- */
+/* ============================================================================
+   DLCARRY · layer 62 · v166 "⇄ Carry" — continuity bundles and proof cards.
+   Rules only. No token definitions. Every selector is scoped to #dlCarry.
+   Night is the default; every rule has its day pair right under it, and every
+   pair was picked to clear 4.5:1 against the surface it sits on.
+   ============================================================================ */
+
+#dlCarry .carry-note,#dlCarry .carry-strip,#dlCarry .carry-plainrow{
+  font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.6;margin:10px 0}
+#dlCarry .carry-strip{font-size:11.5px;color:var(--txt-3,#8b97ad);border-top:1px solid var(--line,rgba(148,163,199,.16));
+  border-bottom:1px solid var(--line,rgba(148,163,199,.16));padding:8px 0}
+#dlCarry .carry-strip b{color:var(--txt-1,#eaf2ff)}
+html[data-mode="day"] #dlCarry .carry-note,html[data-mode="day"] #dlCarry .carry-plainrow{color:#4a5266}
+html[data-mode="day"] #dlCarry .carry-strip{color:#5a6274;border-color:rgba(0,0,0,.10)}
+html[data-mode="day"] #dlCarry .carry-strip b{color:#141a26}
+
+#dlCarry .carry-sub{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--txt-3,#8b97ad);margin:16px 0 8px}
+html[data-mode="day"] #dlCarry .carry-sub{color:#4a5266}
+
+/* the claim box — the one paragraph on this desk that must never be skimmed */
+#dlCarry .carry-claim{font:500 12.5px var(--ui-sans,sans-serif);line-height:1.65;color:var(--txt-1,#eaf2ff);
+  background:var(--dl-sunk,rgba(148,163,199,.06));border:1px solid var(--line,rgba(148,163,199,.16));
+  border-left:3px solid var(--cyan,#4fd1e0);border-radius:var(--r-sm,8px);padding:11px 13px;margin:12px 0}
+#dlCarry .carry-claim b{font-weight:800}
+html[data-mode="day"] #dlCarry .carry-claim{color:#141a26;background:#f3efe7;border-color:rgba(0,0,0,.09);border-left-color:#0d7d8c}
+
+#dlCarry .carry-warn{font:600 12.5px var(--ui-sans,sans-serif);line-height:1.6;color:var(--down,#ff6b6b);
+  border:1px solid rgba(255,107,107,.32);border-radius:var(--r-sm,8px);padding:10px 12px;margin:12px 0}
+html[data-mode="day"] #dlCarry .carry-warn{color:#b0202a;border-color:rgba(176,32,42,.35)}
+
+#dlCarry .carry-ok-box{font:500 12.5px var(--ui-sans,sans-serif);line-height:1.6;color:var(--txt-1,#eaf2ff);
+  border:1px solid rgba(34,227,154,.32);border-radius:var(--r-sm,8px);padding:10px 12px;margin:12px 0}
+html[data-mode="day"] #dlCarry .carry-ok-box{color:#141a26;border-color:rgba(10,122,82,.35)}
+
+#dlCarry .carry-busy{font:600 12px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);padding:12px 0}
+html[data-mode="day"] #dlCarry .carry-busy{color:#5a6274}
+
+/* badges and tags */
+#dlCarry .carry-badges{display:flex;flex-wrap:wrap;gap:6px;margin:12px 0}
+#dlCarry .carry-tag{font:700 10px var(--ui-sans,sans-serif);letter-spacing:.06em;text-transform:uppercase;
+  padding:4px 8px;border-radius:999px;background:var(--dl-sunk,rgba(148,163,199,.08));
+  color:var(--txt-2,#b6c2d6);border:1px solid var(--line,rgba(148,163,199,.16));white-space:nowrap}
+#dlCarry .carry-tag.carry-plain{color:#ffb454;border-color:rgba(255,180,84,.42)}
+#dlCarry .carry-tag.carry-enc{color:var(--up,#22e39a);border-color:rgba(34,227,154,.38)}
+#dlCarry .carry-tag.carry-ok{color:var(--up,#22e39a);border-color:rgba(34,227,154,.38)}
+#dlCarry .carry-tag.carry-bad{color:var(--down,#ff6b6b);border-color:rgba(255,107,107,.42)}
+html[data-mode="day"] #dlCarry .carry-tag{background:#ece7dd;color:#4a5266;border-color:rgba(0,0,0,.10)}
+html[data-mode="day"] #dlCarry .carry-tag.carry-plain{color:#8a4b00;border-color:rgba(138,75,0,.38)}
+html[data-mode="day"] #dlCarry .carry-tag.carry-enc,
+html[data-mode="day"] #dlCarry .carry-tag.carry-ok{color:#0a6b48;border-color:rgba(10,107,72,.38)}
+html[data-mode="day"] #dlCarry .carry-tag.carry-bad{color:#b0202a;border-color:rgba(176,32,42,.38)}
+
+/* forms */
+#dlCarry .carry-form{margin:12px 0 4px}
+#dlCarry .carry-f{display:flex;flex-direction:column;gap:6px}
+#dlCarry .carry-fl{font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.07em;text-transform:uppercase;
+  color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlCarry .carry-fl{color:#4a5266}
+#dlCarry .carry-ck{display:flex;gap:9px;align-items:flex-start;margin:10px 0;
+  font:500 12px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.55}
+html[data-mode="day"] #dlCarry .carry-ck{color:#4a5266}
+#dlCarry .carry-actions{display:flex;flex-wrap:wrap;gap:10px;align-items:center;margin:14px 0}
+#dlCarry .carry-sendnote{font:500 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);line-height:1.5}
+html[data-mode="day"] #dlCarry .carry-sendnote{color:#5a6274}
+
+/* the text areas that ARE the transport — nothing here goes over a wire */
+#dlCarry .carry-ta{width:100%;box-sizing:border-box;resize:vertical;
+  font:500 11.5px/1.5 var(--mono,ui-monospace,monospace);
+  color:var(--txt-1,#eaf2ff);background:var(--dl-sunk,rgba(148,163,199,.06));
+  border:1px solid var(--line,rgba(148,163,199,.16));border-radius:var(--r-sm,8px);padding:10px;margin:6px 0}
+#dlCarry .carry-ta:focus{outline:2px solid var(--cyan,#4fd1e0);outline-offset:1px}
+#dlCarry .carry-mono{word-break:break-all}
+html[data-mode="day"] #dlCarry .carry-ta{color:#141a26;background:#f6f3ec;border-color:rgba(0,0,0,.12)}
+html[data-mode="day"] #dlCarry .carry-ta:focus{outline-color:#0d7d8c}
+
+/* tables */
+#dlCarry .dl-tbl td,#dlCarry .dl-tbl th{vertical-align:top}
+#dlCarry .dl-tbl tr.carry-dim td{color:var(--txt-3,#8b97ad);font-size:11.5px}
+#dlCarry .dl-tbl tr.carry-detail td{font:500 11px/1.5 var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);
+  padding-top:2px;padding-bottom:2px}
+#dlCarry .dl-tbl tr.carry-detail code{font:500 10.5px var(--mono,ui-monospace,monospace);word-break:break-all}
+html[data-mode="day"] #dlCarry .dl-tbl tr.carry-dim td{color:#5a6274}
+html[data-mode="day"] #dlCarry .dl-tbl tr.carry-detail td{color:#4a5266}
+
+#dlCarry .carry-ba{display:flex;flex-wrap:wrap;gap:6px 14px;margin-top:3px}
+#dlCarry .carry-before{color:var(--down,#ff6b6b);word-break:break-all}
+#dlCarry .carry-after{color:var(--up,#22e39a);word-break:break-all}
+html[data-mode="day"] #dlCarry .carry-before{color:#a3151f}
+html[data-mode="day"] #dlCarry .carry-after{color:#0a6b48}
+
+#dlCarry .carry-no{color:#ffb454;font-weight:700}
+html[data-mode="day"] #dlCarry .carry-no{color:#8a4b00}
+#dlCarry .carry-dimtxt{color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlCarry .carry-dimtxt{color:#5a6274}
+
+#dlCarry .carry-list{margin:8px 0 12px;padding-left:18px}
+#dlCarry .carry-list li{font:500 12px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);
+  line-height:1.65;margin-bottom:7px}
+#dlCarry .carry-list li b{color:var(--txt-1,#eaf2ff)}
+#dlCarry .carry-list code{font:500 10.5px var(--mono,ui-monospace,monospace);word-break:break-all}
+html[data-mode="day"] #dlCarry .carry-list li{color:#4a5266}
+html[data-mode="day"] #dlCarry .carry-list li b{color:#141a26}
+
+/* method */
+#dlCarry .carry-method{display:grid;gap:10px;margin:12px 0}
+#dlCarry .carry-mrow{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:12px;align-items:start}
+#dlCarry .carry-mrow b{font:800 12px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlCarry .carry-mrow span{font:500 12.5px var(--ui-sans,sans-serif);color:var(--txt-2,#b6c2d6);line-height:1.65}
+html[data-mode="day"] #dlCarry .carry-mrow b{color:#141a26}
+html[data-mode="day"] #dlCarry .carry-mrow span{color:#4a5266}
+
+#dlCarry .carry-out{margin-top:6px}
+
+/* 360px: nothing may scroll sideways */
+@media(max-width:560px){
+  #dlCarry .carry-mrow{grid-template-columns:1fr;gap:3px}
+  #dlCarry .carry-actions{flex-direction:column;align-items:stretch}
+  #dlCarry .carry-actions .go{width:100%}
+  #dlCarry .carry-ta{font-size:10.5px}
+}
+
+/* ---- 63-access.css ---- */
+/* ============================================================================
+   v166 · layer 63 · DLACCESS — "◔ Access"
+   Two kinds of rule live here and nowhere else:
+
+   1. #dlAccess …            the desk's own chrome, prefixed so nothing leaks.
+   2. html.dla-… and .dla-hl the four reader-facing display modes and the audit
+                             highlight. These are PAGE-WIDE by definition — a
+                             text-spacing override that only reached one panel
+                             would not be SC 1.4.12 — so they carry the dla-
+                             namespace instead of a sheet id. Nothing here is
+                             an unprefixed element or class selector.
+
+   No token block is declared here, and no token is defined or redefined. The high-contrast mode
+   REPOINTS elements at tokens that already exist (muted text → ink, hairline →
+   the stronger line token) so the payload's contrast gate still governs every
+   colour on screen.
+
+   Every rule that could depend on a physical side is written with LOGICAL
+   properties — inline-start/end, block-start/end, text-align:start, margin-
+   inline, padding-inline, border-inline. No physical side is named anywhere in
+   this file, which is what makes dir="rtl" flip the desk with no second
+   stylesheet. test/gate-access.js asserts exactly that, by text.
+   ============================================================================ */
+
+/* ------------------------------------------------------------ desk chrome */
+
+#dlAccess .dla-note {
+  font: 500 12px var(--ui-sans, sans-serif);
+  line-height: 1.55;
+  color: var(--txt-2, #9aa6bd);
+  margin-block: 0 var(--sp-3, 12px);
+  max-inline-size: 78ch;
+}
+
+#dlAccess .dla-sub {
+  font: 800 12px var(--ui-sans, sans-serif);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+  color: var(--ink, #e7edf8);
+  margin-block: var(--sp-5, 20px) var(--sp-2, 8px);
+  padding-block-end: 6px;
+  border-block-end: 1px solid var(--line, rgba(148, 163, 199, .14));
+}
+
+#dlAccess .dla-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: var(--sp-3, 12px);
+  margin-block: var(--sp-3, 12px);
+}
+
+#dlAccess .dla-floor {
+  font: 700 11.5px var(--ui-sans, sans-serif);
+  color: var(--ink-2, #c8d2e6);
+}
+
+#dlAccess .dla-verdict {
+  font: 600 13.5px var(--ui-sans, sans-serif);
+  line-height: 1.5;
+  color: var(--ink, #e7edf8);
+  padding: var(--sp-3, 12px);
+  border: 1px solid var(--line, rgba(148, 163, 199, .14));
+  border-inline-start: 3px solid var(--cyan, #22d3ee);
+  border-radius: var(--r-sm, 10px);
+  background: var(--surface-2, rgba(255, 255, 255, .03));
+  margin-block-end: var(--sp-3, 12px);
+}
+
+#dlAccess .dla-kpis {
+  display: grid;
+  grid-template-columns: repeat(auto-fit,minmax(min(122px,100%),1fr));
+  gap: var(--sp-2, 8px);
+  margin-block-end: var(--sp-3, 12px);
+}
+
+#dlAccess .dla-kpi {
+  padding: var(--sp-2, 8px) var(--sp-3, 12px);
+  border: 1px solid var(--line, rgba(148, 163, 199, .14));
+  border-radius: var(--r-sm, 10px);
+  background: var(--surface-2, rgba(255, 255, 255, .03));
+  min-inline-size: 0;
+}
+#dlAccess .dla-kpi b { display: block; font: 800 19px var(--mono, ui-monospace, monospace); color: var(--ink, #e7edf8); }
+#dlAccess .dla-kpi span { display: block; font: 500 10.5px var(--ui-sans, sans-serif); color: var(--txt-2, #9aa6bd); margin-block-start: 2px; }
+
+/* ------------------------------------------------------ one criterion card */
+
+#dlAccess .dla-sc {
+  border: 1px solid var(--line, rgba(148, 163, 199, .14));
+  border-radius: var(--r-sm, 10px);
+  padding: var(--sp-3, 12px);
+  margin-block-end: var(--sp-3, 12px);
+  background: var(--surface-2, rgba(255, 255, 255, .025));
+}
+#dlAccess .dla-sc[data-status="fail"] { border-inline-start: 3px solid var(--down, #ff5252); }
+#dlAccess .dla-sc[data-status="pass"] { border-inline-start: 3px solid var(--up, #00e676); }
+#dlAccess .dla-sc[data-status="not-applicable"] { border-inline-start: 3px solid var(--line-2, rgba(148, 163, 199, .08)); }
+#dlAccess .dla-sc[data-status="error"] { border-inline-start: 3px solid var(--down, #ff5252); }
+
+#dlAccess .dla-schead {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: var(--sp-2, 8px);
+}
+#dlAccess .dla-scid { font: 800 13px var(--mono, ui-monospace, monospace); color: var(--cyan, #22d3ee); }
+#dlAccess .dla-scname { font: 700 13px var(--ui-sans, sans-serif); color: var(--ink, #e7edf8); flex: 1 1 auto; min-inline-size: 0; }
+#dlAccess .dla-lvl {
+  font: 800 10px var(--mono, ui-monospace, monospace);
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--line, rgba(148, 163, 199, .14));
+  color: var(--ink-2, #c8d2e6);
+}
+#dlAccess .dla-new {
+  font: 700 10px var(--ui-sans, sans-serif);
+  padding: 2px 7px;
+  border-radius: 999px;
+  border: 1px solid var(--cyan, #22d3ee);
+  color: var(--cyan, #22d3ee);
+  white-space: nowrap;
+}
+#dlAccess .dla-status { font: 800 11px var(--ui-sans, sans-serif); text-transform: uppercase; letter-spacing: .05em; color: var(--ink-2, #c8d2e6); }
+#dlAccess .dla-sc[data-status="pass"] .dla-status { color: var(--up, #00e676); }
+#dlAccess .dla-sc[data-status="fail"] .dla-status,
+#dlAccess .dla-sc[data-status="error"] .dla-status { color: var(--down, #ff5252); }
+
+#dlAccess .dla-scwhat { font: 500 11.5px var(--ui-sans, sans-serif); color: var(--txt-2, #9aa6bd); margin-block-start: 6px; line-height: 1.5; }
+#dlAccess .dla-scmeta { font: 500 11.5px var(--mono, ui-monospace, monospace); color: var(--ink-2, #c8d2e6); margin-block-start: 6px; }
+#dlAccess .dla-scmeta b { color: var(--ink, #e7edf8); }
+#dlAccess .dla-scnote {
+  font: 500 11.5px var(--ui-sans, sans-serif);
+  line-height: 1.5;
+  color: var(--txt-2, #9aa6bd);
+  margin-block-start: 8px;
+  padding-inline-start: 10px;
+  border-inline-start: 2px solid var(--line, rgba(148, 163, 199, .14));
+}
+#dlAccess .dla-more { font: 500 11px var(--ui-sans, sans-serif); color: var(--txt-2, #9aa6bd); margin-block-start: 6px; }
+
+#dlAccess .dla-sel {
+  font: 500 11px var(--mono, ui-monospace, monospace);
+  color: var(--ink-2, #c8d2e6);
+  background: var(--surface, rgba(255, 255, 255, .05));
+  border: 1px solid var(--line-2, rgba(148, 163, 199, .1));
+  border-radius: 6px;
+  padding: 1px 5px;
+  overflow-wrap: anywhere;
+}
+
+/* ------------------------------------------------------------- the switches */
+
+#dlAccess .dla-togs { display: grid; grid-template-columns: repeat(auto-fit,minmax(min(240px,100%),1fr)); gap: var(--sp-2, 8px); }
+#dlAccess .dla-row { margin-block: var(--sp-3, 12px); }
+
+#dlAccess .dla-tog {
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 4px var(--sp-2, 8px);
+  inline-size: 100%;
+  text-align: start;
+  min-block-size: 44px;
+  padding: var(--sp-2, 8px) var(--sp-3, 12px);
+  border: 1px solid var(--line, rgba(148, 163, 199, .14));
+  border-radius: var(--r-sm, 10px);
+  background: var(--surface-2, rgba(255, 255, 255, .03));
+  color: var(--ink, #e7edf8);
+  cursor: pointer;
+  font: 600 12.5px var(--ui-sans, sans-serif);
+}
+#dlAccess .dla-tog[aria-pressed="true"] { border-color: var(--cyan, #22d3ee); }
+#dlAccess .dla-togl { font: 700 12.5px var(--ui-sans, sans-serif); color: var(--ink, #e7edf8); }
+#dlAccess .dla-togs2 {
+  font: 800 10.5px var(--mono, ui-monospace, monospace);
+  text-transform: uppercase;
+  letter-spacing: .05em;
+  color: var(--txt-2, #9aa6bd);
+  align-self: start;
+}
+#dlAccess .dla-tog[aria-pressed="true"] .dla-togs2 { color: var(--cyan, #22d3ee); }
+#dlAccess .dla-togn { grid-column: 1 / -1; font: 500 11px var(--ui-sans, sans-serif); line-height: 1.5; color: var(--txt-2, #9aa6bd); }
+#dlAccess .dla-tog.small { grid-template-columns: 1fr auto; max-inline-size: 420px; }
+
+/* ------------------------------------------------------------- language tab */
+
+#dlAccess .dla-langs { display: flex; flex-wrap: wrap; gap: 6px; margin-block-end: var(--sp-3, 12px); }
+#dlAccess .dla-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-block-end: var(--sp-2, 8px); }
+#dlAccess .dla-hop {
+  font: 700 11.5px var(--mono, ui-monospace, monospace);
+  padding: 3px 9px;
+  border-radius: 999px;
+  border: 1px solid var(--line, rgba(148, 163, 199, .14));
+  background: var(--surface-2, rgba(255, 255, 255, .03));
+  color: var(--ink, #e7edf8);
+}
+#dlAccess .dla-arrow { color: var(--txt-2, #9aa6bd); font-size: 12px; }
+#dlAccess .dla-keys { display: flex; flex-wrap: wrap; gap: 4px; margin-block-end: var(--sp-3, 12px); }
+#dlAccess .dla-drift { color: var(--down, #ff5252); font-weight: 800; }
+
+/* ---------------------------------------------------------------- method tab */
+
+#dlAccess .dla-method { display: grid; gap: var(--sp-2, 8px); }
+#dlAccess .dla-mrow {
+  padding: var(--sp-2, 8px) var(--sp-3, 12px);
+  border: 1px solid var(--line, rgba(148, 163, 199, .14));
+  border-radius: var(--r-sm, 10px);
+  background: var(--surface-2, rgba(255, 255, 255, .03));
+}
+#dlAccess .dla-mrow b { display: block; font: 800 12.5px var(--ui-sans, sans-serif); color: var(--ink, #e7edf8); margin-block-end: 4px; }
+#dlAccess .dla-mrow span { font: 500 12px var(--ui-sans, sans-serif); line-height: 1.6; color: var(--txt-2, #9aa6bd); }
+#dlAccess .dla-assume { margin: 0; padding-inline-start: 18px; }
+#dlAccess .dla-assume li { font: 500 12px var(--ui-sans, sans-serif); line-height: 1.6; color: var(--txt-2, #9aa6bd); margin-block-end: 10px; }
+#dlAccess kbd {
+  font: 700 11px var(--mono, ui-monospace, monospace);
+  padding: 2px 7px;
+  border-radius: 6px;
+  border: 1px solid var(--line, rgba(148, 163, 199, .14));
+  background: var(--surface, rgba(255, 255, 255, .05));
+  color: var(--ink, #e7edf8);
+  white-space: nowrap;
+}
+
+/* the desk itself is measured with a keyboard, so its own focus ring is loud */
+#dlAccess button:focus-visible,
+#dlAccess [tabindex]:focus-visible {
+  outline: 3px solid var(--cyan, #22d3ee);
+  outline-offset: 2px;
+}
+
+@media (max-width: 420px) {
+  #dlAccess .dla-togs { grid-template-columns: 1fr; }
+  #dlAccess .dla-kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  #dlAccess .dla-scname { flex-basis: 100%; }
+}
+
+/* ========================================================= reader-facing modes */
+
+/* SC 1.4.12 · the specification's own override. The audit applies this exact
+   class to measure the criterion, so what is tested and what ships are one
+   implementation. */
+html.dla-space p,
+html.dla-space li,
+html.dla-space td,
+html.dla-space th,
+html.dla-space dd,
+html.dla-space dt,
+html.dla-space h1,
+html.dla-space h2,
+html.dla-space h3,
+html.dla-space h4,
+html.dla-space h5,
+html.dla-space h6,
+html.dla-space label,
+html.dla-space span,
+html.dla-space div,
+html.dla-space a,
+html.dla-space button,
+html.dla-space figcaption,
+html.dla-space blockquote {
+  line-height: 1.5 !important;
+  letter-spacing: .12em !important;
+  word-spacing: .16em !important;
+}
+html.dla-space p,
+html.dla-space blockquote,
+html.dla-space li { margin-block-end: 2em !important; }
+
+/* A reduced-motion override that does not wait for the operating system. */
+html.dla-motion *,
+html.dla-motion *::before,
+html.dla-motion *::after {
+  animation-duration: 1ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 1ms !important;
+  animation-delay: 0s !important;
+  transition-delay: 0s !important;
+}
+html.dla-motion { scroll-behavior: auto !important; }
+
+/* SC 2.5.8 · 24 by 24 CSS pixels, which is the MINIMUM. The 44 pixel target of
+   the AAA criterion 2.5.5 is deliberately not claimed here. */
+html.dla-targets button,
+html.dla-targets a[role="button"],
+html.dla-targets input:not([type="hidden"]),
+html.dla-targets select,
+html.dla-targets textarea,
+html.dla-targets summary,
+html.dla-targets [role="button"],
+html.dla-targets [role="tab"],
+html.dla-targets [role="switch"],
+html.dla-targets [role="checkbox"] {
+  min-block-size: 24px;
+  min-inline-size: 24px;
+  padding-block: 2px;
+  padding-inline: 4px;
+}
+
+/* Higher contrast, inside the token system. Nothing below defines a token —
+   each rule points an element at a token that already exists and already
+   passes the build's 4.5:1 floor. */
+html.dla-contrast .dl154 .n,
+html.dla-contrast .dl-src,
+html.dla-contrast .dl-age,
+html.dla-contrast .dl-prov,
+html.dla-contrast .dls-head .dls-sub,
+html.dla-contrast .dl-chip,
+html.dla-contrast .dl-empty,
+html.dla-contrast #dlAccess .dla-note,
+html.dla-contrast #dlAccess .dla-scwhat,
+html.dla-contrast #dlAccess .dla-scnote,
+html.dla-contrast #dlAccess .dla-togn,
+html.dla-contrast #dlAccess .dla-mrow span,
+html.dla-contrast #dlAccess .dla-assume li,
+html.dla-contrast #dlAccess .dla-kpi span { color: var(--ink, #e7edf8); }
+
+html.dla-contrast .dl154,
+html.dla-contrast .dl-chip,
+html.dla-contrast .dl-b,
+html.dla-contrast .dl-inp,
+html.dla-contrast #dlAccess .dla-sc,
+html.dla-contrast #dlAccess .dla-kpi,
+html.dla-contrast #dlAccess .dla-tog,
+html.dla-contrast #dlAccess .dla-mrow { border-color: var(--ink-2, #c8d2e6); }
+
+html.dla-contrast a { text-decoration: underline; }
+html.dla-contrast button:focus-visible,
+html.dla-contrast a:focus-visible,
+html.dla-contrast input:focus-visible,
+html.dla-contrast select:focus-visible,
+html.dla-contrast [tabindex]:focus-visible {
+  outline: 3px solid var(--cyan, #22d3ee);
+  outline-offset: 2px;
+}
+
+/* While the audit runs, the desk stops painting so the pass measures the page
+   behind it rather than itself. Restored the instant the pass returns. */
+html.dla-auditing .dls.on { visibility: hidden; }
+
+/* What a finding points at, after the desk closes. */
+.dla-hl {
+  outline: 3px dashed var(--cyan, #22d3ee) !important;
+  outline-offset: 3px !important;
+  scroll-margin-block: 96px;
+}
+
+/* ---- 64-verify.css ---- */
+/* ============================================================================
+   DexLadder — Verify desk (layers/64-verify.js, sheet id #dlVerify) · v166
+   Rules only. No token definitions, no :root block. Every rule is paired for
+   Day, and every colour is a token or a value with a checked 4.5:1 contrast
+   against the surface it sits on in both appearances.
+   ============================================================================ */
+
+/* ------------------------------------------------------------------ banner */
+#dlVerify .v-banner{
+  font:600 12px var(--ui-sans,sans-serif);color:var(--txt-2,#aeb9cf);line-height:1.55;
+  border:1px solid var(--line,rgba(148,163,199,.18));border-left:3px solid var(--cyan);
+  background:var(--dl-sunk,rgba(148,163,199,.06));border-radius:var(--r-sm,10px);
+  padding:10px 12px;margin:0 0 14px}
+#dlVerify .v-banner b{color:var(--txt-1,#eaf2ff)}
+html[data-mode="day"] #dlVerify .v-banner{color:#4a5266;background:#f1ece3;border-color:rgba(0,0,0,.10);border-left-color:var(--cyan)}
+html[data-mode="day"] #dlVerify .v-banner b{color:#141a26}
+
+/* ------------------------------------------------------- notes and headings */
+#dlVerify .v-note,#dlVerify .v-xn,#dlVerify .v-cite{
+  font:500 11.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);line-height:1.6;margin:10px 0}
+#dlVerify .v-note code,#dlVerify .v-sheet code{
+  font:600 11px var(--mono,ui-monospace,monospace);color:var(--txt-2,#aeb9cf);
+  background:var(--dl-sunk,rgba(148,163,199,.06));border-radius:5px;padding:1px 5px}
+html[data-mode="day"] #dlVerify .v-note,html[data-mode="day"] #dlVerify .v-xn,
+html[data-mode="day"] #dlVerify .v-cite{color:#5a6274}
+html[data-mode="day"] #dlVerify .v-note code,html[data-mode="day"] #dlVerify .v-sheet code{color:#333;background:rgba(0,0,0,.05)}
+
+#dlVerify .v-sub{
+  font:700 10.5px var(--ui-sans,sans-serif);letter-spacing:.08em;text-transform:uppercase;
+  color:var(--txt-3,#8b97ad);margin:18px 0 8px}
+html[data-mode="day"] #dlVerify .v-sub{color:#4a5266}
+
+#dlVerify .v-head{display:flex;flex-wrap:wrap;gap:8px 12px;align-items:baseline;margin:14px 0 4px}
+#dlVerify .v-title{font:800 15px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+html[data-mode="day"] #dlVerify .v-title{color:#141a26}
+#dlVerify .v-pill{
+  font:700 10px var(--ui-sans,sans-serif);letter-spacing:.04em;padding:2px 8px;border-radius:999px;
+  border:1px solid var(--line,rgba(148,163,199,.18));color:var(--txt-3,#8b97ad);
+  background:var(--dl-sunk,rgba(148,163,199,.06))}
+html[data-mode="day"] #dlVerify .v-pill{color:#4a5266;background:#ece7dd;border-color:rgba(0,0,0,.10)}
+
+/* ------------------------------------------------------------------- form */
+#dlVerify .v-form{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(220px,100%),1fr));gap:10px;margin:0 0 6px}
+#dlVerify .v-f{display:flex;flex-direction:column;gap:5px;min-width:0}
+#dlVerify .v-fl{font:700 10px var(--ui-sans,sans-serif);letter-spacing:.07em;text-transform:uppercase;color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlVerify .v-fl{color:#4a5266}
+#dlVerify .v-actions{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin:14px 0 4px}
+
+/* ------------------------------------------------- formula and spreadsheet */
+#dlVerify .v-formula{font-size:12px;line-height:1.7;color:var(--txt-2,#aeb9cf)}
+html[data-mode="day"] #dlVerify .v-formula{color:#3a4256;background:rgba(0,0,0,.035);border-color:rgba(0,0,0,.14)}
+#dlVerify .v-sheet{display:flex;flex-wrap:wrap;gap:6px 10px;align-items:baseline;margin-top:8px}
+#dlVerify .v-sheet code{white-space:pre-wrap;word-break:break-word}
+
+/* ------------------------------------------------------ the numbered working */
+#dlVerify .v-steps{list-style:none;margin:0;padding:0;
+  border:1px solid var(--line,rgba(148,163,199,.18));border-radius:var(--r-sm,10px);overflow:hidden}
+#dlVerify .v-step{display:grid;grid-template-columns:34px 1fr auto;gap:8px;align-items:baseline;
+  padding:8px 11px;border-bottom:1px solid var(--line-2,rgba(148,163,199,.10));
+  font:500 12px var(--ui-sans,sans-serif)}
+#dlVerify .v-steps li:last-child{border-bottom:0}
+#dlVerify .v-steps li:nth-child(odd){background:var(--dl-sunk,rgba(148,163,199,.05))}
+#dlVerify .v-sn{font:700 11px var(--mono,ui-monospace,monospace);color:var(--txt-3,#8b97ad)}
+#dlVerify .v-st{color:var(--txt-2,#aeb9cf);line-height:1.5;word-break:break-word}
+#dlVerify .v-sv{font:700 12px var(--mono,ui-monospace,monospace);color:var(--txt-1,#eaf2ff);
+  font-variant-numeric:tabular-nums;text-align:right;word-break:break-all}
+html[data-mode="day"] #dlVerify .v-steps{border-color:rgba(0,0,0,.12)}
+html[data-mode="day"] #dlVerify .v-step{border-bottom-color:rgba(0,0,0,.07)}
+html[data-mode="day"] #dlVerify .v-steps li:nth-child(odd){background:#f3efe7}
+html[data-mode="day"] #dlVerify .v-sn{color:#5a6274}
+html[data-mode="day"] #dlVerify .v-st{color:#3a4256}
+html[data-mode="day"] #dlVerify .v-sv{color:#141a26}
+
+/* -------------------------------------------------------------- verdicts */
+#dlVerify .v-ok,#dlVerify .v-bad,#dlVerify .v-warn{
+  font:600 12.5px var(--ui-sans,sans-serif);line-height:1.6;
+  border-radius:var(--r-sm,10px);padding:10px 12px;margin:12px 0;border:1px solid}
+#dlVerify .v-ok{color:var(--up,#22e39a);border-color:rgba(34,227,154,.38);background:rgba(34,227,154,.07)}
+#dlVerify .v-bad{color:var(--down,#ff6b6b);border-color:rgba(255,107,107,.45);background:rgba(255,107,107,.08)}
+#dlVerify .v-warn{color:var(--txt-2,#aeb9cf);border-color:var(--line,rgba(148,163,199,.18));background:var(--dl-sunk,rgba(148,163,199,.06))}
+#dlVerify .v-ok b,#dlVerify .v-bad b{font-weight:800}
+html[data-mode="day"] #dlVerify .v-ok{color:#0a6b47;border-color:rgba(10,107,71,.35);background:#e6f4ee}
+html[data-mode="day"] #dlVerify .v-bad{color:#a8121d;border-color:rgba(168,18,29,.35);background:#fbeaea}
+html[data-mode="day"] #dlVerify .v-warn{color:#4a5266;border-color:rgba(0,0,0,.12);background:#f1ece3}
+
+/* -------------------------------------------------------------- the tables */
+#dlVerify .dl-tbl td.v-n{font-weight:700;color:var(--txt-1,#eaf2ff);white-space:normal}
+html[data-mode="day"] #dlVerify .dl-tbl td.v-n{color:#141a26}
+#dlVerify .dl-tbl td.v-num{font:700 12px var(--mono,ui-monospace,monospace);font-variant-numeric:tabular-nums}
+#dlVerify .dl-tbl td.v-prov,#dlVerify .dl-tbl td.v-src,
+#dlVerify .dl-tbl td.v-formula-cell,#dlVerify .dl-tbl td.v-age{
+  white-space:normal;color:var(--txt-3,#8b97ad);font-weight:500;line-height:1.5;
+  max-width:26ch;font-size:11.5px}
+#dlVerify .dl-tbl td.v-formula-cell{font:500 11px var(--mono,ui-monospace,monospace);max-width:34ch}
+html[data-mode="day"] #dlVerify .dl-tbl td.v-prov,html[data-mode="day"] #dlVerify .dl-tbl td.v-src,
+html[data-mode="day"] #dlVerify .dl-tbl td.v-formula-cell,html[data-mode="day"] #dlVerify .dl-tbl td.v-age{color:#5a6274}
+#dlVerify .dl-tbl tr[data-fail="1"] td{background:rgba(255,107,107,.10)}
+html[data-mode="day"] #dlVerify .dl-tbl tr[data-fail="1"] td{background:#fbeaea}
+#dlVerify .dl-tbl .dl-inp{min-height:32px;font-size:12px;min-width:150px}
+#dlVerify .v-id{display:block;font:500 10px var(--mono,ui-monospace,monospace);color:var(--txt-3,#8b97ad);margin-top:2px;font-weight:500}
+html[data-mode="day"] #dlVerify .v-id{color:#5a6274}
+
+#dlVerify .v-yes{color:var(--up,#22e39a);font-weight:700}
+#dlVerify .v-no,#dlVerify .v-badflag{color:var(--down,#ff6b6b);font-weight:800}
+html[data-mode="day"] #dlVerify .v-yes{color:#0a6b47}
+html[data-mode="day"] #dlVerify .v-no,html[data-mode="day"] #dlVerify .v-badflag{color:#a8121d}
+
+/* ----------------------------------------------------------- cross-checks */
+#dlVerify .v-xc{border:1px solid var(--line,rgba(148,163,199,.18));border-radius:var(--r-lg,14px);
+  padding:12px 13px;margin:12px 0;background:var(--dl-sunk,rgba(148,163,199,.05))}
+#dlVerify .v-xt{font:800 13px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff);margin-bottom:9px}
+#dlVerify .v-xn{margin:9px 0 0}
+html[data-mode="day"] #dlVerify .v-xc{border-color:rgba(0,0,0,.12);background:#f3efe7}
+html[data-mode="day"] #dlVerify .v-xt{color:#141a26}
+
+/* --------------------------------------------------------- method / cites */
+#dlVerify .v-method{display:flex;flex-direction:column;gap:2px;
+  border:1px solid var(--line,rgba(148,163,199,.18));border-radius:var(--r-sm,10px);overflow:hidden}
+#dlVerify .v-mrow{display:grid;grid-template-columns:minmax(120px,190px) 1fr;gap:12px;
+  padding:10px 12px;border-bottom:1px solid var(--line-2,rgba(148,163,199,.10))}
+#dlVerify .v-method .v-mrow:last-child{border-bottom:0}
+#dlVerify .v-mrow b{font:700 12px var(--ui-sans,sans-serif);color:var(--txt-1,#eaf2ff)}
+#dlVerify .v-mrow span{font:500 12px var(--ui-sans,sans-serif);color:var(--txt-2,#aeb9cf);line-height:1.6}
+html[data-mode="day"] #dlVerify .v-method{border-color:rgba(0,0,0,.12)}
+html[data-mode="day"] #dlVerify .v-mrow{border-bottom-color:rgba(0,0,0,.07)}
+html[data-mode="day"] #dlVerify .v-mrow b{color:#141a26}
+html[data-mode="day"] #dlVerify .v-mrow span{color:#3a4256}
+
+#dlVerify .v-assume,#dlVerify .v-cites{margin:6px 0 0;padding-left:18px}
+#dlVerify .v-assume li,#dlVerify .v-cites li{
+  font:500 12px var(--ui-sans,sans-serif);color:var(--txt-2,#aeb9cf);line-height:1.65;margin-bottom:9px}
+#dlVerify .v-cites li{font-size:11.5px;color:var(--txt-3,#8b97ad);margin-bottom:5px}
+#dlVerify .v-cites li b{font:700 11px var(--mono,ui-monospace,monospace);color:var(--txt-2,#aeb9cf)}
+html[data-mode="day"] #dlVerify .v-assume li{color:#3a4256}
+html[data-mode="day"] #dlVerify .v-cites li{color:#5a6274}
+html[data-mode="day"] #dlVerify .v-cites li b{color:#3a4256}
+#dlVerify .v-cite b{color:var(--txt-2,#aeb9cf)}
+#dlVerify .v-cite .v-src{color:var(--txt-3,#8b97ad)}
+html[data-mode="day"] #dlVerify .v-cite b{color:#3a4256}
+html[data-mode="day"] #dlVerify .v-cite .v-src{color:#5a6274}
+
+/* ----------------------------------------------------------------- export */
+#dlVerify .v-pre{
+  font:500 11px var(--mono,ui-monospace,monospace);color:var(--txt-2,#aeb9cf);
+  background:var(--dl-sunk,rgba(148,163,199,.06));border:1px solid var(--line,rgba(148,163,199,.18));
+  border-radius:var(--r-sm,10px);padding:10px 12px;margin:8px 0 0;
+  overflow-x:auto;white-space:pre;line-height:1.6;max-height:240px}
+html[data-mode="day"] #dlVerify .v-pre{color:#3a4256;background:#f3efe7;border-color:rgba(0,0,0,.12)}
+
+#dlVerify .v-empty{font:600 12.5px var(--ui-sans,sans-serif);color:var(--txt-3,#8b97ad);
+  border:1px dashed var(--line,rgba(148,163,199,.18));border-radius:var(--r-sm,10px);
+  padding:14px 12px;text-align:center}
+html[data-mode="day"] #dlVerify .v-empty{color:#5a6274;border-color:rgba(0,0,0,.14)}
+
+/* ------------------------------------------------------------------ phone */
+@media (max-width:560px){
+  #dlVerify .v-step{grid-template-columns:26px 1fr;row-gap:3px}
+  #dlVerify .v-sv{grid-column:2;text-align:left}
+  #dlVerify .v-mrow{grid-template-columns:1fr;gap:4px}
+  #dlVerify .v-form{grid-template-columns:1fr}
+  #dlVerify .dl-tbl td.v-prov,#dlVerify .dl-tbl td.v-src,
+  #dlVerify .dl-tbl td.v-formula-cell,#dlVerify .dl-tbl td.v-age{max-width:18ch}
+  #dlVerify .v-actions .dl-b{flex:1 1 auto}
+}
+

@@ -115,6 +115,7 @@ def apply(out):
     assert 'DXC' in out and out.count('fetch(u, init)') >= 1, 'dxc: the core fetch path is missing'
     for bad in ('fetch("https://data-api', "fetch('https://data-api"):
         assert bad not in out, 'dxc: the engine opened its own network call instead of DLCORE.jget'
-    print('dxc: DexChart Pro owns the native panel — 16 chart types, 65 studies, 71 drawing tools, '
-          '14 bar sizes on real klines; TradingView and the replay desk keep the canvas when theirs')
+    print('dxc: DexChart Pro owns the native panel — 16 chart types, 14 bar sizes on real klines, '
+          'and layer 46\'s own 65 studies and 71 drawing tools (layers 51-54 add to these), '
+          'TradingView and the replay desk keep the canvas when theirs')
     return out

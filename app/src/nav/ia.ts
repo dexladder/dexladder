@@ -6,7 +6,10 @@
  *   Terminal · Markets/Screener · Portfolio · Academy & Hub · Explorer · P2P
  *
  * Academy & Hub absorbs what used to be scattered: Learn, the Blog (long-form), Discover (editorial), the Town Square,
- * the Journey hub (quests, XP, streaks), the daily macro challenge and the Satoshi monument.
+ * the Journey hub (quests, XP, streaks), the daily macro challenge and the Satoshi monument — and, as each shipped,
+ * every MODELLED desk: Rewind, Bots, Execution, and (v166) Order Lab, Lending, Options and Cross-chain. A desk that opens a
+ * sheet rather than a route lives here, beside the labs, so that a simulator is never filed next to a live surface:
+ * Explorer traces real chains, Terminal trades the real (paper) book, and neither is asked to carry a model of itself.
  */
 
 export type DestinationId = 'terminal' | 'markets' | 'portfolio' | 'academy' | 'explorer' | 'p2p';
@@ -59,6 +62,11 @@ export const DESTINATIONS: readonly Destination[] = [
       { id: 'daily', label: 'Daily challenge', action: 'openDaily', hint: 'The 60-second macro hedge scenario' },
       { id: 'rewind', label: 'Rewind', action: 'DLREWIND.open', hint: 'Replay real history bar by bar and trade it' },
       { id: 'bots', label: 'Bots', action: 'DLBOTS.open', hint: 'Build a bot from rules, or bring your own, and race it against buy-and-hold' },
+      { id: 'sor', label: 'Execution', action: 'DLSOR.open', hint: 'Smart order routing — quote one order across every venue and see where it actually fills' },
+      { id: 'orders', label: 'Order Lab', action: 'DLORD.open', hint: 'What an order costs you where cost actually hides — the queue, the wick, and the part that never filled at all' },
+      { id: 'lending', label: 'Lending', action: 'DLLEND.open', hint: 'At what price a position gets taken, who takes it, and what their selling does to everyone else’s collateral' },
+      { id: 'options', label: 'Options', action: 'DLOPT.open', hint: 'What a strike is actually worth, what vol the price is telling you, and whether the surface you fitted admits a free lunch' },
+      { id: 'chains', label: 'Cross-chain', action: 'DLCHAIN.open', hint: 'The same trade on six chains — what it costs to get there, fill and get back, and who has to be honest for the money to arrive' },
       { id: 'monument', label: 'Monument', action: 'openSatoshi3D', hint: 'Satoshi · the monument' },
     ] },
   { id: 'explorer', label: 'Explorer', home: 'explorer', hash: '#/explorer',

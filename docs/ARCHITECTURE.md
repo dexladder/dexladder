@@ -1,6 +1,6 @@
 # Architecture
 
-DexLadder is a **single-file application**. `dist/index.html` is 3,648,352 bytes of
+DexLadder is a **single-file application**. `dist/index.html` is 5,449,494 bytes of
 self-contained HTML, CSS and JavaScript with no runtime dependency, no module
 loader, no bundler output and no network origin it must reach to start.
 
@@ -9,12 +9,12 @@ loader, no bundler output and no network origin it must reach to start.
 ```
 build154.py
   ├─ src/            page shell, CSS, the static academy prose
-  ├─ layers/*.js     feature layers, concatenated in filename order
+  ├─ layers/*.js     51 feature layers, concatenated in filename order
   └─ dist/index.html one file, byte-for-byte reproducible
 ```
 
 Layers are ordinary scripts, sorted by their numeric prefix, so `00-` boots and
-`45-` lands last. Adding a feature means adding a file; the build script globs.
+`64-` lands last. Adding a feature means adding a file; the build script globs.
 There is no dependency graph to reason about and no import resolution to break.
 
 ## Runtime shape

@@ -91,6 +91,12 @@
   var MAIN_KEY = 'coinbridge.v1';
   var SOV_KEY = 'coinbridge.sovkey';
   var KEY_PREFIXES = ['coinbridge.', 'cb.', 'cb_', 'dl.'];
+  /* v164 · cb_mx_cache_v1 is the 500-coin market snapshot — a cache, not
+     state. The `cb_` prefix was sweeping it into every export, so a
+     sovereign bundle carried ~10 MB of stale CoinGecko rows, signed and
+     checksummed. It lives in this database's meta store now (DLMXC); the
+     exclusion also covers a visitor whose migration has not yet run. */
+  var KEY_EXCLUDE = ['cb_mx_cache_v1'];
 
   /* ---------------------------------------------------------- series */
   var SERIES = [
@@ -376,7 +382,7 @@
       for (i = 0; i < localStorage.length; i++) {
         k = localStorage.key(i); if (!k) continue;
         for (p = 0; p < KEY_PREFIXES.length; p++) {
-          if (k.indexOf(KEY_PREFIXES[p]) === 0) { out.push(k); break; }
+          if (k.indexOf(KEY_PREFIXES[p]) === 0) { if (KEY_EXCLUDE.indexOf(k) < 0) out.push(k); break; }
         }
       }
     } catch (e) {}

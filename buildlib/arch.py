@@ -186,7 +186,7 @@ ROOT_RULE = re.compile(r'(:root|html\[data-mode=day\])\s*\{([^{}]*)\}')
 STYLE = re.compile(r'(<style[^>]*>)(.*?)(</style>)', re.S)
 DECL = re.compile(r'\s*(--[\w-]+)\s*:\s*([^;]+?)\s*$')
 # 11 rules across the payload carried 97 (:root) + 42 (Day) token declarations for 68 + 38 tokens.
-EXPECT_REMOVED = 139
+EXPECT_REMOVED = 162  # +21: the depth/outline block (11 Night + 10 Day) seated in front of </head>
 
 
 def _effective(text):

@@ -20,8 +20,8 @@ python3 build154.py
 The build emits one self-contained HTML file. Check it:
 
 ```bash
-wc -c dist/index.html          # expect 2727228 for the published build
-shasum -a 256 dist/index.html  # macOS / Linux
+wc -c dist/index.html          # expect 5449494 for the published build
+shasum -a 256 dist/index.html  # macOS / Linux — expect 82c5bd60a156588c84281ef07c121ee9c459c62986d0345e96c90df6421a8541
 sha256sum dist/index.html      # Linux
 ```
 

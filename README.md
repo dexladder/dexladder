@@ -43,7 +43,7 @@ Or take it with you:
 3. That's the whole install.
 ```
 
-One file. **3,648,352 bytes.** No bundler output, no module loader, no npm dependency, no build step required to *run* it, and no DexLadder server anywhere — there is no backend to call home to. It works offline — on a plane, in a lecture hall, on a laptop that has never met this repo. Your desk lives in two stores on your own machine: a `localStorage` working set, and an append-only `IndexedDB` archive (`dexladder-vault`) that keeps the full history of fills, journal entries, alerts and the equity curve past the limits a single browser key can hold. Both leave together, as one signed and SHA-256-checksummed bundle you carry to another machine yourself.
+One file. **5,449,494 bytes.** No bundler output, no module loader, no npm dependency, no build step required to *run* it, and no DexLadder server anywhere — there is no backend to call home to. It works offline — on a plane, in a lecture hall, on a laptop that has never met this repo. Your desk lives in two stores on your own machine: a `localStorage` working set, and an append-only `IndexedDB` archive (`dexladder-vault`) that keeps the full history of fills, journal entries, alerts and the equity curve past the limits a single browser key can hold. Both leave together, as one signed and SHA-256-checksummed bundle you carry to another machine yourself.
 
 ---
 
@@ -144,11 +144,11 @@ The current build:
 
 The build is byte-for-byte reproducible from source. Same input, same output, same hash — anyone can confirm the file they downloaded is the file this repo describes.
 
-The current release, `v163`:
+The current release, `v166`:
 
 ```
-dist/index.html   3,648,352 bytes
-sha256            b85f0c42138829221b1b394fd0d31addbc527632b37ecd2ef859ab0b63703ec2
+dist/index.html   5,449,494 bytes
+sha256            82c5bd60a156588c84281ef07c121ee9c459c62986d0345e96c90df6421a8541
 ```
 
 That is the tagged release artifact. Download it, hash it, build it here, hash that — those three should agree.
@@ -237,8 +237,8 @@ shasum -a 256 dist/index.html
 
 | field | value |
 | --- | --- |
-| bytes | `3,648,352` |
-| sha256 | `b85f0c42138829221b1b394fd0d31addbc527632b37ecd2ef859ab0b63703ec2` |
+| bytes | `5,449,494` |
+| sha256 | `82c5bd60a156588c84281ef07c121ee9c459c62986d0345e96c90df6421a8541` |
 | build input | `build154.py` + `layers/` + `src/` |
 | runtime dependencies | none |
 | network calls at build time | none |

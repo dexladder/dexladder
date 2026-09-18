@@ -1481,6 +1481,30 @@ window.DXC = (function () {
   };
 
   var ST_KEYS = Object.keys(ST_DEF);
+  /* Extension point. A later layer adds studies through DXC.registerStudy; the registry is the
+     only thing it touches, so the cache, the pane layout, the legend and the dialog pick them
+     up with no knowledge of what was added. A def missing calc, name, group or inputs is
+     refused outright rather than registered half-formed and thrown from at paint time. */
+  function registerStudy(k, def) {
+    if (!k || !def || ST_DEF[k]) return false;
+    if (typeof def.calc !== "function" || !def.name || !def.g || !Array.isArray(def.in)) return false;
+    def.__ext = true;
+    ST_DEF[k] = def; ST_KEYS = Object.keys(ST_DEF);
+    return true;
+  }
+  /* The other half of registerStudy. A script the user deletes has to be able to leave, and
+     leaving means two things: the def goes, and any instance of it on the chart goes with it —
+     a CFG.studies row pointing at a def that is no longer there would ask the legend and the
+     pane layout to describe something that cannot be computed. Built-ins are refused: the
+     65 that shipped are not the user's to remove. */
+  function unregisterStudy(k) {
+    if (!k || !ST_DEF[k] || !ST_DEF[k].__ext) return false;
+    delete ST_DEF[k]; ST_KEYS = Object.keys(ST_DEF);
+    var i, moved = false;
+    for (i = CFG.studies.length - 1; i >= 0; i--) if (CFG.studies[i].k === k) { CFG.studies.splice(i, 1); moved = true; }
+    if (moved) { saveCfg(); CACHE = {}; syncBar(); mark(); }
+    return true;
+  }
   function stDef(k) { return ST_DEF[k] || null; }
   function stDefaults(k) {
     var def = stDef(k), p = {}, i;
@@ -1799,6 +1823,15 @@ window.DXC = (function () {
         for (var j2 = 0; j2 < r2.rows.length; j2++) {
           var rw = r2.rows[j2], dat = rw.data || rw.a;
           if (!dat) continue;
+          if (rw.kind === "bg") continue;
+          if (rw.kind === "shapes" || rw.kind === "labels") {
+            for (var z3 = from; z3 < Math.min(to, dat.length); z3++) {
+              var mk = dat[z3];
+              if (!mk || mk.v == null || !isFinite(mk.v)) continue;
+              if (mk.v > phi) phi = mk.v; if (mk.v < plo) plo = mk.v;
+            }
+            continue;
+          }
           for (var z2 = from; z2 < Math.min(to, dat.length); z2++) {
             var v3 = dat[z2];
             if (v3 == null || !isFinite(v3)) continue;
@@ -2006,6 +2039,89 @@ window.DXC = (function () {
     x.restore();
   }
 
+  /* ---------------------------------------------------------------------
+     The row kinds a script emits. Nothing in the 65 built-in studies returns
+     any of these, so the chart that shipped draws exactly as it did.
+     --------------------------------------------------------------------- */
+  function markSize(g) { return Math.max(2, Math.min(5.5, g.sp * 0.3)); }
+  function drawShapeRow(x, g, sc, row, from, to) {
+    var a = row.data, i, pal = P(), r = markSize(g);
+    if (!a) return;
+    x.save();
+    for (i = from; i < Math.min(to, a.length); i++) {
+      var m = a[i];
+      if (!m || m.v == null || !isFinite(m.v)) continue;
+      var px = g.x(i), py = sc.y(m.v), c = m.c || row.c || pal.text, sh = m.s || row.shape || "circle", dn;
+      x.fillStyle = c; x.strokeStyle = c; x.lineWidth = 1.2;
+      if (sh === "square") x.fillRect(px - r, py - r, r * 2, r * 2);
+      else if (sh === "diamond") { x.beginPath(); x.moveTo(px, py - r); x.lineTo(px + r, py); x.lineTo(px, py + r); x.lineTo(px - r, py); x.closePath(); x.fill(); }
+      else if (sh === "cross" || sh === "xcross") { x.beginPath(); x.moveTo(px - r, py - r); x.lineTo(px + r, py + r); x.moveTo(px + r, py - r); x.lineTo(px - r, py + r); x.stroke(); }
+      else if (sh === "flag") { x.fillRect(px - 0.7, py - r * 2.2, 1.4, r * 2.8); x.beginPath(); x.moveTo(px + 0.7, py - r * 2.2); x.lineTo(px + r * 2, py - r * 1.5); x.lineTo(px + 0.7, py - r * 0.8); x.closePath(); x.fill(); }
+      else if (sh === "up" || sh === "down" || sh === "triangleup" || sh === "triangledown" || sh === "arrowup" || sh === "arrowdown") {
+        dn = (sh === "down" || sh === "triangledown" || sh === "arrowdown") ? 1 : -1;
+        x.beginPath(); x.moveTo(px, py); x.lineTo(px - r, py + dn * r * 1.7); x.lineTo(px + r, py + dn * r * 1.7); x.closePath(); x.fill();
+      } else { x.beginPath(); x.arc(px, py, r, 0, TAU); x.fill(); }
+      if (m.txt) {
+        dn = (m.s === "down" || m.s === "triangledown" || m.s === "arrowdown" || row.below) ? 1 : -1;
+        label(x, px, py + dn * (r * 2.2 + 7), String(m.txt), c, null, "center", 9);
+      }
+    }
+    x.restore();
+  }
+  function drawBgRow(x, g, sc, row, from, to) {
+    var a = row.data, i, bw = Math.max(1, g.sp), h = Math.max(1, sc.bot - sc.top);
+    if (!a) return;
+    x.save(); x.globalAlpha = row.alpha == null ? 0.13 : row.alpha;
+    for (i = from; i < Math.min(to, a.length); i++) {
+      if (!a[i]) continue;
+      x.fillStyle = a[i];
+      x.fillRect(g.x(i) - bw / 2, sc.top, bw, h);
+    }
+    x.restore();
+  }
+  function drawColsRow(x, g, sc, row, from, to) {
+    var a = row.data, cs = row.cols, i, bw = Math.max(1, g.sp * 0.66), base = row.base == null ? 0 : row.base, dflt = row.c || P().text;
+    if (!a) return;
+    x.save(); x.globalAlpha = row.alpha == null ? 0.85 : row.alpha;
+    for (i = from; i < Math.min(to, a.length); i++) {
+      var v = a[i];
+      if (v == null || !isFinite(v)) continue;
+      var y0 = sc.y(base), y1 = sc.y(v);
+      x.fillStyle = (cs && cs[i]) || dflt;
+      x.fillRect(g.x(i) - bw / 2, Math.min(y0, y1), bw, Math.max(1, Math.abs(y1 - y0)));
+    }
+    x.restore();
+  }
+  function drawLabelRow(x, g, sc, row, from, to) {
+    var a = row.data, i, pal = P();
+    if (!a) return;
+    for (i = from; i < Math.min(to, a.length); i++) {
+      var m = a[i];
+      if (!m || m.v == null || !isFinite(m.v) || m.txt == null || m.txt === "") continue;
+      label(x, g.x(i), sc.y(m.v) + (m.below ? 12 : -8), String(m.txt), m.c || row.c || pal.text, m.bg || null, m.align || "center", m.fs || 9);
+    }
+  }
+  function drawAreaRow(x, g, sc, row, from, to) {
+    var a = row.data, i, on = false, firstX = 0, lastX = 0;
+    if (!a) return;
+    var base = row.base == null ? sc.bot : sc.y(row.base);
+    x.save(); x.beginPath();
+    for (i = from; i < Math.min(to, a.length); i++) {
+      var v = a[i];
+      if (v == null || !isFinite(v)) continue;
+      var px = g.x(i), py = sc.y(v);
+      if (!on) { x.moveTo(px, py); firstX = px; on = true; } else x.lineTo(px, py);
+      lastX = px;
+    }
+    if (on) {
+      x.lineTo(lastX, base); x.lineTo(firstX, base); x.closePath();
+      x.globalAlpha = row.fill == null ? 0.16 : row.fill;
+      x.fillStyle = row.c || P().text; x.fill(); x.globalAlpha = 1;
+    }
+    x.restore();
+    drawLineRow(x, g, sc, { data: a, c: row.c, w: row.w || 1.4, dash: row.dash || 0, name: row.name }, from, to, 0);
+  }
+
   function drawRows(x, g, pane, list, extend) {
     var i, j, sc = pane.sc;
     for (i = 0; i < list.length; i++) {
@@ -2021,6 +2137,11 @@ window.DXC = (function () {
         else if (row.kind === "pivots") drawPivots(x, g, sc, row);
         else if (row.kind === "profile") drawProfile(x, g, sc, row);
         else if (row.kind === "step") drawStepRow(x, g, sc, row, g.from, g.to);
+        else if (row.kind === "shapes") drawShapeRow(x, g, sc, row, g.from, g.to);
+        else if (row.kind === "bg") drawBgRow(x, g, sc, row, g.from, g.to);
+        else if (row.kind === "cols") drawColsRow(x, g, sc, row, g.from, g.to);
+        else if (row.kind === "labels") drawLabelRow(x, g, sc, row, g.from, g.to);
+        else if (row.kind === "area") drawAreaRow(x, g, sc, row, g.from, g.to);
         else drawLineRow(x, g, sc, row, g.from, g.to + (list[i].r.extend || 0), 0);
       }
       if (list[i].r.levels) for (j = 0; j < list[i].r.levels.length; j++) {
@@ -3309,16 +3430,29 @@ window.DXC = (function () {
   patternTool("ellDouble", "Elliott double combo", ["W", "X", "Y", "⓶"], false, "Ⓦ");
   patternTool("ellTriple", "Elliott triple combo", ["W", "X", "Y", "X", "Z"], false, "Ⓩ");
 
-  var TOOL_KEYS = Object.keys(TOOL);
-  var TOOL_GROUPS = (function () {
+  var TOOL_KEYS = [], TOOL_GROUPS = [];
+  /* TOOL_GROUPS used to be a snapshot taken at load. It is now a function of TOOL, so a tool
+     registered by a later layer appears in the rail and its flyout instead of existing only
+     to the hit test. */
+  function indexTools() {
+    TOOL_KEYS = Object.keys(TOOL);
     var seen = {}, out = [], i;
     for (i = 0; i < TOOL_KEYS.length; i++) {
       var t = TOOL[TOOL_KEYS[i]];
       if (!seen[t.g]) { seen[t.g] = { g: t.g, tools: [] }; out.push(seen[t.g]); }
       seen[t.g].tools.push(t);
     }
-    return out;
-  })();
+    TOOL_GROUPS = out;
+  }
+  indexTools();
+  /* Extension point. A tool registered here is stored, hit-tested, styled, undone and
+     persisted by exactly the same paths as one declared above — the registry is the contract. */
+  function registerTool(id, def) {
+    if (!id || !def || TOOL[id]) return false;
+    if (typeof def.render !== "function" || !def.l || !def.g) return false;
+    T(id, def); indexTools();
+    return true;
+  }
 
   function drawAll(x, g) {
     if (CFG.draw.hide) return;
@@ -3532,7 +3666,7 @@ window.DXC = (function () {
         chip(rr, nm + (ins.length ? " " + ins.join(" ") : ""), "nm");
         for (q = 0; q < r.rows.length; q++) {
           var rw = r.rows[q], dat = rw.data;
-          if (!dat || rw.kind === "vbars") continue;
+          if (!dat || rw.kind === "vbars" || rw.kind === "shapes" || rw.kind === "labels" || rw.kind === "bg") continue;
           var v2 = dat[i];
           if (v2 == null || !isFinite(v2)) continue;
           chip(rr, r.fmt === "vol" ? vol(v2) : sig(v2), "val", rw.c || rw.up || pal.line);
@@ -4811,8 +4945,29 @@ window.DXC = (function () {
   else wireClicks();
 
   return {
-    __v: 160,
+    __v: 165,
     owns: owns, draw: draw, sync: sync, mount: mount, paint: paint,
+    /* the extension surface — see buildlib/dxc_open.py */
+    registerStudy: registerStudy, unregisterStudy: unregisterStudy, registerTool: registerTool, reindex: indexTools,
+    studyDefs: function () { return ST_DEF; }, toolDefs: function () { return TOOL; },
+    kit: {
+      M: M, line: line, num: num, SRC: SRC_OPTS, colors: SERIES_COLORS, pal: P, isDay: day,
+      fmt: fmt, sig: sig, volFmt: vol, pct: pctS, stamp: stamp, clamp: clamp, isNum: isNum, last: last,
+      uid: uid, LS: LS, TAU: TAU, dash: dash,
+      sxy: sxy, lineTo: lineTo, extendLine: extend, dist2seg: dist2seg, label: label, arrowHead: arrowHead,
+      polyPath: polyPath, fillPoly: fillPoly, hitPoly: hitPoly, bbox: bbox, hitBox: hitBox,
+      el: el, btn: btn, modal: modal, closeModal: closeModal2, fieldRow: fieldRow, inputNum: inputNum,
+      select: select, checkbox: checkbox, askText: askText, clear: clear,
+      mark: mark, barsOf: bars, host: host, canvas: cv, fault: fault, jget: jget,
+      cfg: function () { return CFG; }, mkey: mkey, symKey: symKey,
+      drawStyle: drawStyle, commit: commit, newObj: newObj, pushUndo: pushUndo, saveDraws: saveDraws,
+      drawings: drawings, geo: function () { return V.geo; },
+      /* the selection, read-only. An extension that styles or groups objects needs to know
+         what the pointer has picked, and V is private. */
+      selection: function () { return V.sel.slice(); },
+      select: function (ids) { V.sel = (ids || []).slice(); mark(); },
+      removeIds: removeIds, byId: byId
+    },
     cfg: function () { return CFG; },
     setInterval: setInterval2,
     setType: function (t) { CFG.type = t; saveCfg(); syncBar(); mark(); },

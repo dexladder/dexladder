@@ -29,7 +29,7 @@ assert hashlib.sha256(src.encode('utf-8')).hexdigest() == 'ccbeddf6f664da8a8e36b
 # read v154, because each of them was a literal typed into a patch. They are all derived
 # from this dict now, dist/sw.js is asserted to name the same build, and test/gate154.js
 # asserts at runtime that the stamp a user reads IS <meta name="cb:build">.
-RELEASE = {'build': 'v163', 'name': 'the vault', 'updated': 'September 16, 2026'}
+RELEASE = {'build': 'v166', 'name': 'the depth', 'updated': 'September 18, 2026'}
 
 # ------------------------------------------------------------------ patch manifest
 # (id, find, replace, expected count)
@@ -138,7 +138,7 @@ PATCHES = [
  # P11 — What's-New banner + list for v154
  ('wn-seen', '"v152"===localStorage.getItem("dl.seen")', '"%(build)s"===localStorage.getItem("dl.seen")' % RELEASE, 1),
  ('wn-dismiss', 'localStorage.setItem("dl.seen","v152")', 'localStorage.setItem("dl.seen","%(build)s")' % RELEASE, 1),
- ('wn-banner', '✨ <b>New in v152 · compass</b><span style="color:var(--faint)">— quest, journey hub, session replay, perp presets</span>', '✨ <b>New in %(build)s · %(name)s</b><span style="color:var(--faint)">— the Blog now documents every surface of the platform: fifteen new long-form guides, twenty-two in all</span>' % RELEASE, 1),
+ ('wn-banner', '✨ <b>New in v152 · compass</b><span style="color:var(--faint)">— quest, journey hub, session replay, perp presets</span>', '✨ <b>New in %(build)s · %(name)s</b><span style="color:var(--faint)">— ten new desks, and the arithmetic under each one written out to check</span>' % RELEASE, 1),
  ('wn-list', 'var NEWS=[["v152 · compass",', 'var NEWS=[["%(build)s · %(name)s' % RELEASE + '","' + 'THE LIBRARY. The Blog covers the whole platform now: fifteen new long-form guides beside the original seven, one for every surface the app has. Bots — rules as blocks or your own code in a sandbox, an isolated wallet each, and a kill switch whose confirmation prints the steps it is about to run. Rewind, and the law that makes a backtest worth reading: a fill can only land on a bar the trader had not yet seen. Perpetuals — isolated margin, the maintenance ladder, and funding that comes out of the margin and moves the liquidation price while you sleep. Every order type on the desk, from stop-limit and trailing stops to OCO brackets that shrink their partner by exactly what filled, and TWAP worked in slices. The Liquidity Desk arithmetic, contract by contract, with divergence loss, LVR and a break-even fee APR. The local fork sandbox, where no key ever enters the app. DeXaI and the numeric-slot law: it never types a number. Markets and the data ladder — median witnesses, health, and a missing figure that stays missing instead of becoming a zero. The news transport that was rebuilt after every rung died at once, and Sentinel alerts written in plain words. The portfolio, the journal, the Monte Carlo fan and an auditor that verifies your ledger without this app. The desks, one by one. Journey, quests and the sixty-second daily decision. The installed app and what still works offline. Day, Night, and the 4.5:1 contrast floor the build enforces. And security: no accounts, no keys, an eval-free payload, and one deliberate loopback door that is gated in both directions. Twenty-two articles, every illustration drawn by the app from design tokens — no image files, correct in both appearances — and every published address permanent. AND A FULL AUDIT PASS BEFORE THE DOOR: every line of the payload, the layers, the build and the typed core read again, by dimension — security, execution arithmetic, performance, build integrity, the DOM, failure modes and the copy itself. What it found is fixed here. The payload compiles no code at runtime any more: the two call sites that turned the attribute of a jump button into executable code are gone, replaced by a bounded function registry, so a coin symbol coming off a third-party feed can no longer reach a compiler — the eval-free claim this app makes is now true of every byte it ships. Boot no longer fails as one unit: it ran as a single comma expression, so one throw anywhere in it skipped routing and left the page dead on its loading skeleton; each phase now stands alone, and there is a global error net behind them. Two tabs can no longer overwrite one ledger — the second stops saving and says so instead of silently winning — and a browser that refuses to store at all now tells you, rather than losing the trade in an empty catch. The engine stops running in a hidden tab, and the catch-up on return is worked in slices instead of freezing the page for up to 240 ticks. Dialogs take focus, trap it, hand it back, and carry a name; every close button has one. The reduced-motion rule that shipped an invalid time value — and therefore did nothing at all — works. A daily candle is labelled with its own UTC day. A basket with one feed out renormalises instead of printing a 50% loss that never happened. The liquidation stream behind the leverage desk closes on every close path, not just one button. And the policy the site has been collecting violations against for a week is enforced rather than observed."],["v159 · the floor","' + 'Two new desks, and a floor under both of them. THE LIQUIDITY DESK: stop taking prices and start making them. Provide to a Uniswap v2 pair and watch the constant product decide your share; open a v3 position over a price range you choose and see the capital efficiency that a narrow band buys you \u2014 and the moment it stops earning because the price left your range; add to a Curve StableSwap pool where the invariant holds the peg until it doesn\u2019t. Stake, and read the reward curve that pays less per coin as more coins arrive, with a vote-escrow multiplier that caps where the protocol caps it. And IMPERMANENT LOSS, stated as arithmetic rather than a warning: what the pool paid you in fees against what simply holding the two coins would have, at every price you care to move to. Every number is the contract\u2019s own, checked against figures the protocols published before this desk existed. Two new ways to trade without watching a chart, both on paper money and both on their own wallet. BUILD YOUR OWN BOT: pick the market and the bar size, stack the rules as blocks — RSI under 30, EMA 20 crossing above EMA 50, a close through the last 20 bars\u2019 high on above-average volume — add a stop, a target, a trailing stop and a cooldown, read the whole thing back in plain English, and test it on real history before it ever runs: every decision fills at the NEXT bar\u2019s open, and the stop is checked against every price inside the bar, wick included. BRING YOUR OWN BOT: your JavaScript runs in a Worker with fetch, sockets and storage removed before your first line \u2014 it just answers onBar(ctx); or run your bot in any language at all and DexLadder asks it one URL per closed bar (Python and Node starter kits included, and a dry-run that shows the raw answer). Both land in the ARENA, where every bot is ranked by the only number that matters \u2014 its edge over simply holding the coin \u2014 with drawdown, fee drag, exposure, a Wilson band on the win rate, and every decision it took, in words. A bot can never reach your trading account: it has its own wallet, and that is all it has."],["v158 · tidy"," The Markets page opened on a panel that answered six questions nobody had asked \u2014 a market cap, a 24h volume, two dominances, Fear \u0026 Greed and breadth, each with its own universe chip, above the hero. It is removed, not hidden: the element, its styles and the third market-data fetch behind it are cut out of the payload. No figure is lost \u2014 the command bar carries them on every view now, with the same whole-market / tracked-set switch, the same sources and the same disagreement marks. Tidied to an industry grade, from seven screenshots. The News desk is served first-party now: /api/news on both hosts reads the seven newsrooms directly, and the public-bridge ladder behind it has six measured rungs — the categorised front page fills, newest first. The Markets spotlight draws the observed week, ending at the live price, and says \\"live\\" instead of \\"7-day\\" when it has no week to show. The command palette has a real search field. The Proof ledger\\u2019s actions stay inside their card. The portfolio board\\u2019s columns end on one line, and on a phone the What\\u2019s-New banner and the hero stat strip fold to one line each. And every market figure is stated once — the witness spread, the universe and the source note are one hover away instead of a row of red chips."],["v157 · leverage","Perpetual futures, done properly: isolated margin with tiered maintenance, a liquidation price you can see before you open, funding that settles on the real UTC clock out of your margin, and a liquidation engine that explains itself afterwards — what it cost, what funding did to it, and whether a stop, less leverage or more margin would have survived. And Rewind, a bar-by-bar backtester: pick a market and a stretch of history (including the 2020 crash, the 2021 top, LUNA and FTX), step or play through real candles, and trade them with orders that fill on the bars that come NEXT — never on the one you are looking at. Live equity curve, drawdown and a verdict that leads with buy-and-hold. Conditional and algorithmic orders on the paper desk: OCO, where one leg cancels the other and a partial fill shrinks its partner exactly, and TWAP, a parent order worked in even slices on the clock. The Local Fork sandbox runs a real pool on your own node — encode, sign and send transactions, watch gas and slippage decide the fill. The Blog: seven long-form guides inside Academy, illustrated with drawn figures and animated diagrams, no image files. The News desk has a working transport again — a four-rung bridge ladder with health memory that remembers which bridge answered, so the categorised front page fills instead of blanking. And a keyless CoinMarketCap Spot Rail with a two-witness cross-check."],["v156 · execution","Advanced execution mode: every order is priced on a liquidity pool — price impact against your slippage tolerance, real venue fees and partial fills. On the DEX, gas and a priority fee (swaps can wait, be dropped or revert) and optional MEV sandwich bots. Near-zero liquidity is refused; stops meet the market in a gap. Every surprise is explained and points to its Academy lab. Beginner is unchanged."],["v155f · dexai","DeXaI — a copilot that never types a number (Read, Desk, Coach, Tutor, Scan, Lens, Brief). Rungs, Sectors, Pool Radar, Leverage Weather, Chain Clock, Forecast, Odds, coin Dossier, Sentinel alerts in words, Chain Ladder, Venue Board, Yield Sandbox, Convert with time travel, Supply Drift, Era Ledger, Baskets, heat lenses, Trust model card. Dead feeds retired (CryptoCompare, Reddit)."],["v153 · citadel","DLGUARD error shield, live-region toasts, faster news cadence, wallet-mirror fixes."],["v152 · compass",', 1),
  ('trust-sources-row', 'sr("CryptoCompare","https://www.cryptocompare.com","Second price fallback")', 'sr("Coinlore","https://www.coinlore.com","Second price fallback (CryptoCompare\'s free API ended May 2026)")', 1),
  # P12 — decorative background stack removed from the web build (user request 2026-09-05):
@@ -277,6 +277,33 @@ PATCHES = [
  ('gstat-upd-anchor',
   'function mountUpd(){try{var g=$("#dlGstat");if(g&&!$("#dlUpd")){var u=doc.createElement("div");u.id="dlUpd",u.className="dlt-upd",g.parentElement.insertBefore(u,g.nextSibling)}',
   'function mountUpd(){try{var g=doc.querySelector("#page-markets .wrap.section");if(g&&!$("#dlUpd")){var u=doc.createElement("div");u.id="dlUpd",u.className="dlt-upd",g.insertBefore(u,g.firstChild)}', 1),
+ # ---- 2026-09-16 · v164 · cb_mx_cache_v1 leaves localStorage (layers/49-mxcache.js)
+ # The 500-coin screener snapshot is a CACHE — every field is re-fetched on the
+ # next load — and it is most of the ~10.4 MB v163 measured in this origin's
+ # localStorage. Two things were paying for it: _saveNow()'s quota catch, which
+ # prunes REAL history (txns 25, journal 20, eq 40) the first time a write
+ # throws; and DLVAULT.readLocal(), which walks the `cb_` prefix and was
+ # therefore signing a stale CoinGecko page into every sovereign bundle.
+ #
+ # Four sites touch that key and all four are here. cacheLoad() stays
+ # SYNCHRONOUS — it is called from load()'s first-paint path — by reading the
+ # in-memory pack DLMXC hydrates from IndexedDB at DOMContentLoaded, which runs
+ # before __MXPRO's own boot(). If hydration has not landed, get() returns null
+ # and the screener falls back to useStatic() exactly as on a first visit.
+ # Every replacement keeps the original localStorage line as the else-branch,
+ # so a page where the layer failed to mount behaves as it did in v163.
+ ('mxc-save',
+  'function cacheSave(){try{localStorage.setItem(LS_CACHE,JSON.stringify({t:Date.now(),coins:MX.coins.map(function(c){return{id:c.id,sym:c.sym,name:c.name,glyph:c.glyph,color:c.color,logo:c.logo,price:c.price,c1:c.c1,c24:c.c24,c7:c.c7,mcap:c.mcap,vol:c.vol,supply:c.supply,spark:c.spark}})}))}catch(e){}}',
+  'function cacheSave(){try{var _p=MX.coins.map(function(c){return{id:c.id,sym:c.sym,name:c.name,glyph:c.glyph,color:c.color,logo:c.logo,price:c.price,c1:c.c1,c24:c.c24,c7:c.c7,mcap:c.mcap,vol:c.vol,supply:c.supply,spark:c.spark}});if(window.DLMXC)DLMXC.put(_p);else localStorage.setItem(LS_CACHE,JSON.stringify({t:Date.now(),coins:_p}))}catch(e){}}', 1),
+ ('mxc-load',
+  'function cacheLoad(maxAge){try{var o=JSON.parse(localStorage.getItem(LS_CACHE)||"null");',
+  'function cacheLoad(maxAge){try{var o=window.DLMXC?DLMXC.get(0):JSON.parse(localStorage.getItem(LS_CACHE)||"null");', 1),
+ ('mxc-refresh-age',
+  'try{var o=JSON.parse(localStorage.getItem(LS_CACHE)||"null")}catch(e){o=null}',
+  'try{var o=window.DLMXC?DLMXC.get(0):JSON.parse(localStorage.getItem(LS_CACHE)||"null")}catch(e){o=null}', 1),
+ ('mxc-dedupe',
+  'try{var raw=localStorage.getItem("cb_mx_cache_v1");if(raw){var o=JSON.parse(raw);if(o&&o.coins&&o.coins.length){var seen={},ded=o.coins.filter(function(c){var k=String(c&&c.sym||"").toUpperCase();return!(!k||seen[k])&&(seen[k]=1,!0)});ded.length<o.coins.length&&(o.coins=ded,localStorage.setItem("cb_mx_cache_v1",JSON.stringify(o)))}}}catch(e){}',
+  'try{var o=window.DLMXC?DLMXC.get(0):JSON.parse(localStorage.getItem("cb_mx_cache_v1")||"null");if(o&&o.coins&&o.coins.length){var seen={},ded=o.coins.filter(function(c){var k=String(c&&c.sym||"").toUpperCase();return!(!k||seen[k])&&(seen[k]=1,!0)});ded.length<o.coins.length&&(o.coins=ded,window.DLMXC?DLMXC.put(ded):localStorage.setItem("cb_mx_cache_v1",JSON.stringify(o)))}}catch(e){}', 1),
  ('gstat-journey-anchor',
   'function mountHost(){try{var g=$("#dlGstat");if(!g||$("#dlJourneyHost"))return;var h=ce("div","",""),upd;h.id="dlJourneyHost",($("#dlUpd")||g).insertAdjacentElement("afterend",h),sync()}catch(e){}}',
   'function mountHost(){try{var u=$("#dlUpd"),w=document.querySelector("#page-markets .wrap.section");if(!u&&!w||$("#dlJourneyHost"))return;var h=ce("div","",""),upd;h.id="dlJourneyHost",u?u.insertAdjacentElement("afterend",h):w.insertBefore(h,w.firstChild),sync()}catch(e){}}', 1),
@@ -310,6 +337,68 @@ PATCHES += [
  ('v163-trust-stored', TRUST_OLD, TRUST_NEW, 1),
  ('v163-trust-profile', PROFILE_OLD, PROFILE_NEW, 1),
  ('v163-trust-balances', BAL_OLD, BAL_NEW, 1),
+]
+
+# ---- 2026-09-16 · v164 · the banner, again, on purpose
+# v163 fixed a What's-New entry that carried the PREVIOUS release's text under
+# the current title, because only the title derives from RELEASE. That fix is
+# not self-maintaining: the body is still a literal, so bumping RELEASE to v164
+# re-creates the same lie one release along. This patch is the standing cost of
+# that design — the v164 entry describes v164, and the vault text becomes v163's
+# own entry rather than being relabelled. Runs after v163-news-vault, which has
+# already put NEWS_V163 under the v164 title by then.
+NEWS_V164 = "THE CACHE MOVES OUT. The desk's storage budget stops being spent on a cache. The 500-coin market snapshot the screener keeps, cb_mx_cache_v1, was the largest single thing in this site's localStorage — measured on a cold visit, most of the ~10.4 MB sitting in front of the state that actually matters. It is a cache: every field in it is refetched on the next load, and losing it costs one network round trip and nothing else. But it shared a budget with your fills, and when a browser refuses a write the desk prunes REAL history to make room — trades to 25, journal entries to 20, the equity curve to 40. A disposable copy of a price page was crowding out your trading record. It now lives in the vault's own IndexedDB database, and the whole localStorage budget goes back to state. Two things follow from that beyond the room. YOUR EXPORTS GET SMALLER AND TRUER: the sovereign bundle walks every cb_ key, so until now every export you signed and carried to another machine contained a stale market page — checksummed and signed as though it were part of your desk. It is excluded now, by name, even on a device whose migration has not run yet. AND DESK HEALTH. Trust → Feeds already showed the price ladder and a per-host table with live cooldowns; what it never answered is the question that actually loses data — can this desk still WRITE? It now reports the vault's boot write-probe, the archived row counts, the real size of your desk keys against the browser's own estimate, and whether a save has ever thrown, beside the age of the last-known-good snapshot that carries a cold visit when every price source is down, and the live witness count and spread behind the number on screen. One correction while you are reading it: rung three has been Coinlore since the CryptoCompare host was shimmed out, and the diagnostics table had gone on printing the retired name. It is labelled by what serves it."
+
+PATCHES += [
+ ('v164-news-cache',
+  'var NEWS=[["%(build)s \u00b7 %(name)s","' % RELEASE + NEWS_V163 + '"],',
+  'var NEWS=[["%(build)s \u00b7 %(name)s","' % RELEASE + NEWS_V164 + '"],["v163 \u00b7 the vault","' + NEWS_V163 + '"],', 1),
+]
+
+# ---- 2026-09-17 · v165 · the banner, again, on purpose (the standing cost)
+# Same pattern as v164 above, one release along: the What's-New BODY is a literal
+# and only the TITLE derives from RELEASE, so bumping RELEASE to v165 would put
+# v164's cache text under the v165 title. This patch pays that cost again — the
+# v165 entry describes v165, and the cache text becomes v164's own entry rather
+# than being relabelled. Runs after v164-news-cache, which has already put
+# NEWS_V164 under the v165 title by then.
+NEWS_V165 = "THE ROUTE. A new Execution desk quotes one order across every venue at once — the book venues, the AMM pool, and a forked pool when one is connected — and prints the difference the routing actually makes: fill price, price impact, venue fees, gas and MEV risk, side by side rather than as one blended number. Then it splits the order across them, so each slice is worked where that slice fills best."
+
+PATCHES += [
+ ('v165-news-sor',
+  'var NEWS=[["%(build)s \u00b7 %(name)s","' % RELEASE + NEWS_V164 + '"],',
+  'var NEWS=[["%(build)s \u00b7 %(name)s","' % RELEASE + NEWS_V165 + '"],["v164 \u00b7 the cache","' + NEWS_V164 + '"],', 1),
+]
+
+# v166 · the depth. Same relabelling chain: the head entry becomes v166 and the route
+# text drops into its own v165 entry rather than being renamed. Runs after v165-news-sor.
+NEWS_V166 = 'THE DEPTH. Ten new desks, and the arithmetic under each one written out where you can check it. LENDING: supply and borrow against the two-slope rate curve, with Aave’s own linear supply index and its three-term binomial borrow index — and the divergence between that approximation and exact compounding printed, because at 50% utilisation it is 28.9 basis points a year. Health factor, the liquidation threshold that is not the LTV, the close factor and its 100% branch under 0.95, e-mode, isolation ceilings, siloed borrowing and supply caps that actually bind. Then the cascade: every seized parcel is sold into the curve, the impact moves the price, and the next tier goes — with the reflexive part of the drawdown separated from the move that started it. RESTAKING, with the risk stated properly: one operator serving several services does not fail independently, so the slashing loss is drawn from a one-factor copula and the desk prints the probability at which the extra yield is erased. OPTIONS: Black-Scholes-Merton with carry, greeks including vanna and volga, and a normal CDF good to 1.7e-16 — because implied vol is solved by dividing by vega, and 7.5e-8 is not good enough to divide by. Implied vol refuses to answer outside the no-arbitrage bounds instead of returning a number. An SVI surface fitted without a single random draw, with Durrleman’s butterfly condition and calendar monotonicity reported rather than clamped. A CRR binomial for American exercise with the early-exercise boundary and its convergence table. Twelve strategies with payoff, mark, breakevens and net greeks. CROSS-CHAIN: real tick math at last — Q64.96 sqrt prices, liquidity net applied at every crossing, fee growth inside and outside, and a swap that walks tick by tick instead of the single-range approximation this build shipped with. Solana compute units and the Whirlpool tick-array wall that makes a large swap fail there rather than merely cost more. L2 fees split into what you pay the rollup and what the rollup pays Ethereum, through the EIP-4844 blob fee. Bridges ranked by trust model, with the seven-day challenge window, the liquidity bridge that partially fills at its capacity, and the stuck-message refund path. ORDER LAB: iceberg, priced by the queue position every refresh costs you. Trailing stops checked against the wick, with the pessimistic resolution when one bar could both extend the trail and hit the stop — and the same series at a coarser bar size giving a different answer, which is the lesson. Brackets whose children are sized by what the parent actually filled. Peg orders. A stress dial that moves spread, depth, latency and rejects together, with implementation shortfall split into delay, impact, fee and the cost of what never filled. RISK: EWMA and Ledoit-Wolf shrunk covariance that refuses to answer on too short a window rather than printing a confident number, VaR three ways including Cornish-Fisher, and a Kupiec and Christoffersen backtest of the VaR itself. Spot, perps, v2 and v3 liquidity positions and options collapsed to one net delta per asset — with an out-of-range v3 position showing as the single asset it has quietly become. Five historical shocks as correlated vectors, the book-level liquidation price, and risk contributions that sum to total risk exactly. PATH: the curriculum stopped being reading. A concept is mastered when you do it on the live desk and the app can check — a v3 position held while price left the range, a split route scored against its own prediction, a backtest proven not to have read an unfinished bar. Twenty-four concepts, three tracks, spaced repetition, and progress derived from evidence rather than stored as a number you could inflate. REPLAY: regimes are measured, not typed — efficiency ratio, realised volatility by three estimators, drawdown state — and a strategy is replayed across every window that matches, reported as a distribution rather than one flattering run. Six composable shocks that telescope to their total, the funding tape on the real UTC clock, and the liquidation ladder. CARRY: take the account to another device. Canonical serialisation, a SHA-256 digest, optional AES-GCM under PBKDF2 at 600,000 iterations, a dry run that shows every row that would change before anything does, and a chunked text form a phone can read off the screen which detects a dropped, reordered or altered chunk. Signed proof cards that say exactly what a self-signature proves and what it does not. ACCESS: a WCAG 2.2 AA audit of the live page, criterion by criterion, including the two that are new in 2.2 — focus not obscured, and the 24 by 24 target — with the contrast ratio computed from resolved colours and a verdict that never claims the page is accessible, only what was measured. Text spacing, target size, motion, and a keyboard map read from the shortcuts the payload really registers. English, Spanish, Hindi and an Arabic right-to-left pass, with untranslated keys marked rather than hidden. VERIFY: twenty formulas this app leans on, each computed a second time by a deliberately different route, with the inputs, their provenance, the working line by line, and the delta between the two — and the whole registry exportable so you can redo the arithmetic in a spreadsheet and trust none of this. And the Execution desk, which shipped in v165 with an empty body because its renderer returned the pane instead of writing it, now draws.'
+
+PATCHES += [
+ ('v166-news-depth',
+  'var NEWS=[["%(build)s \u00b7 %(name)s","' % RELEASE + NEWS_V165 + '"],',
+  'var NEWS=[["%(build)s \u00b7 %(name)s","' % RELEASE + NEWS_V166 + '"],["v165 \u00b7 the route","' + NEWS_V165 + '"],', 1),
+]
+
+# ------------------------------------------------------------------ depth & outline pass
+# The account panel carried its layout in three inline style attributes, so the
+# elevation system in layers/v154.css could set the grid, the note's rhythm and the
+# footer's spacing and lose to every one of them. Inline beats a stylesheet; the
+# styles come out of the markup and the rules become reachable.
+PATCHES += [
+ ('depth-au-title',
+  '<button class="mx" onclick="closeModal()">\u2715</button><div class="au-wrap"><div class="au-prof">',
+  '<button class="mx" onclick="closeModal()">\u2715</button><div class="dlg-eyebrow">Account</div>'
+  '<div class="au-wrap"><div class="au-prof">', 1),
+ ('depth-au-stats-inline',
+  '<div class="p2x-prof" style="grid-template-columns:repeat(3,1fr)">',
+  '<div class="p2x-prof">', 1),
+ ('depth-au-note-inline',
+  '<div class="au-note" style="margin-top:12px">Your account, XP',
+  '<div class="au-note">Your account, XP', 1),
+ ('depth-au-acts-inline',
+  '<div class="lnbtns" style="margin-top:14px"><button class="btn" onclick="CBACCT.out()">Sign out</button>',
+  '<div class="lnbtns"><button class="btn" onclick="CBACCT.out()">Sign out</button>', 1),
 ]
 
 out = src
@@ -467,6 +556,44 @@ def _day_rule(m):
 out = re.sub(r'([^{}]*\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}', _day_rule, out)
 print(f'warm-day purge: {_WARMED["n"]} colours re-cast to cool')
 assert _WARMED['n'] > 40, f'warm-day purge found too little: {_WARMED["n"]}'
+
+
+# ---- the half the purge could not see: the retired warm ACCENT ----
+# _warm() requires L > 0.42, so it caught the cream surfaces and walked straight past the
+# saturated accent they were paired with. #C2410C sat at L .35 and survived in 26 Day-scoped
+# declarations — including `html[data-mode=day] .btn.primary{background:#c2410c!important}`,
+# which beat the cool --brand by source order and painted EVERY primary button in Day orange
+# on a teal-and-indigo theme. This is an explicit ramp map, not a heuristic, so the gold and
+# warn tones (#B45309, #8A6100, #A16207) and Bitcoin's own #F7931A are untouched by design.
+RETIRED_WARM = {
+    '#c2410c': '#00728F', '#e8590c': '#0089B3', '#9a3412': '#005A72', '#a8380a': '#00647E',
+}
+_ACC = {'n': 0}
+
+def _accent_decl(body):
+    def hx(m):
+        k = m.group(0).lower()
+        if k not in RETIRED_WARM: return m.group(0)
+        _ACC['n'] += 1
+        return RETIRED_WARM[k]
+    def rg(m):
+        if (m.group(1), m.group(2), m.group(3)) != ('194', '65', '12'): return m.group(0)
+        _ACC['n'] += 1
+        a = m.group(4)
+        return ('rgba(0,114,143,%s)' % a) if a else 'rgb(0,114,143)'
+    body = re.sub(r'#[0-9A-Fa-f]{6}\b', hx, body)
+    return re.sub(r'rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)', rg, body)
+
+out = re.sub(r'([^{}]*\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}',
+             lambda m: m.group(1) + _accent_decl(m.group(2)) + '}', out)
+print(f'warm-day accent purge: {_ACC["n"]} declarations re-cast to the Day accent')
+assert _ACC['n'] >= 24, f'the retired warm accent map found too little: {_ACC["n"]}'
+_day_bodies = ''.join(m.group(1) for m in re.finditer(
+    r'\[data-mode=["\']?day["\']?\][^{}]*\{([^{}]*)\}', out)).lower()
+for _hx in RETIRED_WARM:
+    assert _hx not in _day_bodies, 'the retired warm accent %s is still in a Day rule' % _hx
+assert not re.search(r'rgba?\(\s*194\s*,\s*65\s*,\s*12', _day_bodies), \
+    'the retired warm accent survives as an rgb() in a Day rule'
 
 
 # ================================================================== v155-A · data honesty
@@ -1849,6 +1976,52 @@ out = _arch.apply(out)
 import buildlib.perps as _perps
 out = _perps.apply(out)
 
+# ------------------------------------------------------------------ depth & outline gates
+# D1 · the elevation ladder reaches the panels. The values are asserted where they are
+#      authored (above); here we prove the emitted table carries them, in BOTH modes, so a
+#      future token edit cannot quietly drop a rung back to a single blur.
+_gen_d = open(os.path.join(ROOT, 'buildlib', 'generated', 'dlapp.css'), encoding='utf-8').read()
+for _rung in ('--shadow-sm', '--shadow', '--shadow-lg', '--nv-e1', '--nv-e2', '--nv-e3'):
+    _vals = re.findall(re.escape(_rung) + r':([^;}]+)', _gen_d)
+    assert len(_vals) == 2, 'the %s rung is not emitted once for Night and once for Day (%d)' % (_rung, len(_vals))
+    for _v in _vals:
+        assert _v.count('rgba(') == 2, 'the %s rung collapsed back to a single blur: %s' % (_rung, _v)
+_css_d = open(os.path.join(ROOT, 'layers', 'v154.css'), encoding='utf-8').read()
+_code_d = re.sub(r'/\*[\s\S]*?\*/', '', _css_d)
+# D2 · the edge and the sunken fill exist in both modes and reach the surface families.
+for _tok in ('--dl-edge', '--dl-edge-soft', '--dl-sunk', '--dl-sunk-h'):
+    assert len(re.findall(re.escape(_tok) + r':', _gen_d)) == 2, \
+        'the %s token lost its Night or Day definition' % _tok
+assert _code_d.count('box-shadow:var(--dl-edge), var(--nv-e') >= 2, \
+    'the surface families no longer compose the edge in front of the elevation rung'
+assert 'background:var(--dl-sunk)' in _code_d, 'the sunken plate fill is unused - tiles read as stacked cards again'
+# D3 · the close control. Every dismiss affordance in the build shares one spec; the
+#      family list is the gate, because the defect was that each panel invented its own.
+_CLOSE = ('.mx', '.dlc-x', '.dlh-x', '.dls-x', '.dlv-x', '.dxc-x', '.dlxw-x', '.abs-x',
+          '.s3d-x', '.cine-top .x', '.kcine .kc-top .x', '#dlNew .x')
+_fx = _code_d.find('#dlNew .x{')
+assert _fx > 0, 'the shared close-control rule is gone - the corner glyphs come back'
+_fam_sel = _code_d[_code_d.rfind('}', 0, _fx) + 1:_fx + len('#dlNew .x')]
+_fam_body = _code_d[_fx + len('#dlNew .x{'):_code_d.index('}', _fx)]
+for _c in _CLOSE:
+    assert re.search(r'(?<![\w.-])' + re.escape(_c) + r'\s*[,{]', _fam_sel + '{'), \
+        'the close control %s dropped out of the shared spec' % _c
+for _need in ('width:34px', 'height:34px', 'border:1px solid var(--line)', 'place-items:center',
+              'border-radius:11px', 'background:var(--dl-sunk)'):
+    assert _need in _fam_body, 'the close control lost %s' % _need
+for _state in (':hover', ':active', ':focus-visible'):
+    assert _code_d.count('.dlxw-x' + _state) >= 1 and _code_d.count('#dlNew .x' + _state) == 1, \
+        'the close-control family has no %s state' % _state
+assert '.modal>.mx+*{margin-top:' in _code_d, \
+    'the dialog gutter is gone - the close control overlaps whatever the dialog opens with'
+assert any('border:1px solid var(--line-2)' in _b
+           for _b in re.findall(r'(?<![\w.-])\.modal\{([^}]*)\}', _code_d)), \
+    'the dialog has no outline again - a shadow alone is not an edge'
+# D4 · the account panel's geometry may not return to inline style attributes.
+for _dead in ('class="p2x-prof" style=', 'class="au-note" style="margin-top:12px"',
+              'class="lnbtns" style="margin-top:14px"'):
+    assert _dead not in out, 'the account panel carries inline layout again: %s' % _dead
+
 # ------------------------------------------------------------------ layers
 css = open(os.path.join(ROOT, 'layers', 'v154.css'), encoding='utf-8').read()
 layers = sorted(glob.glob(os.path.join(ROOT, 'layers', '*.js')))
@@ -1872,6 +2045,52 @@ inject = '\n'.join(blocks) + '\n'
 i = out.rfind('</body>')
 assert i > 0
 out = out[:i] + inject + out[i:]
+
+# ------------------------------------------------------------------ depth & outline: the token half
+# Every elevation rung in the payload was a SINGLE blur — 0 1px 2px, 0 6px 24px -8px,
+# 0 16px 48px -12px — so a panel had a soft halo underneath and no edge of its own, and
+# ~750 panel rules inherited that flatness through var(--shadow*) / var(--nv-e*). A rung
+# is a contact shadow AND an ambient shadow now, and two new tokens carry the parts a
+# shadow cannot express: --dl-edge, the 1px inner top highlight that gives a plate a lit
+# top face, and --dl-sunk, the fill that makes a tile read as cut INTO its card rather
+# than stacked beside it. Day gets its own values for all of them, never Night at a
+# lower alpha. The table in web/app/src/design/tokens.ts is the source; this block is the
+# payload half that keeps the two identical, and arch A3 deletes both and emits the table
+# once, as it does for every other token.
+DEPTH_NIGHT = (
+    '--shadow-sm:0 1px 1px rgba(0,0,0,.45),0 2px 5px -2px rgba(0,0,0,.4);'
+    '--shadow:0 1px 2px rgba(0,0,0,.4),0 10px 28px -12px rgba(0,0,0,.6);'
+    '--shadow-lg:0 2px 4px rgba(0,0,0,.45),0 28px 60px -22px rgba(0,0,0,.7);'
+    '--nv-e1:0 1px 1px rgba(0,0,0,.45),0 2px 5px -2px rgba(0,0,0,.4);'
+    '--nv-e2:0 1px 2px rgba(0,0,0,.4),0 10px 28px -12px rgba(0,0,0,.6);'
+    '--nv-e3:0 2px 4px rgba(0,0,0,.45),0 24px 56px -16px rgba(0,0,0,.7);'
+    '--dl-edge:inset 0 1px 0 rgba(255,255,255,.06);'
+    '--dl-edge-soft:inset 0 1px 0 rgba(255,255,255,.035);'
+    '--dl-sunk:linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015));'
+    '--dl-sunk-h:linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.03));'
+    '--gr-shadow:0 1px 0 rgba(255,255,255,.035) inset,0 1px 2px rgba(0,0,0,.4),0 10px 28px -12px rgba(0,0,0,.6);'
+    '--r-lg:18px')
+DEPTH_DAY = (
+    '--shadow-sm:0 1px 1px rgba(13,20,33,.04),0 1px 3px rgba(13,20,33,.06);'
+    '--shadow:0 1px 2px rgba(13,20,33,.05),0 10px 28px -16px rgba(13,20,33,.2);'
+    '--shadow-lg:0 2px 6px rgba(13,20,33,.06),0 24px 56px -22px rgba(13,20,33,.24);'
+    '--nv-e1:0 1px 1px rgba(13,20,33,.04),0 1px 3px rgba(13,20,33,.06);'
+    '--nv-e2:0 1px 2px rgba(13,20,33,.05),0 8px 24px -12px rgba(13,20,33,.16);'
+    '--nv-e3:0 2px 6px rgba(13,20,33,.06),0 20px 48px -18px rgba(13,20,33,.2);'
+    '--dl-edge:inset 0 1px 0 rgba(255,255,255,.9);'
+    '--dl-edge-soft:inset 0 1px 0 rgba(255,255,255,.7);'
+    '--dl-sunk:linear-gradient(180deg,rgba(13,20,33,.045),rgba(13,20,33,.018));'
+    '--dl-sunk-h:linear-gradient(180deg,rgba(13,20,33,.07),rgba(13,20,33,.03));'
+    '--gr-shadow:0 1px 0 rgba(255,255,255,.7) inset,0 1px 2px rgba(13,20,33,.05),0 10px 28px -16px rgba(13,20,33,.2)')
+_hd = out.rfind('</head>')
+assert _hd > 0, 'no </head> to seat the depth tokens in front of'
+out = (out[:_hd] + '<style id="dldepth">:root{' + DEPTH_NIGHT + '}html[data-mode=day]{'
+       + DEPTH_DAY + '}</style>' + out[_hd:])
+# a rung that is one blur is the defect this closes; refuse to ship a one-part rung
+for _name, _blockv in (('night', DEPTH_NIGHT), ('day', DEPTH_DAY)):
+    for _rung in ('--shadow-sm', '--shadow', '--shadow-lg', '--nv-e1', '--nv-e2', '--nv-e3'):
+        _v = re.search(re.escape(_rung) + r':([^;]+)', _blockv).group(1)
+        assert _v.count('rgba(') == 2, 'the %s %s rung is not contact + ambient: %s' % (_name, _rung, _v)
 
 # Phase-1 architecture, late pass: needs the layers' CSS in place
 out = _arch.apply_late(out)
@@ -1908,6 +2127,117 @@ out = _dxc.apply(out)
 # rendering as text, and the lead copy that sold a simulator.
 import buildlib.v162 as _v162
 out = _v162.apply(out)
+
+# The parity pass (layers 51-54): +68 indicators, +46 drawing tools, the DexScript
+# language and its editor/library. They self-register through the surface dxc_open.py
+# opened, so there is nothing to wire - but a layer that failed to concatenate would
+# leave a chart that still works and is quietly missing two thirds of itself, which is
+# exactly the kind of gap no runtime gate notices. Presence and shape, on the bytes.
+import buildlib.dxparity as _dxpar
+out = _dxpar.apply(out)
+
+# the display currency. Runs after every other pass, so it transforms the money
+# sites those passes introduced as well. buildlib/cur.py carries the full note.
+import buildlib.cur as _cur
+out = _cur.apply(out)
+
+# ------------------------------------------------------------------ SEO post-build injection
+# Ported from web/seo/build.mjs (the private monorepo's SEO generator, lines ~620-690) so a
+# public checkout reproduces the shipped dist/index.html byte for byte. Three edits, all
+# idempotent and all applied to `out` BEFORE the payload hash below is taken, because the
+# version-bump gate asserts dist/sw.js names the sha of the bytes that actually ship:
+#   1. the #dl-seo-links footer paragraph  (stripped and rebuilt, so a renamed page cannot rot)
+#   2. the site-level JSON-LD @graph       (injected before </head>)
+#   3. the Bing site-verification meta     (injected before </head>)
+# The values below are the ones build.mjs carries; keep the two in step if either moves.
+SEO_HOST = 'https://www.dexladder.com'                       # seo/lib.mjs HOST
+SEO_MSVALIDATE = 'F266456E2E541E148ED713E829CDD820'          # Bing site verification token
+SEO_FOOT_ANCHOR = '<p class="dl-foot-blog">'                 # the paragraph the block lands after
+# (href, link text) in the order build.mjs emits them; joined with ' · '
+SEO_FOOT_LINKS = [
+    ('/web3/', 'Web3 gateway'),
+    ('/features/', "What's different"),
+    ('/defi/', 'DeFi mechanics'),
+    ('/fork-sandbox/', 'Fork sandbox'),
+    ('/trading-bots/', 'Bots'),
+    ('/backtesting/', 'Backtesting'),
+    ('/perpetuals/', 'Perps'),
+    ('/order-types/', 'Order types'),
+    ('/dex-pool-radar/', 'Pool Radar'),
+    ('/onchain-explorer/', 'Explorer'),
+    ('/proof-ledger/', 'Proof ledger'),
+    ('/paper-trading/', 'Paper trading'),
+    ('/learn/glossary/', 'Glossary'),
+    ('/tools/', 'Calculators'),
+    ('/guides/', 'Guides'),
+    ('/crypto-tax/', 'Crypto tax'),
+    ('/methodology/', 'Methodology'),
+    ('/about/', 'About'),
+]
+SEO_LD_GRAPH = {
+    '@context': 'https://schema.org',
+    '@graph': [
+        {'@type': 'Organization', '@id': SEO_HOST + '/#org', 'name': 'DexLadder', 'url': SEO_HOST + '/',
+         'logo': SEO_HOST + '/icon-512.png', 'email': 'dexladder@gmail.com',
+         'sameAs': ['https://x.com/dexladder', 'https://www.instagram.com/dexladder',
+                    'https://medium.com/@dexladder', 'https://github.com/dexladder']},
+        {'@type': 'WebSite', '@id': SEO_HOST + '/#site', 'url': SEO_HOST + '/', 'name': 'DexLadder',
+         'publisher': {'@id': SEO_HOST + '/#org'}},
+        {'@type': 'SoftwareApplication', '@id': SEO_HOST + '/#app', 'name': 'DexLadder',
+         'applicationCategory': 'FinanceApplication', 'operatingSystem': 'Web, iOS, Android',
+         'offers': {'@type': 'Offer', 'price': '0', 'priceCurrency': 'USD'},
+         'publisher': {'@id': SEO_HOST + '/#org'},
+         'featureList': ['Live on-chain markets with real fees and AMM price impact',
+                         'AMM liquidity desk: Uniswap v2/v3, Curve, staking',
+                         'Local fork sandbox for your own contracts',
+                         'On-chain explorer',
+                         'Strategy bots and historical replay',
+                         'DeFi liquidity desk',
+                         'Multi-jurisdiction crypto tax ledger',
+                         'Structured trading academy']},
+        {'@type': 'FAQPage', 'mainEntity': [
+            {'@type': 'Question', 'name': 'Does DexLadder require an account?',
+             'acceptedAnswer': {'@type': 'Answer', 'text': 'No. There is no signup, no email, no password and no wallet connection. Balances, trades and the journal are stored in your own browser.'}},
+            {'@type': 'Question', 'name': 'Is DexLadder free?',
+             'acceptedAnswer': {'@type': 'Answer', 'text': 'Yes. It is free, with no paid tier, no advertising and no affiliate exchange links.'}},
+            {'@type': 'Question', 'name': 'Do I need a wallet to use DexLadder?',
+             'acceptedAnswer': {'@type': 'Answer', 'text': 'No. There is no wallet connection anywhere in the product and no key or seed phrase is ever requested. Capital in the trading desk is simulated, so there are no deposits, no withdrawals and no custody.'}},
+        ]},
+    ],
+}
+
+
+def _seo_ldjson(graph):
+    """seo/lib.mjs ldJson(): JSON.stringify with no spaces, then `<` escaped so the
+    payload can never close the <script> element it sits in."""
+    import json as _json
+    return _json.dumps(graph, separators=(',', ':'), ensure_ascii=False).replace('<', '\\u003c')
+
+
+def seo_inject(h):
+    """web/seo/build.mjs' dist/index.html patch, in Python. Returns the patched html."""
+    import re as _re
+    # 1 · rebuild the SEO entry links. The old block is stripped first, so the list is
+    #     regenerated from SEO_FOOT_LINKS on every build rather than accumulating.
+    h = _re.sub(r'<p class="dl-foot-blog" id="dl-seo-links">[\s\S]*?</p>', '', h, count=1)
+    i = h.find(SEO_FOOT_ANCHOR)
+    assert i > -1, 'dist/index.html: the dl-foot-blog anchor is gone - SEO entry links were not injected'
+    end = h.index('</p>', i) + 4
+    block = ('<p class="dl-foot-blog" id="dl-seo-links">'
+             + ' · '.join('<a href="%s">%s</a>' % (u, t) for u, t in SEO_FOOT_LINKS)
+             + '</p>')
+    h = h[:end] + block + h[end:]
+    # 2 · the site-level JSON-LD @graph, immediately before </head>
+    if 'dexladder.com/#org' not in h:
+        h = h.replace('</head>', '<script type="application/ld+json">%s</script>\n</head>'
+                      % _seo_ldjson(SEO_LD_GRAPH), 1)
+    # 3 · Bing site verification, also before </head> (so it lands after the JSON-LD)
+    if 'msvalidate.01' not in h:
+        h = h.replace('</head>', '<meta name="msvalidate.01" content="%s">\n</head>' % SEO_MSVALIDATE, 1)
+    return h
+
+out = seo_inject(out)
+print('seo injection: entry links, site JSON-LD and msvalidate meta applied to the payload')
 
 # ------------------------------------------------------------------ worker / payload version lock
 # Defect 4 of the same audit: nothing forced the worker's version to move when the payload did,

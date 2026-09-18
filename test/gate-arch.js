@@ -168,7 +168,7 @@ for (const [k, [now, max]] of Object.entries(R)) ok(`ratchet · legacy ${k} ${no
     ok(`${w}px · News lives in Markets: header + bottom bar highlight Markets, strip marks News`, r.news.active.join() === 'Markets' && (w > 900 || r.news.bottom.join() === 'Markets') && JSON.stringify(r.news.strip) === '["Screener","News & pulse*"]' && r.news.strips === 1, r.news);
     ok(`${w}px · the Town Square lives in Academy`, r.community.active.join() === 'Academy' && r.community.strip && r.community.strip.includes('Town Square*'), r.community);
     ok(`${w}px · one section strip per page, no horizontal overflow`, r.markets.strips === 1 && r.markets.overflow <= 1 && r.learn.overflow <= 1, [r.markets, r.learn]);
-    ok(`${w}px · Academy & Hub carries Lessons · Blog · Discover · Town Square · Journey · Daily · Rewind · Bots · Monument`, JSON.stringify(r.learn.hub) === JSON.stringify(['Lessons*', 'Blog', 'Discover', 'Town Square', 'Journey & quests', 'Daily challenge', 'Rewind', 'Bots', 'Monument']), r.learn.hub);
+    ok(`${w}px · Academy & Hub carries Lessons · Blog · Discover · Town Square · Journey · Daily · Rewind · Bots · Execution · Monument`, JSON.stringify(r.learn.hub) === JSON.stringify(['Lessons*', 'Blog', 'Discover', 'Town Square', 'Journey & quests', 'Daily challenge', 'Rewind', 'Bots', 'Execution', 'Monument']), r.learn.hub);
     ok(`${w}px · the Journey section opens the Journey hub in place`, r.hubOpened === true);
     ok(`${w}px · #/terminal opens the trading terminal`, r.terminal.page === 'page-coin' && r.terminal.active.join() === 'Terminal', r.terminal);
     const t = r.trade, rel = (a, b) => Math.abs(a - b) <= 1e-9 * Math.max(1, Math.abs(b));

@@ -34,6 +34,8 @@ export const TOKENS = {
     "--gr-hl2": { night: "rgba(148,163,199,.07)", day: "rgba(13,20,33,.05)" },
     "--gr-srf": { night: "rgba(255,255,255,.035)", day: "rgba(13,20,33,.028)" },
     "--gr-lift": { night: "rgba(255,255,255,.09)", day: "rgba(47,75,208,.08)" },
+    "--dl-sunk": { night: "linear-gradient(180deg,rgba(255,255,255,.045),rgba(255,255,255,.015))", day: "linear-gradient(180deg,rgba(13,20,33,.045),rgba(13,20,33,.018))" },
+    "--dl-sunk-h": { night: "linear-gradient(180deg,rgba(255,255,255,.075),rgba(255,255,255,.03))", day: "linear-gradient(180deg,rgba(13,20,33,.07),rgba(13,20,33,.03))" },
   },
   text: {
     "--ink": { night: "#F5F7FA", day: "#0D1421" },
@@ -60,15 +62,23 @@ export const TOKENS = {
     "--down-soft": { night: "rgba(255,82,82,.14)", day: "rgba(192,24,43,.1)" },
   },
   elevation: {
-    "--shadow-sm": { night: "0 1px 2px rgba(0,0,0,.4)", day: "0 1px 2px rgba(13,20,33,.05)" },
-    "--shadow": { night: "0 10px 28px -14px rgba(0,0,0,.55)", day: "0 10px 28px -18px rgba(13,20,33,.18)" },
-    "--shadow-lg": { night: "0 22px 48px -22px rgba(0,0,0,.62)", day: "0 24px 56px -24px rgba(13,20,33,.22)" },
-    "--nv-e1": { night: "0 1px 2px rgba(0,0,0,.4)", day: "0 1px 2px rgba(13,20,33,.06)" },
-    "--nv-e2": { night: "0 6px 24px -8px rgba(0,0,0,.55)", day: "0 6px 24px -10px rgba(13,20,33,.14)" },
-    "--nv-e3": { night: "0 16px 48px -12px rgba(0,0,0,.65)", day: "0 16px 48px -16px rgba(13,20,33,.18)" },
+    // Every rung is CONTACT + AMBIENT. A single blur is why the panels read flat: a real
+    // plate is held down by a tight 1-2px shadow at its own edge and lifted by a wide,
+    // faint one underneath. Day is its own ladder, not the Night one at a lower alpha.
+    "--shadow-sm": { night: "0 1px 1px rgba(0,0,0,.45),0 2px 5px -2px rgba(0,0,0,.4)", day: "0 1px 1px rgba(13,20,33,.04),0 1px 3px rgba(13,20,33,.06)" },
+    "--shadow": { night: "0 1px 2px rgba(0,0,0,.4),0 10px 28px -12px rgba(0,0,0,.6)", day: "0 1px 2px rgba(13,20,33,.05),0 10px 28px -16px rgba(13,20,33,.2)" },
+    "--shadow-lg": { night: "0 2px 4px rgba(0,0,0,.45),0 28px 60px -22px rgba(0,0,0,.7)", day: "0 2px 6px rgba(13,20,33,.06),0 24px 56px -22px rgba(13,20,33,.24)" },
+    "--nv-e1": { night: "0 1px 1px rgba(0,0,0,.45),0 2px 5px -2px rgba(0,0,0,.4)", day: "0 1px 1px rgba(13,20,33,.04),0 1px 3px rgba(13,20,33,.06)" },
+    "--nv-e2": { night: "0 1px 2px rgba(0,0,0,.4),0 10px 28px -12px rgba(0,0,0,.6)", day: "0 1px 2px rgba(13,20,33,.05),0 8px 24px -12px rgba(13,20,33,.16)" },
+    "--nv-e3": { night: "0 2px 4px rgba(0,0,0,.45),0 24px 56px -16px rgba(0,0,0,.7)", day: "0 2px 6px rgba(13,20,33,.06),0 20px 48px -18px rgba(13,20,33,.2)" },
+    // The edge: a 1px inner highlight along the top. It is what makes a dark plate read as
+    // an object with a lit top face instead of a hole cut in the page; in Day it is the
+    // white catch-light that keeps a white card off a white background.
+    "--dl-edge": { night: "inset 0 1px 0 rgba(255,255,255,.06)", day: "inset 0 1px 0 rgba(255,255,255,.9)" },
+    "--dl-edge-soft": { night: "inset 0 1px 0 rgba(255,255,255,.035)", day: "inset 0 1px 0 rgba(255,255,255,.7)" },
     "--nv-glow-c": { night: "0 0 24px -6px rgba(0,229,255,.45)" },
     "--nv-glow-g": { night: "0 0 24px -6px rgba(255,179,0,.4)" },
-    "--gr-shadow": { night: "0 1px 0 rgba(255,255,255,.035) inset,0 10px 28px -16px rgba(0,0,0,.6)", day: "0 1px 2px rgba(13,20,33,.05),0 10px 28px -18px rgba(13,20,33,.18)" },
+    "--gr-shadow": { night: "0 1px 0 rgba(255,255,255,.035) inset,0 1px 2px rgba(0,0,0,.4),0 10px 28px -12px rgba(0,0,0,.6)", day: "0 1px 0 rgba(255,255,255,.7) inset,0 1px 2px rgba(13,20,33,.05),0 10px 28px -16px rgba(13,20,33,.2)" },
   },
   radius: {
     "--r": { night: "20px" },
@@ -77,6 +87,7 @@ export const TOKENS = {
     "--gr-r-panel": { night: "16px" },
     "--gr-r-ctl": { night: "12px" },
     "--gr-r-in": { night: "9px" },
+    "--r-lg": { night: "18px" },
   },
   space: {
     "--sp-1": { night: "4px" },

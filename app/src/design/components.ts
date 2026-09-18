@@ -71,10 +71,14 @@ export function componentCSS(): string {
     r(c('cellEnd'), { 'text-align': 'right' }),
     r(c('modal'), { position: 'fixed', inset: '0', display: 'none', 'place-items': 'center', background: 'color-mix(in srgb,' + v('--bg-solid') + ' 72%,transparent)', 'z-index': '90', padding: v('--sp-4') }),
     r(c('modal') + '.' + CX.on, { display: 'grid' }),
-    r(c('modalPanel'), { width: 'min(560px,100%)', 'max-height': 'min(86vh,720px)', overflow: 'auto', background: ROLE.surface, border: '1px solid ' + ROLE.line2, 'border-radius': v('--r'), 'box-shadow': v('--shadow-lg') }),
+    r(c('modalPanel'), { width: 'min(560px,100%)', 'max-height': 'min(86vh,720px)', overflow: 'auto', background: ROLE.surface, border: '1px solid ' + ROLE.line2, 'border-radius': v('--r-lg'), 'box-shadow': v('--dl-edge') + ',' + v('--shadow-lg') }),
     r(c('modalHead'), { display: 'flex', 'align-items': 'center', gap: v('--sp-3'), padding: v('--sp-4') + ' ' + v('--sp-5'), 'border-bottom': '1px solid ' + ROLE.line, font: '700 16px/1.3 ' + v('--disp'), color: ROLE.ink }),
     r(c('modalBody'), { padding: v('--sp-5'), color: ROLE.ink2 }),
-    r(c('modalClose'), { 'margin-left': 'auto', background: 'none', border: '0', color: ROLE.muted, font: '400 18px/1 ' + body, cursor: 'pointer', padding: v('--sp-1') }),
+    // A dialog's close affordance is a control, not a glyph: a 32px box on the panel's own
+    // grid, with a hairline, the inner edge, and hover / focus states. Matches .mx in the payload.
+    r(c('modalClose'), { 'margin-left': 'auto', display: 'inline-grid', 'place-items': 'center', width: '32px', height: '32px', padding: '0', background: v('--dl-sunk'), border: '1px solid ' + ROLE.line, 'border-radius': '10px', 'box-shadow': v('--dl-edge-soft'), color: ROLE.muted, font: '400 14px/1 ' + body, cursor: 'pointer', transition: 'color .16s,background .16s,border-color .16s' }),
+    r(c('modalClose') + ':hover', { color: ROLE.ink, background: v('--dl-sunk-h'), 'border-color': ROLE.line2 }),
+    r(c('modalClose') + ':focus-visible', { outline: '2px solid ' + v('--cyan'), 'outline-offset': '2px' }),
     r(c('tabs'), { display: 'flex', gap: v('--sp-1'), 'overflow-x': 'auto', 'scrollbar-width': 'thin', padding: '2px 2px ' + v('--sp-1') }),
     r(c('tab'), { flex: '0 0 auto', padding: v('--sp-2') + ' ' + v('--sp-3'), 'border-radius': v('--gr-r-ctl'), border: '1px solid transparent', background: 'none', color: ROLE.muted, font: '600 13px/1.2 ' + body, cursor: 'pointer', 'text-decoration': 'none' }),
     r(c('tab') + ':hover', { color: ROLE.ink, background: v('--gr-srf') }),
