@@ -473,6 +473,9 @@ footer{background:var(--surface)}
    dimension it sets is inline and reversible. */
 .dlc-host{align-items:start}
 .dlc-wide{grid-column:1/-1}
+/* Portfolio's balanced board has eight internal joins at desktop width. Keep the
+   columns readable without letting spacing recreate the tall-page regression. */
+@media (min-width:1180px){#page-portfolio .dlc-host>.dlc-col{gap:8px}}
 
 /* --- L5b · community: the feed widens where the rail ends ----------------
    The rail is 1,680px against a 2,482px feed, so the last third of the page
