@@ -642,6 +642,15 @@ html[data-mode=day] .sn-btn.ghost{color:var(--cyan)!important}
 #mktpro .mx-gl2{display:flex;flex-direction:column}
 #mktpro .mx-gl2 .glrow{flex:0 0 auto}
 
+/* At very wide desktop widths the overview and hero rows can expose a large
+   quiet area beside their cards. Keep that intentional breathing room inside
+   the same painted surface as the row, so it reads as panel space rather than
+   an unowned hole. */
+@media (min-width:1728px){
+  #mktpro .mx-top,
+  #mktpro .mkt-hero{background:var(--surface-2);border-radius:var(--gr-r-panel,16px)}
+}
+
 /* the hero. `.hero-copy` runs 555px beside a 275px spotlight card, and the 944x256
    rectangle under the card was the single largest void the audit found on the view.
    The card takes the row's height (G3) and the chart takes the card's — drawArea()
