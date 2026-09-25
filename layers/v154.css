@@ -473,6 +473,9 @@ footer{background:var(--surface)}
    dimension it sets is inline and reversible. */
 .dlc-host{align-items:start}
 .dlc-wide{grid-column:1/-1}
+/* Portfolio's balanced board has eight internal joins at desktop width. Keep the
+   columns readable without letting spacing recreate the tall-page regression. */
+@media (min-width:1180px){#page-portfolio .dlc-host>.dlc-col{gap:8px}}
 
 /* --- L5b · community: the feed widens where the rail ends ----------------
    The rail is 1,680px against a 2,482px feed, so the last third of the page
@@ -638,6 +641,17 @@ html[data-mode=day] .sn-btn.ghost{color:var(--cyan)!important}
 #mktpro .mx-fees .fee-note{margin-top:8px}
 #mktpro .mx-gl2{display:flex;flex-direction:column}
 #mktpro .mx-gl2 .glrow{flex:0 0 auto}
+
+/* At very wide desktop widths the overview and hero rows can expose a large
+   quiet area beside their cards. Keep that intentional breathing room inside
+   the same painted surface as the row, so it reads as panel space rather than
+   an unowned hole. */
+@media (min-width:1728px){
+  #page-markets > .wrap{background:var(--surface-2);border-radius:var(--gr-r-panel,16px)}
+  #mktpro{background:var(--surface-2);border-radius:var(--gr-r-panel,16px)}
+  #mktpro .mx-top,
+  #page-markets .mkt-hero{background:var(--surface-2);border-radius:var(--gr-r-panel,16px)}
+}
 
 /* the hero. `.hero-copy` runs 555px beside a 275px spotlight card, and the 944x256
    rectangle under the card was the single largest void the audit found on the view.

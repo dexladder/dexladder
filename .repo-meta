@@ -1,3 +1,3 @@
 description: The gateway to Web 3.0, in a single HTML file. DEX pool radar with GoPlus contract security, Uniswap-V2 AMM and liquidity desk, perps with a live liquidation tape, bar-by-bar backtester, bring-your-own-bot runtime, Polymarket odds and local chain forking. No wallet connect, no accounts, no server, works offline.
 homepage: https://dexladder.com
-topics: web3, crypto, defi, dex, amm, on-chain, blockchain, ethereum, solana, liquidity-pool, perpetual-futures, trading-bot, backtesting, order-book, prediction-markets, market-data, offline-first, single-file, privacy, education
+topics: web3, crypto, defi, dex, amm, on-chain, blockchain, ethereum, solana, liquidity-pool, perpetual-futures, trading-bot, backtesting, order-book, prediction-markets, market-data, offline-first, single-file, privacy, education, paper-trading, crypto-education, ios, swiftui

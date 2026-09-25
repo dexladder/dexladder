@@ -225,6 +225,17 @@
       sec.insertBefore(el, host);
     });
     distribute(host, packable, n);
+    /* The portfolio board has eight internal joins at desktop width. Keep the
+       cards readable without letting the spacing recreate the tall-page regression.
+       These are inline because pack() owns the reversible grid; set them after the
+       final distribution so the measured board and the rendered board agree. */
+    if (n >= 3) {
+      host.style.gap = '1px';
+      host.style.marginTop = '0';
+      [].forEach.call(host.querySelectorAll(':scope > .dlc-col'), function (col) {
+        col.style.gap = '1px';
+      });
+    }
   }
 
   /* --- the markets band run -------------------------------------------------
