@@ -1,4 +1,7 @@
-# DexLadder
+# DexLadder — a paper-trading Web3 terminal for browser, iPhone and iPad
+
+Practice DEX mechanics, perps, liquidity, options and market structure with live
+public data and test funds. No wallet, no account, no deposit, no server.
 
 
 <!-- badges -->
@@ -44,6 +47,20 @@ Or take it with you:
 ```
 
 One file. **3,648,352 bytes.** No bundler output, no module loader, no npm dependency, no build step required to *run* it, and no DexLadder server anywhere — there is no backend to call home to. It works offline — on a plane, in a lecture hall, on a laptop that has never met this repo. Your desk lives in two stores on your own machine: a `localStorage` working set, and an append-only `IndexedDB` archive (`dexladder-vault`) that keeps the full history of fills, journal entries, alerts and the equity curve past the limits a single browser key can hold. Both leave together, as one signed and SHA-256-checksummed bundle you carry to another machine yourself.
+
+## iPhone and iPad
+
+The native companion brings the same learning-first idea to mobile: live markets,
+paper trading, the academy, replay, risk and verification — with no account and
+no analytics. It is free on the [App Store](https://apps.apple.com/in/app/dexladder/id6800084033).
+
+The browser build remains the easiest way to inspect the source, reproduce the
+artifact and run the full terminal offline. The mobile app is a native SwiftUI
+surface for people who want the desk in their pocket.
+
+> If DexLadder helps you understand a market mechanic or test an idea safely,
+> [starring the repository](https://github.com/dexladder/dexladder) helps other
+> learners find it.
 
 ---
 
