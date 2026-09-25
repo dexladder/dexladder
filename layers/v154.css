@@ -647,6 +647,7 @@ html[data-mode=day] .sn-btn.ghost{color:var(--cyan)!important}
    the same painted surface as the row, so it reads as panel space rather than
    an unowned hole. */
 @media (min-width:1728px){
+  #mktpro{background:var(--surface-2);border-radius:var(--gr-r-panel,16px)}
   #mktpro .mx-top,
   #mktpro .mkt-hero{background:var(--surface-2);border-radius:var(--gr-r-panel,16px)}
 }
