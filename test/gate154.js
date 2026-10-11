@@ -1607,7 +1607,7 @@ function ok(name, cond, detail) { results.push({ name, ok: !!cond, detail }); if
   //     not ink, not a card background, not a border. 944x256 sat beside the spotlight card.
   ok('no unpainted rectangle over 120,000px² inside the Markets content column '
      + '(shipped: 944x256 = 242k beside the spotlight, 752x336 = 253k under the ragged band)',
-    worst('emptyN') === 0, JSON.stringify(rh.filter(d => d.emptyN).map(d => `${d.width}/${d.theme}:${d.emptyMaxKpx}k`)));
+    worst('emptyN') === 0, JSON.stringify(rhRaw.filter(m => RH.digest(m).emptyN).map(m => ({ width: m.width, theme: m.theme, empty: m.empty }))));
 
   // 6 · VERTICAL RHYTHM — a GUARD-RAIL. Gaps between the stacked sections of the content
   //     column; the mean hides everything so this counts OUTLIERS (>2.5x the median and
@@ -1752,9 +1752,15 @@ function ok(name, cond, detail) { results.push({ name, ok: !!cond, detail }); if
   await page.setViewportSize({ width: 1440, height: 900 }); await page.waitForTimeout(800);
   const wide = await ev(() => { const b = document.getElementById('dlNew'), s = document.querySelector('#page-markets .stat-strip');
     const d = e => e ? getComputedStyle(e).display : 'missing';
-    return { bChev: b ? d(b.querySelector('.dl-more')) : null, sChev: d(s.querySelector('.dl-more')), bH: b ? Math.round(b.getBoundingClientRect().height) : null, foot: d(s.querySelector('.dl-snapfoot')) }; });
+    // Check rendered text lines, not a height inferred before the 34px close-button face.
+    const oneLine = b && [...b.querySelectorAll(':scope > b, :scope > span')].every(e => {
+      const range = document.createRange(); range.selectNodeContents(e);
+      const lines = [...range.getClientRects()].filter(r => r.width > 0 && r.height > 0);
+      return lines.length > 0 && lines.every(r => Math.abs(r.top - lines[0].top) < 1);
+    });
+    return { bOneLine: !!oneLine, bChev: b ? d(b.querySelector('.dl-more')) : null, sChev: d(s.querySelector('.dl-more')), bH: b ? Math.round(b.getBoundingClientRect().height) : null, foot: d(s.querySelector('.dl-snapfoot')) }; });
   ok('desktop · nothing of this applies at 1440: no chevrons, the banner one line, the provenance foot shown',
-    wide.bChev === 'none' && wide.sChev === 'none' && wide.bH <= 48 && wide.foot !== 'none', JSON.stringify(wide));
+    wide.bChev === 'none' && wide.sChev === 'none' && wide.bOneLine && wide.bH <= 60 && wide.foot !== 'none', JSON.stringify(wide));
 
   // ================================================================ v158 · tidy
   // The owner's seven screenshots of 12 Sep 2026, each pinned so it cannot come back.
