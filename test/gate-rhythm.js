@@ -456,6 +456,13 @@ function PROBE(viewName) {
 
   var clip = clipping(page);
   var occ = occlusion(page);
+  var hero = page.querySelector('.mkt-hero > .hero-copy');
+  var heroTail = null;
+  if (hero && visible(hero)) {
+    var children = [].slice.call(hero.children).filter(visible);
+    if (children.length) heroTail = Math.max(0, docRect(hero).b -
+      Math.max.apply(null, children.map(function (e) { return docRect(e).b; })));
+  }
   var empt = emptyRegions(col);
   var rh = rhythm(col);
   var sb = statBars();
@@ -472,6 +479,7 @@ function PROBE(viewName) {
     clip: clip,
     occlusion: occ,
     empty: empt,
+    heroTail: heroTail,
     statBars: sb
   };
 }

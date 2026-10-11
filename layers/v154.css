@@ -645,7 +645,10 @@ html[data-mode=day] .sn-btn.ghost{color:var(--cyan)!important}
    already measures its own box when it is not handed a magic number. */
 .mkt-hero>#spotlight{display:flex;flex-direction:column}
 .mkt-hero>#spotlight .chart-host{flex:1;min-height:150px;display:flex}
-.mkt-hero>#spotlight #spotChart{width:100%;height:100%;flex:1;min-height:150px}
+/* The bitmap height set by drawArea must not determine the grid row's height.
+   Keep the canvas inside its flex-sized host: otherwise its intrinsic aspect ratio
+   adds a 128px blank tail under the introduction on Linux at wide breakpoints. */
+.mkt-hero>#spotlight #spotChart{position:absolute;inset:0;width:100%;height:100%;min-height:0}
 
 /* ---- G5 · a scroller states that it scrolls -------------------------------
    `scrollbar-width:none` on a container that overflows by 400-1100px is a silent
