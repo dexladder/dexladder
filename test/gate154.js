@@ -1609,6 +1609,10 @@ function ok(name, cond, detail) { results.push({ name, ok: !!cond, detail }); if
      + '(shipped: 944x256 = 242k beside the spotlight, 752x336 = 253k under the ragged band)',
     worst('emptyN') === 0, JSON.stringify(rhRaw.filter(m => RH.digest(m).emptyN).map(m => ({ width: m.width, theme: m.theme, empty: m.empty }))));
 
+  ok('the spotlight canvas does not leave a blank tail under the Markets introduction (was 126-140px)',
+    rhRaw.every(m => m.heroTail !== null && m.heroTail <= 32),
+    JSON.stringify(rhRaw.map(m => ({ width: m.width, theme: m.theme, tail: m.heroTail }))));
+
   // 6 · VERTICAL RHYTHM — a GUARD-RAIL. Gaps between the stacked sections of the content
   //     column; the mean hides everything so this counts OUTLIERS (>2.5x the median and
   //     >40px over it). Green on the shipped payload too: this is here so a fix that
