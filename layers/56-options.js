@@ -1192,27 +1192,27 @@
   function spotLeg(S, qty) { return { kind: "spot", qty: qty, K: null, T: null, v: null, px: S, bid: S, ask: S }; }
 
   var STRATS = [
-    { id: "bull-call", name: "Bull call spread", note: "long the at-the-forward call, short one strike up. A debit, and both ends are capped.",
+    { id: "bull-call", name: "Bull call spread", note: window.DLI18N.t("56-options.2d5ec43ccfb4"),
       build: function (ch, e, e2, n) { return [legFrom(rowAt(e, 0), e, "call", n), legFrom(rowAt(e, 2), e, "call", -n)]; } },
-    { id: "bear-put", name: "Bear put spread", note: "long the at-the-forward put, short one strike down. The mirror of the call spread.",
+    { id: "bear-put", name: "Bear put spread", note: window.DLI18N.t("56-options.5ca5d73234a8"),
       build: function (ch, e, e2, n) { return [legFrom(rowAt(e, 0), e, "put", n), legFrom(rowAt(e, -2), e, "put", -n)]; } },
-    { id: "straddle", name: "Long straddle", note: "call and put at the same strike. Long vol, long gamma, paying theta from both legs.",
+    { id: "straddle", name: "Long straddle", note: window.DLI18N.t("56-options.90b14b28e596"),
       build: function (ch, e, e2, n) { return [legFrom(rowAt(e, 0), e, "call", n), legFrom(rowAt(e, 0), e, "put", n)]; } },
-    { id: "strangle", name: "Long strangle", note: "out-of-the-money call and put. Cheaper than the straddle and it needs a bigger move.",
+    { id: "strangle", name: "Long strangle", note: window.DLI18N.t("56-options.ef045bfe83f0"),
       build: function (ch, e, e2, n) { return [legFrom(rowAt(e, 2), e, "call", n), legFrom(rowAt(e, -2), e, "put", n)]; } },
-    { id: "butterfly", name: "Long call butterfly", note: "one call up, two at the body, one down. A bet on the body, with both wings bought.",
+    { id: "butterfly", name: "Long call butterfly", note: window.DLI18N.t("56-options.cec92aa880b5"),
       build: function (ch, e, e2, n) { return [legFrom(rowAt(e, -2), e, "call", n), legFrom(rowAt(e, 0), e, "call", -2 * n), legFrom(rowAt(e, 2), e, "call", n)]; } },
-    { id: "iron-condor", name: "Iron condor", note: "short an out-of-the-money put spread and an out-of-the-money call spread. A credit with two defined walls.",
+    { id: "iron-condor", name: "Iron condor", note: window.DLI18N.t("56-options.824c088983e2"),
       build: function (ch, e, e2, n) { return [legFrom(rowAt(e, -2), e, "put", -n), legFrom(rowAt(e, -4), e, "put", n), legFrom(rowAt(e, 2), e, "call", -n), legFrom(rowAt(e, 4), e, "call", n)]; } },
-    { id: "calendar", name: "Call calendar", note: "short the near call, long the far one at the same strike. The far leg is MARKED at the near expiry, not expired.",
+    { id: "calendar", name: "Call calendar", note: window.DLI18N.t("56-options.8e59e3f6efd6"),
       build: function (ch, e, e2, n) { return e2 ? [legFrom(rowAt(e, 0), e, "call", -n), legFrom(rowAt(e2, 0), e2, "call", n)] : null; } },
-    { id: "collar", name: "Collar", note: "hold the coin, buy the downside put, sell the upside call to pay for it.",
+    { id: "collar", name: "Collar", note: window.DLI18N.t("56-options.257be8fa7f35"),
       build: function (ch, e, e2, n) { return [spotLeg(ch.S, n), legFrom(rowAt(e, -2), e, "put", n), legFrom(rowAt(e, 2), e, "call", -n)]; } },
-    { id: "covered-call", name: "Covered call", note: "hold the coin, sell the call above it. The premium is the whole of the edge and the upside is sold.",
+    { id: "covered-call", name: "Covered call", note: window.DLI18N.t("56-options.415107ffd1ff"),
       build: function (ch, e, e2, n) { return [spotLeg(ch.S, n), legFrom(rowAt(e, 2), e, "call", -n)]; } },
-    { id: "protective-put", name: "Protective put", note: "hold the coin, buy the put under it. Insurance, priced at the surface.",
+    { id: "protective-put", name: "Protective put", note: window.DLI18N.t("56-options.792a77f84968"),
       build: function (ch, e, e2, n) { return [spotLeg(ch.S, n), legFrom(rowAt(e, -2), e, "put", n)]; } },
-    { id: "risk-reversal", name: "Risk reversal", note: "long the upside call, short the downside put. Synthetic long, and the skew is what it costs.",
+    { id: "risk-reversal", name: "Risk reversal", note: window.DLI18N.t("56-options.26445fad7c42"),
       build: function (ch, e, e2, n) { return [legFrom(rowAt(e, 2), e, "call", n), legFrom(rowAt(e, -2), e, "put", -n)]; } }
   ];
 
@@ -1519,7 +1519,7 @@
   }
   function pctv(v) { return v == null || !isFinite(v) ? "—" : (v * 100).toFixed(2) + "%"; }
   function sig4(n) { return n == null || !isFinite(n) ? "—" : (Math.abs(n) >= 1 ? n.toFixed(4) : n.toPrecision(4)); }
-  function unbounded(v, isUnb, q) { return isUnb ? '<b class="opt-unb">unbounded</b>' : fmtQ(v, q); }
+  function unbounded(v, isUnb, q) { return isUnb ? ('<b class="opt-unb">' + window.DLI18N.t("56-options.75cf685d0646") + '</b>') : fmtQ(v, q); }
 
   /* ========================================================================
      11 · THE DESK
@@ -1552,8 +1552,8 @@
   function header(ch) {
     if (!ch || ch.S == null) return '<div class="opt-empty">' + esc((ch && ch.note) || "no market") + "</div>";
     return '<div class="opt-head"><span class="opt-pair">' + esc(ch.sym) + " " + fmtQ(ch.S, "USDT") + '</span>' +
-      '<span class="opt-meta">realised ' + pctv(ch.rv) + " (" + esc(ch.rvSrc) + ", " + ch.rvBars + " hourly bars) · r " + pctv(ch.r) + " · q " + pctv(ch.q) + '</span></div>' +
-      '<div class="opt-strip">Generated chain. There is no options venue feed in this app — these are model prices from a surface whose parameters are on the Surface tab, not quotes.</div>';
+      ('<span class="opt-meta">' + window.DLI18N.t("56-options.65a134db059d") + '') + pctv(ch.rv) + " (" + esc(ch.rvSrc) + ", " + ch.rvBars + " hourly bars) · r " + pctv(ch.r) + " · q " + pctv(ch.q) + '</span></div>' +
+      ('<div class="opt-strip">' + window.DLI18N.t("56-options.066b4075dc15") + '</div>');
   }
 
   function paneChain() {
@@ -1565,9 +1565,9 @@
       fld("r (rate, %)", '<input id="optR" class="dl-inp" type="number" step="any" value="' + (t.r * 100) + '" aria-label="Risk free rate percent">') +
       fld("q (carry, %)", '<input id="optQ" class="dl-inp" type="number" step="any" value="' + (t.q * 100) + '" aria-label="Carry yield percent">') +
       fld("Size (contracts)", '<input id="optQty" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.qty) + '" aria-label="Size in contracts">') +
-      '</div><div class="opt-actions"><button class="dl-b" id="optGo">Rebuild the chain</button></div>';
+      ('</div><div class="opt-actions"><button class="dl-b" id="optGo">' + window.DLI18N.t("56-options.cd9255979a89") + '</button></div>');
 
-    h += '<div class="opt-sub">Expiry</div><div class="dl-chips opt-exps">';
+    h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.6956d81401b8") + '</div><div class="dl-chips opt-exps">');
     for (i = 0; i < ch.expiries.length; i++) {
       h += '<button class="dl-chip' + (i === ST.exp ? " on" : "") + '" data-exp="' + i + '">' + ch.expiries[i].days + "d · " + esc(ch.expiries[i].label) + "</button>";
     }
@@ -1577,7 +1577,7 @@
     h += '<div class="opt-note">' + e.days + " days (T = " + e.T.toFixed(4) + "y) · forward " + fmtQ(e.F, "USDT") + " · at-the-money vol " + pctv(e.atmVol) +
       " · slice a=" + sig4(e.gen.a) + " b=" + sig4(e.gen.b) + " rho=" + sig4(e.gen.rho) + " m=" + sig4(e.gen.m) + " sig=" + sig4(e.gen.sig) + "</div>";
     h += '<div class="dl-tblw"><table class="dl-tbl opt-chain"><thead><tr>' +
-      '<th>Strike</th><th class="r">k</th><th class="r">vol</th><th class="r">call bid</th><th class="r">call ask</th><th class="r">delta</th><th class="r">gamma</th><th class="r">vega/pt</th><th class="r">theta/day</th><th class="r">put bid</th><th class="r">put ask</th><th>Trade</th>' +
+      ('<th>' + window.DLI18N.t("56-options.92c872eb9eff") + '</th><th class="r">' + window.DLI18N.t("56-options.8254c329a928") + '</th><th class="r">' + window.DLI18N.t("56-options.b9f6da279ec5") + '</th><th class="r">' + window.DLI18N.t("56-options.59aa3f5873fb") + '</th><th class="r">' + window.DLI18N.t("56-options.9449d53f774d") + '</th><th class="r">' + window.DLI18N.t("56-options.4f4a9410ffcd") + '</th><th class="r">' + window.DLI18N.t("56-options.be9d587defa1") + '</th><th class="r">' + window.DLI18N.t("56-options.ed9f316c1b9a") + '</th><th class="r">' + window.DLI18N.t("56-options.67d2cd9e39ce") + '</th><th class="r">' + window.DLI18N.t("56-options.8f9149e193a2") + '</th><th class="r">' + window.DLI18N.t("56-options.dc4c608d1020") + '</th><th>' + window.DLI18N.t("56-options.9709653fc80c") + '</th>') +
       "</tr></thead><tbody>";
     for (i = 0; i < e.rows.length; i++) {
       var R = e.rows[i];
@@ -1598,13 +1598,13 @@
         "</td></tr>";
     }
     h += "</tbody></table></div>";
-    h += '<div class="opt-legend">Greeks are for the CALL at each strike, analytic. vega is per ONE vol point (a move from 60% to 61%); theta is per DAY (theta/year is on the Method tab). bid and ask are the surface vol minus and plus 1 vol point — that spread is the only trading cost modelled here.</div>';
+    h += ('<div class="opt-legend">' + window.DLI18N.t("56-options.ace3650b6359") + '</div>');
 
     /* the American premium and the convergence of the tree, for the ATM strike */
     var atm = e.rows[e.atmIndex];
     if (atm) {
       var ap = americanPremium(ch.S, atm.K, e.T, ch.r, ch.q, atm.vol, false, t.N || 200);
-      h += '<div class="opt-sub">Early exercise · CRR binomial at the ' + num(atm.K) + " put</div>";
+      h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.e6cb69f010d0") + '') + num(atm.K) + (window.DLI18N.t("56-options.8ecbc0212d57") + "</div>");
       if (ap) {
         h += '<div class="opt-grid">' +
           kv("American (N=" + ap.N + ")", fmtQ(ap.american, "USDT")) +
@@ -1616,19 +1616,19 @@
           "</div>";
         var bnd = ap.boundary, bi, shown = 0, bh = "";
         for (bi = 0; bi < bnd.length && shown < 8; bi += Math.max(1, Math.floor(bnd.length / 8))) {
-          if (bnd[bi] && bnd[bi].S != null) { bh += "<tr><td>" + ((e.T - bnd[bi].t) * YEAR_DAYS).toFixed(1) + " d to go</td><td class=\"r\">" + num(bnd[bi].S) + "</td></tr>"; shown++; }
+          if (bnd[bi] && bnd[bi].S != null) { bh += "<tr><td>" + ((e.T - bnd[bi].t) * YEAR_DAYS).toFixed(1) + (window.DLI18N.t("56-options.b87d96774af7") + "</td><td class=\"r\">") + num(bnd[bi].S) + "</td></tr>"; shown++; }
         }
         h += bh
-          ? '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Time remaining</th><th class="r">exercise below</th></tr></thead><tbody>' + bh + "</tbody></table></div>"
-          : '<div class="opt-note">No node on this tree exercised early, so there is no boundary to draw — with q = ' + pctv(ch.q) + " that is what an American call should do.</div>";
+          ? ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("56-options.864927fe11e0") + '</th><th class="r">' + window.DLI18N.t("56-options.44187bec7acf") + '</th></tr></thead><tbody>') + bh + "</tbody></table></div>"
+          : ('<div class="opt-note">' + window.DLI18N.t("56-options.8e87b97c3502") + '') + pctv(ch.q) + (window.DLI18N.t("56-options.7014a5c20e75") + "</div>");
       }
       var conv = crrConverge(ch.S, atm.K, e.T, ch.r, ch.q, atm.vol, true, [25, 50, 100, 200, 400, 800]);
-      h += '<div class="opt-sub">Convergence of the tree, shown rather than assumed — European CALL at ' + num(atm.K) + ' against the closed form</div>';
-      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>N</th><th class="r">European tree</th><th class="r">closed form</th><th class="r">error</th><th class="r">American</th><th class="r">premium</th></tr></thead><tbody>';
+      h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.e18285db2537") + '') + num(atm.K) + ('' + window.DLI18N.t("56-options.3481fe9faa90") + '</div>');
+      h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("56-options.8ce86a6ae65d") + '</th><th class="r">' + window.DLI18N.t("56-options.312e08e8acdf") + '</th><th class="r">' + window.DLI18N.t("56-options.6427e0429960") + '</th><th class="r">' + window.DLI18N.t("56-options.ca00fccfb408") + '</th><th class="r">' + window.DLI18N.t("56-options.0baaf6f25d1c") + '</th><th class="r">' + window.DLI18N.t("56-options.870dc23d2183") + '</th></tr></thead><tbody>');
       for (i = 0; i < conv.length; i++) {
         h += "<tr><td>" + conv[i].N + '</td><td class="r">' + sig4(conv[i].euro) + '</td><td class="r">' + sig4(conv[i].closed) + '</td><td class="r">' + sig4(conv[i].err) + '</td><td class="r">' + sig4(conv[i].amer) + '</td><td class="r">' + sig4(conv[i].premium) + "</td></tr>";
       }
-      h += "</tbody></table></div><div class=\"opt-legend\">The error column oscillates in sign as it falls — that is the even/odd behaviour of a CRR tree straddling the strike, and it is exactly why doubling N once proves nothing.</div>";
+      h += ("</tbody></table></div><div class=\"opt-legend\">" + window.DLI18N.t("56-options.94b61d855385") + "</div>");
     }
     return h;
   }
@@ -1651,16 +1651,16 @@
     var sf = surface(ch);
     ST.sf = sf;
     var h = header(ch), i, j;
-    h += '<div class="opt-note">Each expiry is fitted BACK from its own generated mid prices: price to implied vol through Newton/bisection, implied vol to total variance w = sigma^2 T, then a raw SVI slice by deterministic coordinate descent. If the fit cannot recover the generator, one of the two is wrong — so both sets of parameters are printed.</div>';
-    h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Expiry</th><th class="r">a</th><th class="r">b</th><th class="r">rho</th><th class="r">m</th><th class="r">sig</th><th class="r">rmse (w)</th><th class="r">min g(k)</th><th>Butterfly</th></tr></thead><tbody>';
+    h += ('<div class="opt-note">' + window.DLI18N.t("56-options.a3e20bff6a17") + '</div>');
+    h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("56-options.6956d81401b8") + '</th><th class="r">' + window.DLI18N.t("56-options.ca978112ca1b") + '</th><th class="r">' + window.DLI18N.t("56-options.3e23e8160039") + '</th><th class="r">' + window.DLI18N.t("56-options.0ddbc6c1d81a") + '</th><th class="r">' + window.DLI18N.t("56-options.62c66a7a5dd7") + '</th><th class="r">' + window.DLI18N.t("56-options.a543997d84f1") + '</th><th class="r">' + window.DLI18N.t("56-options.1ffb32b9312e") + '</th><th class="r">' + window.DLI18N.t("56-options.a7e52e98a4bf") + '</th><th>' + window.DLI18N.t("56-options.a30f6a02eaa2") + '</th></tr></thead><tbody>');
     for (i = 0; i < sf.slices.length; i++) {
       var s = sf.slices[i], f = s.fit;
-      h += '<tr><td class="opt-k">' + s.days + "d gen</td><td class=\"r\">" + sig4(s.gen.a) + '</td><td class="r">' + sig4(s.gen.b) + '</td><td class="r">' + sig4(s.gen.rho) + '</td><td class="r">' + sig4(s.gen.m) + '</td><td class="r">' + sig4(s.gen.sig) + '</td><td class="r">—</td><td class="r">' + sig4(butterfly(s.gen, -1.5, 1.5, 121).minG) + '</td><td>generator</td></tr>';
+      h += '<tr><td class="opt-k">' + s.days + (window.DLI18N.t("56-options.45742ce86258") + "</td><td class=\"r\">") + sig4(s.gen.a) + '</td><td class="r">' + sig4(s.gen.b) + '</td><td class="r">' + sig4(s.gen.rho) + '</td><td class="r">' + sig4(s.gen.m) + '</td><td class="r">' + sig4(s.gen.sig) + '</td><td class="r">—</td><td class="r">' + sig4(butterfly(s.gen, -1.5, 1.5, 121).minG) + ('</td><td>' + window.DLI18N.t("56-options.9123dcbb0b42") + '</td></tr>');
       if (f && f.ok) {
-        h += '<tr><td class="opt-k">' + s.days + ' fit</td><td class="r">' + sig4(f.p.a) + '</td><td class="r">' + sig4(f.p.b) + '</td><td class="r">' + sig4(f.p.rho) + '</td><td class="r">' + sig4(f.p.m) + '</td><td class="r">' + sig4(f.p.sig) + '</td><td class="r">' + sig4(f.rmse) + '</td><td class="r">' + sig4(f.butterfly.minG) + '</td><td>' +
-          (f.butterfly.ok ? '<span class="opt-ok">passes</span>' : '<span class="opt-bad">FAILS at k=' + f.butterfly.atK.toFixed(3) + ", " + f.butterfly.negPoints + " of " + f.butterfly.tested + " points negative</span>") + "</td></tr>";
+        h += '<tr><td class="opt-k">' + s.days + ('' + window.DLI18N.t("56-options.42a1abe93cee") + '</td><td class="r">') + sig4(f.p.a) + '</td><td class="r">' + sig4(f.p.b) + '</td><td class="r">' + sig4(f.p.rho) + '</td><td class="r">' + sig4(f.p.m) + '</td><td class="r">' + sig4(f.p.sig) + '</td><td class="r">' + sig4(f.rmse) + '</td><td class="r">' + sig4(f.butterfly.minG) + '</td><td>' +
+          (f.butterfly.ok ? ('<span class="opt-ok">' + window.DLI18N.t("56-options.2c28ec094b83") + '</span>') : ('<span class="opt-bad">' + window.DLI18N.t("56-options.79f9a73c3c93") + '') + f.butterfly.atK.toFixed(3) + ", " + f.butterfly.negPoints + " of " + f.butterfly.tested + (window.DLI18N.t("56-options.ee12266b32f6") + "</span>")) + "</td></tr>";
       } else {
-        h += '<tr><td class="opt-k">' + s.days + ' fit</td><td colspan="8">' + esc((f && f.reason) || "not fitted") + "</td></tr>";
+        h += '<tr><td class="opt-k">' + s.days + ('' + window.DLI18N.t("56-options.42a1abe93cee") + '</td><td colspan="8">') + esc((f && f.reason) || "not fitted") + "</td></tr>";
       }
     }
     h += "</tbody></table></div>";
@@ -1682,24 +1682,24 @@
       kv("Strikes with no implied vol", nBad + (nBad ? " (outside the no-arbitrage band, or zero vega)" : "")) +
       "</div>";
 
-    h += '<div class="opt-sub">Calendar-spread check — total variance must not fall as T grows</div>';
+    h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.a23d12f9cffa") + '</div>');
     if (sf.calendar && sf.calendar.pairs.length) {
-      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Pair</th><th class="r">min w(T2) - w(T1)</th><th class="r">at k</th><th>Verdict</th></tr></thead><tbody>';
+      h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("56-options.989da04b0aaa") + '</th><th class="r">' + window.DLI18N.t("56-options.c0f4d7a22f36") + '</th><th class="r">' + window.DLI18N.t("56-options.4b303797a03f") + '</th><th>' + window.DLI18N.t("56-options.4a36f89dafb0") + '</th></tr></thead><tbody>');
       for (i = 0; i < sf.calendar.pairs.length; i++) {
         var pr = sf.calendar.pairs[i];
-        h += "<tr><td>" + (pr.from * YEAR_DAYS).toFixed(0) + "d to " + (pr.to * YEAR_DAYS).toFixed(0) + 'd</td><td class="r">' + sig4(pr.minGap) + '</td><td class="r">' + (pr.atK == null ? "—" : pr.atK.toFixed(3)) + "</td><td>" +
-          (pr.ok ? '<span class="opt-ok">monotone</span>' : '<span class="opt-bad">FAILS — a free calendar spread at ' + pr.badPoints + " points</span>") + "</td></tr>";
+        h += "<tr><td>" + (pr.from * YEAR_DAYS).toFixed(0) + "d to " + (pr.to * YEAR_DAYS).toFixed(0) + ('' + window.DLI18N.t("56-options.18ac3e7343f0") + '</td><td class="r">') + sig4(pr.minGap) + '</td><td class="r">' + (pr.atK == null ? "—" : pr.atK.toFixed(3)) + "</td><td>" +
+          (pr.ok ? ('<span class="opt-ok">' + window.DLI18N.t("56-options.74bc9fb5bd59") + '</span>') : ('<span class="opt-bad">' + window.DLI18N.t("56-options.169441fbe464") + '') + pr.badPoints + (window.DLI18N.t("56-options.bbbc02efdd44") + "</span>")) + "</td></tr>";
       }
       h += "</tbody></table></div>";
-    } else h += '<div class="opt-note">Not enough fitted slices to compare.</div>';
+    } else h += ('<div class="opt-note">' + window.DLI18N.t("56-options.b5c59e05f317") + '</div>');
 
     var bg = butterfly(DEMO_GOOD, -1.5, 1.5, 241), bb = butterfly(DEMO_BAD, -1.5, 1.5, 241);
-    h += '<div class="opt-sub">Does the check bite?</div><div class="opt-note">A test that has never been seen to fail is not a test. These two slices are carried in the layer on purpose.</div>' +
-      '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Slice</th><th class="r">a</th><th class="r">b</th><th class="r">rho</th><th class="r">m</th><th class="r">sig</th><th class="r">min g(k)</th><th>Durrleman</th></tr></thead><tbody>' +
-      '<tr><td class="opt-k">known good</td><td class="r">' + sig4(DEMO_GOOD.a) + '</td><td class="r">' + sig4(DEMO_GOOD.b) + '</td><td class="r">' + sig4(DEMO_GOOD.rho) + '</td><td class="r">' + sig4(DEMO_GOOD.m) + '</td><td class="r">' + sig4(DEMO_GOOD.sig) + '</td><td class="r">' + sig4(bg.minG) + "</td><td>" + (bg.ok ? '<span class="opt-ok">passes</span>' : '<span class="opt-bad">fails</span>') + "</td></tr>" +
-      '<tr><td class="opt-k">known bad</td><td class="r">' + sig4(DEMO_BAD.a) + '</td><td class="r">' + sig4(DEMO_BAD.b) + '</td><td class="r">' + sig4(DEMO_BAD.rho) + '</td><td class="r">' + sig4(DEMO_BAD.m) + '</td><td class="r">' + sig4(DEMO_BAD.sig) + '</td><td class="r">' + sig4(bb.minG) + "</td><td>" + (bb.ok ? '<span class="opt-bad">passes — the check is broken</span>' : '<span class="opt-ok">fails, as it should (butterfly arbitrage at k=' + bb.atK.toFixed(3) + ")</span>") + "</td></tr>" +
+    h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.9ee420a3052d") + '</div><div class="opt-note">' + window.DLI18N.t("56-options.dcdd903c8c10") + '</div>') +
+      ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("56-options.87bd78650264") + '</th><th class="r">' + window.DLI18N.t("56-options.ca978112ca1b") + '</th><th class="r">' + window.DLI18N.t("56-options.3e23e8160039") + '</th><th class="r">' + window.DLI18N.t("56-options.0ddbc6c1d81a") + '</th><th class="r">' + window.DLI18N.t("56-options.62c66a7a5dd7") + '</th><th class="r">' + window.DLI18N.t("56-options.a543997d84f1") + '</th><th class="r">' + window.DLI18N.t("56-options.a7e52e98a4bf") + '</th><th>' + window.DLI18N.t("56-options.7dfd134957f3") + '</th></tr></thead><tbody>') +
+      ('<tr><td class="opt-k">' + window.DLI18N.t("56-options.be8e11ccfae3") + '</td><td class="r">') + sig4(DEMO_GOOD.a) + '</td><td class="r">' + sig4(DEMO_GOOD.b) + '</td><td class="r">' + sig4(DEMO_GOOD.rho) + '</td><td class="r">' + sig4(DEMO_GOOD.m) + '</td><td class="r">' + sig4(DEMO_GOOD.sig) + '</td><td class="r">' + sig4(bg.minG) + "</td><td>" + (bg.ok ? ('<span class="opt-ok">' + window.DLI18N.t("56-options.2c28ec094b83") + '</span>') : ('<span class="opt-bad">' + window.DLI18N.t("56-options.c1481e2eb555") + '</span>')) + "</td></tr>" +
+      ('<tr><td class="opt-k">' + window.DLI18N.t("56-options.78b1aa3bbca5") + '</td><td class="r">') + sig4(DEMO_BAD.a) + '</td><td class="r">' + sig4(DEMO_BAD.b) + '</td><td class="r">' + sig4(DEMO_BAD.rho) + '</td><td class="r">' + sig4(DEMO_BAD.m) + '</td><td class="r">' + sig4(DEMO_BAD.sig) + '</td><td class="r">' + sig4(bb.minG) + "</td><td>" + (bb.ok ? ('<span class="opt-bad">' + window.DLI18N.t("56-options.49233e8f4eb9") + '</span>') : ('<span class="opt-ok">' + window.DLI18N.t("56-options.fbebc603cd94") + '') + bb.atK.toFixed(3) + ")</span>") + "</td></tr>" +
       "</tbody></table></div>";
-    h += '<div class="opt-legend">g(k) = (1 - k w\'/(2w))^2 - (w\'^2/4)(1/w + 1/4) + w\'\'/2. g >= 0 everywhere is the same statement as a non-negative risk-neutral density. Where g < 0 there is a butterfly spread with a negative cost and a payoff that cannot be negative — the surface is claiming a free lunch, and this desk prints it rather than smoothing it away.</div>';
+    h += ('<div class="opt-legend">' + window.DLI18N.t("56-options.9db55f775099") + '< 0 there is a butterfly spread with a negative cost and a payoff that cannot be negative — the surface is claiming a free lunch, and this desk prints it rather than smoothing it away.</div>');
     return h;
   }
 
@@ -1708,20 +1708,20 @@
     if (!ch || ch.S == null) return '<div class="opt-empty">' + esc((ch && ch.note) || "no market") + "</div>";
     var t = ticket(), i;
     var h = header(ch);
-    h += '<div class="opt-sub">Structure</div><div class="dl-chips opt-strats">';
+    h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.7203c2b3dad3") + '</div><div class="dl-chips opt-strats">');
     for (i = 0; i < STRATS.length; i++) {
       h += '<button class="dl-chip' + (STRATS[i].id === ST.strat ? " on" : "") + '" data-strat="' + esc(STRATS[i].id) + '">' + esc(STRATS[i].name) + "</button>";
     }
     h += "</div>";
     h += '<div class="dl-chips opt-exps">';
-    for (i = 0; i < ch.expiries.length; i++) h += '<button class="dl-chip' + (i === ST.exp ? " on" : "") + '" data-exp="' + i + '">' + ch.expiries[i].days + "d</button>";
+    for (i = 0; i < ch.expiries.length; i++) h += '<button class="dl-chip' + (i === ST.exp ? " on" : "") + '" data-exp="' + i + '">' + ch.expiries[i].days + (window.DLI18N.t("56-options.18ac3e7343f0") + "</button>");
     h += "</div>";
 
     var st = strategy(ST.strat, ch, { expiry: ST.exp, qty: +t.qty > 0 ? +t.qty : 1 });
-    if (!st) return h + '<div class="opt-empty">That structure could not be built on this chain.</div>';
+    if (!st) return h + ('<div class="opt-empty">' + window.DLI18N.t("56-options.7c5c140ed9e8") + '</div>');
     if (!st.legs.length) return h + '<div class="opt-empty">' + esc(st.reason || "no legs") + "</div>";
     h += '<div class="opt-note"><b>' + esc(st.name) + "</b> — " + esc(st.note) + "</div>";
-    h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Leg</th><th class="r">qty</th><th class="r">strike</th><th class="r">days</th><th class="r">vol</th><th class="r">mid</th><th class="r">you pay/receive</th></tr></thead><tbody>';
+    h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("56-options.7c94ee113e1b") + '</th><th class="r">' + window.DLI18N.t("56-options.32e8369a9c4f") + '</th><th class="r">' + window.DLI18N.t("56-options.7cd58cdd64a3") + '</th><th class="r">' + window.DLI18N.t("56-options.ab51004e9d71") + '</th><th class="r">' + window.DLI18N.t("56-options.b9f6da279ec5") + '</th><th class="r">' + window.DLI18N.t("56-options.90ac16783fbc") + '</th><th class="r">' + window.DLI18N.t("56-options.cb08ecc9ed45") + '</th></tr></thead><tbody>');
     for (i = 0; i < st.legs.length; i++) {
       var L = st.legs[i];
       var cash = L.qty > 0 ? L.qty * (L.ask == null ? L.px : L.ask) : L.qty * (L.bid == null ? L.px : L.bid);
@@ -1739,10 +1739,10 @@
       kv("Max loss", unbounded(an.maxLoss, an.maxLossUnbounded, "USDT") + (an.maxLossUnbounded ? "" : " at " + num(an.maxLossAt))) +
       kv("P(profit), risk-neutral", st.pop ? (st.pop.p * 100).toFixed(1) + "%" : "—") +
       "</div>";
-    h += '<div class="opt-legend">Probability of profit uses the lognormal with drift r - q - sigma^2/2 and sigma = ' + pctv(st.pop ? st.pop.sigma : null) + ' (the horizon\'s at-the-money vol). THAT IS THE PRICING DRIFT, NOT A FORECAST. Under a real-world drift the same structure has a different probability, and this desk does not know that drift.</div>';
+    h += ('<div class="opt-legend">' + window.DLI18N.t("56-options.47116382af6d") + '') + pctv(st.pop ? st.pop.sigma : null) + ('' + window.DLI18N.t("56-options.12d34f41220a") + '</div>');
 
     var g = st.greeks;
-    h += '<div class="opt-sub">Net greeks, now</div><div class="opt-grid">' +
+    h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.c2d3dac2ab40") + '</div><div class="opt-grid">') +
       kv("Delta", sig4(g.delta)) + kv("Gamma", sig4(g.gamma)) +
       kv("Vega (per vol point)", sig4(g.vegaPt)) +
       kv("Theta (per day)", sig4(g.thetaDay)) +
@@ -1750,7 +1750,7 @@
       kv("Rho", sig4(g.rho)) + kv("Vanna", sig4(g.vanna)) + kv("Volga", sig4(g.volga)) +
       "</div>";
     h += payoffSVG(an, ch.S);
-    h += '<div class="opt-sub">Payoff at the horizon, and the mark before it</div><div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">spot</th><th class="r">payoff at horizon</th><th class="r">mark at half the horizon</th></tr></thead><tbody>';
+    h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.1f3cacf7b273") + '</div><div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">' + window.DLI18N.t("56-options.be2bdbb3100e") + '</th><th class="r">' + window.DLI18N.t("56-options.c020c04fc24e") + '</th><th class="r">' + window.DLI18N.t("56-options.a4f70ab964da") + '</th></tr></thead><tbody>');
     var half = an.horizonYears / 2, mids = [0.8, 0.9, 0.95, 1, 1.05, 1.1, 1.2];
     for (i = 0; i < mids.length; i++) {
       var Sx = ch.S * mids[i];
@@ -1758,8 +1758,8 @@
       var mk = markToModel(st.legs, Sx, half, ch.r, ch.q) ;
       h += '<tr><td class="r">' + num(Sx) + '</td><td class="r">' + fmtQ(atH, "USDT") + '</td><td class="r">' + (mk == null ? "—" : fmtQ(mk - an.cost, "USDT")) + "</td></tr>";
     }
-    h += "</tbody></table></div><div class=\"opt-legend\">The middle column is the expiry payoff. The right-hand column is the same structure MARKED at half the horizon, with every leg still carrying time value — that difference is the whole reason a payoff diagram is a bad way to hold a position.</div>";
-    h += '<div class="opt-actions"><button class="dl-b pri" id="optOpenStrat">Open this structure as paper positions</button><span class="opt-sendnote">Paper money, through the same engine the trading ticket uses. Short legs post margin.</span></div>';
+    h += ("</tbody></table></div><div class=\"opt-legend\">" + window.DLI18N.t("56-options.37a2fed3d89c") + "</div>");
+    h += ('<div class="opt-actions"><button class="dl-b pri" id="optOpenStrat">' + window.DLI18N.t("56-options.c8e0c0e8fd33") + '</button><span class="opt-sendnote">' + window.DLI18N.t("56-options.1508d454c55a") + '</span></div>');
     return h;
   }
 
@@ -1799,30 +1799,30 @@
       '<line class="opt-zero" x1="0" y1="' + zero.toFixed(1) + '" x2="' + W + '" y2="' + zero.toFixed(1) + '"></line>' +
       '<line class="opt-spot" x1="' + sx.toFixed(1) + '" y1="0" x2="' + sx.toFixed(1) + '" y2="' + H + '"></line>' +
       '<polyline class="opt-pl" points="' + pts + '"></polyline></svg>' +
-      '<div class="opt-axis"><span>' + num(loX) + "</span><span>spot now " + num(S0) + "</span><span>" + num(hiX) + "</span></div></div>";
+      '<div class="opt-axis"><span>' + num(loX) + ("</span><span>" + window.DLI18N.t("56-options.cd06d0445cea")) + num(S0) + "</span><span>" + num(hiX) + "</span></div></div>";
   }
 
   function panePositions() {
     var ch = ST.ch || rebuild();
     var rows = ch && ch.S > 0 ? markAll(ch) : [];
     var h = ch && ch.S > 0 ? header(ch) : "";
-    if (!rows.length) h += '<div class="opt-empty">No open option positions. Open one from the Chain tab or the Builder.</div>';
+    if (!rows.length) h += ('<div class="opt-empty">' + window.DLI18N.t("56-options.6a3d9bca0137") + '</div>');
     else {
       var i, tiedTotal = 0, unrealTotal = 0;
-      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Position</th><th class="r">qty</th><th class="r">days left</th><th class="r">vol now</th><th class="r">opened at</th><th class="r">mark</th><th class="r">unrealised</th><th class="r">margin tied</th><th></th></tr></thead><tbody>';
+      h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("56-options.6d031af10da7") + '</th><th class="r">' + window.DLI18N.t("56-options.32e8369a9c4f") + '</th><th class="r">' + window.DLI18N.t("56-options.593cbe7299f7") + '</th><th class="r">' + window.DLI18N.t("56-options.5e87a2ad2b80") + '</th><th class="r">' + window.DLI18N.t("56-options.648aaefbade1") + '</th><th class="r">' + window.DLI18N.t("56-options.6201eb4dccc9") + '</th><th class="r">' + window.DLI18N.t("56-options.34aceb1b8d88") + '</th><th class="r">' + window.DLI18N.t("56-options.415333e77180") + '</th><th></th></tr></thead><tbody>');
       for (i = 0; i < rows.length; i++) {
         var P0 = rows[i].pos, m = rows[i].mark;
         tiedTotal += rows[i].marginTied;
         if (rows[i].unreal != null) unrealTotal += rows[i].unreal;
-        h += "<tr><td class=\"opt-k\">" + esc(P0.side) + " " + esc(P0.sym) + " " + num(P0.K) + " " + esc(P0.kind) + " " + esc(dayLabel(P0.expiry)) + '</td><td class="r">' + num(P0.qty) + '</td><td class="r">' + (m ? (m.T * YEAR_DAYS).toFixed(1) : "—") + '</td><td class="r">' + (m && m.vol != null ? pctv(m.vol) : "expired") + '</td><td class="r">' + fmtQ(P0.openPer, P0.quote) + '</td><td class="r">' + (m ? fmtQ(m.per, P0.quote) : "—") + '</td><td class="r ' + (rows[i].unreal >= 0 ? "up" : "dn") + '">' + (rows[i].unreal == null ? "—" : (rows[i].unreal >= 0 ? "+" : "−") + fmtQ(Math.abs(rows[i].unreal), P0.quote)) + '</td><td class="r">' + (rows[i].marginTied ? fmtQ(rows[i].marginTied, P0.quote) : "—") + '</td><td><button class="dl-b" data-act="close" data-id="' + P0.id + '">Close</button></td></tr>';
+        h += "<tr><td class=\"opt-k\">" + esc(P0.side) + " " + esc(P0.sym) + " " + num(P0.K) + " " + esc(P0.kind) + " " + esc(dayLabel(P0.expiry)) + '</td><td class="r">' + num(P0.qty) + '</td><td class="r">' + (m ? (m.T * YEAR_DAYS).toFixed(1) : "—") + '</td><td class="r">' + (m && m.vol != null ? pctv(m.vol) : "expired") + '</td><td class="r">' + fmtQ(P0.openPer, P0.quote) + '</td><td class="r">' + (m ? fmtQ(m.per, P0.quote) : "—") + '</td><td class="r ' + (rows[i].unreal >= 0 ? "up" : "dn") + '">' + (rows[i].unreal == null ? "—" : (rows[i].unreal >= 0 ? "+" : "−") + fmtQ(Math.abs(rows[i].unreal), P0.quote)) + '</td><td class="r">' + (rows[i].marginTied ? fmtQ(rows[i].marginTied, P0.quote) : "—") + '</td><td><button class="dl-b" data-act="close" data-id="' + P0.id + ('' + window.DLI18N.t("56-options.35f207f4bef3") + '</button></td></tr>');
       }
       h += "</tbody></table></div>";
       h += '<div class="opt-grid">' + kv("Unrealised, marked to model", fmtQ(unrealTotal, "USDT")) + kv("Margin tied up by short legs", fmtQ(tiedTotal, "USDT")) + "</div>";
-      h += '<div class="opt-legend">A position is held in the account as a synthetic claim bought at its net cash outlay: for a long that is the ask, for a short it is the posted margin less the bid. The mark is what closing it would return, so the unrealised column is the option\'s P&amp;L exactly. Margin is the Reg T / CBOE minimum, max(premium + 0.20S − OTM, premium + 0.10X) — a US listed-equity rule, not any crypto venue\'s.</div>';
+      h += ('<div class="opt-legend">' + window.DLI18N.t("56-options.46e7e1d880b9") + '</div>');
     }
     var lg = logRows(), j;
     if (lg.length) {
-      h += '<div class="opt-sub">Log</div><div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>When</th><th>What</th><th class="r">P&amp;L</th></tr></thead><tbody>';
+      h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.21e49eb2b299") + '</div><div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("56-options.cf9c7aa24a26") + '</th><th>' + window.DLI18N.t("56-options.f8cf83a76a98") + '</th><th class="r">' + window.DLI18N.t("56-options.2a0f7ad1ebef") + '</th></tr></thead><tbody>');
       for (j = 0; j < lg.length; j++) {
         h += "<tr><td>" + esc(when(lg[j].t)) + "</td><td>" + esc(lg[j].text) + '</td><td class="r">' + (lg[j].pl == null ? "—" : fmtQ(lg[j].pl, "USDT")) + "</td></tr>";
       }
@@ -1837,7 +1837,7 @@
   }
 
   function paneMethod() {
-    var h = '<div class="opt-note">Everything this desk does, in plain language. If a number on any tab cannot be traced to one of these paragraphs it should not be on the screen.</div>';
+    var h = ('<div class="opt-note">' + window.DLI18N.t("56-options.2a8e26ee1bfc") + '</div>');
     var i;
     /* the parity identity, computed live so it cannot rot */
     var g = parityGap(100, 100, 1, 0.05, 0.02, 0.2);
@@ -1851,7 +1851,7 @@
     h += '<div class="opt-method">';
     for (i = 0; i < METHOD.length; i++) h += '<div class="opt-mrow"><b>' + esc(METHOD[i][0]) + "</b><span>" + esc(METHOD[i][1]) + "</span></div>";
     h += "</div>";
-    h += '<div class="opt-sub">What is assumed, and what is measured</div><ul class="opt-assume">';
+    h += ('<div class="opt-sub">' + window.DLI18N.t("56-options.72575be9ba5c") + '</div><ul class="opt-assume">');
     for (i = 0; i < ASSUMPTIONS.length; i++) h += "<li>" + esc(ASSUMPTIONS[i]) + "</li>";
     h += "</ul>";
     return h;
@@ -1953,8 +1953,8 @@
     var el = null;
     try {
       el = C.open("dlOpt", {
-        title: "◉ Options",
-        sub: "model prices, a surface that is checked for arbitrage, and what a short option ties up",
+        title: window.DLI18N.t("56-options.3122bee4fbfc"),
+        sub: window.DLI18N.t("56-options.c2d9aa4026c7"),
         tabs: [["chain", "Chain"], ["surface", "Surface"], ["builder", "Builder"], ["positions", "Positions"], ["method", "Method"]],
         onTab: bodyFor
       }, tab || "chain");
