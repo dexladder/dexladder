@@ -315,15 +315,15 @@
      this desk does not report it, and that is deliberate.) */
 
   var SC = [
-    { id: "1.3.1", name: "Info and Relationships", level: "A", since: "2.0", what: "structure a screen reader can follow: every control has an accessible name, headings step one level at a time, and the page declares its landmarks" },
-    { id: "1.4.3", name: "Contrast (Minimum)", level: "AA", since: "2.0", what: "text against its resolved backdrop at 4.5:1, or 3:1 once the text is large" },
-    { id: "1.4.11", name: "Non-text Contrast", level: "AA", since: "2.1", what: "the visible boundary of a control against what is behind it, at 3:1" },
-    { id: "1.4.12", name: "Text Spacing", level: "AA", since: "2.1", what: "nothing is clipped when the reader forces the spec's line, letter, word and paragraph spacing" },
-    { id: "2.3.3", name: "Animation from Interactions", level: "AAA", since: "2.1", what: "motion started by an interaction can be switched off" },
-    { id: "2.4.7", name: "Focus Visible", level: "AA", since: "2.0", what: "the keyboard focus indicator is actually painted" },
-    { id: "2.4.11", name: "Focus Not Obscured (Minimum)", level: "AA", since: "2.2", what: "the focused control is not entirely hidden behind sticky or fixed furniture" },
-    { id: "2.5.8", name: "Target Size (Minimum)", level: "AA", since: "2.2", what: "a pointer target is at least 24 by 24 CSS pixels, or earns one of the spec's exceptions" },
-    { id: "4.1.2", name: "Name, Role, Value", level: "A", since: "2.0", what: "a role that exists, an aria reference that resolves, and nothing interactive hidden from the tree" }
+    { id: "1.3.1", name: "Info and Relationships", level: "A", since: "2.0", what: window.DLI18N.t("63-access.9f5985538242") },
+    { id: "1.4.3", name: "Contrast (Minimum)", level: "AA", since: "2.0", what: window.DLI18N.t("63-access.800913cd5940") },
+    { id: "1.4.11", name: "Non-text Contrast", level: "AA", since: "2.1", what: window.DLI18N.t("63-access.6be4a20d3ee0") },
+    { id: "1.4.12", name: "Text Spacing", level: "AA", since: "2.1", what: window.DLI18N.t("63-access.182458f4a583") },
+    { id: "2.3.3", name: "Animation from Interactions", level: "AAA", since: "2.1", what: window.DLI18N.t("63-access.34d95e4b7752") },
+    { id: "2.4.7", name: "Focus Visible", level: "AA", since: "2.0", what: window.DLI18N.t("63-access.9fadcb8cf0a9") },
+    { id: "2.4.11", name: "Focus Not Obscured (Minimum)", level: "AA", since: "2.2", what: window.DLI18N.t("63-access.8fc6b772f364") },
+    { id: "2.5.8", name: "Target Size (Minimum)", level: "AA", since: "2.2", what: window.DLI18N.t("63-access.c9b15f6bced1") },
+    { id: "4.1.2", name: "Name, Role, Value", level: "A", since: "2.0", what: window.DLI18N.t("63-access.cb19498d221d") }
   ];
 
   function scMeta(id) { var i; for (i = 0; i < SC.length; i++) if (SC[i].id === id) return SC[i]; return null; }
@@ -955,69 +955,69 @@
   var STR = {};
 
   STR.en = {
-    "ui.name": "Access",
-    "ui.sub": "what this screen measures against WCAG 2.2 AA, right now",
-    "tab.audit": "Audit",
-    "tab.display": "Display",
-    "tab.language": "Language",
-    "tab.method": "Method",
-    "audit.run": "Measure this screen",
-    "audit.again": "Measure it again",
-    "audit.idle": "Nothing measured yet. The button below walks the painted DOM behind this desk and reports what it finds, criterion by criterion.",
-    "audit.took": "{n} element checks in {ms} ms",
-    "audit.floor": "This is a floor, not a certificate.",
-    "sc.criterion": "Success criterion",
-    "sc.level": "Level",
-    "sc.added": "Added in",
-    "sc.checked": "Checked",
-    "sc.findings": "Findings",
-    "sc.new22": "new in WCAG 2.2",
-    "st.pass": "pass",
-    "st.fail": "fail",
-    "st.na": "not applicable",
-    "st.error": "could not run",
-    "find.selector": "Selector",
-    "find.show": "Show me",
-    "find.more": "and {n} more",
-    "disp.head": "How this app renders for you",
-    "disp.spacing": "Text spacing",
-    "disp.motion": "Reduced motion",
-    "disp.targets": "Larger targets",
-    "disp.contrast": "Higher contrast",
-    "disp.on": "on",
-    "disp.off": "off",
-    "disp.keyboard": "Keyboard",
-    "keys.key": "Key",
-    "keys.where": "Where it is bound",
-    "keys.sites": "Sites",
-    "keys.none": "No key comparison was found in the payload text.",
-    "lang.pick": "Language",
-    "lang.coverage": "Coverage",
-    "lang.declared": "Declared",
-    "lang.measured": "Measured",
-    "lang.strings": "Strings",
-    "lang.translated": "Translated",
-    "lang.chain": "Fallback chain",
-    "lang.mark": "Mark every key that fell back",
-    "lang.dir": "Writing direction",
-    "lang.ltr": "left to right",
-    "lang.rtl": "right to left",
-    "intl.number": "Number",
-    "intl.date": "Date",
-    "intl.rel": "Relative time",
-    "intl.currency": "Currency",
-    "method.head": "Method",
-    "method.assume": "What is assumed",
-    "oracle.head": "The contrast maths, against known values",
-    "oracle.pair": "Pair",
-    "oracle.expected": "Expected",
-    "oracle.measured": "Measured",
-    "common.close": "Close",
-    "common.elements": "elements",
-    "common.unknown": "unknown",
-    "common.none": "none",
-    "common.yes": "yes",
-    "common.no": "no"
+    "ui.name": window.DLI18N.t("63-access.ec5ba0abb717"),
+    "ui.sub": window.DLI18N.t("63-access.0bc5b0f3ff8e"),
+    "tab.audit": window.DLI18N.t("63-access.bb6aea287396"),
+    "tab.display": window.DLI18N.t("63-access.34e108c0896d"),
+    "tab.language": window.DLI18N.t("63-access.a4fe65264ef7"),
+    "tab.method": window.DLI18N.t("63-access.52a0f9b65b27"),
+    "audit.run": window.DLI18N.t("63-access.3c8189a95f3e"),
+    "audit.again": window.DLI18N.t("63-access.7bc3ba075c44"),
+    "audit.idle": window.DLI18N.t("63-access.a0aa76076835"),
+    "audit.took": window.DLI18N.t("63-access.bf36e553e10a"),
+    "audit.floor": window.DLI18N.t("63-access.879120641f33"),
+    "sc.criterion": window.DLI18N.t("63-access.4a5f72b82c0c"),
+    "sc.level": window.DLI18N.t("63-access.1709305c9fa9"),
+    "sc.added": window.DLI18N.t("63-access.275989f5e28e"),
+    "sc.checked": window.DLI18N.t("63-access.0efd92a33590"),
+    "sc.findings": window.DLI18N.t("63-access.e171c2ff25b5"),
+    "sc.new22": window.DLI18N.t("63-access.9de12726549e"),
+    "st.pass": window.DLI18N.t("63-access.d74ff0ee8da3"),
+    "st.fail": window.DLI18N.t("63-access.51280dabfbc8"),
+    "st.na": window.DLI18N.t("63-access.1bd86e06d963"),
+    "st.error": window.DLI18N.t("63-access.6d9973b2ef09"),
+    "find.selector": window.DLI18N.t("63-access.f02a172a3535"),
+    "find.show": window.DLI18N.t("63-access.b76c42cb4bf3"),
+    "find.more": window.DLI18N.t("63-access.827ab9506d94"),
+    "disp.head": window.DLI18N.t("63-access.0c64f3016797"),
+    "disp.spacing": window.DLI18N.t("63-access.48992b4025e6"),
+    "disp.motion": window.DLI18N.t("63-access.1fd516a54881"),
+    "disp.targets": window.DLI18N.t("63-access.0d034f6e2d25"),
+    "disp.contrast": window.DLI18N.t("63-access.9d69da969398"),
+    "disp.on": window.DLI18N.t("63-access.b8d31e852725"),
+    "disp.off": window.DLI18N.t("63-access.b4dc66dde806"),
+    "disp.keyboard": window.DLI18N.t("63-access.2316810a5de3"),
+    "keys.key": window.DLI18N.t("63-access.99a52df3ff3d"),
+    "keys.where": window.DLI18N.t("63-access.01c56e71f6df"),
+    "keys.sites": window.DLI18N.t("63-access.9d7690937436"),
+    "keys.none": window.DLI18N.t("63-access.d504e35573b9"),
+    "lang.pick": window.DLI18N.t("63-access.a4fe65264ef7"),
+    "lang.coverage": window.DLI18N.t("63-access.523487a5de21"),
+    "lang.declared": window.DLI18N.t("63-access.dc56dd2687a3"),
+    "lang.measured": window.DLI18N.t("63-access.9298c8f4b3ff"),
+    "lang.strings": window.DLI18N.t("63-access.31058086b35a"),
+    "lang.translated": window.DLI18N.t("63-access.abbc13c13e35"),
+    "lang.chain": window.DLI18N.t("63-access.a0a6ecf56058"),
+    "lang.mark": window.DLI18N.t("63-access.883ed6d693e7"),
+    "lang.dir": window.DLI18N.t("63-access.0935fd222194"),
+    "lang.ltr": window.DLI18N.t("63-access.7d852e658818"),
+    "lang.rtl": window.DLI18N.t("63-access.752fa095e782"),
+    "intl.number": window.DLI18N.t("63-access.bd82cf16699b"),
+    "intl.date": window.DLI18N.t("63-access.99c40ab40592"),
+    "intl.rel": window.DLI18N.t("63-access.e5fe302dbf75"),
+    "intl.currency": window.DLI18N.t("63-access.3ac1a9ec4fa7"),
+    "method.head": window.DLI18N.t("63-access.52a0f9b65b27"),
+    "method.assume": window.DLI18N.t("63-access.2d3d2a04ac44"),
+    "oracle.head": window.DLI18N.t("63-access.4b326511ce7f"),
+    "oracle.pair": window.DLI18N.t("63-access.989da04b0aaa"),
+    "oracle.expected": window.DLI18N.t("63-access.ca99b7f1b14e"),
+    "oracle.measured": window.DLI18N.t("63-access.9298c8f4b3ff"),
+    "common.close": window.DLI18N.t("63-access.7d9eb7acb13e"),
+    "common.elements": window.DLI18N.t("63-access.b0b17893a513"),
+    "common.unknown": window.DLI18N.t("63-access.b23a6a8439c0"),
+    "common.none": window.DLI18N.t("63-access.140bedbf9c3f"),
+    "common.yes": window.DLI18N.t("63-access.8a798890fe93"),
+    "common.no": window.DLI18N.t("63-access.9390298f3fb0")
   };
 
   STR.hi = {
@@ -1404,10 +1404,10 @@
 
     if (!LAST) {
       h += '<div class="dla-sub">' + esc(t("sc.criterion")) + "</div>";
-      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + esc(t("sc.criterion")) + "</th><th>" + esc(t("sc.level")) + "</th><th>" + esc(t("sc.added")) + "</th><th>What it asks</th></tr></thead><tbody>";
+      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + esc(t("sc.criterion")) + "</th><th>" + esc(t("sc.level")) + "</th><th>" + esc(t("sc.added")) + ("</th><th>" + window.DLI18N.t("63-access.8f24e465d1ca") + "</th></tr></thead><tbody>");
       var i;
       for (i = 0; i < SC.length; i++) {
-        h += "<tr><td><b>" + esc(SC[i].id) + "</b> " + esc(SC[i].name) + (SC[i].since === "2.2" ? ' <span class="dla-new">' + esc(t("sc.new22")) + "</span>" : "") + "</td><td>" + esc(SC[i].level) + "</td><td>WCAG " + esc(SC[i].since) + "</td><td>" + esc(SC[i].what) + "</td></tr>";
+        h += "<tr><td><b>" + esc(SC[i].id) + "</b> " + esc(SC[i].name) + (SC[i].since === "2.2" ? ' <span class="dla-new">' + esc(t("sc.new22")) + "</span>" : "") + "</td><td>" + esc(SC[i].level) + ("</td><td>" + window.DLI18N.t("63-access.3469085062d6")) + esc(SC[i].since) + "</td><td>" + esc(SC[i].what) + "</td></tr>";
       }
       h += "</tbody></table></div>";
       return h;
@@ -1438,13 +1438,13 @@
     h += '<span class="dla-status">' + esc(statusWord(r.status)) + "</span></div>";
     h += '<div class="dla-scwhat">' + esc(r.what) + "</div>";
     h += '<div class="dla-scmeta">' + esc(t("sc.checked")) + ": <b>" + esc(fmtNum(r.checked)) + "</b> · " + esc(t("sc.findings")) + ": <b>" + esc(fmtNum(r.count)) + "</b>";
-    if (r.extra && r.extra.unresolved) h += " · unresolved: <b>" + esc(fmtNum(r.extra.unresolved)) + "</b>";
-    if (r.extra && r.extra.exempt) h += " · exempt: <b>" + esc(fmtNum(r.extra.exempt)) + "</b>";
-    if (r.extra && r.extra.offscreen) h += " · off-screen: <b>" + esc(fmtNum(r.extra.offscreen)) + "</b>";
+    if (r.extra && r.extra.unresolved) h += (window.DLI18N.t("63-access.bbd71063c932") + "<b>") + esc(fmtNum(r.extra.unresolved)) + "</b>";
+    if (r.extra && r.extra.exempt) h += (window.DLI18N.t("63-access.4eb8f1670e86") + "<b>") + esc(fmtNum(r.extra.exempt)) + "</b>";
+    if (r.extra && r.extra.offscreen) h += (window.DLI18N.t("63-access.e6193b849272") + "<b>") + esc(fmtNum(r.extra.offscreen)) + "</b>";
     h += "</div>";
     if (r.note) h += '<div class="dla-scnote">' + esc(r.note) + "</div>";
     if (r.count) {
-      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + esc(t("find.selector")) + "</th><th>Why it fails</th><th></th></tr></thead><tbody>";
+      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + esc(t("find.selector")) + ("</th><th>" + window.DLI18N.t("63-access.89e72e95e670") + "</th><th></th></tr></thead><tbody>");
       var i, f, n = r.failures.length > 14 ? 14 : r.failures.length;
       for (i = 0; i < n; i++) {
         f = r.failures[i];
@@ -1459,7 +1459,7 @@
 
   function paneDisplay() {
     var p = prefs(), h = "";
-    h += '<div class="dla-note">' + esc(t("disp.head")) + ". Every switch here is page-wide, applies at once, and is remembered in the same state bucket the rest of the app uses. None of them needs a reload.</div>";
+    h += '<div class="dla-note">' + esc(t("disp.head")) + (window.DLI18N.t("63-access.d07716a4d6eb") + "</div>");
     h += '<div class="dla-togs">';
     h += tog("space", t("disp.spacing"), "SC 1.4.12 · line height 1.5, paragraph spacing 2em, letter spacing 0.12em, word spacing 0.16em — the specification's own override, applied to the whole app", p.space);
     h += tog("motion", t("disp.motion"), "Independent of the operating system. Animations and transitions collapse to a millisecond, and smooth scrolling goes away, whether or not your machine asks for it", p.motion);
@@ -1469,11 +1469,11 @@
     h += "</div>";
 
     var m = motionReduced();
-    h += '<div class="dla-note">Your operating system currently asks for reduced motion: <b>' + esc(m.os ? t("common.yes") : t("common.no")) + "</b>. This desk's own override is <b>" + esc(m.ours ? t("disp.on") : t("disp.off")) + "</b>.</div>";
+    h += ('<div class="dla-note">' + window.DLI18N.t("63-access.070d09dea806") + '<b>') + esc(m.os ? t("common.yes") : t("common.no")) + ("</b>" + window.DLI18N.t("63-access.db4100cfcb91") + "<b>") + esc(m.ours ? t("disp.on") : t("disp.off")) + "</b>.</div>";
 
     h += '<div class="dla-sub">' + esc(t("disp.keyboard")) + "</div>";
     var s = shortcuts();
-    h += '<div class="dla-note">Scanned out of ' + esc(fmtNum(s.chars)) + " characters of the payload's own inline script at the moment you opened this tab. Nothing below is typed by hand — remove a binding and it leaves this table by itself.</div>";
+    h += ('<div class="dla-note">' + window.DLI18N.t("63-access.6cb7b72378b5") + '') + esc(fmtNum(s.chars)) + (window.DLI18N.t("63-access.0a30a631dac9") + "</div>");
     if (!s.keys.length && !s.chords.length) h += '<div class="dl-empty">' + esc(t("keys.none")) + "</div>";
     else {
       h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + esc(t("keys.key")) + "</th><th>" + esc(t("keys.where")) + '</th><th class="r">' + esc(t("keys.sites")) + "</th></tr></thead><tbody>";
@@ -1482,14 +1482,14 @@
         h += "<tr><td><kbd>" + esc(s.keys[i].key) + "</kbd></td><td><code class=\"dla-sel\">" + esc(s.keys[i].context || "") + '</code></td><td class="r">' + esc(String(s.keys[i].sites)) + "</td></tr>";
       }
       for (i = 0; i < s.chords.length; i++) {
-        h += "<tr><td><kbd>" + esc(s.chords[i].key) + "</kbd></td><td>goes to <b>" + esc(s.chords[i].to) + "</b> (read out of the leader-key map)</td><td class=\"r\">1</td></tr>";
+        h += "<tr><td><kbd>" + esc(s.chords[i].key) + ("</kbd></td><td>" + window.DLI18N.t("63-access.cdfc10ddfafc") + "<b>") + esc(s.chords[i].to) + ("</b>" + window.DLI18N.t("63-access.d06c10a88cdc") + "</td><td class=\"r\">1</td></tr>");
       }
       for (i = 0; i < s.accesskeys.length; i++) {
         h += "<tr><td><kbd>" + esc(s.accesskeys[i].key) + "</kbd></td><td>" + esc(s.accesskeys[i].to) + "</td><td class=\"r\">1</td></tr>";
       }
       h += "</tbody></table></div>";
     }
-    h += '<div class="dla-note">A binding dispatched from a lookup table rather than from a comparison against the key is invisible to this scan. That is a limit of reading the source rather than the browser, and it is named here rather than papered over.</div>';
+    h += ('<div class="dla-note">' + window.DLI18N.t("63-access.8491ed7de439") + '</div>');
     return h;
   }
 
@@ -1502,7 +1502,7 @@
 
   function paneLang() {
     var cur = curLang(), h = "", i, L, cv;
-    h += '<div class="dla-note">This desk’s own chrome is translated. The app’s market data, article text and desk prose are not — so the language you pick here is set on this panel, not on the document, because telling a screen reader the whole page is Hindi when it is not would be worse than leaving it English.</div>';
+    h += ('<div class="dla-note">' + window.DLI18N.t("63-access.f24aa53fdce2") + '</div>');
     h += '<div class="dla-langs">';
     for (i = 0; i < LANGS.length; i++) {
       L = LANGS[i];
@@ -1524,25 +1524,25 @@
         '<td class="r' + (drift ? " dla-drift" : "") + '">' + esc(cv.declared == null ? "—" : cv.declared.toFixed(1) + "%") + (drift ? " ≠" : "") + "</td></tr>";
     }
     h += "</tbody></table></div>";
-    h += '<div class="dla-note">Measured is counted from the tables in this layer every time this tab renders. Declared is the constant the layer ships and the build gate checks. If the two ever disagree the declared cell is marked, because a coverage figure nobody re-counts is a coverage figure that is already wrong.</div>';
+    h += ('<div class="dla-note">' + window.DLI18N.t("63-access.dca2eaf3b96e") + '</div>');
 
     h += '<div class="dla-sub">' + esc(t("lang.chain")) + "</div>";
     var ch = chainFor(cur);
     h += '<div class="dla-chain">';
     for (i = 0; i < ch.length; i++) h += '<span class="dla-hop">' + esc(ch[i]) + "</span>" + (i < ch.length - 1 ? '<span class="dla-arrow">→</span>' : "");
     h += "</div>";
-    h += '<div class="dla-note">A request for a regional tag such as <code class="dla-sel">es-MX</code> falls to <code class="dla-sel">es</code>, then to English, and finally prints the key itself inside brackets. The last hop is deliberate: a missing string should look broken, not blank.</div>';
+    h += ('<div class="dla-note">' + window.DLI18N.t("63-access.538cbc966ce4") + '<code class="dla-sel">' + window.DLI18N.t("63-access.d8f9f1d71114") + '</code>' + window.DLI18N.t("63-access.4b0e73d1ea3c") + '<code class="dla-sel">' + window.DLI18N.t("63-access.c0bc1e08f974") + '</code>' + window.DLI18N.t("63-access.b08f674aebda") + '</div>');
 
     var miss = missingKeys(cur);
     h += '<div class="dla-row"><button class="dla-tog small" data-act="mark" aria-pressed="' + (marking() ? "true" : "false") + '"><span class="dla-togl">' + esc(t("lang.mark")) + '</span><span class="dla-togs2">' + esc(marking() ? t("disp.on") : t("disp.off")) + "</span></button></div>";
     if (miss.length) {
-      h += '<div class="dla-note">' + esc(fmtNum(miss.length)) + " of " + esc(fmtNum(Object.keys(STR.en).length)) + " keys have no entry in <b>" + esc(langMeta(cur).name) + "</b> and fall back. They are listed rather than hidden:</div>";
+      h += '<div class="dla-note">' + esc(fmtNum(miss.length)) + " of " + esc(fmtNum(Object.keys(STR.en).length)) + (window.DLI18N.t("63-access.6f94852d2a6d") + "<b>") + esc(langMeta(cur).name) + ("</b>" + window.DLI18N.t("63-access.2049c2e26ef9") + "</div>");
       h += '<div class="dla-keys">';
       for (i = 0; i < miss.length && i < 80; i++) h += '<code class="dla-sel">' + esc(miss[i]) + "</code>";
       h += "</div>";
     }
 
-    h += '<div class="dla-sub">Intl, in ' + esc(langMeta(cur).name) + "</div>";
+    h += ('<div class="dla-sub">' + window.DLI18N.t("63-access.61827df47443") + '') + esc(langMeta(cur).name) + "</div>";
     var now = C.now ? C.now() : 0;
     h += '<div class="dl-tblw"><table class="dl-tbl"><tbody>';
     h += "<tr><td>" + esc(t("intl.number")) + '</td><td class="r">' + esc(fmtNum(1234567.891, cur, { maximumFractionDigits: 2 })) + "</td></tr>";
@@ -1550,12 +1550,12 @@
     h += "<tr><td>" + esc(t("intl.date")) + '</td><td class="r">' + esc(fmtDate(now, cur)) + "</td></tr>";
     h += "<tr><td>" + esc(t("intl.rel")) + '</td><td class="r">' + esc(fmtRel(-3600000, cur)) + " · " + esc(fmtRel(172800000, cur)) + "</td></tr>";
     h += "</tbody></table></div>";
-    h += '<div class="dla-note">Every one of those is formatted by the platform’s own Intl in the chosen locale — there is no separator table, no month list and no currency symbol map in this layer. Arabic sets dir="rtl" on this panel, and every rule in this layer’s stylesheet is written with logical properties, so the layout flips without a single physical side being named.</div>';
+    h += ('<div class="dla-note">' + window.DLI18N.t("63-access.72b186f4a6e1") + '</div>');
     return h;
   }
 
   function paneMethod() {
-    var h = '<div class="dla-note">Everything this desk does, and the exact edge of what it can see. If a number on the Audit tab cannot be traced to a paragraph here, it should not be on the screen.</div>';
+    var h = ('<div class="dla-note">' + window.DLI18N.t("63-access.5ec794f201cf") + '</div>');
     var i;
     h += '<div class="dla-method">';
     for (i = 0; i < METHOD.length; i++) h += '<div class="dla-mrow"><b>' + esc(METHOD[i][0]) + "</b><span>" + esc(METHOD[i][1]) + "</span></div>";
@@ -1568,7 +1568,7 @@
       h += "<tr><td><code class=\"dla-sel\">" + esc(o[i].fg) + " on " + esc(o[i].bg) + "</code> — " + esc(o[i].note) + '</td><td class="r">' + esc(o[i].expected.toFixed(4)) + '</td><td class="r">' + esc(o[i].measured == null ? "—" : o[i].measured.toFixed(4)) + '</td><td class="r">' + (o[i].ok ? "✓" : "✗") + "</td></tr>";
     }
     h += "</tbody></table></div>";
-    h += '<div class="dla-note">These four are recomputed by this layer’s own contrast function every time this tab renders. The build gate recomputes the same four from the relative-luminance definition, independently, and fails if they drift.</div>';
+    h += ('<div class="dla-note">' + window.DLI18N.t("63-access.d25dc1a30481") + '</div>');
 
     h += '<div class="dla-sub">' + esc(t("method.assume")) + '</div><ul class="dla-assume">';
     for (i = 0; i < ASSUMPTIONS.length; i++) h += "<li>" + esc(ASSUMPTIONS[i]) + "</li>";
