@@ -695,7 +695,9 @@
   "42-rewind.6dccb27888d0": "Replay this market bar by bar on real history and trade it — equity curve, drawdown and a verdict against buy-and-hold. Hypothetical: your paper account is not touched.",
   "42-rewind.7d50e0068a60": "⏮ Rewind",
   "42-rewind.aab580ab9680": "BACKTEST",
-  "42-rewind.bdacdeb9ca34": "Open Rewind"
+  "42-rewind.bdacdeb9ca34": "Open Rewind",
+  "43-fork.7eb798a22cf2": "🧪 Local fork sandbox",
+  "43-fork.aa208563557d": "YOUR NODE"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);

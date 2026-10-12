@@ -86,10 +86,10 @@ window.DLFORK = (function () {
     var head = doc.createElement("div");
     head.className = "ph";
     var title = doc.createElement("b");
-    title.textContent = "🧪 Local fork sandbox";
+    title.textContent = window.DLI18N.t("43-fork.7eb798a22cf2");
     var tag = doc.createElement("span");
     tag.className = "tag";
-    tag.textContent = "YOUR NODE";
+    tag.textContent = window.DLI18N.t("43-fork.aa208563557d");
     head.appendChild(title);
     head.appendChild(tag);
     var body = doc.createElement("div");
