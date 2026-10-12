@@ -1892,7 +1892,47 @@
   "45-defi.fc2ac0b67884": "imbalanced deposit fee = f·n / (4(n−1))     ·     virtual price = D / LP supply",
   "46-dexchart.1f0d3448a4be": "range low",
   "46-dexchart.a7b291e437ff": "range high",
-  "47-footer.a22bd608ff67": "Data sources"
+  "47-footer.a22bd608ff67": "Data sources",
+  "48-vault.00aab080413c": "desk keys",
+  "48-vault.10d53f81b3e5": "Browser storage",
+  "48-vault.11cc91b5cc75": "A desk from before your last import (",
+  "48-vault.1d30974591cf": "Older v1 bundle — carries the capped state only, no archive.",
+  "48-vault.1dd8e2ceef42": " · signed ",
+  "48-vault.1eb79602411e": "this",
+  "48-vault.22bc49f99b55": "archive off",
+  "48-vault.328b0e78fab5": "export failed",
+  "48-vault.3838f3e3c0e2": " — this device becomes that desk.",
+  "48-vault.3d77d52cac0f": "sovereign key ",
+  "48-vault.3f4cee59b00d": "including a signing key",
+  "48-vault.3fb96660cf57": "Saved ",
+  "48-vault.43b7c75d56f0": "Journal",
+  "48-vault.4a15f34b8e5d": ") is still on this device. ",
+  "48-vault.5042fc3602a9": "Equity points",
+  "48-vault.55057d7e96a5": "Put it back",
+  "48-vault.570e973aa51d": "One signed file: every DexLadder setting on this browser, the full archive, and a SHA-256 checksum over the lot. ",
+  "48-vault.5d55c415e356": "Vault",
+  "48-vault.690945acf929": "Desk from ",
+  "48-vault.72e34eed796c": "Fills",
+  "48-vault.88418dccb7f0": " include my signing key — makes the other device ",
+  "48-vault.9f0b7d17fe74": " equity points — the full archive, not the 50-fill window",
+  "48-vault.a8295e08ff7a": "Series",
+  "48-vault.a8441e012daa": "SHA-256 ",
+  "48-vault.add5f763a297": "localStorage · ",
+  "48-vault.bdb86505f806": "Archived",
+  "48-vault.bfa7409f7646": "Verified.",
+  "48-vault.c375731e6de9": "… — checked before the signature on import. Your signing key is not in this file.",
+  "48-vault.ca607057318c": "Export Journal CSV",
+  "48-vault.dac837e8a1c5": "In the app",
+  "48-vault.de15effa1fc4": "Export desk",
+  "48-vault.e326817fe7d9": "Import desk",
+  "48-vault.e7c8c745cd9d": " desk. Leave off for a backup you might send.",
+  "48-vault.e95ebee50a73": "Replace my desk",
+  "48-vault.ecba99847275": "This replaces everything on this browser. ",
+  "48-vault.f44c67d54186": " — history is kept in full, past the 50-fill save window",
+  "48-vault.f62e9267d196": "Alerts",
+  "48-vault.f8e8a428e8c2": "Nothing leaves your device unless you send it.",
+  "48-vault.faa3207069b6": "archive on",
+  "48-vault.fd8e04a19044": "✓ exported "
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -19396,15 +19436,15 @@ window.DLFOOT = (function () {
 
   /* ---------------------------------------------------------- series */
   var SERIES = [
-    { id: 'txns', label: 'Fills', order: 'desc',
+    { id: 'txns', label: window.DLI18N.t("48-vault.72e34eed796c"), order: 'desc',
       get: function () { return liveArr('txns'); },
       key: function (r) { return [r && r.t, r && r.type, r && r.sym, r && r.amt].join('|'); },
       stamp: function (r) { return (r && +r.t) || 0; } },
-    { id: 'journal', label: 'Journal', order: 'desc',
+    { id: 'journal', label: window.DLI18N.t("48-vault.43b7c75d56f0"), order: 'desc',
       get: function () { return liveArr('journal'); },
       key: function (r) { return r && r.id != null ? 'id:' + r.id : (r && r.t != null ? 't:' + r.t : 'j:' + stable(r)); },
       stamp: function (r) { return (r && (+r.t || +r.created)) || 0; } },
-    { id: 'alerts', label: 'Alerts', order: 'desc',
+    { id: 'alerts', label: window.DLI18N.t("48-vault.f62e9267d196"), order: 'desc',
       get: function () { return liveArr('alerts'); },
       key: function (r) { return r && r.id != null ? 'id:' + r.id : 'a:' + stable(r); },
       stamp: function (r) { return (r && (+r.created || +r.t)) || 0; } }
@@ -19912,7 +19952,7 @@ window.DLFOOT = (function () {
       var d = SERIES[i], id = d.id;
       out.series[id] = { label: d.label, rows: (_cache[id] && _cache[id].rows.length) || 0, live: (d.get() || []).length };
     }
-    out.series[EQ_ID] = { label: 'Equity points', rows: (_cache[EQ_ID] && _cache[EQ_ID].rows.length) || 0, live: (liveEq() || []).length };
+    out.series[EQ_ID] = { label: window.DLI18N.t("48-vault.5042fc3602a9"), rows: (_cache[EQ_ID] && _cache[EQ_ID].rows.length) || 0, live: (liveEq() || []).length };
     var p = Promise.resolve(null);
     try {
       if (navigator.storage && navigator.storage.estimate) {
@@ -20064,29 +20104,29 @@ window.DLFOOT = (function () {
                      : 'not reported by this browser';
     var room = p.headroom === true ? 'room for more' : (p.headroom === false ? 'at this browser\'s limit' : 'headroom unknown');
     return '<div class="vault">' +
-      '<h3>Vault</h3>' +
+      ('<h3>' + window.DLI18N.t("48-vault.5d55c415e356") + '</h3>') +
       '<p class="vsub">' + (st.idb
-        ? '<span class="vok">archive on</span> — history is kept in full, past the 50-fill save window'
-        : '<span class="vbad">archive off</span> — ' + (st.connected
+        ? ('<span class="vok">' + window.DLI18N.t("48-vault.faa3207069b6") + '</span>' + window.DLI18N.t("48-vault.f44c67d54186") + '')
+        : ('<span class="vbad">' + window.DLI18N.t("48-vault.22bc49f99b55") + '</span> — ') + (st.connected
             ? 'this browser accepted the database but refuses to write to it, so only the capped window survives a reload'
             : 'this browser blocks IndexedDB, so only the capped window survives a reload')) +
       '</p>' +
-      '<table class="vtab"><thead><tr><th>Series</th><th class="vnum">In the app</th><th class="vnum">Archived</th></tr></thead><tbody>' + rows + '</tbody></table>' +
+      ('<table class="vtab"><thead><tr><th>' + window.DLI18N.t("48-vault.a8295e08ff7a") + '</th><th class="vnum">' + window.DLI18N.t("48-vault.dac837e8a1c5") + '</th><th class="vnum">' + window.DLI18N.t("48-vault.bdb86505f806") + '</th></tr></thead><tbody>') + rows + '</tbody></table>' +
       '<div class="vgrid">' +
-        '<div><b>' + kb(p.bytes) + '</b><span>localStorage · ' + esc(room) + '</span></div>' +
-        '<div><b>' + st.local.keys + '</b><span>desk keys</span></div>' +
-        '<div style="grid-column:1/-1"><b>Browser storage</b><span>' + esc(q) + '</span></div>' +
+        '<div><b>' + kb(p.bytes) + ('</b><span>' + window.DLI18N.t("48-vault.add5f763a297") + '') + esc(room) + '</span></div>' +
+        '<div><b>' + st.local.keys + ('</b><span>' + window.DLI18N.t("48-vault.00aab080413c") + '</span></div>') +
+        ('<div style="grid-column:1/-1"><b>' + window.DLI18N.t("48-vault.10d53f81b3e5") + '</b><span>') + esc(q) + '</span></div>' +
       '</div>' +
-      '<label class="vchk"><input type="checkbox" id="vSov"> include my signing key — makes the other device <i>this</i> desk. Leave off for a backup you might send.</label>' +
+      ('<label class="vchk"><input type="checkbox" id="vSov">' + window.DLI18N.t("48-vault.88418dccb7f0") + '<i>' + window.DLI18N.t("48-vault.1eb79602411e") + '</i>' + window.DLI18N.t("48-vault.e7c8c745cd9d") + '</label>') +
       '<div class="vbtns">' +
-        '<button type="button" id="vExp" class="vprim">Export desk</button>' +
-        '<button type="button" id="vImp">Import desk</button>' +
-        '<button type="button" id="vCsv">Export Journal CSV</button>' +
+        ('<button type="button" id="vExp" class="vprim">' + window.DLI18N.t("48-vault.de15effa1fc4") + '</button>') +
+        ('<button type="button" id="vImp">' + window.DLI18N.t("48-vault.e326817fe7d9") + '</button>') +
+        ('<button type="button" id="vCsv">' + window.DLI18N.t("48-vault.ca607057318c") + '</button>') +
         '<input type="file" id="vFile" accept=".cbundle,.json,application/json" hidden>' +
       '</div>' +
-      '<p class="vfoot">One signed file: every DexLadder setting on this browser, the full archive, and a SHA-256 checksum over the lot. ' +
+      ('<p class="vfoot">' + window.DLI18N.t("48-vault.570e973aa51d") + '') +
         (st.signed ? 'Signed with your own secp256k1 key — anyone can re-verify it, no server, no account. ' : '') +
-        'Nothing leaves your device unless you send it.</p>' +
+        ('' + window.DLI18N.t("48-vault.f8e8a428e8c2") + '</p>') +
       '<div id="vUndo"></div>' +
       '<div id="vOut" class="vout" hidden></div>' +
     '</div>';
@@ -20107,8 +20147,8 @@ window.DLFOOT = (function () {
       var host = $('vUndo');
       if (!host || !r || !r.bundle) return;
       var when = new Date(r.at || Date.now()).toISOString().replace('T', ' ').slice(0, 16);
-      host.innerHTML = '<p class="vundo">A desk from before your last import (' + esc(when) +
-        ') is still on this device. <button type="button" id="vUndoGo">Put it back</button></p>';
+      host.innerHTML = ('<p class="vundo">' + window.DLI18N.t("48-vault.11cc91b5cc75") + '') + esc(when) +
+        ('' + window.DLI18N.t("48-vault.4a15f34b8e5d") + '<button type="button" id="vUndoGo">' + window.DLI18N.t("48-vault.55057d7e96a5") + '</button></p>');
       var u = $('vUndoGo');
       if (u) u.addEventListener('click', function () {
         u.disabled = true; out('', 'Restoring the earlier desk…');
@@ -20126,11 +20166,11 @@ window.DLFOOT = (function () {
       download({ sovereign: !!($('vSov') && $('vSov').checked) }).then(function (r) {
         exp.disabled = false;
         var b = r.bundle, c = b.counts || {};
-        out('vok', 'Saved <b>' + esc(r.name) + '</b> · ' + kb(r.bytes) +
+        out('vok', ('' + window.DLI18N.t("48-vault.3fb96660cf57") + '<b>') + esc(r.name) + '</b> · ' + kb(r.bytes) +
           '<br>' + (c.txns || 0) + ' fills · ' + (c.journal || 0) + ' journal · ' +
           (c.alerts || 0) + ' alerts · ' + (c.equity || 0) + ' equity points' +
-          '<br>SHA-256 <code>' + esc(String((b.checksum && b.checksum.value) || '—').slice(0, 16)) + '…</code>' +
-          (b.sig ? ' · signed <code>' + esc(String(b.pub.x).slice(0, 12)) + '…</code>' : ''));
+          ('<br>' + window.DLI18N.t("48-vault.a8441e012daa") + '<code>') + esc(String((b.checksum && b.checksum.value) || '—').slice(0, 16)) + '…</code>' +
+          (b.sig ? ('' + window.DLI18N.t("48-vault.1dd8e2ceef42") + '<code>') + esc(String(b.pub.x).slice(0, 12)) + '…</code>' : ''));
       })['catch'](function (e) {
         exp.disabled = false; out('vbad', esc((e && e.message) || 'export failed'));
       });
@@ -20146,16 +20186,16 @@ window.DLFOOT = (function () {
             if (!v.ok) { out('vbad', 'Rejected: ' + esc(v.why)); return; }
             var c = b.counts || {};
             var when = esc(String(b.issuedAt || '').replace('T', ' ').slice(0, 16));
-            out('', '<b>Verified.</b>' + (v.weak ? ' <i>' + esc(v.weak) + '</i>' : '') +
-              '<br>Desk from ' + when + ' · ' + esc(b.app || '') +
+            out('', ('<b>' + window.DLI18N.t("48-vault.bfa7409f7646") + '</b>') + (v.weak ? ' <i>' + esc(v.weak) + '</i>' : '') +
+              ('<br>' + window.DLI18N.t("48-vault.690945acf929") + '') + when + ' · ' + esc(b.app || '') +
               (v.v2
                 ? '<br>' + (c.txns || 0) + ' fills · ' + (c.journal || 0) + ' journal · ' +
                   (c.alerts || 0) + ' alerts · ' + (c.equity || 0) + ' equity points' +
                   '<br>' + Object.keys(b.keys || {}).length + ' desk keys' +
-                  (b.keys && b.keys[SOV_KEY] ? ' <b>including a signing key</b> — this device becomes that desk.' : '')
-                : '<br>Older v1 bundle — carries the capped state only, no archive.') +
-              '<br><br>This replaces everything on this browser. ' +
-              '<button type="button" id="vGo" class="vprim">Replace my desk</button>');
+                  (b.keys && b.keys[SOV_KEY] ? (' <b>' + window.DLI18N.t("48-vault.3f4cee59b00d") + '</b>' + window.DLI18N.t("48-vault.3838f3e3c0e2") + '') : '')
+                : ('<br>' + window.DLI18N.t("48-vault.1d30974591cf") + '')) +
+              ('<br><br>' + window.DLI18N.t("48-vault.ecba99847275") + '') +
+              ('<button type="button" id="vGo" class="vprim">' + window.DLI18N.t("48-vault.e95ebee50a73") + '</button>'));
             var go = (root || document).querySelector('#vGo');
             if (go) go.addEventListener('click', function () {
               go.disabled = true; out('', 'Writing…');
@@ -20208,13 +20248,13 @@ window.DLFOOT = (function () {
             download({ sovereign: false }).then(function (out) {
               if (!res) return;
               var b = out.bundle, c = b.counts || {};
-              res.innerHTML = '<span class="ok">✓ exported ' + esc(out.name) + '</span>' +
+              res.innerHTML = ('<span class="ok">' + window.DLI18N.t("48-vault.fd8e04a19044") + '') + esc(out.name) + '</span>' +
                 '<div class="hash">' + (c.txns || 0) + ' fills · ' + (c.journal || 0) + ' journal · ' +
-                (c.alerts || 0) + ' alerts · ' + (c.equity || 0) + ' equity points — the full archive, not the 50-fill window</div>' +
-                (b.sig ? '<div class="hash">sovereign key ' + esc(String(b.pub.x).slice(0, 22)) + '… · sig ' + esc(String(b.sig.r).slice(0, 16)) + '…</div>' : '') +
-                '<div class="hash" style="color:var(--faint,#66707E)">SHA-256 ' + esc(String((b.checksum && b.checksum.value) || '').slice(0, 16)) + '… — checked before the signature on import. Your signing key is not in this file.</div>';
+                (c.alerts || 0) + ' alerts · ' + (c.equity || 0) + ('' + window.DLI18N.t("48-vault.9f0b7d17fe74") + '</div>') +
+                (b.sig ? ('<div class="hash">' + window.DLI18N.t("48-vault.3d77d52cac0f") + '') + esc(String(b.pub.x).slice(0, 22)) + '… · sig ' + esc(String(b.sig.r).slice(0, 16)) + '…</div>' : '') +
+                ('<div class="hash" style="color:var(--faint,#66707E)">' + window.DLI18N.t("48-vault.a8441e012daa") + '') + esc(String((b.checksum && b.checksum.value) || '').slice(0, 16)) + ('' + window.DLI18N.t("48-vault.c375731e6de9") + '</div>');
             })['catch'](function () {
-              if (res) res.innerHTML = '<span class="bad">export failed</span>';
+              if (res) res.innerHTML = ('<span class="bad">' + window.DLI18N.t("48-vault.328b0e78fab5") + '</span>');
             });
           });
         } catch (e) {}
