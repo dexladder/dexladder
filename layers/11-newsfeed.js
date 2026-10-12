@@ -250,7 +250,7 @@ window.DLNEWSX = (function () {
           var note = document.getElementById("newsNote"), b = bridgeLabel();
           if (note && b && typeof newsCache !== "undefined" && newsCache.length &&
               note.innerHTML.indexOf("live headlines") >= 0 && note.innerHTML.indexOf("via ") < 0) {
-            note.innerHTML += ' <span class="dot"></span> via ' + b;
+            note.innerHTML += (' <span class="dot"></span>' + window.DLI18N.t("11-newsfeed.d57cda15bac6") + '') + b;
           }
         } catch (e) {}
         return r;
