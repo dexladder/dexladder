@@ -116,3 +116,9 @@ Export your state from within the app. The result is a signed bundle: a file you
 ---
 
 *Don't trust. Verify.*
+
+### Hash shown by the running app
+
+Trust Center shows a SHA-256 and copies it without extra whitespace. For a controlled page, the service worker witnesses the exact navigation response bytes and answers by document client ID. It does not substitute a possibly stale URL cache entry or the worker's own build lock. First visits without a controlling worker capture the served copy near boot. If an older worker cannot provide a navigation witness, the app shows verification unavailable until its update is activated and the page reloaded.
+
+`node test/gate-running-hash.js dist/index.html` exercises a returning browser with a deliberately stale URL cache entry and checks the navigation witness and displayed hash against the delivered build.

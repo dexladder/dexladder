@@ -24,7 +24,7 @@ fi
 [ -f test/gate-defi.js ] && { node test/gate-defi.js "$F" > "$OUT/gate-defi.txt" 2>&1; r=$?; printf '%-22s %s (exit %s)\n' gate-defi "$(tail -n 1 "$OUT/gate-defi.txt")" "$r"; [ $r = 0 ] || fail=1; }
 [ -f test/gate-sor.js ] && { node test/gate-sor.js "$F" > "$OUT/gate-sor.txt" 2>&1; r=$?; printf '%-22s %s (exit %s)\n' gate-sor "$(tail -n 1 "$OUT/gate-sor.txt")" "$r"; [ $r = 0 ] || fail=1; }
 [ -f test/gate-news-api.js ] && { node test/gate-news-api.js > "$OUT/gate-news-api.txt" 2>&1; r=$?; printf '%-22s %s (exit %s)\n' gate-news-api "$(tail -n 1 "$OUT/gate-news-api.txt")" "$r"; [ $r = 0 ] || fail=1; }
-for g in gate-aria gate-enhancements gate154 gate155 gate-fork gate-contrast gate-e gate-render-contrast gate-rhythm gate-voice; do
+for g in gate-aria gate-enhancements gate-running-hash gate154 gate155 gate-fork gate-contrast gate-e gate-render-contrast gate-rhythm gate-voice; do
   node "test/$g.js" "$F" > "$OUT/$g.txt" 2>&1; r=$?
   printf '%-22s %s (exit %s)\n' "$g" "$(grep -E 'passed|failed' "$OUT/$g.txt" | tail -n 1 | sed 's/^ *//')" "$r"
   [ $r = 0 ] || fail=1
