@@ -2302,7 +2302,177 @@
   "56-options.ee12266b32f6": " points negative",
   "56-options.ef045bfe83f0": "out-of-the-money call and put. Cheaper than the straddle and it needs a bigger move.",
   "56-options.f8cf83a76a98": "What",
-  "56-options.fbebc603cd94": "fails, as it should (butterfly arbitrage at k="
+  "56-options.fbebc603cd94": "fails, as it should (butterfly arbitrage at k=",
+  "57-chains.001974b148ba": "The claim is assumed true unless someone disputes it inside the window — what must exist is at least one honest watcher with the capital and the will to post a bond in time.",
+  "57-chains.041bb769152c": "The OP-stack Ecotone L1 cost formula, and Arbitrum Nitro's poster-gas accounting through ArbGasInfo.",
+  "57-chains.046ea881b437": "Stuck message",
+  "57-chains.058460d7b373": "Capacity limit reached. Inventory ",
+  "57-chains.082a4e41604f": "% utilisation (modelled)",
+  "57-chains.0ae04571c018": " and each initialised tick stores feeGrowthOutside, flipping it to global minus itself on every crossing. For a position over ticks ",
+  "57-chains.0b0c4c134a92": "All-in / unit",
+  "57-chains.0d402749749f": "mid ",
+  "57-chains.0dc766e9854c": "L1 base fee ",
+  "57-chains.0fe95d25476a": "tick spacing",
+  "57-chains.11973e83c0c4": "Destination slippage",
+  "57-chains.11e221bd1b7f": "verdict",
+  "57-chains.135ac9cd0705": "fee growth",
+  "57-chains.140bedbf9c3f": "none",
+  "57-chains.18bd54c3ff1e": "Uniswap v3 whitepaper, equations 6.29 and 6.30 (amounts from liquidity), and v3-core TickMath / SwapMath / Tick.sol for the tick space, computeSwapStep and the fee-growth identity.",
+  "57-chains.1af59d104c06": "impact, fee excluded",
+  "57-chains.1e48cdb3f514": " gas whether it attests to one transaction or a hundred thousand, so cost per transaction falls as 1/batchSize toward an asymptote of L2 execution plus your own state diff.",
+  "57-chains.1ed26696bbce": "of which fee",
+  "57-chains.1ee293f5407d": " ticks",
+  "57-chains.1fe1d7cc7511": "EIP-4844 for fake_exponential, MIN_BASE_FEE_PER_BLOB_GAS = 1 wei, the Cancun update fraction 3338477 and 131072 blob gas per blob.",
+  "57-chains.26ad9cb2232d": "active liquidity L",
+  "57-chains.27c904ae676a": " gwei",
+  "57-chains.2861f9a0d8c9": " — the modelled ladder ran out ",
+  "57-chains.2b7f6db41054": "modelled",
+  "57-chains.2bc66281b1d7": "Solana tick arrays.",
+  "57-chains.2cd76f8096e5": "biggest move in one tx",
+  "57-chains.31c8bef4ec00": " has to wait for the canonical route, which is the row above it in time and below it in cost.",
+  "57-chains.3309a92d4100": "The trust column is a ",
+  "57-chains.33b93476cf59": "Time",
+  "57-chains.3472f0fb0e4f": "The blob-versus-calldata branch.",
+  "57-chains.3892e10346fd": "Bridge",
+  "57-chains.397dbf5208d4": " A verifier call is ",
+  "57-chains.3a13ffc026cc": "All-in per unit is the whole trip divided by what actually arrives: the multi-tick swap, its fee, the gas on the destination chain under that chain's own fee model, and the bridge fee to get the funds there. ",
+  "57-chains.41d430783542": "⛓ Cross-chain",
+  "57-chains.424e985e03fa": "Expected cost",
+  "57-chains.44cbd3050872": " Both scalar terms are in the Ecotone formula at once and the batcher's choice shows up as which one dominates. Right now the ",
+  "57-chains.45490720cb12": "price to",
+  "57-chains.45e18b453c37": "Everything this desk does, in plain language. If a number anywhere on it cannot be traced to one of these paragraphs, it should not be on the screen.",
+  "57-chains.473b570c8c68": "cost per tx",
+  "57-chains.47a0f9f3aad8": "optimistically verified",
+  "57-chains.484fb1f717ed": "The funds are already on this chain, so nothing outside it has to be honest — only the chain's own consensus and the pool contract.",
+  "57-chains.48f0a9d8199b": "L after",
+  "57-chains.49a6ddf9a439": "from ",
+  "57-chains.4a99bc8e4c18": "The tick liquidity distribution below is ",
+  "57-chains.4c8c4e69383d": ": every sqrt price, every amount, every crossing and every fee-growth figure follows from the published formulas with no fudge factor. This is the part of the build that 53-sor.js says it does not have.",
+  "57-chains.5033c4a97f0c": "fee growth global",
+  "57-chains.52195e8616df": "Swap fee",
+  "57-chains.55109bdb7d84": "tick 1.0001^tick check",
+  "57-chains.5537ff532f5f": "The floor was breached, or the destination call reverted for good, and the bridge returns the principal on the source chain instead. This is the branch nobody quotes.",
+  "57-chains.55a4bc5be68e": "tick",
+  "57-chains.55be74d0b88b": "ladder seed (FNV)",
+  "57-chains.55f4631ef62e": "The tick liquidity distribution is modelled; the arithmetic over it is exact. Gas, blob and priority prices are the app's own signals and are named per row. No bridge and no L2 is queried live in this build. The only real-chain row is the fork node when connected. Full detail on the Method tab.",
+  "57-chains.5698d89d432b": "value in the ladder",
+  "57-chains.57d246ec2057": "input offered",
+  "57-chains.57f0c2a6e1f3": "price moved",
+  "57-chains.582967534d0f": "in",
+  "57-chains.58395e49597b": "The proof does not care how many of you there are.",
+  "57-chains.58a6828b0a67": "No gas auction, and a hard wall instead.",
+  "57-chains.59d582d63a34": "natively verified",
+  "57-chains.5fc38085acce": "One swap, the fee split into the components that actually produce it. Every line is computed from the chain's published formula — nothing here is a round number someone typed in.",
+  "57-chains.606d5a12a962": "sqrtPrice",
+  "57-chains.61e2f6e9a9e3": "risk statement, not a rating",
+  "57-chains.630ef00b7c4f": "Side",
+  "57-chains.641b3acc7139": "Arithmetic",
+  "57-chains.642baf0f3837": " (computed from excess blob gas ",
+  "57-chains.6684d4da0329": "The walk — ",
+  "57-chains.673d8aa03113": "Orca Whirlpool's tick-array layout: 88 ticks per array, at most 3 arrays per swap instruction.",
+  "57-chains.683b531f41ec": "price",
+  "57-chains.68c00d509326": " further steps are not printed; the totals below are over all of them.",
+  "57-chains.6b6a15ed68f5": " Fees are not held by the pool, they are owed to whichever positions were in range when they were earned, so the pool tracks growth ",
+  "57-chains.6f9a1a1bd5bf": ". L2 base fees are per-chain modelling constants, named in each row.",
+  "57-chains.7031edbcf9c4": "Failure",
+  "57-chains.706bb10a27d8": "Blob market level",
+  "57-chains.710d2a059233": "The trust taxonomy — natively / externally / optimistically / locally verified — is the interoperability-trilemma one, from Connext's Arjun Bhuptani.",
+  "57-chains.722e4cd8d122": "would revert",
+  "57-chains.725669373237": "how it is computed",
+  "57-chains.72575be9ba5c": "What is assumed, and what is measured",
+  "57-chains.738433f1c5db": "There is no canonical bridge on this pair, so the two canonical rows are absent rather than approximated. A canonical bridge only exists between a rollup and the chain it settles to: each verifies the other because one is derived from the other. Ethereum and Solana do not verify each other at all, so every route between them is somebody's promise — an m-of-n validator set, an LP fronting inventory, or a counterparty behind a timelock. That is the honest statement, and it is the reason the trust column exists.",
+  "57-chains.7479cd75450d": "externally verified (m-of-n)",
+  "57-chains.762069bc07a6": "out",
+  "57-chains.762f6ad03561": "typical Whirlpool tier",
+  "57-chains.7978a162b0c0": " term is larger. The two are equal when the blob base fee reaches ",
+  "57-chains.7af05b5899e9": "The destination chain verifies the source chain's state itself, in a contract, with no outside party — what must hold is the source chain's consensus and the bridge contract's code.",
+  "57-chains.7cb41bcb41d1": " wei, which is float noise and not a fudge.",
+  "57-chains.7ea8307398ef": "Remedy",
+  "57-chains.8044aae1f868": "how",
+  "57-chains.813ce0d50cd4": "vs asymptote",
+  "57-chains.81ab7b836539": "The refund path",
+  "57-chains.81af5f06390e": " — this order travels ",
+  "57-chains.82755591f824": "Destination chain",
+  "57-chains.8570a2e1669f": "Part",
+  "57-chains.8acc2801f8ff": ", of which only ",
+  "57-chains.8d0888c125ab": "The mechanisms that exist for this pair, priced separately, with the trust statement beside each one and the four failure modes underneath. A bridge quoted only on its happy path is quoted wrong.",
+  "57-chains.8d5c9a92f0f4": "Quote it on every chain",
+  "57-chains.9131e0ac0d79": "Abramowitz and Stegun 7.1.26 for the error function used in the slippage-breach probability.",
+  "57-chains.919028672533": "What goes wrong, and what it costs — for ",
+  "57-chains.95d924a02c6d": "unfilled",
+  "57-chains.961c08b8d769": "Read the first row: on a 1-spacing stable pool a swap cannot move the price more than ",
+  "57-chains.97026a21eea1": "What would actually go wrong",
+  "57-chains.971b3bc07e0e": " short. The shortfall is named rather than quietly dropped.",
+  "57-chains.97228edc3a8b": ". There is no ordering in it: a natively verified route can still be slow enough to be the wrong answer, and an m-of-n route can be the right one for a size where a week of challenge window costs more than the counterparty risk. What the column gives you is the sentence you would have to be comfortable saying out loud before you send.",
+  "57-chains.9834a14ab9bc": "partial",
+  "57-chains.9d58a1326994": " ticks crossed",
+  "57-chains.9fc2bf7d7dd5": "L in this step",
+  "57-chains.a16fb284696b": ". That is the three-term identity from Uniswap v3 core, Tick.sol — and it is why a concentrated position earns more per dollar exactly where it also carries more inventory risk.",
+  "57-chains.a26cdf3a6e70": "USD",
+  "57-chains.a4130d7d2c3a": "Rank",
+  "57-chains.a5ba3247d133": "Nothing to walk for that chain this session.",
+  "57-chains.a9ef49ae8f1a": " Where the wall actually bites is the TIGHT tiers, and the same order is fine on one and impossible on another purely because of the spacing:",
+  "57-chains.ac640485deab": "sqrtPriceX96",
+  "57-chains.acb75757818d": "tick moved",
+  "57-chains.adc74704d65d": "Route",
+  "57-chains.ade9248e0132": "Trust",
+  "57-chains.ae3ea68e53c7": "The identity Nitro hides.",
+  "57-chains.afeccd7a4b97": "sum of feeAmount / L per step",
+  "57-chains.afed41563b04": "Time and trust are printed beside the ranking and are never folded into it.",
+  "57-chains.b25ec7c34727": "The same trade on six chains — real tick math, the fee split that produces it, and who has to be honest for it to arrive",
+  "57-chains.b2faf4ab8101": "crossed",
+  "57-chains.b47c9e18c39a": ") · blob base fee ",
+  "57-chains.b80cdaae9b32": "fee",
+  "57-chains.bc9d7b1f053f": "Where each fee comes from",
+  "57-chains.bcc0c5118350": " tx",
+  "57-chains.bea0a2d63b52": "The destination execution was paid for at source-time prices with a buffer. The destination base fee moved past it, the call reverted on gas, and the funds are sitting in the bridge's escrow.",
+  "57-chains.c1766b75ac9f": " wei",
+  "57-chains.c17ba547e1ee": "Slippage tolerance",
+  "57-chains.c3bc45ac352f": "share",
+  "57-chains.c6a5d9f59255": "L start / end",
+  "57-chains.c8f386f917ce": "Insufficient destination gas",
+  "57-chains.c9b3c38247f7": "Total",
+  "57-chains.c9c5663114c7": " of this transaction's fee.",
+  "57-chains.ca34670e641e": "ticks in 3 arrays",
+  "57-chains.caa608ef0c6d": "locally verified",
+  "57-chains.caf85b0888d7": "Sources",
+  "57-chains.cc21848f2b9b": "The worked liquidity example — price 5000, range 4545 to 5500, L = 1519.437308 from the base side and 1517.882344 from the quote side — is from the Uniswap v3 development book, and the gate re-derives both independently.",
+  "57-chains.ccf58b5335d1": "net into the curve",
+  "57-chains.cdcf65b93cbf": "per unit of liquidity",
+  "57-chains.ce54f0e22dbb": "Component",
+  "57-chains.d17a0c588ea8": " gas",
+  "57-chains.d1f23f0d1361": "Impact",
+  "57-chains.d2bd91c085c8": "batch size",
+  "57-chains.d37b28955914": " — the fast bridge could only front ",
+  "57-chains.d4daf35dab23": "An outside validator set signs the transfer — m of n of them must stay honest, and any m that collude can mint what was never burned.",
+  "57-chains.d673e80d4cd2": "Carries",
+  "57-chains.da9982296fed": "no bridge",
+  "57-chains.dae0896cbc2c": "Chain",
+  "57-chains.db3908f2fb57": " for this swap",
+  "57-chains.dd42cf5f8cb8": "% move) per swap instruction.",
+  "57-chains.dd98ba7a8012": " There is no honest weight between a seven-day withdrawal and a ninety-second one, and inventing one would hide the only decision on this table that is actually yours.",
+  "57-chains.ddcfd0f0be09": "Only you and your counterparty can affect the outcome — nobody can take the funds, but the counterparty can strand them until the timelock expires and you pay the gas to unwind.",
+  "57-chains.e0382a0130bd": "Odds",
+  "57-chains.e0aaa0c92aad": "You were quoted at source time and you execute after the transit window. Over that window the price moves, and if it moves past your minimum-out the destination swap reverts rather than filling badly.",
+  "57-chains.e0ee8bb50685": "output",
+  "57-chains.e0fe5064c2d0": "input consumed",
+  "57-chains.e13accbf4b3b": "The source burn or lock happened and the attestation exists, but no relayer executed it on the destination. Nothing is lost; nothing has arrived either.",
+  "57-chains.e23a445d0fa7": "Gas",
+  "57-chains.e60a60bae9aa": ". The arithmetic over it is ",
+  "57-chains.e6ce17e2c5b3": "this order needs",
+  "57-chains.ea16091308f7": "Fee growth inside a range.",
+  "57-chains.ec2c08a6ad1b": "Trust — what must be honest",
+  "57-chains.ee935ba6b377": "price from",
+  "57-chains.f04f53848610": "Chain for the tick walk",
+  "57-chains.f13024272c38": "Pool",
+  "57-chains.f1d367d2b83b": "% in a single transaction, whatever it is willing to pay. That is not a fee, it is a ceiling, and it is the single most important difference between executing size here and executing it on an EVM chain — where the same order is merely expensive.",
+  "57-chains.f28779674971": "Enter a size greater than zero.",
+  "57-chains.f6ef0f7a086d": " The receipt shows ",
+  "57-chains.f842c3e1858d": "Fee",
+  "57-chains.f92964ba4034": "Source chain",
+  "57-chains.f9e52d270eb3": "vs mid",
+  "57-chains.fa79d4746c21": "exact",
+  "57-chains.fcde2b2edba5": "bar"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -37073,26 +37243,26 @@ window.DXSCRIPTUI = (function () {
      This is a RISK STATEMENT, not a rating: there is no ordering here. */
   var TRUST = {
     native: {
-      key: "native", label: "natively verified",
-      one: "The destination chain verifies the source chain's state itself, in a contract, with no outside party — what must hold is the source chain's consensus and the bridge contract's code."
+      key: "native", label: window.DLI18N.t("57-chains.59d582d63a34"),
+      one: window.DLI18N.t("57-chains.7af05b5899e9")
     },
     external: {
-      key: "external", label: "externally verified (m-of-n)",
-      one: "An outside validator set signs the transfer — m of n of them must stay honest, and any m that collude can mint what was never burned."
+      key: "external", label: window.DLI18N.t("57-chains.7479cd75450d"),
+      one: window.DLI18N.t("57-chains.d4daf35dab23")
     },
     optimistic: {
-      key: "optimistic", label: "optimistically verified",
-      one: "The claim is assumed true unless someone disputes it inside the window — what must exist is at least one honest watcher with the capital and the will to post a bond in time."
+      key: "optimistic", label: window.DLI18N.t("57-chains.47a0f9f3aad8"),
+      one: window.DLI18N.t("57-chains.001974b148ba")
     },
     local: {
-      key: "local", label: "locally verified",
-      one: "Only you and your counterparty can affect the outcome — nobody can take the funds, but the counterparty can strand them until the timelock expires and you pay the gas to unwind."
+      key: "local", label: window.DLI18N.t("57-chains.caa608ef0c6d"),
+      one: window.DLI18N.t("57-chains.ddcfd0f0be09")
     },
     /* not a fifth kind of bridge — the absence of one. Kept separate so the
        taxonomy above stays the four-way taxonomy it is. */
     none: {
-      key: "none", label: "no bridge",
-      one: "The funds are already on this chain, so nothing outside it has to be honest — only the chain's own consensus and the pool contract."
+      key: "none", label: window.DLI18N.t("57-chains.da9982296fed"),
+      one: window.DLI18N.t("57-chains.484fb1f717ed")
     }
   };
 
@@ -37186,8 +37356,8 @@ window.DXSCRIPTUI = (function () {
     var stuckRemedy = dstGas;
     out.push({
       id: "stuck",
-      label: "Stuck message",
-      what: "The source burn or lock happened and the attestation exists, but no relayer executed it on the destination. Nothing is lost; nothing has arrived either.",
+      label: window.DLI18N.t("57-chains.046ea881b437"),
+      what: window.DLI18N.t("57-chains.e13accbf4b3b"),
       probability: RELAY_FAIL_RATE,
       sunkUSD: srcGas + bridgeFee,
       remedy: "Call the destination executor yourself against the same attestation. Anyone can, which is the point of the design.",
@@ -37202,8 +37372,8 @@ window.DXSCRIPTUI = (function () {
     var shortfall = Math.max(0, required - quoted);
     out.push({
       id: "dstgas",
-      label: "Insufficient destination gas",
-      what: "The destination execution was paid for at source-time prices with a buffer. The destination base fee moved past it, the call reverted on gas, and the funds are sitting in the bridge's escrow.",
+      label: window.DLI18N.t("57-chains.c8f386f917ce"),
+      what: window.DLI18N.t("57-chains.bea0a2d63b52"),
       probability: null,
       sunkUSD: srcGas + bridgeFee,
       remedy: "Top up the destination gas and re-execute. The principal is not at risk; the delay and the extra transaction are.",
@@ -37219,8 +37389,8 @@ window.DXSCRIPTUI = (function () {
     var breach = sigmaT > 0 ? 2 * (1 - normalCdf((tolPct / 100) / sigmaT)) : 0;
     out.push({
       id: "slippage",
-      label: "Destination slippage",
-      what: "You were quoted at source time and you execute after the transit window. Over that window the price moves, and if it moves past your minimum-out the destination swap reverts rather than filling badly.",
+      label: window.DLI18N.t("57-chains.11973e83c0c4"),
+      what: window.DLI18N.t("57-chains.e0aaa0c92aad"),
       probability: breach,
       sunkUSD: srcGas + bridgeFee,
       remedy: "Set the minimum-out against the transit window rather than against a spot quote, or take a route whose window is short enough that the window stops mattering.",
@@ -37234,8 +37404,8 @@ window.DXSCRIPTUI = (function () {
     var recovered = Math.max(0, principal - srcGas - dstGas - refundFee);
     out.push({
       id: "refund",
-      label: "The refund path",
-      what: "The floor was breached, or the destination call reverted for good, and the bridge returns the principal on the source chain instead. This is the branch nobody quotes.",
+      label: window.DLI18N.t("57-chains.81ab7b836539"),
+      what: window.DLI18N.t("57-chains.5537ff532f5f"),
       probability: null,
       sunkUSD: srcGas + dstGas + refundFee,
       remedy: "None. The refund is the remedy, and it is not whole.",
@@ -37576,7 +37746,7 @@ window.DXSCRIPTUI = (function () {
 
     var st = statsOf(sym), mid = midOf(sym, q), qp = quoteUSD(q);
     if (!st || !(mid > 0)) return { sym: sym, quote: q, side: side, base: base > 0 ? base : null, mid: null, rows: [], note: "No market for " + sym + "/" + q + " — nothing to quote. A missing market stays missing here; it does not become a zero." };
-    if (!(base > 0)) return { sym: sym, quote: q, side: side, base: null, mid: mid, rows: [], note: "Enter a size greater than zero." };
+    if (!(base > 0)) return { sym: sym, quote: q, side: side, base: null, mid: mid, rows: [], note: window.DLI18N.t("57-chains.f28779674971") };
 
     var notionalQuote = base * mid;
     var notionalUSD = qp > 0 ? notionalQuote * qp : null;
@@ -37788,19 +37958,19 @@ window.DXSCRIPTUI = (function () {
     var t = ticket();
     var h = '<div class="dl-2 ch-form">';
     h += field("Symbol", '<input id="chSym" class="dl-inp" type="text" value="' + esc(t.sym) + '" autocomplete="off" spellcheck="false" aria-label="Symbol">');
-    h += field("Side", '<select id="chSide" class="dl-inp" aria-label="Side">' + opts([["buy", "Buy"], ["sell", "Sell"]], t.side) + '</select>');
+    h += field("Side", ('<select id="chSide" class="dl-inp" aria-label="' + window.DLI18N.t("57-chains.630ef00b7c4f") + '">') + opts([["buy", "Buy"], ["sell", "Sell"]], t.side) + '</select>');
     h += field("Size (base)", '<input id="chBase" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.base) + '" aria-label="Size in base units">');
-    h += field("Funds start on", '<select id="chFrom" class="dl-inp" aria-label="Source chain">' + opts(chainOpts(), t.from) + '</select>');
-    h += field("Blob market", '<select id="chBlob" class="dl-inp" aria-label="Blob market level">' + opts([["floor", "floor (excess 0)"], ["busy", "busy (excess 5.0e7)"], ["spike", "spike (excess 8.5e7)"]], t.blobLevel) + '</select>');
-    h += field("Tolerance", '<select id="chTol" class="dl-inp" aria-label="Slippage tolerance">' + opts([[0.1, "0.1%"], [0.5, "0.5%"], [1, "1%"], [2, "2%"], [5, "5%"]], t.tolerancePct) + '</select>');
-    h += '</div><div class="ch-actions"><button class="go" id="chGo">Quote it on every chain</button></div>';
+    h += field("Funds start on", ('<select id="chFrom" class="dl-inp" aria-label="' + window.DLI18N.t("57-chains.f92964ba4034") + '">') + opts(chainOpts(), t.from) + '</select>');
+    h += field("Blob market", ('<select id="chBlob" class="dl-inp" aria-label="' + window.DLI18N.t("57-chains.706bb10a27d8") + '">') + opts([["floor", "floor (excess 0)"], ["busy", "busy (excess 5.0e7)"], ["spike", "spike (excess 8.5e7)"]], t.blobLevel) + '</select>');
+    h += field("Tolerance", ('<select id="chTol" class="dl-inp" aria-label="' + window.DLI18N.t("57-chains.c17ba547e1ee") + '">') + opts([[0.1, "0.1%"], [0.5, "0.5%"], [1, "1%"], [2, "2%"], [5, "5%"]], t.tolerancePct) + '</select>');
+    h += ('</div><div class="ch-actions"><button class="go" id="chGo">' + window.DLI18N.t("57-chains.8d5c9a92f0f4") + '</button></div>');
     return h;
   }
 
   function signalStrip(cmp) {
     var s = cmp && cmp.signals;
     if (!s) return "";
-    return '<div class="ch-sig">L1 base fee <b>' + (s.l1Gwei != null ? s.l1Gwei.toFixed(2) : "—") + ' gwei</b> (' + esc(s.l1Src) + ', ' + esc(s.congestion) + ') · blob base fee <b>' + wei(s.blobWei) + ' wei</b> (computed from excess blob gas ' + SIG.excessBlobGas + ' through EIP-4844 fake_exponential, level "' + esc(s.blobLevel) + '") · ETH ' + usd(s.ethUSD) + ' · SOL ' + usd(s.solUSD) + '. L2 base fees are per-chain modelling constants, named in each row.</div>';
+    return ('<div class="ch-sig">' + window.DLI18N.t("57-chains.0dc766e9854c") + '<b>') + (s.l1Gwei != null ? s.l1Gwei.toFixed(2) : "—") + ('' + window.DLI18N.t("57-chains.27c904ae676a") + '</b> (') + esc(s.l1Src) + ', ' + esc(s.congestion) + ('' + window.DLI18N.t("57-chains.b47c9e18c39a") + '<b>') + wei(s.blobWei) + ('' + window.DLI18N.t("57-chains.c1766b75ac9f") + '</b>' + window.DLI18N.t("57-chains.642baf0f3837") + '') + SIG.excessBlobGas + ' through EIP-4844 fake_exponential, level "' + esc(s.blobLevel) + '") · ETH ' + usd(s.ethUSD) + ' · SOL ' + usd(s.solUSD) + ('' + window.DLI18N.t("57-chains.6f9a1a1bd5bf") + '</div>');
   }
 
   function trustCell(tr) {
@@ -37813,21 +37983,21 @@ window.DXSCRIPTUI = (function () {
     var cmp = currentCompare();
     if (!cmp || !cmp.rows.length) return ticketStrip() + '<div class="ch-empty">' + esc(cmp && cmp.note ? cmp.note : "Nothing to compare.") + '</div>';
     var h = ticketStrip();
-    h += '<div class="ch-head"><span class="ch-pair">' + esc(cmp.side.toUpperCase()) + ' ' + fmtNum(cmp.base) + ' ' + esc(cmp.sym) + ' / ' + esc(cmp.quote) + '</span><span class="ch-mid">mid ' + fmtQuote(cmp.mid, cmp.quote) + ' · notional ' + usd(cmp.notionalUSD) + ' · funds start on ' + esc((chainById(cmp.from) || {}).name || cmp.from) + '</span></div>';
+    h += '<div class="ch-head"><span class="ch-pair">' + esc(cmp.side.toUpperCase()) + ' ' + fmtNum(cmp.base) + ' ' + esc(cmp.sym) + ' / ' + esc(cmp.quote) + ('</span><span class="ch-mid">' + window.DLI18N.t("57-chains.0d402749749f") + '') + fmtQuote(cmp.mid, cmp.quote) + ' · notional ' + usd(cmp.notionalUSD) + ' · funds start on ' + esc((chainById(cmp.from) || {}).name || cmp.from) + '</span></div>';
     h += signalStrip(cmp);
     h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr>' +
-      '<th>Chain</th><th>Pool</th><th class="r">Impact</th><th class="r">Swap fee</th><th class="r">Gas</th><th class="r">Bridge</th><th class="r">All-in / unit</th><th class="r">vs mid</th><th class="r">Time</th><th>Trust</th><th class="r">Rank</th>' +
+      ('<th>' + window.DLI18N.t("57-chains.dae0896cbc2c") + '</th><th>' + window.DLI18N.t("57-chains.f13024272c38") + '</th><th class="r">' + window.DLI18N.t("57-chains.d1f23f0d1361") + '</th><th class="r">' + window.DLI18N.t("57-chains.52195e8616df") + '</th><th class="r">' + window.DLI18N.t("57-chains.e23a445d0fa7") + '</th><th class="r">' + window.DLI18N.t("57-chains.3892e10346fd") + '</th><th class="r">' + window.DLI18N.t("57-chains.0b0c4c134a92") + '</th><th class="r">' + window.DLI18N.t("57-chains.f9e52d270eb3") + '</th><th class="r">' + window.DLI18N.t("57-chains.33b93476cf59") + '</th><th>' + window.DLI18N.t("57-chains.ade9248e0132") + '</th><th class="r">' + window.DLI18N.t("57-chains.a4130d7d2c3a") + '</th>') +
       '</tr></thead><tbody>';
     var i, r;
     for (i = 0; i < cmp.rows.length; i++) {
       r = cmp.rows[i];
       h += '<tr data-kind="' + esc(r.kind) + '"' + (r.rank === 1 ? ' data-best="1"' : "") + (r.blocked ? ' data-blocked="1"' : "") + '>' +
-        '<td class="ch-n">' + esc(r.name) + (r.blocked ? '<span class="ch-flag">would revert</span>' : "") + (r.exhausted ? '<span class="ch-flag">partial</span>' : "") + '</td>' +
+        '<td class="ch-n">' + esc(r.name) + (r.blocked ? ('<span class="ch-flag">' + window.DLI18N.t("57-chains.722e4cd8d122") + '</span>') : "") + (r.exhausted ? ('<span class="ch-flag">' + window.DLI18N.t("57-chains.9834a14ab9bc") + '</span>') : "") + '</td>' +
         '<td class="ch-dex">' + esc(r.dex) + ' <span class="ch-tier">' + (r.feeRate * 100).toFixed(2) + '% · spacing ' + r.spacing + '</span></td>' +
-        '<td class="r">' + (r.impactBps == null ? "—" : r.impactBps.toFixed(1) + " bp") + '<span class="ch-sub2">' + r.crossings + ' ticks crossed</span></td>' +
+        '<td class="r">' + (r.impactBps == null ? "—" : r.impactBps.toFixed(1) + " bp") + '<span class="ch-sub2">' + r.crossings + ('' + window.DLI18N.t("57-chains.9d58a1326994") + '</span></td>') +
         '<td class="r">' + fmtQuote(r.swapFeeQuote, cmp.quote) + '</td>' +
-        '<td class="r">' + usd(r.gasUSD) + (r.txCount > 1 ? '<span class="ch-sub2">' + r.txCount + ' tx</span>' : "") + '</td>' +
-        '<td class="r">' + (r.chain === cmp.from ? '<span class="ch-none">none</span>' : usd(r.bridgeUSD)) + (r.bridge ? '<span class="ch-sub2">' + esc(r.bridge.name.split("(")[0].trim()) + '</span>' : "") + '</td>' +
+        '<td class="r">' + usd(r.gasUSD) + (r.txCount > 1 ? '<span class="ch-sub2">' + r.txCount + ('' + window.DLI18N.t("57-chains.bcc0c5118350") + '</span>') : "") + '</td>' +
+        '<td class="r">' + (r.chain === cmp.from ? ('<span class="ch-none">' + window.DLI18N.t("57-chains.140bedbf9c3f") + '</span>') : usd(r.bridgeUSD)) + (r.bridge ? '<span class="ch-sub2">' + esc(r.bridge.name.split("(")[0].trim()) + '</span>' : "") + '</td>' +
         '<td class="r ch-all">' + fmtQuote(r.unitCost, cmp.quote) + '</td>' +
         '<td class="r">' + fmtBps(r.vsMidBps) + '</td>' +
         '<td class="r">' + fmtSec(r.etaSec) + '</td>' +
@@ -37836,17 +38006,17 @@ window.DXSCRIPTUI = (function () {
     }
     h += '</tbody></table></div>';
 
-    h += '<div class="ch-legend">All-in per unit is the whole trip divided by what actually arrives: the multi-tick swap, its fee, the gas on the destination chain under that chain\'s own fee model, and the bridge fee to get the funds there. <b>Time and trust are printed beside the ranking and are never folded into it.</b> There is no honest weight between a seven-day withdrawal and a ninety-second one, and inventing one would hide the only decision on this table that is actually yours.</div>';
+    h += ('<div class="ch-legend">' + window.DLI18N.t("57-chains.3a13ffc026cc") + '<b>' + window.DLI18N.t("57-chains.afed41563b04") + '</b>' + window.DLI18N.t("57-chains.dd98ba7a8012") + '</div>');
 
     /* the things that are not a number */
     var warn = "", j;
     for (i = 0; i < cmp.rows.length; i++) {
       r = cmp.rows[i];
-      if (r.blocked && r.arrays) warn += '<li><b>' + esc(r.name) + '</b> — this order travels ' + Math.round(r.arrays.ticksTravelled) + ' ticks, which is ' + r.arrays.arraysNeeded + ' tick arrays, and a Whirlpool swap instruction can reference ' + r.arrays.arraysAvailable + '. ' + esc(r.arrays.remedy) + '</li>';
-      if (r.exhausted) warn += '<li><b>' + esc(r.name) + '</b> — the modelled ladder ran out ' + fmtNum(r.unfilledIn) + ' ' + esc(cmp.side === "sell" ? cmp.sym : cmp.quote) + ' short. The shortfall is named rather than quietly dropped.</li>';
-      if (r.unbridgedUSD > 0) warn += '<li><b>' + esc(r.name) + '</b> — the fast bridge could only front ' + usd(r.bridge.capacityUSD) + ' of ' + usd(cmp.notionalUSD) + '. ' + usd(r.unbridgedUSD) + ' has to wait for the canonical route, which is the row above it in time and below it in cost.</li>';
+      if (r.blocked && r.arrays) warn += '<li><b>' + esc(r.name) + ('</b>' + window.DLI18N.t("57-chains.81af5f06390e") + '') + Math.round(r.arrays.ticksTravelled) + ' ticks, which is ' + r.arrays.arraysNeeded + ' tick arrays, and a Whirlpool swap instruction can reference ' + r.arrays.arraysAvailable + '. ' + esc(r.arrays.remedy) + '</li>';
+      if (r.exhausted) warn += '<li><b>' + esc(r.name) + ('</b>' + window.DLI18N.t("57-chains.2861f9a0d8c9") + '') + fmtNum(r.unfilledIn) + ' ' + esc(cmp.side === "sell" ? cmp.sym : cmp.quote) + ('' + window.DLI18N.t("57-chains.971b3bc07e0e") + '</li>');
+      if (r.unbridgedUSD > 0) warn += '<li><b>' + esc(r.name) + ('</b>' + window.DLI18N.t("57-chains.d37b28955914") + '') + usd(r.bridge.capacityUSD) + ' of ' + usd(cmp.notionalUSD) + '. ' + usd(r.unbridgedUSD) + ('' + window.DLI18N.t("57-chains.31c8bef4ec00") + '</li>');
     }
-    if (warn) h += '<div class="ch-sub">What would actually go wrong</div><ul class="ch-warnlist">' + warn + '</ul>';
+    if (warn) h += ('<div class="ch-sub">' + window.DLI18N.t("57-chains.97026a21eea1") + '</div><ul class="ch-warnlist">') + warn + '</ul>';
     h += assumptionStrip();
     return h;
   }
@@ -37855,7 +38025,7 @@ window.DXSCRIPTUI = (function () {
   function paneChains() {
     var cmp = currentCompare();
     if (!cmp || !cmp.rows.length) return '<div class="ch-empty">' + esc((cmp && cmp.note) || "Nothing to price.") + '</div>';
-    var h = '<div class="ch-note">One swap, the fee split into the components that actually produce it. Every line is computed from the chain\'s published formula — nothing here is a round number someone typed in.</div>';
+    var h = ('<div class="ch-note">' + window.DLI18N.t("57-chains.5fc38085acce") + '</div>');
     h += signalStrip(cmp);
     var i, j, r, m;
 
@@ -37863,27 +38033,27 @@ window.DXSCRIPTUI = (function () {
       r = cmp.rows[i];
       m = r.gas && r.gas.model;
       if (!m) continue;
-      h += '<div class="ch-card"><div class="ch-cardh"><b>' + esc(r.name) + '</b><span>' + esc(kindLabel(r.kind)) + ' · ' + usd(r.gasUSD) + ' for this swap</span></div>';
+      h += '<div class="ch-card"><div class="ch-cardh"><b>' + esc(r.name) + '</b><span>' + esc(kindLabel(r.kind)) + ' · ' + usd(r.gasUSD) + ('' + window.DLI18N.t("57-chains.db3908f2fb57") + '</span></div>');
       h += '<div class="ch-src">' + esc(r.gas.srcLabel || "") + '</div>';
-      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Component</th><th class="r">' + (r.kind === "svm" ? "lamports" : "wei") + '</th><th class="r">share</th><th>how it is computed</th></tr></thead><tbody>';
+      h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("57-chains.ce54f0e22dbb") + '</th><th class="r">') + (r.kind === "svm" ? "lamports" : "wei") + ('</th><th class="r">' + window.DLI18N.t("57-chains.c3bc45ac352f") + '</th><th>' + window.DLI18N.t("57-chains.725669373237") + '</th></tr></thead><tbody>');
       var tot = r.kind === "svm" ? m.totalLamports : m.totalWei;
       for (j = 0; j < m.parts.length; j++) {
         var pr = m.parts[j];
         h += '<tr><td>' + esc(pr[0]) + '</td><td class="r">' + (r.kind === "svm" ? Math.round(pr[1]) : fmtWeiCell(pr[1])) + '</td><td class="r">' + (tot > 0 ? (pr[1] / tot * 100).toFixed(1) + "%" : "—") + '</td><td class="ch-how">' + esc(pr[2]) + '</td></tr>';
       }
-      h += '<tr class="ch-tot"><td><b>Total</b></td><td class="r"><b>' + (r.kind === "svm" ? Math.round(tot) + " lamports" : fmtWeiCell(tot)) + '</b></td><td class="r">100%</td><td class="ch-how">' + (r.kind === "svm" ? esc(Math.round(tot) / SOL_LAMPORTS + " SOL at " + usd(SIG.solUSD)) : esc(fmtEth(tot) + " at " + usd(SIG.ethUSD) + "/ETH")) + '</td></tr>';
+      h += ('<tr class="ch-tot"><td><b>' + window.DLI18N.t("57-chains.c9b3c38247f7") + '</b></td><td class="r"><b>') + (r.kind === "svm" ? Math.round(tot) + " lamports" : fmtWeiCell(tot)) + '</b></td><td class="r">100%</td><td class="ch-how">' + (r.kind === "svm" ? esc(Math.round(tot) / SOL_LAMPORTS + " SOL at " + usd(SIG.solUSD)) : esc(fmtEth(tot) + " at " + usd(SIG.ethUSD) + "/ETH")) + '</td></tr>';
       h += '</tbody></table></div>';
 
       if (r.kind === "opstack") {
-        h += '<div class="ch-branch"><b>The blob-versus-calldata branch.</b> Both scalar terms are in the Ecotone formula at once and the batcher\'s choice shows up as which one dominates. Right now the <b>' + esc(m.posting) + '</b> term is larger. The two are equal when the blob base fee reaches <b>' + wei(m.crossoverBlobBaseFeeWei) + ' wei</b> (' + (m.crossoverBlobBaseFeeWei / 1e9).toFixed(6) + ' gwei) — that is 16 x baseFeeScalar x l1BaseFee / blobBaseFeeScalar, and it is how far the blob market has to move before calldata is worth posting again. The L1 data side is ' + (m.l1SharePct == null ? "—" : m.l1SharePct.toFixed(1) + "%") + ' of this transaction\'s fee.</div>';
+        h += ('<div class="ch-branch"><b>' + window.DLI18N.t("57-chains.3472f0fb0e4f") + '</b>' + window.DLI18N.t("57-chains.44cbd3050872") + '<b>') + esc(m.posting) + ('</b>' + window.DLI18N.t("57-chains.7978a162b0c0") + '<b>') + wei(m.crossoverBlobBaseFeeWei) + ('' + window.DLI18N.t("57-chains.c1766b75ac9f") + '</b> (') + (m.crossoverBlobBaseFeeWei / 1e9).toFixed(6) + ' gwei) — that is 16 x baseFeeScalar x l1BaseFee / blobBaseFeeScalar, and it is how far the blob market has to move before calldata is worth posting again. The L1 data side is ' + (m.l1SharePct == null ? "—" : m.l1SharePct.toFixed(1) + "%") + ('' + window.DLI18N.t("57-chains.c9c5663114c7") + '</div>');
       }
       if (r.kind === "nitro") {
-        h += '<div class="ch-branch"><b>The identity Nitro hides.</b> The receipt shows <b>' + fmtNum(m.totalGas) + ' gas</b>, of which only ' + fmtNum(m.l2ComputeGas) + ' is compute — the other ' + fmtNum(m.posterGas) + ' is the batch poster\'s L1 outlay converted back into L2 gas units at ' + (m.posting === "blob" ? "blob" : "calldata") + ' prices. ' + m.compressedBytes.toFixed(0) + ' compressed bytes out of ' + m.rawBytes + ' raw, at the modelled Brotli ratio ' + m.compression + '. total gas x L2 price = ' + fmtEth(m.totalWei) + ', and L2 compute plus the poster\'s outlay = ' + fmtEth(m.l2FeeWei + m.l1FeeWei) + ' — the two agree to ' + m.identityResidual.toExponential(1) + ' wei, which is float noise and not a fudge.</div>';
+        h += ('<div class="ch-branch"><b>' + window.DLI18N.t("57-chains.ae3ea68e53c7") + '</b>' + window.DLI18N.t("57-chains.f6ef0f7a086d") + '<b>') + fmtNum(m.totalGas) + ('' + window.DLI18N.t("57-chains.d17a0c588ea8") + '</b>' + window.DLI18N.t("57-chains.8acc2801f8ff") + '') + fmtNum(m.l2ComputeGas) + ' is compute — the other ' + fmtNum(m.posterGas) + ' is the batch poster\'s L1 outlay converted back into L2 gas units at ' + (m.posting === "blob" ? "blob" : "calldata") + ' prices. ' + m.compressedBytes.toFixed(0) + ' compressed bytes out of ' + m.rawBytes + ' raw, at the modelled Brotli ratio ' + m.compression + '. total gas x L2 price = ' + fmtEth(m.totalWei) + ', and L2 compute plus the poster\'s outlay = ' + fmtEth(m.l2FeeWei + m.l1FeeWei) + ' — the two agree to ' + m.identityResidual.toExponential(1) + ('' + window.DLI18N.t("57-chains.7cb41bcb41d1") + '</div>');
       }
       if (r.kind === "validity") {
         var curve = validityCurve({ l2Gas: unitsSwap(), l2GasPriceWei: (chainById(r.chain) || {}).l2BaseFeeGwei * 1e9, l1BaseFeeWei: SIG.l1Gwei * 1e9, blobBaseFeeWei: SIG.blobWei }, null);
-        h += '<div class="ch-branch"><b>The proof does not care how many of you there are.</b> A verifier call is ' + ZK_PROOF_VERIFY_GAS + ' gas whether it attests to one transaction or a hundred thousand, so cost per transaction falls as 1/batchSize toward an asymptote of L2 execution plus your own state diff.</div>';
-        h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">batch size</th><th class="r">cost per tx</th><th class="r">vs asymptote</th><th>bar</th></tr></thead><tbody>';
+        h += ('<div class="ch-branch"><b>' + window.DLI18N.t("57-chains.58395e49597b") + '</b>' + window.DLI18N.t("57-chains.397dbf5208d4") + '') + ZK_PROOF_VERIFY_GAS + ('' + window.DLI18N.t("57-chains.1e48cdb3f514") + '</div>');
+        h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">' + window.DLI18N.t("57-chains.d2bd91c085c8") + '</th><th class="r">' + window.DLI18N.t("57-chains.473b570c8c68") + '</th><th class="r">' + window.DLI18N.t("57-chains.813ce0d50cd4") + '</th><th>' + window.DLI18N.t("57-chains.fcde2b2edba5") + '</th></tr></thead><tbody>');
         var maxW = curve.length ? curve[0].totalWei : 1;
         for (j = 0; j < curve.length; j++) {
           var cv = curve[j];
@@ -37893,8 +38063,8 @@ window.DXSCRIPTUI = (function () {
         h += '</tbody></table></div>';
       }
       if (r.kind === "svm" && r.arrays) {
-        h += '<div class="ch-branch"><b>No gas auction, and a hard wall instead.</b> ' + esc(m.noAuction) + ' The wall is the tick arrays: ' + r.arrays.ticksPerArray + ' ticks each, ' + r.arrays.arraysPerSwap + ' per swap instruction, so one transaction can travel ' + r.arrays.maxTicksPerSwap + ' ticks at spacing ' + r.arrays.spacing + ' — a price move of ' + r.arrays.maxMovePct.toFixed(2) + '%. This order travels ' + Math.round(r.arrays.ticksTravelled) + ' ticks and needs ' + r.arrays.arraysNeeded + ' array' + (r.arrays.arraysNeeded === 1 ? "" : "s") + ', so it ' + (r.arrays.fits ? "fits in one transaction." : "DOES NOT FIT. " + esc(r.arrays.remedy)) + ' Where the wall actually bites is the TIGHT tiers, and the same order is fine on one and impossible on another purely because of the spacing:</div>';
-        h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">tick spacing</th><th>typical Whirlpool tier</th><th class="r">ticks in 3 arrays</th><th class="r">biggest move in one tx</th><th class="r">this order needs</th><th>verdict</th></tr></thead><tbody>';
+        h += ('<div class="ch-branch"><b>' + window.DLI18N.t("57-chains.58a6828b0a67") + '</b> ') + esc(m.noAuction) + ' The wall is the tick arrays: ' + r.arrays.ticksPerArray + ' ticks each, ' + r.arrays.arraysPerSwap + ' per swap instruction, so one transaction can travel ' + r.arrays.maxTicksPerSwap + ' ticks at spacing ' + r.arrays.spacing + ' — a price move of ' + r.arrays.maxMovePct.toFixed(2) + '%. This order travels ' + Math.round(r.arrays.ticksTravelled) + ' ticks and needs ' + r.arrays.arraysNeeded + ' array' + (r.arrays.arraysNeeded === 1 ? "" : "s") + ', so it ' + (r.arrays.fits ? "fits in one transaction." : "DOES NOT FIT. " + esc(r.arrays.remedy)) + ('' + window.DLI18N.t("57-chains.a9ef49ae8f1a") + '</div>');
+        h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">' + window.DLI18N.t("57-chains.0fe95d25476a") + '</th><th>' + window.DLI18N.t("57-chains.762f6ad03561") + '</th><th class="r">' + window.DLI18N.t("57-chains.ca34670e641e") + '</th><th class="r">' + window.DLI18N.t("57-chains.2cd76f8096e5") + '</th><th class="r">' + window.DLI18N.t("57-chains.e6ce17e2c5b3") + '</th><th>' + window.DLI18N.t("57-chains.11e221bd1b7f") + '</th></tr></thead><tbody>');
         var spacings = [[1, "stablecoin pair"], [8, "correlated pair"], [64, "volatile pair"], [128, "long-tail pair"]];
         for (j = 0; j < spacings.length; j++) {
           var ta = solanaTickArrays(spacings[j][0], r.arrays.ticksTravelled);
@@ -37902,7 +38072,7 @@ window.DXSCRIPTUI = (function () {
           h += '<tr' + (ta.fits ? "" : ' data-blocked="1"') + '><td class="r">' + ta.spacing + '</td><td>' + esc(spacings[j][1]) + '</td><td class="r">' + ta.maxTicksPerSwap + '</td><td class="r">' + ta.maxMovePct.toFixed(2) + '%</td><td class="r">' + ta.arraysNeeded + '</td><td>' + (ta.fits ? "fits" : "reverts — " + esc(ta.remedy)) + '</td></tr>';
         }
         h += '</tbody></table></div>';
-        h += '<div class="ch-branch">Read the first row: on a 1-spacing stable pool a swap cannot move the price more than ' + solanaTickArrays(1, 0).maxMovePct.toFixed(2) + '% in a single transaction, whatever it is willing to pay. That is not a fee, it is a ceiling, and it is the single most important difference between executing size here and executing it on an EVM chain — where the same order is merely expensive.</div>';
+        h += ('<div class="ch-branch">' + window.DLI18N.t("57-chains.961c08b8d769") + '') + solanaTickArrays(1, 0).maxMovePct.toFixed(2) + ('' + window.DLI18N.t("57-chains.f1d367d2b83b") + '</div>');
       }
       h += '</div>';
     }
@@ -37928,49 +38098,49 @@ window.DXSCRIPTUI = (function () {
     var ch = chainById(dest) || CHAINS[1];
     var row = null, i, j;
     for (i = 0; i < ((cmp && cmp.rows) || []).length; i++) if (cmp.rows[i].chain === dest) row = cmp.rows[i];
-    var h = '<div class="ch-note">The mechanisms that exist for this pair, priced separately, with the trust statement beside each one and the four failure modes underneath. A bridge quoted only on its happy path is quoted wrong.</div>';
-    h += '<div class="dl-2 ch-form">' + field("Destination", '<select id="chDest" class="dl-inp" aria-label="Destination chain">' + opts(chainOpts(), dest) + '</select>') + '</div>';
+    var h = ('<div class="ch-note">' + window.DLI18N.t("57-chains.8d0888c125ab") + '</div>');
+    h += '<div class="dl-2 ch-form">' + field("Destination", ('<select id="chDest" class="dl-inp" aria-label="' + window.DLI18N.t("57-chains.82755591f824") + '">') + opts(chainOpts(), dest) + '</select>') + '</div>';
     if (!row || !row.bridgeRoutes) {
       return h + '<div class="ch-empty">' + esc(dest === (cmp && cmp.from) ? "The funds already start on " + ch.name + " — there is nothing to bridge. Pick another destination, or change where the funds start on the Route tab." : "Nothing to price for " + ch.name + " this session.") + '</div>';
     }
-    h += '<div class="ch-head"><span class="ch-pair">' + usd(cmp.notionalUSD) + ' to ' + esc(ch.name) + '</span><span class="ch-mid">from ' + esc((chainById(cmp.from) || {}).name || cmp.from) + ' · destination LP inventory ' + usd(LIQ_INVENTORY_USD[dest] || 5e5) + ' (modelled) at ' + (LIQ_START_UTIL * 100).toFixed(0) + '% utilisation (modelled)</span></div>';
+    h += '<div class="ch-head"><span class="ch-pair">' + usd(cmp.notionalUSD) + ' to ' + esc(ch.name) + ('</span><span class="ch-mid">' + window.DLI18N.t("57-chains.49a6ddf9a439") + '') + esc((chainById(cmp.from) || {}).name || cmp.from) + ' · destination LP inventory ' + usd(LIQ_INVENTORY_USD[dest] || 5e5) + ' (modelled) at ' + (LIQ_START_UTIL * 100).toFixed(0) + ('' + window.DLI18N.t("57-chains.082a4e41604f") + '</span></div>');
 
-    h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Route</th><th class="r">Fee</th><th class="r">Carries</th><th class="r">Time</th><th>Trust — what must be honest</th></tr></thead><tbody>';
+    h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("57-chains.adc74704d65d") + '</th><th class="r">' + window.DLI18N.t("57-chains.f842c3e1858d") + '</th><th class="r">' + window.DLI18N.t("57-chains.d673e80d4cd2") + '</th><th class="r">' + window.DLI18N.t("57-chains.33b93476cf59") + '</th><th>' + window.DLI18N.t("57-chains.ec2c08a6ad1b") + '</th></tr></thead><tbody>');
     for (i = 0; i < row.bridgeRoutes.length; i++) {
       var b = row.bridgeRoutes[i];
       h += '<tr' + (row.bridge && b.id === row.bridge.id ? ' data-best="1"' : "") + '>' +
         '<td class="ch-n">' + esc(b.name) + '<span class="ch-sub2">' + esc(b.dir) + '</span></td>' +
         '<td class="r">' + usd(b.feeUSD) + '</td>' +
-        '<td class="r">' + usd(b.filledUSD) + (b.partial ? '<span class="ch-flag">partial</span>' : "") + '</td>' +
+        '<td class="r">' + usd(b.filledUSD) + (b.partial ? ('<span class="ch-flag">' + window.DLI18N.t("57-chains.9834a14ab9bc") + '</span>') : "") + '</td>' +
         '<td class="r">' + fmtSec(b.etaSec) + '<span class="ch-sub2">' + esc(b.etaNote) + '</span></td>' +
         '<td>' + trustCell(b.trust) + '<span class="ch-sub2">' + esc(b.trust.one) + (b.honestSet ? " " + esc(b.honestSet) + "." : "") + '</span></td></tr>';
     }
     h += '</tbody></table></div>';
     if (row.bridgeRoutes.length && row.bridgeRoutes[0].hasCanonical === false) {
-      h += '<div class="ch-warn">There is no canonical bridge on this pair, so the two canonical rows are absent rather than approximated. A canonical bridge only exists between a rollup and the chain it settles to: each verifies the other because one is derived from the other. Ethereum and Solana do not verify each other at all, so every route between them is somebody\'s promise — an m-of-n validator set, an LP fronting inventory, or a counterparty behind a timelock. That is the honest statement, and it is the reason the trust column exists.</div>';
+      h += ('<div class="ch-warn">' + window.DLI18N.t("57-chains.738433f1c5db") + '</div>');
     }
 
     /* the fee parts of each route, computed rather than asserted */
-    h += '<div class="ch-sub">Where each fee comes from</div>';
+    h += ('<div class="ch-sub">' + window.DLI18N.t("57-chains.bc9d7b1f053f") + '</div>');
     for (i = 0; i < row.bridgeRoutes.length; i++) {
       var br = row.bridgeRoutes[i];
       h += '<div class="ch-card"><div class="ch-cardh"><b>' + esc(br.name) + '</b><span>' + usd(br.feeUSD) + '</span></div>';
       h += '<div class="ch-src">' + esc(br.mechanism) + '</div>';
-      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Part</th><th class="r">USD</th><th>how</th></tr></thead><tbody>';
+      h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("57-chains.8570a2e1669f") + '</th><th class="r">' + window.DLI18N.t("57-chains.a26cdf3a6e70") + '</th><th>' + window.DLI18N.t("57-chains.8044aae1f868") + '</th></tr></thead><tbody>');
       for (j = 0; j < br.feeParts.length; j++) {
         h += '<tr><td>' + esc(br.feeParts[j][0]) + '</td><td class="r">' + usd(br.feeParts[j][1]) + '</td><td class="ch-how">' + esc(br.feeParts[j][2]) + '</td></tr>';
       }
       h += '</tbody></table></div>';
       if (br.liq && br.liq.partial) {
-        h += '<div class="ch-warn">Capacity limit reached. Inventory ' + usd(br.liq.inventoryUSD) + ' at ' + (br.liq.utilisationBefore * 100).toFixed(0) + '% used leaves ' + usd(br.liq.capacityUSD) + ' free, so ' + usd(br.liq.filledUSD) + ' fills and ' + usd(br.liq.unfilledUSD) + ' does not. ' + esc(br.liq.note) + '</div>';
+        h += ('<div class="ch-warn">' + window.DLI18N.t("57-chains.058460d7b373") + '') + usd(br.liq.inventoryUSD) + ' at ' + (br.liq.utilisationBefore * 100).toFixed(0) + '% used leaves ' + usd(br.liq.capacityUSD) + ' free, so ' + usd(br.liq.filledUSD) + ' fills and ' + usd(br.liq.unfilledUSD) + ' does not. ' + esc(br.liq.note) + '</div>';
       }
       h += '</div>';
     }
 
     /* the failure modes */
     var fails = row.bridge ? row.bridge.failures : row.bridgeRoutes[0].failures;
-    h += '<div class="ch-sub">What goes wrong, and what it costs — for ' + esc((row.bridge || row.bridgeRoutes[0]).name) + '</div>';
-    h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Failure</th><th class="r">Odds</th><th class="r">Expected cost</th><th>Arithmetic</th><th>Remedy</th></tr></thead><tbody>';
+    h += ('<div class="ch-sub">' + window.DLI18N.t("57-chains.919028672533") + '') + esc((row.bridge || row.bridgeRoutes[0]).name) + '</div>';
+    h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("57-chains.7031edbcf9c4") + '</th><th class="r">' + window.DLI18N.t("57-chains.e0382a0130bd") + '</th><th class="r">' + window.DLI18N.t("57-chains.424e985e03fa") + '</th><th>' + window.DLI18N.t("57-chains.641b3acc7139") + '</th><th>' + window.DLI18N.t("57-chains.7ea8307398ef") + '</th></tr></thead><tbody>');
     for (i = 0; i < fails.length; i++) {
       var fm = fails[i];
       h += '<tr><td class="ch-n">' + esc(fm.label) + '<span class="ch-sub2">' + esc(fm.what) + '</span></td>' +
@@ -37980,7 +38150,7 @@ window.DXSCRIPTUI = (function () {
         '<td class="ch-how">' + esc(fm.remedy) + '</td></tr>';
     }
     h += '</tbody></table></div>';
-    h += '<div class="ch-legend">The trust column is a <b>risk statement, not a rating</b>. There is no ordering in it: a natively verified route can still be slow enough to be the wrong answer, and an m-of-n route can be the right one for a size where a week of challenge window costs more than the counterparty risk. What the column gives you is the sentence you would have to be comfortable saying out loud before you send.</div>';
+    h += ('<div class="ch-legend">' + window.DLI18N.t("57-chains.3309a92d4100") + '<b>' + window.DLI18N.t("57-chains.61e2f6e9a9e3") + '</b>' + window.DLI18N.t("57-chains.97228edc3a8b") + '</div>');
     h += assumptionStrip();
     return h;
   }
@@ -37992,51 +38162,51 @@ window.DXSCRIPTUI = (function () {
     var cid = t.chain || "ethereum";
     var row = null, i;
     for (i = 0; i < ((cmp && cmp.rows) || []).length; i++) if (cmp.rows[i].chain === cid) row = cmp.rows[i];
-    var h = '<div class="ch-note">The tick liquidity distribution below is <b>modelled</b>. The arithmetic over it is <b>exact</b>: every sqrt price, every amount, every crossing and every fee-growth figure follows from the published formulas with no fudge factor. This is the part of the build that 53-sor.js says it does not have.</div>';
-    h += '<div class="dl-2 ch-form">' + field("Chain", '<select id="chChain" class="dl-inp" aria-label="Chain for the tick walk">' + opts(chainOpts(), cid) + '</select>') + '</div>';
-    if (!row) return h + '<div class="ch-empty">Nothing to walk for that chain this session.</div>';
+    var h = ('<div class="ch-note">' + window.DLI18N.t("57-chains.4a99bc8e4c18") + '<b>' + window.DLI18N.t("57-chains.2b7f6db41054") + '</b>' + window.DLI18N.t("57-chains.e60a60bae9aa") + '<b>' + window.DLI18N.t("57-chains.fa79d4746c21") + '</b>' + window.DLI18N.t("57-chains.4c8c4e69383d") + '</div>');
+    h += '<div class="dl-2 ch-form">' + field("Chain", ('<select id="chChain" class="dl-inp" aria-label="' + window.DLI18N.t("57-chains.f04f53848610") + '">') + opts(chainOpts(), cid) + '</select>') + '</div>';
+    if (!row) return h + ('<div class="ch-empty">' + window.DLI18N.t("57-chains.a5ba3247d133") + '</div>');
     var pool = row.pool, w = row.walk;
 
-    h += '<div class="ch-head"><span class="ch-pair">' + esc(row.name) + ' · ' + esc(row.dex) + '</span><span class="ch-mid">' + (pool.fee * 100).toFixed(2) + '% tier · tick spacing ' + pool.spacing + ' · ' + pool.slots.length + ' liquidity slots of ' + pool.slotTicks + ' ticks</span></div>';
+    h += '<div class="ch-head"><span class="ch-pair">' + esc(row.name) + ' · ' + esc(row.dex) + '</span><span class="ch-mid">' + (pool.fee * 100).toFixed(2) + '% tier · tick spacing ' + pool.spacing + ' · ' + pool.slots.length + ' liquidity slots of ' + pool.slotTicks + ('' + window.DLI18N.t("57-chains.1ee293f5407d") + '</span></div>');
 
     h += '<div class="dl-tblw"><table class="dl-tbl ch-state"><tbody>' +
-      '<tr><td>price</td><td class="r">' + fmtQuote(pool.price, cmp.quote) + '</td><td>sqrtPrice</td><td class="r">' + pool.sqrtP.toFixed(8) + '</td></tr>' +
-      '<tr><td>tick</td><td class="r">' + pool.tick + '</td><td>sqrtPriceX96</td><td class="r">' + pool.sqrtPriceX96.toExponential(6) + '</td></tr>' +
-      '<tr><td>active liquidity L</td><td class="r">' + fmtNum(pool.L) + '</td><td>value in the ladder</td><td class="r">' + fmtQuote(pool.tvlQuote, cmp.quote) + '</td></tr>' +
-      '<tr><td>tick 1.0001^tick check</td><td class="r">' + tickToPrice(pool.tick).toFixed(4) + '</td><td>ladder seed (FNV)</td><td class="r ch-seed">' + esc(pool.seed) + '</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.683b531f41ec") + '</td><td class="r">') + fmtQuote(pool.price, cmp.quote) + ('</td><td>' + window.DLI18N.t("57-chains.606d5a12a962") + '</td><td class="r">') + pool.sqrtP.toFixed(8) + '</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.55a4bc5be68e") + '</td><td class="r">') + pool.tick + ('</td><td>' + window.DLI18N.t("57-chains.ac640485deab") + '</td><td class="r">') + pool.sqrtPriceX96.toExponential(6) + '</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.26ad9cb2232d") + '</td><td class="r">') + fmtNum(pool.L) + ('</td><td>' + window.DLI18N.t("57-chains.5698d89d432b") + '</td><td class="r">') + fmtQuote(pool.tvlQuote, cmp.quote) + '</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.55109bdb7d84") + '</td><td class="r">') + tickToPrice(pool.tick).toFixed(4) + ('</td><td>' + window.DLI18N.t("57-chains.55be74d0b88b") + '</td><td class="r ch-seed">') + esc(pool.seed) + '</td></tr>' +
       '</tbody></table></div>';
 
-    h += '<div class="ch-sub">The walk — ' + w.crossings + ' tick crossing' + (w.crossings === 1 ? "" : "s") + ', ' + w.steps.length + ' step' + (w.steps.length === 1 ? "" : "s") + '</div>';
-    h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">#</th><th class="r">tick</th><th class="r">price from</th><th class="r">price to</th><th class="r">L in this step</th><th class="r">in</th><th class="r">out</th><th class="r">fee</th><th class="r">L after</th><th class="r">fee growth</th></tr></thead><tbody>';
+    h += ('<div class="ch-sub">' + window.DLI18N.t("57-chains.6684d4da0329") + '') + w.crossings + ' tick crossing' + (w.crossings === 1 ? "" : "s") + ', ' + w.steps.length + ' step' + (w.steps.length === 1 ? "" : "s") + '</div>';
+    h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">#</th><th class="r">' + window.DLI18N.t("57-chains.55a4bc5be68e") + '</th><th class="r">' + window.DLI18N.t("57-chains.ee935ba6b377") + '</th><th class="r">' + window.DLI18N.t("57-chains.45490720cb12") + '</th><th class="r">' + window.DLI18N.t("57-chains.9fc2bf7d7dd5") + '</th><th class="r">' + window.DLI18N.t("57-chains.582967534d0f") + '</th><th class="r">' + window.DLI18N.t("57-chains.762069bc07a6") + '</th><th class="r">' + window.DLI18N.t("57-chains.b80cdaae9b32") + '</th><th class="r">' + window.DLI18N.t("57-chains.48f0a9d8199b") + '</th><th class="r">' + window.DLI18N.t("57-chains.135ac9cd0705") + '</th></tr></thead><tbody>');
     var shown = Math.min(w.steps.length, 60);
     for (i = 0; i < shown; i++) {
       var s = w.steps[i];
-      h += '<tr' + (s.crossed ? ' data-cross="1"' : "") + '><td class="r">' + (i + 1) + '</td><td class="r">' + s.tickTarget + (s.crossed ? ' <span class="ch-x">crossed</span>' : "") + '</td>' +
+      h += '<tr' + (s.crossed ? ' data-cross="1"' : "") + '><td class="r">' + (i + 1) + '</td><td class="r">' + s.tickTarget + (s.crossed ? (' <span class="ch-x">' + window.DLI18N.t("57-chains.b2faf4ab8101") + '</span>') : "") + '</td>' +
         '<td class="r">' + fmtNum(s.priceFrom) + '</td><td class="r">' + fmtNum(s.priceTo) + '</td>' +
         '<td class="r">' + fmtNum(s.L) + '</td><td class="r">' + fmtNum(s.amountIn) + '</td><td class="r">' + fmtNum(s.amountOut) + '</td>' +
         '<td class="r">' + fmtNum(s.feeAmount) + '</td><td class="r">' + fmtNum(s.LAfter) + '</td>' +
         '<td class="r">' + s.feeGrowthGlobal.toExponential(3) + '</td></tr>';
     }
     h += '</tbody></table></div>';
-    if (w.steps.length > shown) h += '<div class="ch-sub2b">' + (w.steps.length - shown) + ' further steps are not printed; the totals below are over all of them.</div>';
+    if (w.steps.length > shown) h += '<div class="ch-sub2b">' + (w.steps.length - shown) + ('' + window.DLI18N.t("57-chains.68c00d509326") + '</div>');
 
     h += '<div class="dl-tblw"><table class="dl-tbl ch-state"><tbody>' +
-      '<tr><td>input offered</td><td class="r">' + fmtNum(w.amountIn) + '</td><td>input consumed</td><td class="r">' + fmtNum(w.amountInUsed) + '</td></tr>' +
-      '<tr><td>of which fee</td><td class="r">' + fmtNum(w.feePaid) + '</td><td>net into the curve</td><td class="r">' + fmtNum(w.amountInNet) + '</td></tr>' +
-      '<tr><td>output</td><td class="r">' + fmtNum(w.amountOut) + '</td><td>unfilled</td><td class="r">' + (w.amountInUnfilled > 0 ? fmtNum(w.amountInUnfilled) : "none") + '</td></tr>' +
-      '<tr><td>price moved</td><td class="r">' + fmtNum(w.priceStart) + ' to ' + fmtNum(w.priceEnd) + '</td><td>tick moved</td><td class="r">' + w.tickStart + ' to ' + w.tickEnd + '</td></tr>' +
-      '<tr><td>L start / end</td><td class="r">' + fmtNum(w.LStart) + ' / ' + fmtNum(w.LEnd) + '</td><td>impact, fee excluded</td><td class="r">' + (w.impactBps == null ? "—" : w.impactBps.toFixed(1) + " bp") + '</td></tr>' +
-      '<tr><td>fee growth global</td><td class="r">' + w.feeGrowthGlobal.toExponential(4) + '</td><td>per unit of liquidity</td><td class="r">sum of feeAmount / L per step</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.57d246ec2057") + '</td><td class="r">') + fmtNum(w.amountIn) + ('</td><td>' + window.DLI18N.t("57-chains.e0fe5064c2d0") + '</td><td class="r">') + fmtNum(w.amountInUsed) + '</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.1ed26696bbce") + '</td><td class="r">') + fmtNum(w.feePaid) + ('</td><td>' + window.DLI18N.t("57-chains.ccf58b5335d1") + '</td><td class="r">') + fmtNum(w.amountInNet) + '</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.e0ee8bb50685") + '</td><td class="r">') + fmtNum(w.amountOut) + ('</td><td>' + window.DLI18N.t("57-chains.95d924a02c6d") + '</td><td class="r">') + (w.amountInUnfilled > 0 ? fmtNum(w.amountInUnfilled) : "none") + '</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.57f0c2a6e1f3") + '</td><td class="r">') + fmtNum(w.priceStart) + ' to ' + fmtNum(w.priceEnd) + ('</td><td>' + window.DLI18N.t("57-chains.acb75757818d") + '</td><td class="r">') + w.tickStart + ' to ' + w.tickEnd + '</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.c6a5d9f59255") + '</td><td class="r">') + fmtNum(w.LStart) + ' / ' + fmtNum(w.LEnd) + ('</td><td>' + window.DLI18N.t("57-chains.1af59d104c06") + '</td><td class="r">') + (w.impactBps == null ? "—" : w.impactBps.toFixed(1) + " bp") + '</td></tr>' +
+      ('<tr><td>' + window.DLI18N.t("57-chains.5033c4a97f0c") + '</td><td class="r">') + w.feeGrowthGlobal.toExponential(4) + ('</td><td>' + window.DLI18N.t("57-chains.cdcf65b93cbf") + '</td><td class="r">' + window.DLI18N.t("57-chains.afeccd7a4b97") + '</td></tr>') +
       '</tbody></table></div>';
 
     /* fee growth inside a range, the three-term identity */
     var lo = alignTick(pool.tick, pool.slotTicks) - pool.slotTicks * 4;
     var hi = lo + pool.slotTicks * 8;
     var inside = feeGrowthInside(lo, hi, w.tickEnd, w.feeGrowthGlobal, 0, w.feeGrowthGlobal);
-    h += '<div class="ch-branch"><b>Fee growth inside a range.</b> Fees are not held by the pool, they are owed to whichever positions were in range when they were earned, so the pool tracks growth <i>per unit of liquidity</i> and each initialised tick stores feeGrowthOutside, flipping it to global minus itself on every crossing. For a position over ticks ' + lo + ' to ' + hi + ' after this walk, feeGrowthInside = global ' + w.feeGrowthGlobal.toExponential(4) + ' minus the part below minus the part above = ' + inside.toExponential(4) + '. That is the three-term identity from Uniswap v3 core, Tick.sol — and it is why a concentrated position earns more per dollar exactly where it also carries more inventory risk.</div>';
+    h += ('<div class="ch-branch"><b>' + window.DLI18N.t("57-chains.ea16091308f7") + '</b>' + window.DLI18N.t("57-chains.6b6a15ed68f5") + '<i>' + window.DLI18N.t("57-chains.cdcf65b93cbf") + '</i>' + window.DLI18N.t("57-chains.0ae04571c018") + '') + lo + ' to ' + hi + ' after this walk, feeGrowthInside = global ' + w.feeGrowthGlobal.toExponential(4) + ' minus the part below minus the part above = ' + inside.toExponential(4) + ('' + window.DLI18N.t("57-chains.a16fb284696b") + '</div>');
 
     if (row.arrays) {
-      h += '<div class="ch-branch"><b>Solana tick arrays.</b> ' + esc(row.arrays.remedy) + ' This order travels ' + Math.round(row.arrays.ticksTravelled) + ' ticks = ' + row.arrays.spacingsTravelled.toFixed(1) + ' spacings = ' + row.arrays.arraysNeeded + ' array' + (row.arrays.arraysNeeded === 1 ? "" : "s") + ', against a ceiling of ' + row.arrays.arraysPerSwap + ' (' + row.arrays.maxTicksPerSwap + ' ticks, a ' + row.arrays.maxMovePct.toFixed(2) + '% move) per swap instruction.</div>';
+      h += ('<div class="ch-branch"><b>' + window.DLI18N.t("57-chains.2bc66281b1d7") + '</b> ') + esc(row.arrays.remedy) + ' This order travels ' + Math.round(row.arrays.ticksTravelled) + ' ticks = ' + row.arrays.spacingsTravelled.toFixed(1) + ' spacings = ' + row.arrays.arraysNeeded + ' array' + (row.arrays.arraysNeeded === 1 ? "" : "s") + ', against a ceiling of ' + row.arrays.arraysPerSwap + ' (' + row.arrays.maxTicksPerSwap + ' ticks, a ' + row.arrays.maxMovePct.toFixed(2) + ('' + window.DLI18N.t("57-chains.dd42cf5f8cb8") + '</div>');
     }
 
     var fk = forkPool();
@@ -38049,28 +38219,28 @@ window.DXSCRIPTUI = (function () {
 
   /* ------------------------------------------------------------ Method */
   function paneMethod() {
-    var h = '<div class="ch-note">Everything this desk does, in plain language. If a number anywhere on it cannot be traced to one of these paragraphs, it should not be on the screen.</div>';
+    var h = ('<div class="ch-note">' + window.DLI18N.t("57-chains.45e18b453c37") + '</div>');
     var i;
     h += '<div class="ch-method">';
     for (i = 0; i < METHOD.length; i++) h += '<div class="ch-mrow"><b>' + esc(METHOD[i][0]) + '</b><span>' + esc(METHOD[i][1]) + '</span></div>';
     h += '</div>';
-    h += '<div class="ch-sub">What is assumed, and what is measured</div><ul class="ch-assume">';
+    h += ('<div class="ch-sub">' + window.DLI18N.t("57-chains.72575be9ba5c") + '</div><ul class="ch-assume">');
     for (i = 0; i < ASSUMPTIONS.length; i++) h += '<li>' + esc(ASSUMPTIONS[i]) + '</li>';
     h += '</ul>';
-    h += '<div class="ch-sub">Sources</div><ul class="ch-assume">' +
-      '<li>Uniswap v3 whitepaper, equations 6.29 and 6.30 (amounts from liquidity), and v3-core TickMath / SwapMath / Tick.sol for the tick space, computeSwapStep and the fee-growth identity.</li>' +
-      '<li>The worked liquidity example — price 5000, range 4545 to 5500, L = 1519.437308 from the base side and 1517.882344 from the quote side — is from the Uniswap v3 development book, and the gate re-derives both independently.</li>' +
-      '<li>EIP-4844 for fake_exponential, MIN_BASE_FEE_PER_BLOB_GAS = 1 wei, the Cancun update fraction 3338477 and 131072 blob gas per blob.</li>' +
-      '<li>The OP-stack Ecotone L1 cost formula, and Arbitrum Nitro\'s poster-gas accounting through ArbGasInfo.</li>' +
-      '<li>Orca Whirlpool\'s tick-array layout: 88 ticks per array, at most 3 arrays per swap instruction.</li>' +
-      '<li>The trust taxonomy — natively / externally / optimistically / locally verified — is the interoperability-trilemma one, from Connext\'s Arjun Bhuptani.</li>' +
-      '<li>Abramowitz and Stegun 7.1.26 for the error function used in the slippage-breach probability.</li>' +
+    h += ('<div class="ch-sub">' + window.DLI18N.t("57-chains.caf85b0888d7") + '</div><ul class="ch-assume">') +
+      ('<li>' + window.DLI18N.t("57-chains.18bd54c3ff1e") + '</li>') +
+      ('<li>' + window.DLI18N.t("57-chains.cc21848f2b9b") + '</li>') +
+      ('<li>' + window.DLI18N.t("57-chains.1fe1d7cc7511") + '</li>') +
+      ('<li>' + window.DLI18N.t("57-chains.041bb769152c") + '</li>') +
+      ('<li>' + window.DLI18N.t("57-chains.673d8aa03113") + '</li>') +
+      ('<li>' + window.DLI18N.t("57-chains.710d2a059233") + '</li>') +
+      ('<li>' + window.DLI18N.t("57-chains.9131e0ac0d79") + '</li>') +
       '</ul>';
     return h;
   }
 
   function assumptionStrip() {
-    return '<div class="ch-strip">The tick liquidity distribution is modelled; the arithmetic over it is exact. Gas, blob and priority prices are the app\'s own signals and are named per row. No bridge and no L2 is queried live in this build. The only real-chain row is the fork node when connected. Full detail on the Method tab.</div>';
+    return ('<div class="ch-strip">' + window.DLI18N.t("57-chains.55f4631ef62e") + '</div>');
   }
 
   /* ==================================================================
@@ -38132,8 +38302,8 @@ window.DXSCRIPTUI = (function () {
     var el = null;
     try {
       el = C.open("dlChain", {
-        title: "⛓ Cross-chain",
-        sub: "The same trade on six chains — real tick math, the fee split that produces it, and who has to be honest for it to arrive",
+        title: window.DLI18N.t("57-chains.41d430783542"),
+        sub: window.DLI18N.t("57-chains.b25ec7c34727"),
         tabs: [["route", "Route"], ["chains", "Chains"], ["bridges", "Bridges"], ["ticks", "Ticks"], ["method", "Method"]],
         onTab: bodyFor
       }, tab || "route");
