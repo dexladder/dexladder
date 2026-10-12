@@ -1,0 +1,42 @@
+name: production health
+
+on:
+  schedule:
+    - cron: "43 * * * *"
+  workflow_dispatch:
+  push:
+    branches: [main]
+    paths: ["tools/production_health.py", "docs/production-health-baseline.json", ".github/workflows/production-health.yml"]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: production-health-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: production domains
+    runs-on: ubuntu-24.04
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v7
+      - uses: actions/setup-python@v7
+        with: { python-version: "3.12" }
+      - name: Check both production domains
+        run: python3 tools/production_health.py --output production-health.json
+      - name: Save health evidence
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: production-health-${{ github.run_id }}
+          path: production-health.json
+          retention-days: 14
+      - name: Health summary
+        if: always()
+        run: |
+          echo '### Production domain health' >> "$GITHUB_STEP_SUMMARY"
+          if test -f production-health.json; then
+            cat production-health.json >> "$GITHUB_STEP_SUMMARY"
+          fi

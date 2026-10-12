@@ -8,10 +8,18 @@ on:
   schedule:
     - cron: "17 4 * * *"
 
+permissions:
+  contents: read
+
+concurrency:
+  group: verify-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
 jobs:
   reproducible-build:
     name: reproducible build + gates
     runs-on: ubuntu-24.04
+    timeout-minutes: 35
     steps:
       - uses: actions/checkout@v7
       - uses: actions/setup-python@v7
