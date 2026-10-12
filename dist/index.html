@@ -1464,7 +1464,57 @@
   "39-desks.f13024272c38": "Pool",
   "39-desks.f191fd4c74b0": "24h DEX vol",
   "39-desks.f4b06ef6d3c8": "To",
-  "39-desks.f5a53bc229ef": "Vol / TVL"
+  "39-desks.f5a53bc229ef": "Vol / TVL",
+  "39b-ledgers.0241ccff2d40": "Coin",
+  "39b-ledgers.06d38c49e6c8": "drift = circulating supply today ÷ circulating supply N days ago − 1, from daily snapshots taken on this device (",
+  "39b-ledgers.0b3277a4d9e4": "held · ",
+  "39b-ledgers.0ebead23ec8e": "\">Buy basket",
+  "39b-ledgers.111fa5021a0d": "Price then",
+  "39b-ledgers.1142524fcf0e": ". CoinMarketCap can replay 2013; this ledger can only replay what you have witnessed — and it says so.",
+  "39b-ledgers.12defc692297": "Overbought map · RSI",
+  "39b-ledgers.187d8f22da23": "Recording started ",
+  "39b-ledgers.1a2210c51f8e": "Market cap then",
+  "39b-ledgers.326e7575be93": "🗓 Era Ledger",
+  "39b-ledgers.39b2d0966d2d": "Circulating",
+  "39b-ledgers.3a863587ff45": "Name (e.g. L2 trio, AI infra)",
+  "39b-ledgers.3c4b8cb2d814": "index = Σ weight × (price now ÷ price at build) × 100 · buying routes every leg through the same fill engine (slippage, fees, cost basis) as a normal order, so the Portfolio, journal and tax centre all see it",
+  "39b-ledgers.4035f585e44d": "vs BTC over the same period",
+  "39b-ledgers.4ffc9ccc6faf": "your own index · tracked vs BTC · tradeable as one unit",
+  "39b-ledgers.56dd69588794": "Shrinking · 7d",
+  "39b-ledgers.5ac6fcfaf8a2": "\" style=\"width:100%\">",
+  "39b-ledgers.60663a96d84f": "Recording since ",
+  "39b-ledgers.6248c0313424": " cap-weighted",
+  "39b-ledgers.6778ada08aa3": "No baskets yet.",
+  "39b-ledgers.6bfb2d58f377": " so far). Dilution is measured, not scraped from an unlock schedule — a rising circulating supply is the unlock happening. ",
+  "39b-ledgers.7160111b1e7f": "Top 30 · 24h",
+  "39b-ledgers.786de0d60266": "Active Rung",
+  "39b-ledgers.78af0f3142e6": ")\nSupply data: CoinGecko circulating_supply per coin. Stablecoins mint and burn with demand — their drift is flow, not dilution.",
+  "39b-ledgers.78f505550e6b": ". Come back after a few days — the ladder’s supply is snapshotted once a day, and drift needs two points.",
+  "39b-ledgers.7cba413b96c3": "(BTC ",
+  "39b-ledgers.81cc2877c661": "\">Sell basket",
+  "39b-ledgers.93345c0b0ceb": "New basket",
+  "39b-ledgers.95111f68033a": " at entry",
+  "39b-ledgers.95c27a6ad067": "Replay the Ladder ",
+  "39b-ledgers.979abea4dfe6": "Measured 30d supply change",
+  "39b-ledgers.9a194375b89b": "Movers →",
+  "39b-ledgers.9f455a66c4ee": "Inflating fastest · 7d",
+  "39b-ledgers.a717b7678f42": "Rank now",
+  "39b-ledgers.b161540d8c77": "🌊 Supply Drift · ",
+  "39b-ledgers.bc146389208a": "ARB, OP, MATIC…",
+  "39b-ledgers.bdd254b65baa": "Build",
+  "39b-ledgers.c4758df2e760": "Circulating of max",
+  "39b-ledgers.c48e8202ed20": "measured circulating-supply change on this device",
+  "39b-ledgers.c5172a304b33": "Index starts at 100 when built. DL10 = the top 10 by cap, cap-weighted, is one tap below.",
+  "39b-ledgers.ca1844969742": "Unavailable",
+  "39b-ledgers.d0afad270840": "🌊 Supply Drift · movers",
+  "39b-ledgers.d1e12b37aaa1": " equal-weight",
+  "39b-ledgers.d7cef53269d2": "No weekly snapshot has been recorded yet, so there is nothing to replay. The ladder is snapshotted once a week, on this device, and only once at least 50 coins have loaded — the first one lands as soon as the market data does.",
+  "39b-ledgers.da2e5ae0d340": "\">Delete",
+  "39b-ledgers.db6689bd1d3d": "Recorded on this device every day since ",
+  "39b-ledgers.deeda0bbe3cd": "🧺 Baskets",
+  "39b-ledgers.e08a7452ae98": "Build DL10",
+  "39b-ledgers.f45a37805298": "Measured 7d supply change",
+  "39b-ledgers.f7d1a707e9f9": "the ladder as it was, one snapshot a week, recorded on this device"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -10692,18 +10742,18 @@ window.DLLEDGERS = (function () {
     var host = $("dlDossier") || $("dlForecast") || $("cv-kpis"); if (!host) return;
     var el = $("dlSupply"); if (el && el.dataset.sym === sym) return; if (!el) { el = document.createElement("div"); el.id = "dlSupply"; el.className = "dl154"; } el.dataset.sym = sym; host.insertAdjacentElement("afterend", el);
     var d = supDrift(sym), max = c.maxSupply || c.totalSupply || null, prog = (max && null != c.supply) ? Math.min(100, c.supply / max * 100) : null;
-    el.innerHTML = '<div class="h">🌊 Supply Drift · ' + esc(sym) + '</div>' + (prog != null ? '<div class="kv"><span>Circulating of max</span><b>' + prog.toFixed(1) + "% (" + (null == c.supply ? "Unavailable" : C.big(c.supply)) + " / " + C.big(max) + ')</b></div><div class="dl-gauge" style="background:linear-gradient(90deg,#3ae58f,#ffb300)"><i style="left:' + prog.toFixed(0) + '%"></i></div>' : '<div class="kv"><span>Circulating</span><b>' + (null == c.supply ? "Unavailable" : C.big(c.supply) + " · no fixed max") + "</b></div>") +
-      (d ? '<div class="kv"><span>Measured 7d supply change</span><b>' + driftText(d.d7) + '</b></div><div class="kv"><span>Measured 30d supply change</span><b>' + driftText(d.d30) + "</b></div>" : "") +
-      '<div class="n">Recorded on this device every day since ' + esc(d ? d.since : day()) + " (" + (d ? d.days : 1) + " day" + (d && d.days !== 1 ? "s" : "") + " so far). Dilution is measured, not scraped from an unlock schedule — a rising circulating supply is the unlock happening. <button class=\"dl-b\" id=\"dlSupMore\">Movers →</button></div>";
+    el.innerHTML = ('<div class="h">' + window.DLI18N.t("39b-ledgers.b161540d8c77") + '') + esc(sym) + '</div>' + (prog != null ? ('<div class="kv"><span>' + window.DLI18N.t("39b-ledgers.c4758df2e760") + '</span><b>') + prog.toFixed(1) + "% (" + (null == c.supply ? "Unavailable" : C.big(c.supply)) + " / " + C.big(max) + ')</b></div><div class="dl-gauge" style="background:linear-gradient(90deg,#3ae58f,#ffb300)"><i style="left:' + prog.toFixed(0) + '%"></i></div>' : ('<div class="kv"><span>' + window.DLI18N.t("39b-ledgers.39b2d0966d2d") + '</span><b>') + (null == c.supply ? "Unavailable" : C.big(c.supply) + " · no fixed max") + "</b></div>") +
+      (d ? ('<div class="kv"><span>' + window.DLI18N.t("39b-ledgers.f45a37805298") + '</span><b>') + driftText(d.d7) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("39b-ledgers.979abea4dfe6") + '</span><b>') + driftText(d.d30) + "</b></div>" : "") +
+      ('<div class="n">' + window.DLI18N.t("39b-ledgers.db6689bd1d3d") + '') + esc(d ? d.since : day()) + " (" + (d ? d.days : 1) + " day" + (d && d.days !== 1 ? "s" : "") + (window.DLI18N.t("39b-ledgers.6bfb2d58f377") + "<button class=\"dl-b\" id=\"dlSupMore\">" + window.DLI18N.t("39b-ledgers.9a194375b89b") + "</button></div>");
     $("dlSupMore").onclick = supSheet;
   }
   function supSheet() {
-    C.open("dlSupplySheet", { title: "🌊 Supply Drift · movers", sub: "measured circulating-supply change on this device", tabs: [], onTab: function (t, body) {
+    C.open("dlSupplySheet", { title: window.DLI18N.t("39b-ledgers.d0afad270840"), sub: window.DLI18N.t("39b-ledgers.c48e8202ed20"), tabs: [], onTab: function (t, body) {
       var st = supStore(), keys = Object.keys(st.days).sort();
-      if (keys.length < 2) { body.innerHTML = '<div class="dl-empty">Recording started ' + esc(st.since) + '. Come back after a few days — the ladder’s supply is snapshotted once a day, and drift needs two points.</div>'; return; }
+      if (keys.length < 2) { body.innerHTML = ('<div class="dl-empty">' + window.DLI18N.t("39b-ledgers.187d8f22da23") + '') + esc(st.since) + ('' + window.DLI18N.t("39b-ledgers.78f505550e6b") + '</div>'); return; }
       var rows = C.coinsAll().map(function (c) { var d = supDrift(c.sym); return d && d.d7 && null != d.d7.pct ? { sym: c.sym, name: c.name, p7: d.d7.pct, p30: (d.d30 && null != d.d30.pct) ? d.d30.pct : null, now: d.now } : null; }).filter(Boolean).sort(function (a, b) { return b.p7 - a.p7; });
-      body.innerHTML = '<div class="dl-2"><div class="dl154"><div class="h">Inflating fastest · 7d</div>' + rows.slice(0, 12).map(function (r) { return '<div class="kv"><span><b>' + esc(r.sym) + "</b> " + esc(r.name) + "</span><b>" + C.chg(r.p7, 2) + "</b></div>"; }).join("") + '</div><div class="dl154"><div class="h">Shrinking · 7d</div>' + rows.slice(-12).reverse().map(function (r) { return '<div class="kv"><span><b>' + esc(r.sym) + "</b> " + esc(r.name) + "</span><b>" + C.chg(r.p7, 2) + "</b></div>"; }).join("") + "</div></div>" +
-        '<div class="dl-formula">drift = circulating supply today ÷ circulating supply N days ago − 1, from daily snapshots taken on this device (' + keys.length + " days recorded since " + esc(st.since) + ")\nSupply data: CoinGecko circulating_supply per coin. Stablecoins mint and burn with demand — their drift is flow, not dilution.</div>";
+      body.innerHTML = ('<div class="dl-2"><div class="dl154"><div class="h">' + window.DLI18N.t("39b-ledgers.9f455a66c4ee") + '</div>') + rows.slice(0, 12).map(function (r) { return '<div class="kv"><span><b>' + esc(r.sym) + "</b> " + esc(r.name) + "</span><b>" + C.chg(r.p7, 2) + "</b></div>"; }).join("") + ('</div><div class="dl154"><div class="h">' + window.DLI18N.t("39b-ledgers.56dd69588794") + '</div>') + rows.slice(-12).reverse().map(function (r) { return '<div class="kv"><span><b>' + esc(r.sym) + "</b> " + esc(r.name) + "</span><b>" + C.chg(r.p7, 2) + "</b></div>"; }).join("") + "</div></div>" +
+        ('<div class="dl-formula">' + window.DLI18N.t("39b-ledgers.06d38c49e6c8") + '') + keys.length + " days recorded since " + esc(st.since) + (window.DLI18N.t("39b-ledgers.78af0f3142e6") + "</div>");
     } });
   }
 
@@ -10717,13 +10767,13 @@ window.DLLEDGERS = (function () {
     C.lsSet(ERA_LS, st);
   }
   function eraSheet() {
-    C.open("dlEra", { title: "🗓 Era Ledger", sub: "the ladder as it was, one snapshot a week, recorded on this device", tabs: [], onTab: function (t, body) {
+    C.open("dlEra", { title: window.DLI18N.t("39b-ledgers.326e7575be93"), sub: window.DLI18N.t("39b-ledgers.f7d1a707e9f9"), tabs: [], onTab: function (t, body) {
       var st = eraStore(), keys = Object.keys(st.weeks).sort(); if (!keys.length) { eraRecord(); st = eraStore(); keys = Object.keys(st.weeks).sort(); }
       var latest = st.weeks[keys[keys.length - 1]] || [];
       function paint(i) {
         var k = keys[i], snap = st.weeks[k] || [], rankNow = {}; latest.forEach(function (r, j) { rankNow[r[0]] = j + 1; });
         $("dlEraLbl").textContent = "week of " + k + (i === keys.length - 1 ? " (latest)" : "");
-        $("dlEraTbl").innerHTML = '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>#</th><th>Coin</th><th class="r">Market cap then</th><th class="r">Price then</th><th class="r">Rank now</th></tr></thead><tbody>' + snap.slice(0, 50).map(function (r, j) { var rn = rankNow[r[0]]; var mv = rn ? rn - (j + 1) : null; return '<tr class="click" data-coin="' + esc(r[0]) + '"><td>' + (j + 1) + "</td><td><b>" + esc(r[0]) + '</b></td><td class="r">' + C.big(r[1]) + '</td><td class="r">' + C.money(r[2]) + '</td><td class="r">' + (rn ? rn + (mv ? ' <span class="' + (mv < 0 ? "up" : "dn") + '">' + (mv < 0 ? "▲" + (-mv) : "▼" + mv) + "</span>" : "") : "off the top 100") + "</td></tr>"; }).join("") + "</tbody></table></div>";
+        $("dlEraTbl").innerHTML = ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>#</th><th>' + window.DLI18N.t("39b-ledgers.0241ccff2d40") + '</th><th class="r">' + window.DLI18N.t("39b-ledgers.1a2210c51f8e") + '</th><th class="r">' + window.DLI18N.t("39b-ledgers.111fa5021a0d") + '</th><th class="r">' + window.DLI18N.t("39b-ledgers.a717b7678f42") + '</th></tr></thead><tbody>') + snap.slice(0, 50).map(function (r, j) { var rn = rankNow[r[0]]; var mv = rn ? rn - (j + 1) : null; return '<tr class="click" data-coin="' + esc(r[0]) + '"><td>' + (j + 1) + "</td><td><b>" + esc(r[0]) + '</b></td><td class="r">' + C.big(r[1]) + '</td><td class="r">' + C.money(r[2]) + '</td><td class="r">' + (rn ? rn + (mv ? ' <span class="' + (mv < 0 ? "up" : "dn") + '">' + (mv < 0 ? "▲" + (-mv) : "▼" + mv) + "</span>" : "") : "off the top 100") + "</td></tr>"; }).join("") + "</tbody></table></div>";
       }
       /* v155-F: paint(keys.length - 1) was unguarded. eraRecord() bails while fewer than 50
          coins have loaded, so on that device keys is empty, keys[-1] is undefined, and the
@@ -10731,10 +10781,10 @@ window.DLLEDGERS = (function () {
          max was -1. Nothing is missing here — nothing has happened yet — and the law is that
          missing data reads "Unavailable", never a literal undefined and never a bare dash. */
       if (!keys.length) {
-        body.innerHTML = '<div class="dl154"><div class="h">Replay the Ladder <span class="sp"></span><span id="dlEraLbl">Unavailable</span></div><div class="dl-empty">No weekly snapshot has been recorded yet, so there is nothing to replay. The ladder is snapshotted once a week, on this device, and only once at least 50 coins have loaded — the first one lands as soon as the market data does.</div><div class="n">Recording since ' + esc(st.since) + ". CoinMarketCap can replay 2013; this ledger can only replay what you have witnessed — and it says so.</div></div>";
+        body.innerHTML = ('<div class="dl154"><div class="h">' + window.DLI18N.t("39b-ledgers.95c27a6ad067") + '<span class="sp"></span><span id="dlEraLbl">' + window.DLI18N.t("39b-ledgers.ca1844969742") + '</span></div><div class="dl-empty">' + window.DLI18N.t("39b-ledgers.d7cef53269d2") + '</div><div class="n">' + window.DLI18N.t("39b-ledgers.60663a96d84f") + '') + esc(st.since) + (window.DLI18N.t("39b-ledgers.1142524fcf0e") + "</div></div>");
         return;
       }
-      body.innerHTML = '<div class="dl154"><div class="h">Replay the Ladder <span class="sp"></span><span id="dlEraLbl"></span></div><input type="range" id="dlEraScrub" min="0" max="' + (keys.length - 1) + '" value="' + (keys.length - 1) + '" style="width:100%"><div class="n">' + keys.length + " weekly snapshot" + (keys.length === 1 ? "" : "s") + " since " + esc(st.since) + ". CoinMarketCap can replay 2013; this ledger can only replay what you have witnessed — and it says so.</div></div><div id=\"dlEraTbl\"></div>";
+      body.innerHTML = ('<div class="dl154"><div class="h">' + window.DLI18N.t("39b-ledgers.95c27a6ad067") + '<span class="sp"></span><span id="dlEraLbl"></span></div><input type="range" id="dlEraScrub" min="0" max="') + (keys.length - 1) + '" value="' + (keys.length - 1) + ('' + window.DLI18N.t("39b-ledgers.5ac6fcfaf8a2") + '<div class="n">') + keys.length + " weekly snapshot" + (keys.length === 1 ? "" : "s") + " since " + esc(st.since) + (window.DLI18N.t("39b-ledgers.1142524fcf0e") + "</div></div><div id=\"dlEraTbl\"></div>");
       paint(keys.length - 1);
       $("dlEraScrub").oninput = function () { paint(+this.value); };
       body.addEventListener("click", function (e) { var tr = e.target.closest("tr[data-coin]"); if (tr && C.coin(tr.getAttribute("data-coin"))) { C.close("dlEra"); openCoin(tr.getAttribute("data-coin")); } });
@@ -10775,11 +10825,11 @@ window.DLLEDGERS = (function () {
     b.held = null; C.save(); try { updateNavBal(); } catch (e) {} C.sfx("sell"); C.toast("good", "Basket sold" + C.simTag(), n + " legs closed — realised P&L is in the journal");
   }
   function basketSheet() {
-    C.open("dlBaskets", { title: "🧺 Baskets", sub: "your own index · tracked vs BTC · tradeable as one unit", tabs: [], onTab: function (t, body) {
+    C.open("dlBaskets", { title: window.DLI18N.t("39b-ledgers.deeda0bbe3cd"), sub: window.DLI18N.t("39b-ledgers.4ffc9ccc6faf"), tabs: [], onTab: function (t, body) {
       var bs = B() || [], btc = (C.coin("BTC") || {}).price || 0;
-      body.innerHTML = '<div class="dl154"><div class="h">New basket</div><div class="dl-2"><input class="dl-inp" id="dlBkName" placeholder="Name (e.g. L2 trio, AI infra)"><input class="dl-inp" id="dlBkSyms" placeholder="ARB, OP, MATIC…"></div><div style="display:flex;gap:8px;margin-top:8px;align-items:center"><label class="dl-tog"><input type="radio" name="dlBkMode" value="eq" checked> equal-weight</label><label class="dl-tog"><input type="radio" name="dlBkMode" value="cap"> cap-weighted</label><span style="flex:1"></span><button class="dl-b pri" id="dlBkMake">Build</button></div><div class="n">Index starts at 100 when built. DL10 = the top 10 by cap, cap-weighted, is one tap below.<button class="dl-b" id="dlBkDl10" style="margin-left:8px">Build DL10</button></div></div>' +
-        (bs.length ? bs.map(function (b, i) { var idx = basketIndex(b), btcIdx = b.btc0 ? btc / b.btc0 * 100 : null; return '<div class="dl154"><div class="h">🧺 ' + esc(b.name) + ' <span style="font:500 11px var(--ui-sans,sans-serif);color:var(--muted)">· ' + (b.mode === "cap" ? "cap-weighted" : "equal-weight") + " · since " + C.ago(b.t) + '</span><span class="sp"></span><b style="font-size:18px" class="' + (idx >= 100 ? "up" : "dn") + '">' + idx.toFixed(2) + "</b></div>" + '<div class="kv"><span>vs BTC over the same period</span><b>' + (btcIdx ? C.chg(idx - btcIdx, 2) + ' <span style="opacity:.6">(BTC ' + btcIdx.toFixed(1) + ")</span>" : "—") + '</b></div><div class="dl-chips" style="margin:6px 0">' + b.legs.map(function (l) { var c = C.coin(l.sym); return '<span class="dl-chip">' + esc(l.sym) + " " + (l.w * 100).toFixed(0) + "% " + (c ? C.chg((c.price / l.px0 - 1) * 100, 1) : "") + "</span>"; }).join("") + '</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' + (b.held ? '<span class="dl-sim">held · ' + C.money(b.usd, 0) + ' at entry</span><button class="dl-b warn" data-sell="' + i + '">Sell basket</button>' : '<input class="dl-inp" data-amt="' + i + '" type="number" value="1000" style="width:110px"><button class="dl-b pri" data-buy="' + i + '">Buy basket</button>') + '<button class="dl-b" data-del="' + i + '">Delete</button></div></div>'; }).join("") : '<div class="dl-empty">No baskets yet.</div>') +
-        '<div class="dl-formula">index = Σ weight × (price now ÷ price at build) × 100 · buying routes every leg through the same fill engine (slippage, fees, cost basis) as a normal order, so the Portfolio, journal and tax centre all see it</div>';
+      body.innerHTML = ('<div class="dl154"><div class="h">' + window.DLI18N.t("39b-ledgers.93345c0b0ceb") + '</div><div class="dl-2"><input class="dl-inp" id="dlBkName" placeholder="' + window.DLI18N.t("39b-ledgers.3a863587ff45") + '"><input class="dl-inp" id="dlBkSyms" placeholder="' + window.DLI18N.t("39b-ledgers.bc146389208a") + '"></div><div style="display:flex;gap:8px;margin-top:8px;align-items:center"><label class="dl-tog"><input type="radio" name="dlBkMode" value="eq" checked>' + window.DLI18N.t("39b-ledgers.d1e12b37aaa1") + '</label><label class="dl-tog"><input type="radio" name="dlBkMode" value="cap">' + window.DLI18N.t("39b-ledgers.6248c0313424") + '</label><span style="flex:1"></span><button class="dl-b pri" id="dlBkMake">' + window.DLI18N.t("39b-ledgers.bdd254b65baa") + '</button></div><div class="n">' + window.DLI18N.t("39b-ledgers.c5172a304b33") + '<button class="dl-b" id="dlBkDl10" style="margin-left:8px">' + window.DLI18N.t("39b-ledgers.e08a7452ae98") + '</button></div></div>') +
+        (bs.length ? bs.map(function (b, i) { var idx = basketIndex(b), btcIdx = b.btc0 ? btc / b.btc0 * 100 : null; return '<div class="dl154"><div class="h">🧺 ' + esc(b.name) + ' <span style="font:500 11px var(--ui-sans,sans-serif);color:var(--muted)">· ' + (b.mode === "cap" ? "cap-weighted" : "equal-weight") + " · since " + C.ago(b.t) + '</span><span class="sp"></span><b style="font-size:18px" class="' + (idx >= 100 ? "up" : "dn") + '">' + idx.toFixed(2) + "</b></div>" + ('<div class="kv"><span>' + window.DLI18N.t("39b-ledgers.4035f585e44d") + '</span><b>') + (btcIdx ? C.chg(idx - btcIdx, 2) + (' <span style="opacity:.6">' + window.DLI18N.t("39b-ledgers.7cba413b96c3") + '') + btcIdx.toFixed(1) + ")</span>" : "—") + '</b></div><div class="dl-chips" style="margin:6px 0">' + b.legs.map(function (l) { var c = C.coin(l.sym); return '<span class="dl-chip">' + esc(l.sym) + " " + (l.w * 100).toFixed(0) + "% " + (c ? C.chg((c.price / l.px0 - 1) * 100, 1) : "") + "</span>"; }).join("") + '</div><div style="display:flex;gap:6px;align-items:center;flex-wrap:wrap">' + (b.held ? ('<span class="dl-sim">' + window.DLI18N.t("39b-ledgers.0b3277a4d9e4") + '') + C.money(b.usd, 0) + ('' + window.DLI18N.t("39b-ledgers.95111f68033a") + '</span><button class="dl-b warn" data-sell="') + i + ('' + window.DLI18N.t("39b-ledgers.81cc2877c661") + '</button>') : '<input class="dl-inp" data-amt="' + i + '" type="number" value="1000" style="width:110px"><button class="dl-b pri" data-buy="' + i + ('' + window.DLI18N.t("39b-ledgers.0ebead23ec8e") + '</button>')) + '<button class="dl-b" data-del="' + i + ('' + window.DLI18N.t("39b-ledgers.da2e5ae0d340") + '</button></div></div>'); }).join("") : ('<div class="dl-empty">' + window.DLI18N.t("39b-ledgers.6778ada08aa3") + '</div>')) +
+        ('<div class="dl-formula">' + window.DLI18N.t("39b-ledgers.3c4b8cb2d814") + '</div>');
       $("dlBkMake").onclick = function () { var syms = $("dlBkSyms").value.split(/[,\s]+/).filter(Boolean); var mode = body.querySelector('input[name="dlBkMode"]:checked').value; if (mkBasket($("dlBkName").value, syms, mode)) basketSheet(); else C.toast("bad", "Need at least two ladder coins", "Symbols must be on the 500-coin ladder"); };
       $("dlBkDl10").onclick = function () { var top = C.coinsAll().filter(function (c) { return c.sym !== "USDT" && c.sym !== "USDC" && !(window.DLRUNGS && DLRUNGS.wrapped[c.sym]); }).sort(function (a, b) { return b.mcap - a.mcap; }).slice(0, 10).map(function (c) { return c.sym; }); if (mkBasket("DL10", top, "cap")) basketSheet(); };
       body.querySelectorAll("[data-buy]").forEach(function (b) { b.onclick = function () { var i = +b.getAttribute("data-buy"); basketBuy(bs[i], (body.querySelector('[data-amt="' + i + '"]') || {}).value); basketSheet(); }; });
@@ -10834,7 +10884,7 @@ window.DLLEDGERS = (function () {
     var heat = $("dlHeat"); if (!heat || $("dlHeatLens")) return;
     var hh = heat.querySelector(".hh");
     var bar = document.createElement("div"); bar.id = "dlHeatLens"; bar.className = "dl-chips"; bar.style.margin = "6px 0 8px";
-    bar.innerHTML = '<button class="dl-chip on" data-lens="top">Top 30 · 24h</button><button class="dl-chip" data-lens="rung">Active Rung</button><button class="dl-chip" data-lens="rsi">Overbought map · RSI</button>';
+    bar.innerHTML = ('<button class="dl-chip on" data-lens="top">' + window.DLI18N.t("39b-ledgers.7160111b1e7f") + '</button><button class="dl-chip" data-lens="rung">' + window.DLI18N.t("39b-ledgers.786de0d60266") + '</button><button class="dl-chip" data-lens="rsi">' + window.DLI18N.t("39b-ledgers.12defc692297") + '</button>');
     if (hh) hh.insertAdjacentElement("afterend", bar); else heat.insertAdjacentElement("afterbegin", bar);
     var hn = heat.querySelector(".hn"); if (hn && !hn.dataset.base) hn.dataset.base = hn.textContent;
     bar.addEventListener("click", function (e) { var b = e.target.closest("[data-lens]"); if (!b) return; LENS = b.getAttribute("data-lens"); bar.querySelectorAll("[data-lens]").forEach(function (x) { x.classList.toggle("on", x === b); }); if (hn) hn.textContent = LENS === "rsi" ? "Top 40 by market cap · size = cap · colour = RSI-14 (red = overbought, green = oversold) · tap a tile to open the coin" : LENS === "rung" ? "Your active Rung · size = cap · colour = 24h move · tap a tile to open the coin" : hn.dataset.base; lensPaint(); });
