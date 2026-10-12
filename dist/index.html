@@ -1661,6 +1661,7 @@
   "41-trust.022f9ede2d6a": "v154",
   "41-trust.05d4eabad5f6": "Model prose",
   "41-trust.06a7b164556d": "Feeds",
+  "41-trust.0cfacb5a20d0": "Cannot verify this copy yet. Reload after the update is ready.",
   "41-trust.0f2631095c26": " — all keyless, all requested from your device:",
   "41-trust.0f8cb76fc9cb": ": your questions are answered by an on-device composer and, when your browser has one, Chrome’s built-in model — nothing leaves the device. In Hybrid or Cloud mode, and only after you paste a gateway URL you deployed yourself, the question and the facts it needs are sent to ",
   "41-trust.1010777c577d": "Running build SHA-256",
@@ -11986,7 +11987,7 @@ window.DLTRUST154 = (function () {
         button.onclick = function () {
           navigator.clipboard.writeText(hash).then(function () { hashCard.querySelector('#dlHashStatus').textContent = window.DLI18N.t("41-trust.d249818eccab"); }, function () { hashCard.querySelector('#dlHashStatus').textContent = window.DLI18N.t("41-trust.32b8ee04eb61"); });
         };
-      }).catch(function () { hashCard.querySelector('#dlBuildHash').textContent = window.DLI18N.t("41-trust.ca1844969742"); hashCard.querySelector('#dlHashStatus').textContent = window.DLI18N.t("41-trust.ef18eff6b35a"); });
+      }).catch(function () { hashCard.querySelector('#dlBuildHash').textContent = window.DLI18N.t("41-trust.ca1844969742"); hashCard.querySelector('#dlHashStatus').textContent = window.DLI18N.t("41-trust.0cfacb5a20d0"); });
     }
     if (tab === "sources" && !body.querySelector(".v154-src")) { var card = body.querySelector(".dlt-card"); if (card) card.insertAdjacentHTML("afterend", ('<div class="dlt-card v154-src"><b>' + window.DLI18N.t("41-trust.e671c108c8b4") + '</b>' + window.DLI18N.t("41-trust.0f2631095c26") + '<br>' + window.DLI18N.t("41-trust.9016fdcd4686") + '<br><b>' + window.DLI18N.t("41-trust.fd098b0313a9") + '</b>' + window.DLI18N.t("41-trust.20dde24ba596") + '</div>')); }
     if (tab === "changelog" && !body.querySelector(".v154-row")) { var c2 = body.querySelector(".dlt-card"); if (c2) c2.insertAdjacentHTML("afterbegin", ('<div class="dlt-vrow v154-row"><span class="n"><b style="color:var(--ink)">' + window.DLI18N.t("41-trust.022f9ede2d6a") + '</b>' + window.DLI18N.t("41-trust.b18713d8d798") + '</span><span class="val" style="color:var(--muted);font-weight:400;max-width:62%">') + CHANGES.map(function (c) { return c[0]; }).join(" · ") + ('' + window.DLI18N.t("41-trust.769d4484428d") + '</span></div>')); }
@@ -11994,12 +11995,27 @@ window.DLTRUST154 = (function () {
   }
   var hashPromise;
   function buildHash() {
-    if (!hashPromise) hashPromise = fetch(location.href.split('#')[0], { cache: 'force-cache' }).then(function (response) {
-      if (!response.ok) throw new Error('payload unavailable');
-      return response.arrayBuffer();
-    }).then(function (bytes) { return crypto.subtle.digest('SHA-256', bytes); }).then(function (digest) {
-      return Array.from(new Uint8Array(digest)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
-    }).catch(function (error) { hashPromise = null; throw error; });
+    if (!hashPromise) {
+      var controller = navigator.serviceWorker && navigator.serviceWorker.controller;
+      if (controller) hashPromise = new Promise(function (resolve, reject) {
+        var channel = new MessageChannel();
+        var timeout = setTimeout(function () { channel.port1.close(); reject(new Error('Navigation witness unavailable')); }, 6000);
+        channel.port1.onmessage = function (event) {
+          clearTimeout(timeout); channel.port1.close();
+          var data = event.data || {};
+          if (/^[a-f0-9]{64}$/.test(data.sha256 || '')) resolve(data.sha256);
+          else reject(new Error('Navigation witness unavailable'));
+        };
+        controller.postMessage({ dl: 'running-build-hash' }, [channel.port2]);
+      });
+      else hashPromise = fetch(location.href.split('#')[0], { cache: 'force-cache' }).then(function (response) {
+        if (!response.ok) throw new Error('payload unavailable');
+        return response.arrayBuffer();
+      }).then(function (bytes) { return crypto.subtle.digest('SHA-256', bytes); }).then(function (digest) {
+        return Array.from(new Uint8Array(digest)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+      });
+      hashPromise = hashPromise.catch(function (error) { hashPromise = null; throw error; });
+    }
     return hashPromise;
   }
   buildHash().catch(function () {}); // capture the served payload near boot, before later deployments
