@@ -107,7 +107,7 @@ window.DLSNAP = (function () {
     if (!contested(f)) return "";
     return '<span class="dl-dis" role="note" tabindex="0" data-dev="' + (+f.dev).toFixed(2) +
       '" data-witnesses="' + C.esc(f.witnesses.map(function (x) { return x.source + "=" + x.value; }).join(";")) +
-      '" title="' + C.esc(witText(f, what)) + '"><span class="dl-dis-w">⚠ sources differ </span>±' + (+f.dev).toFixed(1) + "%</span>";
+      '" title="' + C.esc(witText(f, what)) + ('"><span class="dl-dis-w">' + window.DLI18N.t("21-snapshot.4fc601cbb597") + '</span>±') + (+f.dev).toFixed(1) + "%</span>";
   }
   function mark(path, what) { return dis(get(path), what); }
   /* every contested figure on the current record, for the feed chip and the gate */
@@ -131,15 +131,15 @@ window.DLSNAP = (function () {
     var c = state.current && state.current.checks && state.current.checks[kind];
     if (!c || !c.note) return "";
     return '<span class="dl-flag" role="note" tabindex="0" data-check="' + kind + '" data-state="' + c.state +
-      '" title="' + C.esc(c.note) + '"><span class="dl-dis-w">⚠ exceeds the whole-market figure</span></span>';
+      '" title="' + C.esc(c.note) + ('"><span class="dl-dis-w">' + window.DLI18N.t("21-snapshot.5aad859f3e6b") + '</span></span>');
   }
   /* Two figures side by side must not sit under one chip unless they were witnessed
      the same way. Anything on a strip whose witness list differs from the strip's
      own chip names its own source, at the figure. */
   function srcNote(f, ref) {
     if (!f || !ref || f.value == null || !f.source || f.source === ref.source) return "";
-    return '<span class="dl-src" title="this figure is not witnessed the same way as the chip on this strip">' +
-      C.esc(f.source) + " only</span>";
+    return ('<span class="dl-src" title="' + window.DLI18N.t("21-snapshot.679ae026d266") + '">') +
+      C.esc(f.source) + (window.DLI18N.t("21-snapshot.e850fc29bcd8") + "</span>");
   }
 
   /* ---------------------------------------------------------------- digest */
@@ -436,19 +436,19 @@ window.DLSNAP = (function () {
         w = get("universes.tracked.change24h"), b = get("universes.tracked.dominance.BTC"),
         e = get("universes.tracked.dominance.ETH"), fg = get("sentiment.fearGreed");
     var wv = w.value == null ? null : w.value;
-    var s = '<span class="gi">Cryptos: <b>' + (t ? t.membership.count : 0) + "</b></span>" +
-      '<span class="gi">Market Cap: <b>' + money(cap) + "</b>" +
+    var s = ('<span class="gi">' + window.DLI18N.t("21-snapshot.09f3a2232924") + '<b>') + (t ? t.membership.count : 0) + "</b></span>" +
+      ('<span class="gi">' + window.DLI18N.t("21-snapshot.c1b674940a79") + '<b>') + money(cap) + "</b>" +
       (wv == null ? "" : ' <span class="' + (wv >= 0 ? "up" : "down") + '">' + pctTxt(w) + "</span>") +
       " " + uni(cap) + "</span>" +
-      '<span class="gi">24h Vol: <b>' + money(v) + "</b>" + flag("volume") + "</span>" +
-      '<span class="gi">BTC Dominance: <b>' + pctTxt(b) + "</b></span>" +
-      '<span class="gi">ETH: <b>' + pctTxt(e) + "</b></span>" +
-      (fg.value == null ? "" : '<span class="gi">Fear &amp; Greed: <b>' + fg.value + " " +
+      ('<span class="gi">' + window.DLI18N.t("21-snapshot.ea547acb9eb9") + '<b>') + money(v) + "</b>" + flag("volume") + "</span>" +
+      ('<span class="gi">' + window.DLI18N.t("21-snapshot.e526f7c059f5") + '<b>') + pctTxt(b) + "</b></span>" +
+      ('<span class="gi">' + window.DLI18N.t("21-snapshot.d577bd21b49f") + '<b>') + pctTxt(e) + "</b></span>" +
+      (fg.value == null ? "" : ('<span class="gi">' + window.DLI18N.t("21-snapshot.19eb2edddaa3") + '<b>') + fg.value + " " +
         C.esc((state.current && state.current.sentiment.fearGreedLabel) || "") + "</b></span>") +
       '<span class="gi">' + prov(cap) + "</span>";
     var sim = false; try { sim = "live" !== telem.mode; } catch (_e) {}
-    s += sim ? '<span class="gi" style="color:var(--gold);font-weight:700">● simulated prices — not real market data</span>'
-             : '<span class="gi" style="color:var(--faint)">● live feed</span>';
+    s += sim ? ('<span class="gi" style="color:var(--gold);font-weight:700">' + window.DLI18N.t("21-snapshot.804c1997d026") + '</span>')
+             : ('<span class="gi" style="color:var(--faint)">' + window.DLI18N.t("21-snapshot.7940586e8b79") + '</span>');
     host.innerHTML = s;
   }
 
@@ -527,8 +527,8 @@ window.DLSNAP = (function () {
   function uniSwitch(which) {
     var g = uniSel[which] === "global";
     return '<span class="gs-uni" role="group" aria-label="Market universe" data-uni-bar="' + which + '">' +
-      '<button type="button" data-uni="global" aria-pressed="' + g + '">Whole market</button>' +
-      '<button type="button" data-uni="tracked" aria-pressed="' + !g + '">Tracked set</button></span>';
+      '<button type="button" data-uni="global" aria-pressed="' + g + ('' + window.DLI18N.t("21-snapshot.6b5b0bde1fd3") + '</button>') +
+      '<button type="button" data-uni="tracked" aria-pressed="' + !g + ('' + window.DLI18N.t("21-snapshot.2ff156d39631") + '</button></span>');
   }
   /* Which route is on screen, stamped on <html> so a stylesheet can ask.
      This was a `html:has(main#page-markets.page.active)` rule, and a :has() anchored at
@@ -587,13 +587,13 @@ window.DLSNAP = (function () {
        are never simultaneous — the markup, its labels and its chips are untouched. */
     var agg = function (n) { if (n) n.className = (n.className || "").indexOf("cb-agg") < 0 ? (n.className + " cb-agg") : n.className; return n; };
     var n1 = agg($$("cbMcap"));
-    if (n1) n1.innerHTML = uniSwitch("cb") + " MCap <b>" + money(cap) + "</b>" + dis(cap, "market cap") +
+    if (n1) n1.innerHTML = uniSwitch("cb") + (window.DLI18N.t("21-snapshot.a32834d68f39") + "<b>") + money(cap) + "</b>" + dis(cap, "market cap") +
       (w.value == null ? "" : ' <span class="' + (w.value >= 0 ? "up" : "down") + '">' + pctTxt(w) + "</span>") +
       " " + uni(cap) + " " + prov(cap);
-    var n2 = agg($$("cbVol")); if (n2) n2.innerHTML = "Vol <b>" + money(v) + "</b>" + flag("volume") + dis(v, "24h volume");
-    var n3 = agg($$("cbDom")); if (n3) n3.innerHTML = "BTC <b>" + pctTxt(b) + "</b>" + dis(b, "BTC dominance") + srcNote(b, cap);
-    var n4 = agg($$("cbEth")); if (n4) n4.innerHTML = "ETH <b>" + pctTxt(e) + "</b>" + srcNote(e, cap);
-    var n5 = agg($$("cbFng")); if (n5) n5.innerHTML = fg.value == null ? "" : "F&G <b>" + fg.value + "</b>";
+    var n2 = agg($$("cbVol")); if (n2) n2.innerHTML = (window.DLI18N.t("21-snapshot.559c66e17145") + "<b>") + money(v) + "</b>" + flag("volume") + dis(v, "24h volume");
+    var n3 = agg($$("cbDom")); if (n3) n3.innerHTML = (window.DLI18N.t("21-snapshot.ccdd85cf5a4f") + "<b>") + pctTxt(b) + "</b>" + dis(b, "BTC dominance") + srcNote(b, cap);
+    var n4 = agg($$("cbEth")); if (n4) n4.innerHTML = (window.DLI18N.t("21-snapshot.c2a856cde3fe") + "<b>") + pctTxt(e) + "</b>" + srcNote(e, cap);
+    var n5 = agg($$("cbFng")); if (n5) n5.innerHTML = fg.value == null ? "" : (window.DLI18N.t("21-snapshot.40696ec39474") + "<b>") + fg.value + "</b>";
     try { C.provRefresh(); } catch (e) {}
     return null;
   }
@@ -605,10 +605,10 @@ window.DLSNAP = (function () {
     var cap = get("universes.tracked.marketCap"), v = get("universes.tracked.volume24h"),
         b = get("universes.tracked.dominance.BTC"), e = get("universes.tracked.dominance.ETH");
     return '<div class="mx-panel mx-glob"><div class="mx-ph">' + C.esc(label(cap)) + "</div>" +
-      '<div class="gg"><span class="k">Market cap</span><span class="v">' + money(cap) + "</span></div>" +
-      '<div class="gg"><span class="k">24h volume</span><span class="v">' + money(v) + flag("volume") + "</span></div>" +
-      '<div class="gg"><span class="k">BTC dominance</span><span class="v">' + pctTxt(b) + "</span></div>" +
-      '<div class="gg"><span class="k">ETH dominance</span><span class="v">' + pctTxt(e) + "</span></div>" +
+      ('<div class="gg"><span class="k">' + window.DLI18N.t("21-snapshot.8c68e22ab378") + '</span><span class="v">') + money(cap) + "</span></div>" +
+      ('<div class="gg"><span class="k">' + window.DLI18N.t("21-snapshot.d290ad0bded9") + '</span><span class="v">') + money(v) + flag("volume") + "</span></div>" +
+      ('<div class="gg"><span class="k">' + window.DLI18N.t("21-snapshot.4ac2a5661158") + '</span><span class="v">') + pctTxt(b) + "</span></div>" +
+      ('<div class="gg"><span class="k">' + window.DLI18N.t("21-snapshot.9e0d445b09c4") + '</span><span class="v">') + pctTxt(e) + "</span></div>" +
       '<div class="gg">' + uni(cap) + " " + prov(cap) + "</div></div>";
   }
 
@@ -635,11 +635,11 @@ window.DLSNAP = (function () {
     return {
       title: "Crypto market · " + label(cap),
       html: '<span class="hero">' + money(cap) + "</span>" + dis(cap, "market cap") +
-        '<div class="kv"><span>24h change</span><b>' + pctTxt(ch) + "</b></div>" +
-        '<div class="kv"><span>24h volume</span><b>' + money(v) + dis(v, "24h volume") + "</b></div>" +
-        '<div class="kv"><span>BTC dominance</span><b>' + pctTxt(b) + "</b>" + srcNote(b, cap) + "</div>" +
+        ('<div class="kv"><span>' + window.DLI18N.t("21-snapshot.ff859fd43686") + '</span><b>') + pctTxt(ch) + "</b></div>" +
+        ('<div class="kv"><span>' + window.DLI18N.t("21-snapshot.d290ad0bded9") + '</span><b>') + money(v) + dis(v, "24h volume") + "</b></div>" +
+        ('<div class="kv"><span>' + window.DLI18N.t("21-snapshot.4ac2a5661158") + '</span><b>') + pctTxt(b) + "</b>" + srcNote(b, cap) + "</div>" +
         '<div class="kv"><span>' + C.esc(label(t)) + "</span><b>" + money(t) + "</b></div>" +
-        '<div class="kv"><span>snapshot</span><b>' + (state.current ? state.current.id : "Unavailable") + "</b></div>" +
+        ('<div class="kv"><span>' + window.DLI18N.t("21-snapshot.16a0eeb0791b") + '</span><b>') + (state.current ? state.current.id : "Unavailable") + "</b></div>" +
         '<div class="kv">' + uni(cap) + " " + provStrip([["market cap", cap], ["24h volume", v]], cap) + "</div>",
       src: cap.source + " · " + label(cap) + " · snapshot " + (state.current ? state.current.id : "none"),
       follow: ["What is bitcoin dominance?", "What is market cap, exactly?", "Top movers today"]
