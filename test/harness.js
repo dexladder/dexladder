@@ -158,7 +158,7 @@ async function launch(indexPath, opts){
   await page.goto(`http://127.0.0.1:${port}/${path.basename(indexPath)}`, { waitUntil: 'load', timeout: 120000 });
   return { browser, page, errors, consoleErr, net, close: async () => { await browser.close(); srv.close(); } };
 }
-module.exports = { launch };
+module.exports = { launch, mockNetwork };
 
 if (require.main === module) {
   (async () => {
