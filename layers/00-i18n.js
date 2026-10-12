@@ -918,7 +918,10 @@
   "53-sor.f28779674971": "Enter a size greater than zero.",
   "53-sor.f4c66a610b22": "Nothing to route.",
   "53-sor.f793de205ead": "Low",
-  "53-sor.f842c3e1858d": "Fee"
+  "53-sor.f842c3e1858d": "Fee",
+  "54-dxscriptui.0c87ed818fb9": "study",
+  "54-dxscriptui.75c1ff8646dc": "no bars",
+  "54-dxscriptui.aaf232064610": "title"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
