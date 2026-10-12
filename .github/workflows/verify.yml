@@ -7,7 +7,6 @@ on:
   workflow_dispatch:
   schedule:
     - cron: "17 4 * * *"
-  workflow_dispatch:
 
 jobs:
   reproducible-build:
