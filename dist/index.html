@@ -1111,7 +1111,8 @@
 (function () {
   'use strict';
   var en = {
-  "00-astra-boot.bff91a49cd13": "live markets · paper money · zero stakes"
+  "00-astra-boot.bff91a49cd13": "live markets · paper money · zero stakes",
+  "11-newsfeed.d57cda15bac6": " via "
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -7656,7 +7657,7 @@ window.DLNEWSX = (function () {
           var note = document.getElementById("newsNote"), b = bridgeLabel();
           if (note && b && typeof newsCache !== "undefined" && newsCache.length &&
               note.innerHTML.indexOf("live headlines") >= 0 && note.innerHTML.indexOf("via ") < 0) {
-            note.innerHTML += ' <span class="dot"></span> via ' + b;
+            note.innerHTML += (' <span class="dot"></span>' + window.DLI18N.t("11-newsfeed.d57cda15bac6") + '') + b;
           }
         } catch (e) {}
         return r;
