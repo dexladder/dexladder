@@ -11484,7 +11484,7 @@ window.DLTRUST154 = (function () {
         button.onclick = function () {
           navigator.clipboard.writeText(hash).then(function () { hashCard.querySelector('#dlHashStatus').textContent = 'Copied.'; }, function () { hashCard.querySelector('#dlHashStatus').textContent = 'Clipboard unavailable. Select and copy the hash above.'; });
         };
-      }).catch(function () { hashCard.querySelector('#dlBuildHash').textContent = 'Unavailable'; hashCard.querySelector('#dlHashStatus').textContent = 'Open this build over HTTPS or localhost to verify its bytes.'; });
+      }).catch(function () { hashCard.querySelector('#dlBuildHash').textContent = 'Unavailable'; hashCard.querySelector('#dlHashStatus').textContent = 'Cannot verify this copy yet. Reload after the update is ready.'; });
     }
     if (tab === "sources" && !body.querySelector(".v154-src")) { var card = body.querySelector(".dlt-card"); if (card) card.insertAdjacentHTML("afterend", '<div class="dlt-card v154-src"><b>Added in v154</b> — all keyless, all requested from your device:<br>Coinlore (price rung 3) · Kraken &amp; Coinbase Exchange (candle history) · Wikimedia page views (Attention pulse) · The Block RSS (news) · GeckoTerminal networks, trending, new pools, OHLCV · GoPlus EVM + Solana (token security) · DefiLlama chains, DEX volumes, fees, stablecoin chains, yields · Hyperliquid, OKX, Binance Futures (perps, funding, long/short, liquidations) · Deribit DVOL · Polymarket Gamma + CLOB (odds) · mempool.space &amp; Blockstream (difficulty, tip height) · open.er-api (32 fiats) · CoinGecko categories, coin detail, tickers, history, public treasuries.<br><b>DeXaI:</b> the on-device composer needs nothing; Chrome’s built-in model runs on-device when the browser has it; a gateway is optional and only used when you paste its URL.</div>'); }
     if (tab === "changelog" && !body.querySelector(".v154-row")) { var c2 = body.querySelector(".dlt-card"); if (c2) c2.insertAdjacentHTML("afterbegin", '<div class="dlt-vrow v154-row"><span class="n"><b style="color:var(--ink)">v154</b> · dexai</span><span class="val" style="color:var(--muted);font-weight:400;max-width:62%">' + CHANGES.map(function (c) { return c[0]; }).join(" · ") + ' — see the v154 tab</span></div>'); }
@@ -11492,12 +11492,27 @@ window.DLTRUST154 = (function () {
   }
   var hashPromise;
   function buildHash() {
-    if (!hashPromise) hashPromise = fetch(location.href.split('#')[0], { cache: 'force-cache' }).then(function (response) {
-      if (!response.ok) throw new Error('payload unavailable');
-      return response.arrayBuffer();
-    }).then(function (bytes) { return crypto.subtle.digest('SHA-256', bytes); }).then(function (digest) {
-      return Array.from(new Uint8Array(digest)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
-    }).catch(function (error) { hashPromise = null; throw error; });
+    if (!hashPromise) {
+      var controller = navigator.serviceWorker && navigator.serviceWorker.controller;
+      if (controller) hashPromise = new Promise(function (resolve, reject) {
+        var channel = new MessageChannel();
+        var timeout = setTimeout(function () { channel.port1.close(); reject(new Error('Navigation witness unavailable')); }, 6000);
+        channel.port1.onmessage = function (event) {
+          clearTimeout(timeout); channel.port1.close();
+          var data = event.data || {};
+          if (/^[a-f0-9]{64}$/.test(data.sha256 || '')) resolve(data.sha256);
+          else reject(new Error('Navigation witness unavailable'));
+        };
+        controller.postMessage({ dl: 'running-build-hash' }, [channel.port2]);
+      });
+      else hashPromise = fetch(location.href.split('#')[0], { cache: 'force-cache' }).then(function (response) {
+        if (!response.ok) throw new Error('payload unavailable');
+        return response.arrayBuffer();
+      }).then(function (bytes) { return crypto.subtle.digest('SHA-256', bytes); }).then(function (digest) {
+        return Array.from(new Uint8Array(digest)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+      });
+      hashPromise = hashPromise.catch(function (error) { hashPromise = null; throw error; });
+    }
     return hashPromise;
   }
   buildHash().catch(function () {}); // capture the served payload near boot, before later deployments
