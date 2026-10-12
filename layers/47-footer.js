@@ -188,7 +188,7 @@ window.DLFOOT = (function () {
 
     var mid = el("div", "dlf-mid", root);
     var sbox = el("div", "dlf-src", mid);
-    el("div", "dlf-h", sbox).textContent = "Data sources";
+    el("div", "dlf-h", sbox).textContent = window.DLI18N.t("47-footer.a22bd608ff67");
     sbox.appendChild(srcEl);
     if (net) el("div", "dlf-stats", mid).appendChild(net);
 

@@ -784,7 +784,8 @@
   "45-defi.f9e759eeb278": "Run 2,000 simulated paths",
   "45-defi.fc2ac0b67884": "imbalanced deposit fee = f·n / (4(n−1))     ·     virtual price = D / LP supply",
   "46-dexchart.1f0d3448a4be": "range low",
-  "46-dexchart.a7b291e437ff": "range high"
+  "46-dexchart.a7b291e437ff": "range high",
+  "47-footer.a22bd608ff67": "Data sources"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
