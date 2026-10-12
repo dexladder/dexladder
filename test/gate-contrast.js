@@ -204,7 +204,12 @@ function declarations(body) {
 // Anything root-scoped that this cannot classify is returned as UNKNOWN and
 // hard-fails the run rather than being quietly skipped.
 function classify(sel) {
-  const s = sel.trim();
+  let s = sel.trim();
+  if (s.includes('.dla-colourblind')) {
+    if (!process.argv.includes('--colourblind')) return null;
+    if (!/^html(?:\[data-mode="day"\])?\.dla-colourblind$/.test(s)) return null;
+    s = s.replace('.dla-colourblind', '');
+  }
   if (/[\s>+~]/.test(s.replace(/\([^)]*\)/g, ''))) return null;   // has a combinator: not the root element
   const base = s.replace(/\[[^\]]*\]/g, '').replace(/:not\([^)]*\)/g, '');
   const isRootish = /^(html|:root|html:root|:root:root)?$/.test(base) && (/^(html|:root)/.test(s));

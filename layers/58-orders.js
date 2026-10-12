@@ -1,3 +1,6 @@
+// owns: advanced paper order laboratory
+// reads: DLAPP, DLCORE, DLDESKS, S paper state, browser DOM
+// emits: DLORD
 /* ============================================================================
    DexLadder — DLORD · layer 58 · v166 "⌁ Order Lab"
    ICEBERG · TRAILING STOPS · BRACKET/OTO/OTOCO · PEG · EXECUTION REALISM

@@ -1,3 +1,6 @@
+// owns: market rung definitions and selection
+// reads: DLCORE, MXP, S paper state, browser DOM
+// emits: DLRUNGS
 /* ============================================================
    DLRUNGS · v154 — Rungs: named lenses over the 500-coin ladder
    A Rung = { id, name, syms[], note } — replaces "multiple watchlists",

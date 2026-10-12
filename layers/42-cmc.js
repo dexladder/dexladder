@@ -1,3 +1,6 @@
+// owns: independent CoinMarketCap spot feed
+// reads: DEXAI, DLCORE, DLRADAR
+// emits: DLCMC
 /* ============================================================================
    DLCMC · v157 — SPOT RAIL: CoinMarketCap's own keyless on-chain feed.
    ---------------------------------------------------------------------------

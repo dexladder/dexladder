@@ -1,3 +1,6 @@
+// owns: DeFi simulation desk
+// reads: DLCORE, DLDESKS, S paper state, browser DOM
+// emits: DLDEFI
 /* ============================================================
    DLDEFI · v159 — the Liquidity Desk
    A simulated, protocol-faithful DeFi bench: automated market makers,

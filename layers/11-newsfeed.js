@@ -1,3 +1,6 @@
+// owns: News transport ladder and cache
+// reads: AbortSignal, browser DOM
+// emits: DLNEWSX
 /* ============================================================
    DLNEWSX · v157 — the News desk's transport ladder
    Owner report (12 Sep 2026): "In News section the latest news on

@@ -1,3 +1,6 @@
+// owns: Day-mode reconciliation of legacy surfaces
+// reads: browser DOM
+// emits: DOM presentation updates
 /* v154e — Day surface reconciliation.
    The payload paints dozens of panels with hard-coded dark gradients that were never given a
    Day value, so in Day they render as grey slabs on a light page. This walks every stylesheet

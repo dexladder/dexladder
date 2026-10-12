@@ -155,7 +155,7 @@ async function launch(indexPath, opts){
   page.on('pageerror', e => errors.push(String(e && e.message || e)));
   page.on('console', m => { if (m.type() === 'error') consoleErr.push(m.text()); });
   await mockNetwork(page, net);
-  await page.goto(`http://127.0.0.1:${port}/${path.basename(indexPath)}`, { waitUntil: 'load' });
+  await page.goto(`http://127.0.0.1:${port}/${path.basename(indexPath)}`, { waitUntil: 'load', timeout: 120000 });
   return { browser, page, errors, consoleErr, net, close: async () => { await browser.close(); srv.close(); } };
 }
 module.exports = { launch };

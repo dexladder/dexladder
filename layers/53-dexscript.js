@@ -1,3 +1,6 @@
+// owns: DexScript parser, interpreter and study runtime
+// reads: S paper state
+// emits: DXS
 /* ============================================================================
    DXS · DexScript — layer 53 · the scripting engine for the native chart
    ----------------------------------------------------------------------------

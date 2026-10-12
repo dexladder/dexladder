@@ -1,3 +1,6 @@
+// owns: feed and storage health report
+// reads: DLBX, DLCORE, DLMXC, DLSNAP, DLTRUST154, DLVAULT, browser DOM
+// emits: DLHEALTH
 /* ============================================================
    DLHEALTH · v164 — desk health, in one place.
 

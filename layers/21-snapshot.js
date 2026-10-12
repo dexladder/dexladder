@@ -1,3 +1,6 @@
+// owns: canonical market snapshot
+// reads: DLAPP, DLCORE, DLF, S paper state, browser DOM
+// emits: DLSNAP
 /*
    DLSNAP · v155 — the one canonical market snapshot.
 

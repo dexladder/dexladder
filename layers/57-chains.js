@@ -1,3 +1,6 @@
+// owns: cross-chain execution and fee models
+// reads: DLAPP, DLCORE, DLDESKS, browser DOM
+// emits: DLCHAIN
 /* ============================================================================
    DexLadder — DLCHAIN · layer 57 · v166 "the other chains"
    CROSS-CHAIN EXECUTION · CONCENTRATED-LIQUIDITY TICK MATH · L2 FEE ANATOMY

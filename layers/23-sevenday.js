@@ -1,3 +1,6 @@
+// owns: observed seven-day Spotlight history
+// reads: browser runtime
+// emits: DLH7
 /* ============================================================
    DLH7 · v158 — the Spotlight's "7-day" series, honestly
    Owner report (12 Sep 2026, screenshot): the Markets spotlight

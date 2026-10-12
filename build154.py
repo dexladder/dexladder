@@ -38,6 +38,8 @@ RELEASE = {'build': 'v166', 'name': 'the depth', 'updated': 'September 18, 2026'
 # ------------------------------------------------------------------ patch manifest
 # (id, find, replace, expected count)
 PATCHES = [
+ ('fee-slider-name', 'id="raceFee" min="2"', 'id="raceFee" aria-label="Transaction fee" min="2"', 1),
+ ('tax-slider-name', 'oninput="TAX.rate=+this.value;renderTax()"', 'aria-label="Tax rate percentage" oninput="TAX.rate=+this.value;renderTax()"', 1),
  # ---- 2026-09-13 · trust-centre rewrite + internal tokens renamed off another platform
  # ---- 2026-09-14 · the two social profiles that existed but were nowhere in the product
  # Instagram is already in the site's JSON-LD sameAs and Medium (@dexladder, personal profile —
@@ -557,7 +559,7 @@ def _recolor_decl(body):
 def _day_rule(m):
     return m.group(1) + _recolor_decl(m.group(2)) + '}'
 
-out = re.sub(r'([^{}]*\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}', _day_rule, out)
+out = re.sub(r'(\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}', _day_rule, out)
 print(f'warm-day purge: {_WARMED["n"]} colours re-cast to cool')
 assert _WARMED['n'] > 40, f'warm-day purge found too little: {_WARMED["n"]}'
 
@@ -588,7 +590,7 @@ def _accent_decl(body):
     body = re.sub(r'#[0-9A-Fa-f]{6}\b', hx, body)
     return re.sub(r'rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)', rg, body)
 
-out = re.sub(r'([^{}]*\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}',
+out = re.sub(r'(\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}',
              lambda m: m.group(1) + _accent_decl(m.group(2)) + '}', out)
 print(f'warm-day accent purge: {_ACC["n"]} declarations re-cast to the Day accent')
 assert _ACC['n'] >= 24, f'the retired warm accent map found too little: {_ACC["n"]}'

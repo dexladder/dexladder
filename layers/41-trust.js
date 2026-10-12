@@ -1,3 +1,6 @@
+// owns: Trust Center, model card and verification hash
+// reads: DEXAI, DLCORE, DLDESKS, DLFEEDS, DLHEALTH, DLSIM, DLTRUST, ORACLE, browser DOM
+// emits: DLTRUST154
 /* ============================================================
    DLTRUST · v154 — Trust: model card · laws · feed diagnostics · settings
    · The DeXaI model card in the app's own words, with the numeric-slot
@@ -84,7 +87,7 @@ window.DLTRUST154 = (function () {
     var L = window.DLTRUST; if (!L || typeof L.open !== "function" || L.open.__v154) return false;
     var _open = L.open;
     var w = function (tab) {
-      if (MINE[tab]) { _open("about"); var ov = document.getElementById("dlTrust"); if (!ov) return; var body = ov.querySelector("#dltBody"), title = ov.querySelector("#dltTitle"); if (title) title.textContent = "DexLadder · " + MINE[tab]; addTabs(ov, tab); if (body) { body.innerHTML = ""; paintPage(tab, body); } var sh = ov.querySelector(".dlv-sheet"); if (sh) sh.scrollTop = 0; return; }
+      if (MINE[tab]) { _open("about"); var ov = document.getElementById("dlTrust"); if (!ov) return; var body = ov.querySelector("#dltBody"), title = ov.querySelector("#dltTitle"); if (title) title.textContent = "DexLadder · " + MINE[tab]; addTabs(ov, tab); if (body) { body.innerHTML = ""; paintPage(tab, body); post(tab, body); } var sh = ov.querySelector(".dlv-sheet"); if (sh) sh.scrollTop = 0; return; }
       var r = _open.apply(this, arguments); var ov2 = document.getElementById("dlTrust"); if (ov2) { addTabs(ov2, tab); post(tab, ov2.querySelector("#dltBody")); } return r;
     };
     w.__v154 = 1; L.open = w; return true;
@@ -97,10 +100,33 @@ window.DLTRUST154 = (function () {
   /* legacy pages, kept current: sources gains the v154 feeds; changelog gains the v154 row; privacy names the new providers */
   function post(tab, body) {
     if (!body) return;
+    if (!body.querySelector('#dlBuildHash')) {
+      var card = document.createElement('div'); card.className = 'dlt-card';
+      card.innerHTML = '<h3>Running build SHA-256</h3><code id="dlBuildHash" style="overflow-wrap:anywhere">Checking…</code><p><button type="button" id="dlCopyHash" disabled>Copy build hash</button> · <a href="https://github.com/dexladder/dexladder/blob/main/docs/VERIFY.md" target="_blank" rel="noopener">How to verify</a></p><p id="dlHashStatus" role="status"></p>';
+      body.appendChild(card);
+      buildHash().then(function (hash) {
+        card.querySelector('#dlBuildHash').textContent = hash;
+        var button = card.querySelector('#dlCopyHash'); button.disabled = false;
+        button.onclick = function () {
+          navigator.clipboard.writeText(hash).then(function () { card.querySelector('#dlHashStatus').textContent = 'Copied.'; }, function () { card.querySelector('#dlHashStatus').textContent = 'Clipboard unavailable. Select and copy the hash above.'; });
+        };
+      }).catch(function () { card.querySelector('#dlBuildHash').textContent = 'Unavailable'; card.querySelector('#dlHashStatus').textContent = 'Open this build over HTTPS or localhost to verify its bytes.'; });
+    }
     if (tab === "sources" && !body.querySelector(".v154-src")) { var card = body.querySelector(".dlt-card"); if (card) card.insertAdjacentHTML("afterend", '<div class="dlt-card v154-src"><b>Added in v154</b> — all keyless, all requested from your device:<br>Coinlore (price rung 3) · Kraken &amp; Coinbase Exchange (candle history) · Wikimedia page views (Attention pulse) · The Block RSS (news) · GeckoTerminal networks, trending, new pools, OHLCV · GoPlus EVM + Solana (token security) · DefiLlama chains, DEX volumes, fees, stablecoin chains, yields · Hyperliquid, OKX, Binance Futures (perps, funding, long/short, liquidations) · Deribit DVOL · Polymarket Gamma + CLOB (odds) · mempool.space &amp; Blockstream (difficulty, tip height) · open.er-api (32 fiats) · CoinGecko categories, coin detail, tickers, history, public treasuries.<br><b>DeXaI:</b> the on-device composer needs nothing; Chrome’s built-in model runs on-device when the browser has it; a gateway is optional and only used when you paste its URL.</div>'); }
     if (tab === "changelog" && !body.querySelector(".v154-row")) { var c2 = body.querySelector(".dlt-card"); if (c2) c2.insertAdjacentHTML("afterbegin", '<div class="dlt-vrow v154-row"><span class="n"><b style="color:var(--ink)">v154</b> · dexai</span><span class="val" style="color:var(--muted);font-weight:400;max-width:62%">' + CHANGES.map(function (c) { return c[0]; }).join(" · ") + ' — see the v154 tab</span></div>'); }
     if (tab === "privacy" && !body.querySelector(".v154-priv")) { var pr = body.querySelector(".dlt-prose"); if (pr) pr.insertAdjacentHTML("beforeend", '<h3 class="v154-priv">DeXaI (v154)</h3><p>DeXaI’s default mode is <b>Device-only</b>: your questions are answered by an on-device composer and, when your browser has one, Chrome’s built-in model — nothing leaves the device. In Hybrid or Cloud mode, and only after you paste a gateway URL you deployed yourself, the question and the facts it needs are sent to <b>your</b> gateway; DexLadder runs none. DeXaI’s memory window lives in this browser’s storage beside your paper book and can be emptied with “forget everything”.</p>'); }
   }
+  var hashPromise;
+  function buildHash() {
+    if (!hashPromise) hashPromise = fetch(location.href.split('#')[0], { cache: 'force-cache' }).then(function (response) {
+      if (!response.ok) throw new Error('payload unavailable');
+      return response.arrayBuffer();
+    }).then(function (bytes) { return crypto.subtle.digest('SHA-256', bytes); }).then(function (digest) {
+      return Array.from(new Uint8Array(digest)).map(function (b) { return b.toString(16).padStart(2, '0'); }).join('');
+    }).catch(function (error) { hashPromise = null; throw error; });
+    return hashPromise;
+  }
+  buildHash().catch(function () {}); // capture the served payload near boot, before later deployments
   function open(tab) { if (wrapTrust() || (window.DLTRUST && window.DLTRUST.open)) DLTRUST.open(tab || "dexai"); }
   function VER() { try { return DEXAI && DEXAI.status ? "DeXaI 1.0 · v154 · provider: " + DEXAI.status().provider : "DeXaI 1.0 · v154"; } catch (e) { return "DeXaI 1.0 · v154"; } }
   function paintModelCard(body) {

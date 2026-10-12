@@ -1,3 +1,6 @@
+// owns: height-balanced card columns
+// reads: DLHEATX, browser DOM
+// emits: DOM presentation updates
 /* v155-C — height-balanced columns, and the three voids they close.
    CSS multi-column packs perfectly but splits cards mid-sentence, which is what
    broke the portfolio board. Real masonry does not use columns: it measures each

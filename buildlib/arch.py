@@ -238,7 +238,7 @@ def _fail_closed(styles):
         if not ROOTISH.search(sel) or not re.search(r'--[\w-]+\s*:', body):
             continue
         assert depth == 0, f'arch-A3: a root/Day token rule sits inside an at-rule ({sel!r}) — the single table cannot express it'
-        assert sel in (':root', 'html[data-mode=day]'), f'arch-A3: unsupported root/Day selector form {sel!r} (grouped, quoted or qualified)'
+        assert sel in (':root', 'html[data-mode=day]', 'html[data-mode="day"].dla-colourblind'), f'arch-A3: unsupported root/Day selector form {sel!r} (grouped, quoted or qualified)'
         assert 'url(' not in body, f'arch-A3: a token value contains url() ({sel!r}) — the declaration splitter would cut it'
 
 

@@ -1,3 +1,6 @@
+// owns: market context strips
+// reads: DLTOUR, browser DOM
+// emits: DLSTRIPS
 /* ============================================================
    DLSTRIPS · v157a — the two Markets panels that covered a phone screen
    (owner report, 12 Sep 2026, two screenshots at 390px).

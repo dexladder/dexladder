@@ -1,3 +1,6 @@
+// owns: options valuation, volatility and strategy desk
+// reads: DLAPP, DLCORE, DLDESKS, S paper state, browser DOM
+// emits: DLOPT
 /* ============================================================================
    DexLadder — DLOPT · layer 56 · v166 "the surface"
    OPTIONS: Black-Scholes-Merton, implied vol, an SVI surface that is CHECKED

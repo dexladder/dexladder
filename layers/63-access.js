@@ -1,3 +1,6 @@
+// owns: accessibility audit and display preferences
+// reads: DLCORE, DLDESKS, browser DOM
+// emits: DLACCESS
 /* ============================================================================
    DexLadder — DLACCESS · layer 63 · v166 "◔ Access"
    A LIVE WCAG 2.2 AA AUDIT OF THE RENDERED DOM, DISPLAY CONTROLS, AND i18n
@@ -1300,7 +1303,7 @@
     return v;
   }
 
-  var MODE_CLASS = { space: "dla-space", motion: "dla-motion", targets: "dla-targets", contrast: "dla-contrast" };
+  var MODE_CLASS = { colourblind: "dla-colourblind", space: "dla-space", motion: "dla-motion", targets: "dla-targets", contrast: "dla-contrast" };
 
   function applyPrefs() {
     var p = prefs(), k, cl;
@@ -1461,6 +1464,7 @@
     h += tog("space", t("disp.spacing"), "SC 1.4.12 · line height 1.5, paragraph spacing 2em, letter spacing 0.12em, word spacing 0.16em — the specification's own override, applied to the whole app", p.space);
     h += tog("motion", t("disp.motion"), "Independent of the operating system. Animations and transitions collapse to a millisecond, and smooth scrolling goes away, whether or not your machine asks for it", p.motion);
     h += tog("targets", t("disp.targets"), "SC 2.5.8 · every button, chip, link-button and field is brought up to the 24 by 24 pixel minimum. The AAA 44 pixel target of 2.5.5 is NOT claimed", p.targets);
+    h += tog("colourblind", "Colour-blind-safe direction colours", "Blue means up; orange means down. Up and down labels also use arrows, and chart legend swatches use solid versus dashed outlines.", p.colourblind);
     h += tog("contrast", t("disp.contrast"), "Muted text is promoted to the ink token, hairlines to the stronger line token, links get an underline, focus rings thicken. No token value is redefined, so the build's contrast gate still governs every colour", p.contrast);
     h += "</div>";
 

@@ -1,3 +1,6 @@
+// owns: durable archive, bundles and Journal CSV
+// reads: SV82, S paper state, browser DOM
+// emits: DLVAULT
 /* ============================================================
    DLVAULT · v163 — the durable state layer.
 
@@ -716,6 +719,34 @@
     return Promise.resolve({ rows: rec.rows.slice(offset, offset + n), total: rec.rows.length });
   }
 
+
+  // RFC 4180, with formula-injection protection for spreadsheet consumers.
+  function csvCell(value) {
+    var text = value == null ? '' : String(value);
+    if (typeof value === 'string' && /^[\s]*[=+@-]/.test(text)) text = "'" + text;
+    return '"' + text.replace(/"/g, '""') + '"';
+  }
+  function journalCsv(rows) {
+    var columns = ['timestamp', 'symbol', 'side', 'type', 'qty', 'price', 'fee', 'slippage', 'pnl'];
+    return '\ufeff' + columns.join(',') + '\r\n' + rows.map(function (r) {
+      var stamp = r.timestamp != null ? r.timestamp : r.t;
+      if (typeof stamp === 'number') stamp = new Date(stamp).toISOString();
+      return [stamp, r.symbol != null ? r.symbol : r.sym, r.side, r.type,
+        r.qty != null ? r.qty : r.amt, r.price != null ? r.price : (r.px != null ? r.px : r.exit),
+        r.fee, r.slippage != null ? r.slippage : r.slip, r.pnl != null ? r.pnl : r.pl].map(csvCell).join(',');
+    }).join('\r\n') + '\r\n';
+  }
+  function exportCsv() {
+    return open().then(function () { capture(); return page('journal', 0, 2147483647); }).then(function (result) {
+      var seen = Object.create(null), def = SERIES[1];
+      result.rows.concat(liveArr('journal') || []).forEach(function (row) { seen[def.key(row)] = row; });
+      result.rows = Object.keys(seen).map(function (key) { return seen[key]; }).sort(function (a, b) { return def.stamp(b) - def.stamp(a); });
+      var url = URL.createObjectURL(new Blob([journalCsv(result.rows)], { type: 'text/csv;charset=utf-8' }));
+      var link = document.createElement('a'); link.href = url; link.download = 'dexladder-journal.csv';
+      document.body.appendChild(link); link.click(); link.remove(); setTimeout(function () { URL.revokeObjectURL(url); }, 1000);
+      return result.rows.length;
+    });
+  }
   /* ------------------------------------------------------------- ui */
   function esc(s) {
     return String(s == null ? '' : s).replace(/[&<>"]/g, function (m) {
@@ -757,6 +788,7 @@
       '<div class="vbtns">' +
         '<button type="button" id="vExp" class="vprim">Export desk</button>' +
         '<button type="button" id="vImp">Import desk</button>' +
+        '<button type="button" id="vCsv">Export Journal CSV</button>' +
         '<input type="file" id="vFile" accept=".cbundle,.json,application/json" hidden>' +
       '</div>' +
       '<p class="vfoot">One signed file: every DexLadder setting on this browser, the full archive, and a SHA-256 checksum over the lot. ' +
@@ -768,6 +800,9 @@
   }
 
   function wirePanel(root) {
+    var csvButton = (root || document).querySelector('#vCsv');
+    if (csvButton) csvButton.onclick = function () { exportCsv().catch(function (error) { csvButton.textContent = 'Export failed: ' + error.message; }); };
+
     var $ = function (id) { var e = (root || document).querySelector('#' + id); return e; };
     var out = function (cls, msg) {
       var o = $('vOut'); if (!o) return;
@@ -948,6 +983,7 @@
 
   /* ----------------------------------------------------------- boot */
   function boot() {
+    if (typeof window.exportJournal === 'function') window.exportJournal = exportCsv;
     style();
     wire();
     hookSovereign();
@@ -962,6 +998,7 @@
     SPEC: SPEC2, DB: DB_NAME,
     open: open, ready: open(),
     stats: stats, pressure: pressure, page: page,
+    journalCsv: journalCsv, exportCsv: exportCsv,
     meta: meta, setMeta: setMeta, undoImport: undoImport,
     APP_DB: APP_DB, writable: function () { return _writable; },
     capture: capture, flush: flush,

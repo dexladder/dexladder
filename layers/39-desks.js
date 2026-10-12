@@ -1,3 +1,6 @@
+// owns: desk registry and chain, venue, yield and conversion desks
+// reads: DLBX, DLCLOCK, DLCORE, DLODDS, DLRADAR, DLSECTORS, DLSIM, DLWEATHER, S paper state, browser DOM
+// emits: DLDESKS
 /* ============================================================
    DLDESKS · v154 — the Desks rail + four metric-named desks
    · Desks rail on Markets: every v154 desk one tap away (the IA move

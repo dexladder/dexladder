@@ -1,3 +1,6 @@
+// owns: coin dossier, community and developer context
+// reads: DLCORE, DLOMNI, S paper state, browser DOM
+// emits: DLDOSSIER
 /* ============================================================
    DLDOSSIER · v154 — coin-page depth the audit found missing:
    · Story (CoinGecko description, cached 7d) for all 500 coins, not 56

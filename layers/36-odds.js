@@ -1,3 +1,6 @@
+// owns: prediction-market paper desk
+// reads: DEXAI, DLCORE, browser DOM
+// emits: DLODDS
 /* ============================================================
    DLODDS · v154 — Odds Desk: live Polymarket odds you can PAPER-TRADE.
    CMC aggregates prediction markets as data; DexLadder turns them into
