@@ -2,7 +2,7 @@
 'use strict';
 const { launch } = require('./harness');
 const file = process.argv[2] || require('path').join(__dirname, '../dist/index.html');
-const interactive = new Set(['button','link','textbox','combobox','checkbox','radio','slider','spinbutton','switch','tab','menuitem']);
+const interactive = new Set(['button','link','textbox','combobox','checkbox','radio','slider','spinbutton','switch','tab','menuitem','menuitemcheckbox','menuitemradio','searchbox','listbox','treeitem']);
 function failures(nodes) {
   return nodes.filter(node => !node.ignored && interactive.has(node.role && node.role.value) && !(node.name && String(node.name.value || '').trim()));
 }
