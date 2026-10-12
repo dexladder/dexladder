@@ -170,5 +170,18 @@
   "33-weather.e801669168e1": "⚡ Leverage Weather ",
   "33-weather.f0fe184937ec": "🧯 Liquidation tape ",
   "33-weather.f9b0078b5df5": "short",
-  "33-weather.fc66f021c67d": "long"
+  "33-weather.fc66f021c67d": "long",
+  "34-clock.0e14e40ab7f4": "Max-pain chatter peaks here; implied vol usually resets after",
+  "34-clock.1378ee21decc": "Survive today’s macro scenario to keep the streak (+75 XP)",
+  "34-clock.1786353e404e": "events the chain and published rules decide — never an empty calendar",
+  "34-clock.20afcccebfe0": "🕰 Chain Clock ",
+  "34-clock.243fe8a35a4e": "🕰 Chain Clock",
+  "34-clock.2d064ca0f17e": "CME Bitcoin futures expiry",
+  "34-clock.2dbe933ce1d1": "Your day resets — gm streak & daily ritual",
+  "34-clock.43bcf8130347": "halving · difficulty · expiries · resolutions · your deadlines — computed, not curated",
+  "34-clock.4fc90e0be16e": "halving ETA = blocks left × 10 min from the live tip · retarget ETA from mempool.space's live estimate · expiries from the venues' published calendar rules · Polymarket resolutions from its public API · your own deadlines from this device\nWhy no news calendar: the audited CMC Events / ICO / Airdrop pages were empty or dormant; DexLadder shows only what it can keep current.",
+  "34-clock.54dba948f18e": "Deribit monthly options expiry",
+  "34-clock.5b71cebd8ad7": "Brier-scored on the tick when it lands",
+  "34-clock.b6b7ac1d495f": "Basis and roll flows around the expiry",
+  "34-clock.e142f763d6a1": "All events →"
 }
