@@ -33,10 +33,11 @@ class ProductionHealth(unittest.TestCase):
 
     def test_worker_hash_revision_and_cache(self):
         body = b"const SW_BUILD='v167';const SW_REV=26;const PAYLOAD_SHA='" + self.baseline['artifact_sha256'].encode() + b"';// Only app entry points may fall back to the offline app shell."
+        self.baseline['worker_sha256'] = hashlib.sha256(body).hexdigest()
         good = response(body, content_type='application/javascript', path='/sw.js')
         good['headers']['cache-control'] = 'no-store'
         health.validate(ORIGIN, '/sw.js', good, self.baseline)
-        for bad in [{**good, 'body': body.replace(b'SW_REV=26', b'SW_REV=25')}, {**good, 'body': body.replace(self.baseline['artifact_sha256'].encode(), b'0' * 64)}, {**good, 'headers': {'content-type': 'application/javascript'}}]:
+        for bad in [{**good, 'body': body + b'changed navigation strategy'}, {**good, 'body': body.replace(b'SW_REV=26', b'SW_REV=25')}, {**good, 'body': body.replace(self.baseline['artifact_sha256'].encode(), b'0' * 64)}, {**good, 'headers': {'content-type': 'application/javascript'}}]:
             with self.assertRaises(ValueError):
                 health.validate(ORIGIN, '/sw.js', bad, self.baseline)
 

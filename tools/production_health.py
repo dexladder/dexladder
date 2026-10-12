@@ -58,6 +58,7 @@ def validate(origin, path, response, baseline):
         return {'items': len(data.get('items', []))}
     if path == '/sw.js':
         require('javascript' in content_type, 'Worker is not JavaScript')
+        require(hashlib.sha256(body).hexdigest() == baseline['worker_sha256'], 'Worker bytes differ from verified release')
         require('no-store' in headers.get('cache-control', '').lower(), 'Worker lacks no-store')
         for key, value in [('SW_BUILD', baseline['build']), ('SW_REV', str(baseline['worker_revision'])), ('PAYLOAD_SHA', baseline['artifact_sha256'])]:
             match = re.search(rb'const\s+' + key.encode() + rb'\s*=\s*[\x27\x22]?([\w-]+)', body)
