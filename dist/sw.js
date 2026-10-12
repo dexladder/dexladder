@@ -53,7 +53,7 @@
 /* --- version ------------------------------------------------------------------------- */
 const SW_BUILD    = 'v166';    // asserted by build154.py to equal <meta name="cb:build">
 const SW_REV = 13;        // bump for worker-only changes (strategy, TTL, bounds)
-const PAYLOAD_SHA = '3b9ac537d1324660d20cc6de309209e9a57a025b2df36d4d8c3163f0f4b3e897';
+const PAYLOAD_SHA = '41b1be73600efc79b0a003a197d502683d4c53373842593a03508d1dfb672a20';
 const V           = 'dl-' + SW_BUILD + '-r' + SW_REV + '-' + PAYLOAD_SHA.slice(0, 12);
 // Static content served beside the app: the SEO layer, the legal pages and the support page.
 // Never cached as the shell, never answered from it.
@@ -209,10 +209,27 @@ self.addEventListener('activate', (e) => {
   })());
 });
 
+// Navigation witnesses are keyed by the document client, never by a stale URL cache entry.
+const NAV_HASHES = new Map();
+function rememberNavigation(e, response) {
+  const id = e.resultingClientId || e.clientId;
+  if (!id) return;
+  const digest = response.clone().arrayBuffer().then(bytes => crypto.subtle.digest('SHA-256', bytes))
+    .then(bytes => Array.from(new Uint8Array(bytes), b => b.toString(16).padStart(2, '0')).join(''));
+  NAV_HASHES.set(id, digest);
+  while (NAV_HASHES.size > 64) NAV_HASHES.delete(NAV_HASHES.keys().next().value);
+  e.waitUntil(digest.catch(() => {}));
+}
+
 // The only route to a swap. The payload posts this when the visitor clicks "Reload to update".
 self.addEventListener('message', (e) => {
   const d = e.data || {};
-  if (d.dl === 'sw-skip-waiting') self.skipWaiting();
+  if (d.dl === 'running-build-hash' && e.ports && e.ports[0]) {
+    const witness = e.source && NAV_HASHES.get(e.source.id);
+    if (!witness) { e.ports[0].postMessage({ error: 'No navigation witness for this document' }); return; }
+    e.waitUntil(witness.then(sha256 => e.ports[0].postMessage({ sha256 }),
+      () => e.ports[0].postMessage({ error: 'Navigation witness unavailable' })));
+  } else if (d.dl === 'sw-skip-waiting') self.skipWaiting();
   else if (d.dl === 'sw-version' && e.ports && e.ports[0]) {
     e.ports[0].postMessage({ v: V, build: SW_BUILD, rev: SW_REV, payload: PAYLOAD_SHA, ttl: DATA_TTL_MS, max: DATA_MAX });
   }
@@ -294,7 +311,7 @@ self.addEventListener('fetch', (e) => {
   // support URL. These paths are therefore not intercepted at all: plain network, no store.
   if (url.origin === self.location.origin && CONTENT_ROUTE.test(url.pathname)) return;
 
-  if (req.mode === 'navigate') { e.respondWith(navigateFirst(e, req)); return; }
+  if (req.mode === 'navigate') { e.respondWith(navigateFirst(e, req).then(response => { rememberNavigation(e, response); return response; })); return; }
 
   if (API_HOSTS.test(url.hostname)) { e.respondWith(dataFirst(e, req, url)); return; }
 
