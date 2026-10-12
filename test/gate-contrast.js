@@ -204,10 +204,11 @@ function declarations(body) {
 // Anything root-scoped that this cannot classify is returned as UNKNOWN and
 // hard-fails the run rather than being quietly skipped.
 function classify(sel) {
-  let s = sel.trim();
+  let s = sel.trim(), colourblindSpecificity = 0;
   if (s.includes('.dla-colourblind')) {
     if (!process.argv.includes('--colourblind')) return null;
     if (!/^html(?:\[data-mode="day"\])?\.dla-colourblind$/.test(s)) return null;
+    colourblindSpecificity = 1;
     s = s.replace('.dla-colourblind', '');
   }
   if (/[\s>+~]/.test(s.replace(/\([^)]*\)/g, ''))) return null;   // has a combinator: not the root element
@@ -234,7 +235,7 @@ function classify(sel) {
   // specificity: a=#id, b=class/attr/pseudo-class, c=element
   const a = (s.match(/#/g) || []).length;
   const b = attrs.length + nots.length + (s.match(/:root/g) || []).length +
-            (s.match(/\.[\w-]/g) || []).length;
+            (s.match(/\.[\w-]/g) || []).length + colourblindSpecificity;
   const c = /(^|[^-\w]):?root/.test(s) ? 0 : 0;
   const el = /^html/.test(s) ? 1 : 0;
   return { day: day, spec: [a, b, el + c] };
