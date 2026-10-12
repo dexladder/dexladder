@@ -47,6 +47,7 @@ jobs:
           python3 tools/layer-index.py --check
           node test/gate-aria.js dist/index.html
           node test/gate-enhancements.js dist/index.html
+          node test/gate-running-hash.js dist/index.html
           node test/gate-contrast.js dist/index.html --colourblind
           node test/gate154.js dist/index.html
 
