@@ -860,7 +860,8 @@
   "51-dxstudies.d361f471e429": "sessions need an intraday bar size",
   "51-dxstudies.e23996b059b0": "strong buy",
   "51-dxstudies.e8197b20f8e7": "buy",
-  "51-dxstudies.ec38063c881f": "even"
+  "51-dxstudies.ec38063c881f": "even",
+  "53-dexscript.ed8817d864ad": "DexScript"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
