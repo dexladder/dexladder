@@ -1282,7 +1282,20 @@
   "33-weather.e801669168e1": "⚡ Leverage Weather ",
   "33-weather.f0fe184937ec": "🧯 Liquidation tape ",
   "33-weather.f9b0078b5df5": "short",
-  "33-weather.fc66f021c67d": "long"
+  "33-weather.fc66f021c67d": "long",
+  "34-clock.0e14e40ab7f4": "Max-pain chatter peaks here; implied vol usually resets after",
+  "34-clock.1378ee21decc": "Survive today’s macro scenario to keep the streak (+75 XP)",
+  "34-clock.1786353e404e": "events the chain and published rules decide — never an empty calendar",
+  "34-clock.20afcccebfe0": "🕰 Chain Clock ",
+  "34-clock.243fe8a35a4e": "🕰 Chain Clock",
+  "34-clock.2d064ca0f17e": "CME Bitcoin futures expiry",
+  "34-clock.2dbe933ce1d1": "Your day resets — gm streak & daily ritual",
+  "34-clock.43bcf8130347": "halving · difficulty · expiries · resolutions · your deadlines — computed, not curated",
+  "34-clock.4fc90e0be16e": "halving ETA = blocks left × 10 min from the live tip · retarget ETA from mempool.space's live estimate · expiries from the venues' published calendar rules · Polymarket resolutions from its public API · your own deadlines from this device\nWhy no news calendar: the audited CMC Events / ICO / Airdrop pages were empty or dormant; DexLadder shows only what it can keep current.",
+  "34-clock.54dba948f18e": "Deribit monthly options expiry",
+  "34-clock.5b71cebd8ad7": "Brier-scored on the tick when it lands",
+  "34-clock.b6b7ac1d495f": "Basis and roll flows around the expiry",
+  "34-clock.e142f763d6a1": "All events →"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -9752,10 +9765,10 @@ window.DLCLOCK = (function () {
   function localMidnight() { var d = new Date(); d.setHours(24, 0, 0, 0); return d; }
   function ruleEvents() {
     var out = [];
-    var der = nextLastFriday(8); out.push({ t: der.getTime(), title: "Deribit monthly options expiry", kind: "derivatives", src: "calendar rule · last Friday 08:00 UTC", sub: "Max-pain chatter peaks here; implied vol usually resets after" });
-    var cme = nextLastFriday(15); out.push({ t: cme.getTime(), title: "CME Bitcoin futures expiry", kind: "derivatives", src: "calendar rule · last Friday, 4pm London", sub: "Basis and roll flows around the expiry" });
-    out.push({ t: localMidnight().getTime(), title: "Your day resets — gm streak & daily ritual", kind: "you", src: "DexLadder · local midnight", sub: "Survive today’s macro scenario to keep the streak (+75 XP)" });
-    try { var x = C.X(); (x && x.fc || []).filter(function (f) { return !f.res && f.due > Date.now(); }).sort(function (a, b) { return a.due - b.due; }).slice(0, 3).forEach(function (f) { out.push({ t: f.due, title: "Forecast due · " + f.sym + " " + f.lo.toFixed(f.lo < 1 ? 4 : 0) + "–" + f.hi.toFixed(f.hi < 1 ? 4 : 0), kind: "you", src: "your Forecast Journal", sub: "Brier-scored on the tick when it lands" }); }); } catch (e) {}
+    var der = nextLastFriday(8); out.push({ t: der.getTime(), title: window.DLI18N.t("34-clock.54dba948f18e"), kind: "derivatives", src: "calendar rule · last Friday 08:00 UTC", sub: window.DLI18N.t("34-clock.0e14e40ab7f4") });
+    var cme = nextLastFriday(15); out.push({ t: cme.getTime(), title: window.DLI18N.t("34-clock.2d064ca0f17e"), kind: "derivatives", src: "calendar rule · last Friday, 4pm London", sub: window.DLI18N.t("34-clock.b6b7ac1d495f") });
+    out.push({ t: localMidnight().getTime(), title: window.DLI18N.t("34-clock.2dbe933ce1d1"), kind: "you", src: "DexLadder · local midnight", sub: window.DLI18N.t("34-clock.1378ee21decc") });
+    try { var x = C.X(); (x && x.fc || []).filter(function (f) { return !f.res && f.due > Date.now(); }).sort(function (a, b) { return a.due - b.due; }).slice(0, 3).forEach(function (f) { out.push({ t: f.due, title: "Forecast due · " + f.sym + " " + f.lo.toFixed(f.lo < 1 ? 4 : 0) + "–" + f.hi.toFixed(f.hi < 1 ? 4 : 0), kind: "you", src: "your Forecast Journal", sub: window.DLI18N.t("34-clock.5b71cebd8ad7") }); }); } catch (e) {}
     return out;
   }
   function chainEvents() {
@@ -9781,13 +9794,13 @@ window.DLCLOCK = (function () {
   function icon(k) { return k === "bitcoin" ? "⛏" : k === "derivatives" ? "📉" : k === "odds" ? "🎲" : "🧭"; }
   function rowHTML(e) { return '<div class="dl-row"' + (e.slug ? ' data-odds="' + esc(e.slug) + '" style="cursor:pointer"' : "") + '><div class="nm"><b>' + icon(e.kind) + " " + esc(e.title) + "</b><span>" + esc(e.sub || "") + ' · <i style="opacity:.75">' + esc(e.src) + '</i></span></div><div class="rt">' + C.until(e.t) + '<br><span style="font-size:10.5px;opacity:.7">' + new Date(e.t).toLocaleString(undefined, { month: "short", day: "numeric", hour: "2-digit", minute: "2-digit" }) + "</span></div></div>"; }
   function open() {
-    var el = C.open("dlClock", { title: "🕰 Chain Clock", sub: "events the chain and published rules decide — never an empty calendar", tabs: [], onTab: function (t, body) { body.innerHTML = C.skel(5); load(true).then(function (ev) { body.innerHTML = ev.map(rowHTML).join("") + '<div class="dl-formula">halving ETA = blocks left × 10 min from the live tip · retarget ETA from mempool.space\'s live estimate · expiries from the venues\' published calendar rules · Polymarket resolutions from its public API · your own deadlines from this device\nWhy no news calendar: the audited CMC Events / ICO / Airdrop pages were empty or dormant; DexLadder shows only what it can keep current.</div>'; }).catch(function (e) { body.innerHTML = '<div class="dl-empty">' + esc(e.message || e) + "</div>"; }); } });
+    var el = C.open("dlClock", { title: window.DLI18N.t("34-clock.243fe8a35a4e"), sub: window.DLI18N.t("34-clock.1786353e404e"), tabs: [], onTab: function (t, body) { body.innerHTML = C.skel(5); load(true).then(function (ev) { body.innerHTML = ev.map(rowHTML).join("") + ('<div class="dl-formula">' + window.DLI18N.t("34-clock.4fc90e0be16e") + '</div>'); }).catch(function (e) { body.innerHTML = '<div class="dl-empty">' + esc(e.message || e) + "</div>"; }); } });
     if (!el.__wired) { el.__wired = 1; el.addEventListener("click", function (e) { var o = e.target.closest("[data-odds]"); if (o && window.DLODDS) { C.close("dlClock"); DLODDS.open("crypto", o.getAttribute("data-odds")); } }); }
   }
   function mount() {
     var host = $("dlWxCard") || $("dlCycle") || $("mxMoversHost"); if (!host || $("dlClockCard")) return;
     var box = document.createElement("div"); box.id = "dlClockCard"; box.className = "dl154";
-    box.innerHTML = '<div class="h">🕰 Chain Clock <span class="sp"></span><button data-open="1">All events →</button></div><div id="dlClockBody">' + C.skel(2) + '</div><div class="n">halving · difficulty · expiries · resolutions · your deadlines — computed, not curated</div>';
+    box.innerHTML = ('<div class="h">' + window.DLI18N.t("34-clock.20afcccebfe0") + '<span class="sp"></span><button data-open="1">' + window.DLI18N.t("34-clock.e142f763d6a1") + '</button></div><div id="dlClockBody">') + C.skel(2) + ('</div><div class="n">' + window.DLI18N.t("34-clock.43bcf8130347") + '</div>');
     host.parentNode.insertBefore(box, host.nextSibling);
     box.addEventListener("click", function (e) { if (e.target.closest("[data-open]")) open(); var o = e.target.closest("[data-odds]"); if (o && window.DLODDS) DLODDS.open("crypto", o.getAttribute("data-odds")); });
     load(false).then(function (ev) { var b = $("dlClockBody"); if (b) b.innerHTML = ev.slice(0, 4).map(rowHTML).join(""); });
