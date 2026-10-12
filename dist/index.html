@@ -50921,7 +50921,7 @@ window.DXSCRIPTUI = (function () {
   document.addEventListener('keydown', function (event) {
     if (overlay) {
       if (event.key === 'Escape') { event.preventDefault(); event.stopImmediatePropagation(); close(); }
-      else if (event.key === 'Tab') { event.preventDefault(); overlay.querySelector('button').focus(); }
+      else if (event.key === 'Tab') { event.preventDefault(); event.stopImmediatePropagation(); overlay.querySelector('button').focus(); }
       else { event.stopImmediatePropagation(); }
       return;
     }
