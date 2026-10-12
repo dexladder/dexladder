@@ -102,21 +102,21 @@ window.DLWEATHER = (function () {
   }
 
   /* ---------------------------------------------------------- UI: desk sheet */
-  function fmtF(f) { if (f == null) return "—"; var bp = f * 1e4; return '<span class="' + (bp > 3 ? "dn" : bp < -1 ? "up" : "") + '">' + (bp >= 0 ? "+" : "") + bp.toFixed(2) + " bp</span>"; }
+  function fmtF(f) { if (f == null) return "—"; var bp = f * 1e4; return '<span class="' + (bp > 3 ? "dn" : bp < -1 ? "up" : "") + '">' + (bp >= 0 ? "+" : "") + bp.toFixed(2) + (window.DLI18N.t("33-weather.bddaf3853bd9") + "</span>"); }
   function deskHTML(d) {
     var top = d.perps.slice().sort(function (a, b) { return (b.oiUsd || 0) - (a.oiUsd || 0); }).slice(0, 40);
     var ladder = new Set(C.coinsAll().map(function (c) { return c.sym; }));
     var oiTot = d.perps.reduce(function (s, x) { return s + (x.oiUsd || 0); }, 0);
     var fs = d.perps.filter(function (x) { return x.fund8h != null; }), pos = fs.filter(function (x) { return x.fund8h > 0; }).length;
-    return '<div class="dl-2"><div class="dl154"><div class="h">Open interest <span class="sp"></span>' + C.prov(d.src, d.at, d.stale) + '</div><div style="font:800 26px var(--ui-sans,sans-serif)">' + (oiTot ? C.big(oiTot) : "—") + '</div><div class="n">Notional across ' + d.perps.length + " perps on " + esc(d.src) + '. One venue, not the whole market — the honest number we can get without a key.</div></div>' +
-      '<div class="dl154"><div class="h">Funding skew</div><div style="font:800 26px var(--ui-sans,sans-serif)">' + (fs.length ? Math.round(100 * pos / fs.length) + "% positive" : "—") + '</div><div class="n">' + (fs.length ? pos + " of " + fs.length + " perps pay longs → shorts. High positive skew = crowded longs." : "Funding not exposed by this venue.") + (D.ls ? " · BTC long/short accounts " + D.ls.ratio.toFixed(2) + " (" + esc(D.ls.src) + ")" : "") + (D.dvol ? " · DVOL " + D.dvol.v.toFixed(1) : "") + "</div></div></div>" +
-      '<div class="dl154"><div class="h">🧯 Liquidation tape <span class="sp"></span><span id="dlLqSum" style="font:600 11.5px var(--ui-sans,sans-serif);color:var(--muted)">connecting…</span></div><div id="dlLqTape" style="max-height:180px;overflow:auto;font:500 12px var(--mono,ui-monospace,monospace)"><div class="dl-empty" style="padding:8px">Waiting for the Binance Futures public stream (opens only while this desk is visible).</div></div></div>' +
-      '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Perp</th><th class="r">Mark</th><th class="r">Funding 8h</th><th class="r">Open interest</th><th class="r">24h vol</th><th></th></tr></thead><tbody>' + top.map(function (x) { return '<tr' + (ladder.has(x.sym) ? ' class="click" data-coin="' + esc(x.sym) + '"' : "") + "><td><b>" + esc(x.sym) + '</b></td><td class="r">' + C.money(x.mark) + '</td><td class="r">' + fmtF(x.fund8h) + '</td><td class="r">' + (x.oiUsd ? C.big(x.oiUsd) : "—") + '</td><td class="r">' + (x.vol24 ? C.big(x.vol24) : "—") + '</td><td>' + (ladder.has(x.sym) ? '<button class="dl-b" data-perp="' + esc(x.sym) + '">Practise perp</button>' : "") + "</td></tr>"; }).join("") + "</tbody></table></div>" +
-      '<div class="dl-formula">funding 8h = venue hourly rate × 8 (Hyperliquid) or the venue’s 8h rate · the DLSIM perps desk now charges THIS rate instead of a synthetic one when it is fresh (&lt; 1 h)\nliquidations: Binance Futures !forceOrder stream — a SELL order means a long was liquidated\nnot a recommendation; leverage in DexLadder is paper and stays paper</div>';
+    return ('<div class="dl-2"><div class="dl154"><div class="h">' + window.DLI18N.t("33-weather.b89dd7bd58c7") + '<span class="sp"></span>') + C.prov(d.src, d.at, d.stale) + '</div><div style="font:800 26px var(--ui-sans,sans-serif)">' + (oiTot ? C.big(oiTot) : "—") + ('</div><div class="n">' + window.DLI18N.t("33-weather.37bb8d40df3e") + '') + d.perps.length + " perps on " + esc(d.src) + ('' + window.DLI18N.t("33-weather.ce738815861f") + '</div></div>') +
+      ('<div class="dl154"><div class="h">' + window.DLI18N.t("33-weather.2b801d876f55") + '</div><div style="font:800 26px var(--ui-sans,sans-serif)">') + (fs.length ? Math.round(100 * pos / fs.length) + "% positive" : "—") + '</div><div class="n">' + (fs.length ? pos + " of " + fs.length + " perps pay longs → shorts. High positive skew = crowded longs." : "Funding not exposed by this venue.") + (D.ls ? " · BTC long/short accounts " + D.ls.ratio.toFixed(2) + " (" + esc(D.ls.src) + ")" : "") + (D.dvol ? " · DVOL " + D.dvol.v.toFixed(1) : "") + "</div></div></div>" +
+      ('<div class="dl154"><div class="h">' + window.DLI18N.t("33-weather.f0fe184937ec") + '<span class="sp"></span><span id="dlLqSum" style="font:600 11.5px var(--ui-sans,sans-serif);color:var(--muted)">' + window.DLI18N.t("33-weather.4b6394535d80") + '</span></div><div id="dlLqTape" style="max-height:180px;overflow:auto;font:500 12px var(--mono,ui-monospace,monospace)"><div class="dl-empty" style="padding:8px">' + window.DLI18N.t("33-weather.21b1d73012ad") + '</div></div></div>') +
+      ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("33-weather.d7d1fbd9e8a1") + '</th><th class="r">' + window.DLI18N.t("33-weather.d7cda0ca2c85") + '</th><th class="r">' + window.DLI18N.t("33-weather.b10461d114e4") + '</th><th class="r">' + window.DLI18N.t("33-weather.c490bde619e8") + '</th><th class="r">' + window.DLI18N.t("33-weather.985bf7951bd1") + '</th><th></th></tr></thead><tbody>') + top.map(function (x) { return '<tr' + (ladder.has(x.sym) ? ' class="click" data-coin="' + esc(x.sym) + '"' : "") + "><td><b>" + esc(x.sym) + '</b></td><td class="r">' + C.money(x.mark) + '</td><td class="r">' + fmtF(x.fund8h) + '</td><td class="r">' + (x.oiUsd ? C.big(x.oiUsd) : "—") + '</td><td class="r">' + (x.vol24 ? C.big(x.vol24) : "—") + '</td><td>' + (ladder.has(x.sym) ? '<button class="dl-b" data-perp="' + esc(x.sym) + ('' + window.DLI18N.t("33-weather.2d9e495d828e") + '</button>') : "") + "</td></tr>"; }).join("") + "</tbody></table></div>" +
+      ('<div class="dl-formula">' + window.DLI18N.t("33-weather.d00ae814f702") + '</div>');
   }
   function paintTape() {
     var el = $("dlLqTape"), sum = $("dlLqSum"); if (!el) return;
-    if (D.liq.length) el.innerHTML = D.liq.slice(0, 40).map(function (e) { return '<div class="kv" style="padding:3px 0"><span>' + (e.side === "long" ? '<span class="dn">long</span>' : '<span class="up">short</span>') + " liquidated · " + esc(e.sym) + '</span><b>' + C.money(e.usd, 0) + " @ " + C.money(e.px) + "</b></div>"; }).join("");
+    if (D.liq.length) el.innerHTML = D.liq.slice(0, 40).map(function (e) { return '<div class="kv" style="padding:3px 0"><span>' + (e.side === "long" ? ('<span class="dn">' + window.DLI18N.t("33-weather.fc66f021c67d") + '</span>') : ('<span class="up">' + window.DLI18N.t("33-weather.f9b0078b5df5") + '</span>')) + " liquidated · " + esc(e.sym) + '</span><b>' + C.money(e.usd, 0) + " @ " + C.money(e.px) + "</b></div>"; }).join("");
     if (sum) sum.textContent = D.ws ? "live · longs " + C.big(D.liqSum.long) + " · shorts " + C.big(D.liqSum.short) + " this session" : (D.wsErr ? "stream unavailable — " + D.wsErr : "connecting…");
   }
   function render(tab, body, el) {
@@ -125,29 +125,29 @@ window.DLWEATHER = (function () {
     body.innerHTML = C.skel(5);
     Promise.all([loadPerps(false), longShort().catch(function () { return null; }), dvol().catch(function () { return null; })]).then(function () {
       body.innerHTML = deskHTML(D); paintTape(); wsOpen(function () { if (el.classList.contains("on") && el.dataset.tab === "perps") paintTape(); });
-    }).catch(function (e) { body.innerHTML = '<div class="dl-empty">No perp venue reachable right now — ' + esc(e.message || e) + '. The desk retries when you reopen it.</div>'; });
+    }).catch(function (e) { body.innerHTML = ('<div class="dl-empty">' + window.DLI18N.t("33-weather.1e5021e0fdf0") + '') + esc(e.message || e) + ('' + window.DLI18N.t("33-weather.b1040728d56b") + '</div>'); });
   }
   function weatherView(body) {
     loadPerps(false).catch(function () {}).then(function () { return dvol().catch(function () {}); }).then(function () {
       var w = weather();
-      body.innerHTML = '<div class="dl154"><div class="h">🌤 Weather <span class="sp"></span><b style="font-size:22px">' + w.w.toFixed(0) + '</b></div><div class="dl-gauge"><i style="left:' + w.w.toFixed(0) + '%"></i></div><div style="font:700 14px var(--ui-sans,sans-serif);margin:6px 0">' + esc(w.label) + "</div>" +
+      body.innerHTML = ('<div class="dl154"><div class="h">' + window.DLI18N.t("33-weather.8ca08cb2adc3") + '<span class="sp"></span><b style="font-size:22px">') + w.w.toFixed(0) + '</b></div><div class="dl-gauge"><i style="left:' + w.w.toFixed(0) + '%"></i></div><div style="font:700 14px var(--ui-sans,sans-serif);margin:6px 0">' + esc(w.label) + "</div>" +
         w.parts.map(function (p) { return '<div class="kv"><span>' + esc(p.name) + ' <span style="opacity:.6">' + esc(p.note) + '</span></span><b>' + (p.z >= 0 ? "+" : "") + (p.w * p.z).toFixed(1) + "</b></div>"; }).join("") +
-        (w.missing.length ? '<div class="n">Unavailable right now: ' + esc(w.missing.join(", ")) + " — weights renormalised over what we have.</div>" : "") +
-        '<div class="dl-formula">Weather = 50 + 0.25·(breadth−50) + 0.25·clamp(2.5·mom7) + 0.20·clamp(5·funding_bp) − 0.15·clamp(0.8·(DVOL−55)) + 0.15·(F&amp;G−50), each term clamped to ±25, result clamped to 0–100\nThis is a printed formula over live inputs, not a proprietary index. Change nothing about your book because of it.</div></div>';
+        (w.missing.length ? ('<div class="n">' + window.DLI18N.t("33-weather.8c0c922702dc") + '') + esc(w.missing.join(", ")) + (window.DLI18N.t("33-weather.1152db312dd4") + "</div>") : "") +
+        ('<div class="dl-formula">' + window.DLI18N.t("33-weather.0bb7f560f674") + '</div></div>');
     });
   }
   function cycleView(body) {
     body.innerHTML = C.skel(3);
     cycle().then(function (c) {
       body.innerHTML = '<div class="dl-2">' +
-        '<div class="dl154"><div class="h">Pi-Cycle top</div><div style="font:800 20px var(--ui-sans,sans-serif)">' + esc(c.pi) + '</div><div class="n">111-day SMA ' + C.money(c.ma111, 0) + (c.ma350x2 ? " vs 2×350-day SMA " + C.money(c.ma350x2, 0) : "") + ". A cross has marked cycle tops in the past; the past is not a promise.</div></div>" +
-        '<div class="dl154"><div class="h">Mayer Multiple</div><div style="font:800 20px var(--ui-sans,sans-serif)">' + (c.mayer ? c.mayer.toFixed(2) : "—") + '</div><div class="n">price ÷ 200-day SMA. Historically &lt;0.8 has been "cheap", &gt;2.4 "hot".</div></div>' +
-        '<div class="dl154"><div class="h">Puell Multiple</div><div style="font:800 20px var(--ui-sans,sans-serif)">' + (c.puell ? c.puell.toFixed(2) : "—") + '</div><div class="n">today’s USD issuance (3.125 BTC × 144 blocks) ÷ its 365-day mean — miner-revenue stress vs euphoria.</div></div>' +
+        ('<div class="dl154"><div class="h">' + window.DLI18N.t("33-weather.77a444d4cbae") + '</div><div style="font:800 20px var(--ui-sans,sans-serif)">') + esc(c.pi) + ('</div><div class="n">' + window.DLI18N.t("33-weather.87e3f29e7b72") + '') + C.money(c.ma111, 0) + (c.ma350x2 ? " vs 2×350-day SMA " + C.money(c.ma350x2, 0) : "") + (window.DLI18N.t("33-weather.1ddabec95610") + "</div></div>") +
+        ('<div class="dl154"><div class="h">' + window.DLI18N.t("33-weather.7e2629b9a317") + '</div><div style="font:800 20px var(--ui-sans,sans-serif)">') + (c.mayer ? c.mayer.toFixed(2) : "—") + ('</div><div class="n">' + window.DLI18N.t("33-weather.c5bff2f865eb") + '</div></div>') +
+        ('<div class="dl154"><div class="h">' + window.DLI18N.t("33-weather.628a367854cd") + '</div><div style="font:800 20px var(--ui-sans,sans-serif)">') + (c.puell ? c.puell.toFixed(2) : "—") + ('</div><div class="n">' + window.DLI18N.t("33-weather.699bbab2eaa4") + '</div></div>') +
         '</div><div class="dl-formula">' + c.n + ' daily closes from CoinGecko (public plan caps history at 365 days, so Pi-Cycle can show today’s status but not its own history) · ' + esc("as of " + C.ago(c.at)) + "</div>";
     }).catch(function (e) { body.innerHTML = '<div class="dl-empty">' + esc(e.message || e) + "</div>"; });
   }
   function open(tab) {
-    var el = C.open("dlWeather", { title: "⚡ Leverage Weather", sub: "funding · open interest · liquidations · DVOL — keyless, one venue at a time, labelled", tabs: [["perps", "Perps"], ["weather", "Weather"], ["cycle", "Cycle dials"]], onTab: render }, tab);
+    var el = C.open("dlWeather", { title: window.DLI18N.t("33-weather.93bb14ed5645"), sub: window.DLI18N.t("33-weather.d1943df77b83"), tabs: [["perps", "Perps"], ["weather", "Weather"], ["cycle", "Cycle dials"]], onTab: render }, tab);
     if (!el.__wired) { el.__wired = 1; el.addEventListener("click", function (e) {
       var p = e.target.closest("[data-perp]"); if (p) { C.close("dlWeather"); openCoin(p.getAttribute("data-perp")); setTimeout(function () { try { window.DLSIM && DLSIM.open && DLSIM.open(); } catch (er) {} }, 700); return; }
       var tr = e.target.closest("tr[data-coin]"); if (tr) { C.close("dlWeather"); openCoin(tr.getAttribute("data-coin")); }
@@ -162,13 +162,13 @@ window.DLWEATHER = (function () {
   function mount() {
     var host = $("dlCycle") || $("mxMoversHost"); if (!host || $("dlWxCard")) return;
     var box = document.createElement("div"); box.id = "dlWxCard"; box.className = "dl154";
-    box.innerHTML = '<div class="h">⚡ Leverage Weather <span class="sp"></span><button data-open="perps">Open desk →</button></div><div id="dlWxBody">' + C.skel(1) + '</div><div class="n" id="dlWxNote">funding · OI · liquidations · Weather composite — every number names its venue</div>';
+    box.innerHTML = ('<div class="h">' + window.DLI18N.t("33-weather.e801669168e1") + '<span class="sp"></span><button data-open="perps">' + window.DLI18N.t("33-weather.8c7fe4b6da04") + '</button></div><div id="dlWxBody">') + C.skel(1) + ('</div><div class="n" id="dlWxNote">' + window.DLI18N.t("33-weather.8905c10a1ce0") + '</div>');
     host.parentNode.insertBefore(box, host.nextSibling);
     box.addEventListener("click", function (e) { var b = e.target.closest("[data-open]"); if (b) open(b.getAttribute("data-open")); });
     loadPerps(false).then(function (d) {
       var maj = ["BTC", "ETH", "SOL"].map(function (s) { return d.by[s]; }).filter(Boolean), w = weather();
-      $("dlWxBody").innerHTML = '<div class="dl-chips" style="margin:0">' + maj.map(function (x) { return '<span class="dl-chip" title="funding 8h">' + esc(x.sym) + " " + fmtF(x.fund8h) + "</span>"; }).join("") + '<button class="dl-chip" data-open="weather" title="' + esc(w.label) + '">🌤 Weather ' + w.w.toFixed(0) + '</button><button class="dl-chip" data-open="cycle">🧭 Cycle dials</button>' + C.prov(d.src, d.at, d.stale, { attr: 'style="align-self:center"' }) + "</div>";
-    }).catch(function () { $("dlWxBody").innerHTML = '<div class="dl-empty" style="padding:6px">No perp venue reachable — the card retries on the next visit.</div>'; });
+      $("dlWxBody").innerHTML = '<div class="dl-chips" style="margin:0">' + maj.map(function (x) { return ('<span class="dl-chip" title="' + window.DLI18N.t("33-weather.49e7df0ff445") + '">') + esc(x.sym) + " " + fmtF(x.fund8h) + "</span>"; }).join("") + '<button class="dl-chip" data-open="weather" title="' + esc(w.label) + '">🌤 Weather ' + w.w.toFixed(0) + ('</button><button class="dl-chip" data-open="cycle">' + window.DLI18N.t("33-weather.7bd3c468b12c") + '</button>') + C.prov(d.src, d.at, d.stale, { attr: 'style="align-self:center"' }) + "</div>";
+    }).catch(function () { $("dlWxBody").innerHTML = ('<div class="dl-empty" style="padding:6px">' + window.DLI18N.t("33-weather.6bf841c31a68") + '</div>'); });
   }
   C.cmd("leverage weather", "Leverage Weather — funding, open interest, liquidation tape", "⚡", function () { open("perps"); });
   C.cmd("weather", "Weather — a printed-formula market composite", "🌤", function () { open("weather"); });
