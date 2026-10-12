@@ -696,7 +696,18 @@
   "42-rewind.aab580ab9680": "BACKTEST",
   "42-rewind.bdacdeb9ca34": "Open Rewind",
   "43-fork.7eb798a22cf2": "🧪 Local fork sandbox",
-  "43-fork.aa208563557d": "YOUR NODE"
+  "43-fork.aa208563557d": "YOUR NODE",
+  "45-bots.02b899f6e08b": "0?x:0))/n;l=(l*(n-1)+(x",
+  "45-bots.1b5ae7b9979c": "Build a bot from rules and test it on real history, or bring your own — JavaScript in a sandbox, or your own program answering one URL. Each bot gets its own paper wallet and is scored against buy-and-hold. Your account is never touched.",
+  "45-bots.26cd649bab68": "build a bot from rules, or bring your own — each trades its own paper wallet against the live market",
+  "45-bots.46c7714c736e": "🤖 Bots",
+  "45-bots.a15a48e43398": "AUTOMATE",
+  "45-bots.ca99ed47cf2e": "for(i=n+1;i",
+  "45-bots.cc971dcab2f4": "function rsi(a,n){n=n||14;if(a.length",
+  "45-bots.d2330853b150": "=0?g+=d:l-=d}g/=n;l/=n;",
+  "45-bots.d5cec259290d": "Open Bots",
+  "45-bots.ead79ae82e1d": "n){s-=0}}return s/Math.max(1,c)}",
+  "45-bots.edab3274c82a": "function atr(bs,n){n=n||14;if(!bs.length)return 0;var p=null,s=0,c=0;for(var i=0;i"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
