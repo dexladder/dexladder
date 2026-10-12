@@ -690,7 +690,12 @@
   "42-cmc.f21ab4497182": "That venue returned no pairs just now.",
   "42-cmc.f26bfd03bb8f": "🧪 Practise this pool ",
   "42-cmc.f569f61b573f": "1h · 24h",
-  "42-cmc.f6b10e7f3354": "CoinMarketCap"
+  "42-cmc.f6b10e7f3354": "CoinMarketCap",
+  "42-rewind.4f5c6df82583": "bar-by-bar backtester — real candles, your orders, no lookahead",
+  "42-rewind.6dccb27888d0": "Replay this market bar by bar on real history and trade it — equity curve, drawdown and a verdict against buy-and-hold. Hypothetical: your paper account is not touched.",
+  "42-rewind.7d50e0068a60": "⏮ Rewind",
+  "42-rewind.aab580ab9680": "BACKTEST",
+  "42-rewind.bdacdeb9ca34": "Open Rewind"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
