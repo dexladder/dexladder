@@ -5,13 +5,13 @@
   'use strict';
   var previous, overlay;
   var keys = [
-    ['?', 'Show shortcuts'], ['g then m / n / d / e / l / p / 2 / c', 'Markets / News / Discover / Explorer / Academy / Portfolio / P2P / Community'],
-    ['⌘K / Ctrl+K / /', 'Command palette'], ['t', 'Cycle display theme'], ['Esc', 'Close dialogs'],
-    ['b / s', 'Coin: Buy / Sell'], ['x', 'Coin: focus amount'], ['1–5', 'Coin: chart ranges'], ['w', 'Coin: watchlist'],
-    ['r', 'Coin: Replay'], ['y', 'Coin: Strategy Lab'], ['← / →', 'Chart: step'], ['+ / −', 'Chart: zoom'],
-    ['Home / End', 'Chart: first bar / realtime'], ['m', 'Chart: cycle magnet'], ['Delete / Backspace', 'Chart: delete selected drawings'],
-    ['⌘Z / Ctrl+Z', 'Chart: undo'], ['⌘⇧Z / Ctrl+Shift+Z / Ctrl+Y', 'Chart: redo'],
-    ['Alt+t / h / v / f / r / p / b / e / i / l / s / c / x', 'Chart tools: trend / horizontal / vertical / Fibonacci / rectangle / channel / brush / ellipse / info / long / short / callout / XABCD']
+    ['?', window.DLI18N.t("65-shortcuts.54a80bd055e7")], ['g then m / n / d / e / l / p / 2 / c', window.DLI18N.t("65-shortcuts.74e2959a7dd6")],
+    ['⌘K / Ctrl+K / /', window.DLI18N.t("65-shortcuts.0347f794d69c")], ['t', window.DLI18N.t("65-shortcuts.8640e5405ab8")], ['Esc', window.DLI18N.t("65-shortcuts.863c24308391")],
+    ['b / s', window.DLI18N.t("65-shortcuts.df0719d2274f")], ['x', window.DLI18N.t("65-shortcuts.0db80b6f050a")], ['1–5', window.DLI18N.t("65-shortcuts.3ef781a50e70")], ['w', window.DLI18N.t("65-shortcuts.80e272fdd198")],
+    ['r', window.DLI18N.t("65-shortcuts.dfc9f8d56f3d")], ['y', window.DLI18N.t("65-shortcuts.0f92d1f369e7")], ['← / →', window.DLI18N.t("65-shortcuts.b0aad4d1327c")], ['+ / −', window.DLI18N.t("65-shortcuts.815e2a27ee5d")],
+    ['Home / End', window.DLI18N.t("65-shortcuts.2fa0a03dc50c")], ['m', window.DLI18N.t("65-shortcuts.21e91a50ea9c")], ['Delete / Backspace', window.DLI18N.t("65-shortcuts.d4fd482cb995")],
+    ['⌘Z / Ctrl+Z', window.DLI18N.t("65-shortcuts.31e213faa77f")], ['⌘⇧Z / Ctrl+Shift+Z / Ctrl+Y', window.DLI18N.t("65-shortcuts.7591ca8358de")],
+    ['Alt+t / h / v / f / r / p / b / e / i / l / s / c / x', window.DLI18N.t("65-shortcuts.bcdbdcd03c07")]
   ];
   function close() {
     if (!overlay) return;
@@ -27,8 +27,8 @@
     var dialog = document.createElement('section');
     dialog.className = 'dlv-sheet'; Object.assign(dialog.style, { maxWidth:'760px', maxHeight:'85vh', overflow:'auto' });
     dialog.setAttribute('role', 'dialog'); dialog.setAttribute('aria-modal', 'true'); dialog.setAttribute('aria-labelledby', 'dlShortcutsTitle');
-    var title = document.createElement('h2'); title.id = 'dlShortcutsTitle'; title.textContent = 'Keyboard shortcuts';
-    var button = document.createElement('button'); button.type = 'button'; button.textContent = 'Close'; button.onclick = close;
+    var title = document.createElement('h2'); title.id = 'dlShortcutsTitle'; title.textContent = window.DLI18N.t("65-shortcuts.e9bef0b0f3c2");
+    var button = document.createElement('button'); button.type = 'button'; button.textContent = window.DLI18N.t("65-shortcuts.7d9eb7acb13e"); button.onclick = close;
     dialog.append(title, button);
     var table = document.createElement('table'); table.className = 'dl-tbl';
     keys.forEach(function (pair) { var row = table.insertRow(); row.insertCell().textContent = pair[0]; row.insertCell().textContent = pair[1]; });
