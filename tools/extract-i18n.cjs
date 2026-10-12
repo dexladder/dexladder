@@ -12,7 +12,12 @@ function call(text) {return 'window.DLI18N.t('+JSON.stringify(key(text))+')';}
 function visit(node) {
   if (ts.isStringLiteral(node) || ts.isNoSubstitutionTemplateLiteral(node)) {
     const value=node.text, parent=node.parent;
+    if (ts.isPropertyAssignment(parent) && parent.name === node) return;
     if (value.includes('window.DLI18N')) return;
+    const quote = source[node.getStart(ast)];
+    function literal(text) {
+      return quote + text.replace(/\\/g, '\\\\').replace(new RegExp(quote, 'g'), '\\' + quote).replace(/\n/g, '\\n').replace(/\r/g, '\\r') + quote;
+    }
     let transformed=null;
     // In HTML, extract text nodes and accessibility-facing attributes only.
     if (/<[a-z/][^>]*>/i.test(value) && !/<(?:style|script)\b/i.test(value)) {
@@ -23,12 +28,13 @@ function visit(node) {
         if (text[0]==='>') { start++;text=text.slice(1); }
         else if (/^(?:aria-label|placeholder|title)=/.test(text)) { const eq=text.indexOf('="');start+=eq+2;text=text.slice(eq+2,-1); }
         if (!/[A-Za-z]/.test(text) || /^[\s\d.,%+−–—:·/]+$/.test(text)) continue;
-        pieces.push(JSON.stringify(value.slice(at,start)),call(text));at=start+text.length;
+        pieces.push(literal(value.slice(at,start)),call(text));at=start+text.length;
       }
-      if (at) { pieces.push(JSON.stringify(value.slice(at)));transformed='('+pieces.filter(p=>p!=='""').join(' + ')+')'; }
-    } else if (ts.isPropertyAssignment(parent) && ['label','title','note','sub','one','what'].includes(parent.name.getText(ast).replace(/['"]/g,'')) && /[A-Za-z]/.test(value)) transformed=call(value);
+      if (at) { pieces.push(literal(value.slice(at)));transformed='('+pieces.filter(p=>p!=='""').join(' + ')+')'; }
+    } else if (ts.isPropertyAssignment(parent) && ['label','title','note','sub','one','what','desc','hint','help'].includes(parent.name.getText(ast).replace(/['"]/g,'')) && /[A-Za-z]/.test(value)) transformed=call(value);
     else if (ts.isBinaryExpression(parent) && parent.operatorToken.kind===ts.SyntaxKind.EqualsToken && /\.(?:textContent|innerText)$/.test(parent.left.getText(ast)) && /[A-Za-z]/.test(value)) transformed=call(value);
     if (!transformed && ts.isCallExpression(parent) && /(?:esc|\.empty)$/.test(parent.expression.getText(ast)) && /[A-Za-z]/.test(value) && !/[<>]/.test(value) && !/^https?:/.test(value)) transformed=call(value);
+    if (!transformed && ts.isPropertyAssignment(parent) && parent.parent.parent && ts.isBinaryExpression(parent.parent.parent) && parent.parent.parent.left.getText(ast)==='STR.en' && /[A-Za-z]/.test(value)) transformed=call(value);
     if (transformed) edits.push({start:node.getStart(ast),end:node.end,replacement:transformed,original:value});
   }
   ts.forEachChild(node,visit);

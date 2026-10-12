@@ -9,6 +9,8 @@ SNAP="$OUT/payload"; rm -rf "$SNAP"; cp -R "$(dirname "$F")" "$SNAP"; F="$SNAP/$
 echo "payload sha256 $(shasum -a 256 "$F" 2>/dev/null | cut -c1-16 || sha256sum "$F" | cut -c1-16)" > "$OUT/payload.txt"
 export LANG=en_US.UTF-8
 fail=0
+node tools/generate-i18n.cjs --check > "$OUT/i18n-catalogue.txt" 2>&1 || fail=1
+node test/gate-i18n.js > "$OUT/gate-i18n.txt" 2>&1 || fail=1
 python3 test/gate-build-check.py > "$OUT/gate-build-check.txt" 2>&1 || fail=1
 python3 tools/layer-index.py --check > "$OUT/layer-index.txt" 2>&1 || fail=1
 if [ -x app/node_modules/.bin/tsc ]; then
