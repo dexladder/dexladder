@@ -37,8 +37,8 @@ window.DLREWIND = (function () {
 
   function open() {
     var el = C.open("dlRewind", {
-      title: "⏮ Rewind",
-      sub: "bar-by-bar backtester — real candles, your orders, no lookahead",
+      title: window.DLI18N.t("42-rewind.7d50e0068a60"),
+      sub: window.DLI18N.t("42-rewind.4f5c6df82583"),
       tabs: [], onTab: body
     });
     watch(el);
@@ -53,12 +53,12 @@ window.DLREWIND = (function () {
       var card = document.createElement("div");
       card.className = "card"; card.id = "dlRwCard";
       var h = document.createElement("div"); h.className = "ph";
-      var b = document.createElement("b"); b.textContent = "⏮ Rewind";
-      var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = "BACKTEST";
+      var b = document.createElement("b"); b.textContent = window.DLI18N.t("42-rewind.7d50e0068a60");
+      var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = window.DLI18N.t("42-rewind.aab580ab9680");
       h.appendChild(b); h.appendChild(tag);
       var note = document.createElement("div"); note.className = "fnote";
-      note.textContent = "Replay this market bar by bar on real history and trade it — equity curve, drawdown and a verdict against buy-and-hold. Hypothetical: your paper account is not touched.";
-      var go = document.createElement("button"); go.className = "btn"; go.type = "button"; go.textContent = "Open Rewind";
+      note.textContent = window.DLI18N.t("42-rewind.6dccb27888d0");
+      var go = document.createElement("button"); go.className = "btn"; go.type = "button"; go.textContent = window.DLI18N.t("42-rewind.bdacdeb9ca34");
       go.onclick = open;
       card.appendChild(h); card.appendChild(note); card.appendChild(go);
       var perp = $("dlPerp");
