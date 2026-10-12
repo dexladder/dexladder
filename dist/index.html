@@ -1739,7 +1739,64 @@
   "41-trust.fbe5a0f83845": "Liquidation",
   "41-trust.fd098b0313a9": "DeXaI:",
   "41-trust.ff41270fb998": "I’ve read it — open the desk",
-  "41-trust.ff8059dc6752": "Actions"
+  "41-trust.ff8059dc6752": "Actions",
+  "42-cmc.02b317c9589e": " · fee + gas $",
+  "42-cmc.04864c05049e": "Liquidity",
+  "42-cmc.086a519fdeed": " at ",
+  "42-cmc.0b509e6d4c97": "24h",
+  "42-cmc.1257ac04471d": "Cap",
+  "42-cmc.148a2f1fedc2": " bps apart on the same contract",
+  "42-cmc.15a546c165e9": "This is the ranking CoinMarketCap itself publishes, fetched with no account. DexLadder’s own ladder is built from a five-source hedge; when the two differ, neither is wrong — they are counting different venues.",
+  "42-cmc.1989dc3fa012": "CoinMarketCap keyless · second witness on every pool price",
+  "42-cmc.19fcc915252a": "Stablecoin volume 24h",
+  "42-cmc.1bd96f2a75e4": "Sell ½",
+  "42-cmc.1e07832d53be": "Only one witness answered — ",
+  "42-cmc.21eeee1c9961": "Scan token",
+  "42-cmc.31b95e77bc19": "GeckoTerminal",
+  "42-cmc.3acb5d6696dd": "pool book ",
+  "42-cmc.42725b36ca10": "Active market pairs",
+  "42-cmc.4ac2a5661158": "BTC dominance",
+  "42-cmc.50a376188969": "← Back to the rail",
+  "42-cmc.51cf15de3859": "CoinMarketCap’s own ladder ",
+  "42-cmc.56713b15e88d": "Enter an amount.",
+  "42-cmc.5926c75c2931": "DeFi volume 24h",
+  "42-cmc.64e3cb0e4960": "Buy",
+  "42-cmc.68cc104b22bd": " paper USDT",
+  "42-cmc.6c9652eec859": "Pool Radar is not loaded, so there is nothing to practise in.",
+  "42-cmc.6d031af10da7": "Position",
+  "42-cmc.6f25c1f37ff4": "No position here yet. Size it small, watch the slippage, then read the cross-check again.",
+  "42-cmc.712f342d7e1e": "% apart",
+  "42-cmc.7e09f17cf4f5": "Assets tracked",
+  "42-cmc.8067030aa0f9": ". One source is not a cross-check, so nothing is claimed here.",
+  "42-cmc.80d298c9f240": "Asset",
+  "42-cmc.817d2062da8e": "liq ",
+  "42-cmc.8887d48c3394": "x·y=k on half of CoinMarketCap’s reported liquidity · LP fee 0.30% · gas $2.20 · paper only. The liquidity figure comes from CMC; if the cross-check says the two indexers disagree on it, this quote inherits that doubt.",
+  "42-cmc.90099c91e9c1": "Sell all",
+  "42-cmc.90d00bfcf760": "Total market cap",
+  "42-cmc.9201793e51b7": "⚖ Two witnesses",
+  "42-cmc.93c91c851e7a": "Price",
+  "42-cmc.98298a0b7669": "Stablecoin volume against total volume is the honest read of how much of \"crypto trading\" is people moving between two dollars. DexLadder shows it because it is unflattering.",
+  "42-cmc.9e0d445b09c4": "ETH dominance",
+  "42-cmc.a1774db9d766": "Liquidity read",
+  "42-cmc.a7c742643c7c": "7d",
+  "42-cmc.ab0959ca6edd": "GoPlus reads the contract’s own rules — honeypot, mint, pause, taxes, LP lock.",
+  "42-cmc.ab28bd6097e2": "Cross-check",
+  "42-cmc.aea1b15df626": "Venue",
+  "42-cmc.af0e10c98b1e": "The market, as CoinMarketCap counts it ",
+  "42-cmc.b0f676007548": "⚖ Spot Rail",
+  "42-cmc.b11fb1f593a8": "Spread",
+  "42-cmc.b21242735eb2": "FDV",
+  "42-cmc.c3d55603d3c7": "🛡 Security",
+  "42-cmc.c8b145e63282": "Avg entry",
+  "42-cmc.ca9006bd3fb0": "USDT",
+  "42-cmc.d290ad0bded9": "24h volume",
+  "42-cmc.ecdfdc759a5c": " bps",
+  "42-cmc.ed417a9e44b4": "One indexer is an opinion. Hold CoinMarketCap’s price for this contract against GeckoTerminal’s and see whether they agree — and by how much when they do not.",
+  "42-cmc.eff9149ba702": "CoinMarketCap’s own on-chain feed, read without an account, a key or a wallet. It is the SECOND witness on this app’s pool prices — open a pool to hold it against GeckoTerminal. ",
+  "42-cmc.f21ab4497182": "That venue returned no pairs just now.",
+  "42-cmc.f26bfd03bb8f": "🧪 Practise this pool ",
+  "42-cmc.f569f61b573f": "1h · 24h",
+  "42-cmc.f6b10e7f3354": "CoinMarketCap"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -12051,31 +12108,31 @@ window.DLCMC = (function () {
   function venueChips() {
     var v = VENUES[ST.vi];
     return '<div class="dl-chips" id="dlCmNets">' + VENUES.map(function (x, i) { return '<button class="dl-chip' + (i === ST.vi ? " on" : "") + '" data-cvi="' + i + '">' + esc(x.name) + "</button>"; }).join("") + "</div>" +
-      '<div class="dl-chips" id="dlCmDex">' + v.dex.map(function (d, i) { return '<button class="dl-chip' + (i === ST.di ? " on" : "") + '" data-cdi="' + i + '">' + esc(d[1]) + "</button>"; }).join("") + '<span class="sp"></span><span class="dl-prov recent" id="dlCmProv">CoinMarketCap</span></div>';
+      '<div class="dl-chips" id="dlCmDex">' + v.dex.map(function (d, i) { return '<button class="dl-chip' + (i === ST.di ? " on" : "") + '" data-cdi="' + i + '">' + esc(d[1]) + "</button>"; }).join("") + ('<span class="sp"></span><span class="dl-prov recent" id="dlCmProv">' + window.DLI18N.t("42-cmc.f6b10e7f3354") + '</span></div>');
   }
   function rowHTML(p) {
-    return '<div class="dl-row click dlc-row-click" data-cpool="' + esc(p.id) + '"><div class="nm"><b>' + esc(p.name) + '</b><span>liq ' + C.big(p.liq) + " · vol " + C.big(p.vol) + (p.fdv ? " · FDV " + C.big(p.fdv) : "") + " · " + esc(p.dex) + '</span></div><div class="rt">' + px(p.price) +
+    return '<div class="dl-row click dlc-row-click" data-cpool="' + esc(p.id) + '"><div class="nm"><b>' + esc(p.name) + ('</b><span>' + window.DLI18N.t("42-cmc.817d2062da8e") + '') + C.big(p.liq) + " · vol " + C.big(p.vol) + (p.fdv ? " · FDV " + C.big(p.fdv) : "") + " · " + esc(p.dex) + '</span></div><div class="rt">' + px(p.price) +
       '<br><span class="dlc-xs"><span class="' + (p.h1 >= 0 ? "up" : "dn") + '" title="1h">' + C.pct(p.h1, 2) + '</span> <span class="' + (p.h24 >= 0 ? "up" : "dn") + '" title="24h">' + C.pct(p.h24, 2) + "</span></span></div></div>";
   }
   function listView(body) {
     var v = VENUES[ST.vi], d = v.dex[ST.di] || v.dex[0];
     body.innerHTML = venueChips() + '<div id="dlCmList">' + C.skel(6) + "</div>" +
-      '<div class="dl-note">CoinMarketCap’s own on-chain feed, read without an account, a key or a wallet. It is the SECOND witness on this app’s pool prices — open a pool to hold it against GeckoTerminal. ' + esc(NOTSUPPORTED) + "</div>";
+      ('<div class="dl-note">' + window.DLI18N.t("42-cmc.eff9149ba702") + '') + esc(NOTSUPPORTED) + "</div>";
     spot(v.net, d[0]).then(function (r) {
       var el = $("dlCmList"); if (!el) return;
       var list = r.list.slice(0, 40);
-      el.innerHTML = list.length ? list.map(rowHTML).join("") : '<div class="dl-empty">That venue returned no pairs just now.</div>';
+      el.innerHTML = list.length ? list.map(rowHTML).join("") : ('<div class="dl-empty">' + window.DLI18N.t("42-cmc.f21ab4497182") + '</div>');
       el.__list = list;
       var pv = $("dlCmProv"); if (pv) pv.outerHTML = C.prov("CoinMarketCap", r.at, r.stale, { attr: 'id="dlCmProv"', title: "CMC keyless " + PATHS.spot + " · via " + (r.mode === "direct" ? "direct" : "the /api/cmc relay") });
     }).catch(function (e) { var el = $("dlCmList"); if (el) dark(el, e.message || e); });
   }
 
   function poolView(body, p) {
-    body.innerHTML = '<button class="dl-b" id="dlCmBack">← Back to the rail</button>' +
-      '<div class="dl154 dlc-mt10"><div class="h">' + esc(p.name) + ' <span class="dl-prov recent" id="dlCmPProv">CoinMarketCap</span><span class="sp"></span><b>' + px(p.price) + '</b></div>' +
-      '<div class="dl-2"><div><div class="kv"><span>Liquidity</span><b>' + C.big(p.liq) + '</b></div><div class="kv"><span>24h volume</span><b>' + C.big(p.vol) + '</b></div><div class="kv"><span>FDV</span><b>' + (p.fdv ? C.big(p.fdv) : "—") + '</b></div><div class="kv"><span>Venue</span><b>' + esc(p.dex) + '</b></div><div class="kv"><span>1h · 24h</span><b><span class="' + (p.h1 >= 0 ? "up" : "dn") + '">' + C.pct(p.h1, 2) + '</span> · <span class="' + (p.h24 >= 0 ? "up" : "dn") + '">' + C.pct(p.h24, 2) + '</span></b></div></div>' +
-      '<div><div class="h dlc-mb6">⚖ Two witnesses<span class="sp"></span><button class="dl-b" id="dlCmX">Cross-check</button></div><div id="dlCmXout" class="dl-note dlc-m0">One indexer is an opinion. Hold CoinMarketCap’s price for this contract against GeckoTerminal’s and see whether they agree — and by how much when they do not.</div>' +
-      '<div class="h dlc-mrow">🛡 Security<span class="sp"></span><button class="dl-b" id="dlCmScan">Scan token</button></div><div id="dlCmSec" class="dl-note dlc-m0">GoPlus reads the contract’s own rules — honeypot, mint, pause, taxes, LP lock.</div></div></div></div>' +
+    body.innerHTML = ('<button class="dl-b" id="dlCmBack">' + window.DLI18N.t("42-cmc.50a376188969") + '</button>') +
+      '<div class="dl154 dlc-mt10"><div class="h">' + esc(p.name) + (' <span class="dl-prov recent" id="dlCmPProv">' + window.DLI18N.t("42-cmc.f6b10e7f3354") + '</span><span class="sp"></span><b>') + px(p.price) + '</b></div>' +
+      ('<div class="dl-2"><div><div class="kv"><span>' + window.DLI18N.t("42-cmc.04864c05049e") + '</span><b>') + C.big(p.liq) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("42-cmc.d290ad0bded9") + '</span><b>') + C.big(p.vol) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("42-cmc.b21242735eb2") + '</span><b>') + (p.fdv ? C.big(p.fdv) : "—") + ('</b></div><div class="kv"><span>' + window.DLI18N.t("42-cmc.aea1b15df626") + '</span><b>') + esc(p.dex) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("42-cmc.f569f61b573f") + '</span><b><span class="') + (p.h1 >= 0 ? "up" : "dn") + '">' + C.pct(p.h1, 2) + '</span> · <span class="' + (p.h24 >= 0 ? "up" : "dn") + '">' + C.pct(p.h24, 2) + '</span></b></div></div>' +
+      ('<div><div class="h dlc-mb6">' + window.DLI18N.t("42-cmc.9201793e51b7") + '<span class="sp"></span><button class="dl-b" id="dlCmX">' + window.DLI18N.t("42-cmc.ab28bd6097e2") + '</button></div><div id="dlCmXout" class="dl-note dlc-m0">' + window.DLI18N.t("42-cmc.ed417a9e44b4") + '</div>') +
+      ('<div class="h dlc-mrow">' + window.DLI18N.t("42-cmc.c3d55603d3c7") + '<span class="sp"></span><button class="dl-b" id="dlCmScan">' + window.DLI18N.t("42-cmc.21eeee1c9961") + '</button></div><div id="dlCmSec" class="dl-note dlc-m0">' + window.DLI18N.t("42-cmc.ab0959ca6edd") + '</div></div></div></div>') +
       '<div class="dl154" id="dlCmSand"></div>';
     $("dlCmBack").onclick = function () { ST.sel = null; listView(body); };
     var pv = $("dlCmPProv"); if (pv) pv.outerHTML = C.prov("CoinMarketCap", p.at || C.now(), false, { attr: 'id="dlCmPProv"', title: "CMC " + PATHS.spot + " · last_updated on the pool row" });
@@ -12083,12 +12140,12 @@ window.DLCMC = (function () {
     $("dlCmX").onclick = function () {
       var out = $("dlCmXout"); out.innerHTML = C.skel(2);
       crossCheck(p.cnet, p.addr).then(function (x) {
-        if (!x.both) { out.innerHTML = '<div class="dl-empty">Only one witness answered — ' + esc((x.cmc && x.cmc.err) || (x.gt && x.gt.err) || "the other indexer does not carry this pool") + ". One source is not a cross-check, so nothing is claimed here.</div>"; return; }
+        if (!x.both) { out.innerHTML = ('<div class="dl-empty">' + window.DLI18N.t("42-cmc.1e07832d53be") + '') + esc((x.cmc && x.cmc.err) || (x.gt && x.gt.err) || "the other indexer does not carry this pool") + (window.DLI18N.t("42-cmc.8067030aa0f9") + "</div>"); return; }
         var agree = !x.contested;
-        out.innerHTML = '<div class="sec-verdict ' + (agree ? "safe" : "warn") + '"><span class="em">' + (agree ? "⚖️" : "⚠️") + '</span><div><b>' + (agree ? "The two indexers agree" : "The two indexers disagree") + '</b><span>' + x.bps.toFixed(1) + ' bps apart on the same contract</span></div></div>' +
-          '<div class="sec-grid"><div class="sec-item"><span>CoinMarketCap</span><span class="neu">' + esc(px(x.cmc.pool.price)) + '</span></div><div class="sec-item"><span>GeckoTerminal</span><span class="neu">' + esc(px(x.gt.price)) + '</span></div>' +
-          '<div class="sec-item"><span>Spread</span><span class="' + (agree ? "ok" : "bad") + '">' + x.bps.toFixed(1) + ' bps</span></div>' +
-          (x.liqGap != null ? '<div class="sec-item"><span>Liquidity read</span><span class="' + (x.liqGap > 10 ? "bad" : "ok") + '">' + x.liqGap.toFixed(1) + '% apart</span></div>' : "") + "</div>" +
+        out.innerHTML = '<div class="sec-verdict ' + (agree ? "safe" : "warn") + '"><span class="em">' + (agree ? "⚖️" : "⚠️") + '</span><div><b>' + (agree ? "The two indexers agree" : "The two indexers disagree") + '</b><span>' + x.bps.toFixed(1) + ('' + window.DLI18N.t("42-cmc.148a2f1fedc2") + '</span></div></div>') +
+          ('<div class="sec-grid"><div class="sec-item"><span>' + window.DLI18N.t("42-cmc.f6b10e7f3354") + '</span><span class="neu">') + esc(px(x.cmc.pool.price)) + ('</span></div><div class="sec-item"><span>' + window.DLI18N.t("42-cmc.31b95e77bc19") + '</span><span class="neu">') + esc(px(x.gt.price)) + '</span></div>' +
+          ('<div class="sec-item"><span>' + window.DLI18N.t("42-cmc.b11fb1f593a8") + '</span><span class="') + (agree ? "ok" : "bad") + '">' + x.bps.toFixed(1) + ('' + window.DLI18N.t("42-cmc.ecdfdc759a5c") + '</span></div>') +
+          (x.liqGap != null ? ('<div class="sec-item"><span>' + window.DLI18N.t("42-cmc.a1774db9d766") + '</span><span class="') + (x.liqGap > 10 ? "bad" : "ok") + '">' + x.liqGap.toFixed(1) + ('' + window.DLI18N.t("42-cmc.712f342d7e1e") + '</span></div>') : "") + "</div>" +
           '<div class="dl-note dlc-mt8">' + (agree ? "Two independent indexers reading one contract landed within half a percent. That is what a liquid, well-indexed pool looks like."
             : "A gap this wide means at least one of them is reading a stale block, a different reserve, or a pool too thin to price. On a real venue you would be filled at neither number. This is the oracle problem, on your screen, with your pool.") + "</div>";
         var chip = $("dlCmPProv");
@@ -12113,14 +12170,14 @@ window.DLCMC = (function () {
      the same ledger and read by the same coach. */
   function sand(body, p) {
     var el = $("dlCmSand"); if (!el) return;
-    if (!window.DLRADAR || !DLRADAR.quote) { el.innerHTML = '<div class="dl-empty">Pool Radar is not loaded, so there is nothing to practise in.</div>'; return; }
+    if (!window.DLRADAR || !DLRADAR.quote) { el.innerHTML = ('<div class="dl-empty">' + window.DLI18N.t("42-cmc.6c9652eec859") + '</div>'); return; }
     var B = DLRADAR.book() || { cash: 0, pos: [] }, pos = B.pos.filter(function (x) { return x.id === p.id; })[0];
-    el.innerHTML = '<div class="h">🧪 Practise this pool ' + C.simTag() + '<span class="sp"></span><span class="dlc-book">pool book <b>' + C.money(B.cash, 2) + '</b> paper USDT</span></div>' +
-      '<div class="dl-2"><div><div class="dlc-inline dlc-mb6"><input class="dl-inp" id="dlCmAmt" type="number" min="1" step="1" value="100" placeholder="USDT"><button class="dl-b pri" id="dlCmBuy">Buy</button></div><div id="dlCmQ" class="dl-formula dlc-m0"></div></div>' +
-      '<div>' + (pos ? '<div class="kv"><span>Position</span><b>' + pos.qty.toFixed(4) + " " + esc(p.sym) + '</b></div><div class="kv"><span>Avg entry</span><b>' + px(pos.cost / pos.qty) + '</b></div><div class="dlc-inline dlc-mt8"><button class="dl-b" data-csell="0.5">Sell ½</button><button class="dl-b warn" data-csell="1">Sell all</button></div>' : '<div class="dl-empty dlc-p10">No position here yet. Size it small, watch the slippage, then read the cross-check again.</div>') + "</div></div>" +
-      '<div class="n">x·y=k on half of CoinMarketCap’s reported liquidity · LP fee 0.30% · gas $2.20 · paper only. The liquidity figure comes from CMC; if the cross-check says the two indexers disagree on it, this quote inherits that doubt.</div>';
+    el.innerHTML = ('<div class="h">' + window.DLI18N.t("42-cmc.f26bfd03bb8f") + '') + C.simTag() + ('<span class="sp"></span><span class="dlc-book">' + window.DLI18N.t("42-cmc.3acb5d6696dd") + '<b>') + C.money(B.cash, 2) + ('</b>' + window.DLI18N.t("42-cmc.68cc104b22bd") + '</span></div>') +
+      ('<div class="dl-2"><div><div class="dlc-inline dlc-mb6"><input class="dl-inp" id="dlCmAmt" type="number" min="1" step="1" value="100" placeholder="' + window.DLI18N.t("42-cmc.ca9006bd3fb0") + '"><button class="dl-b pri" id="dlCmBuy">' + window.DLI18N.t("42-cmc.64e3cb0e4960") + '</button></div><div id="dlCmQ" class="dl-formula dlc-m0"></div></div>') +
+      '<div>' + (pos ? ('<div class="kv"><span>' + window.DLI18N.t("42-cmc.6d031af10da7") + '</span><b>') + pos.qty.toFixed(4) + " " + esc(p.sym) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("42-cmc.c8b145e63282") + '</span><b>') + px(pos.cost / pos.qty) + ('</b></div><div class="dlc-inline dlc-mt8"><button class="dl-b" data-csell="0.5">' + window.DLI18N.t("42-cmc.1bd96f2a75e4") + '</button><button class="dl-b warn" data-csell="1">' + window.DLI18N.t("42-cmc.90099c91e9c1") + '</button></div>') : ('<div class="dl-empty dlc-p10">' + window.DLI18N.t("42-cmc.6f25c1f37ff4") + '</div>')) + "</div></div>" +
+      ('<div class="n">' + window.DLI18N.t("42-cmc.8887d48c3394") + '</div>');
     var amt = $("dlCmAmt"), q = $("dlCmQ");
-    function refresh() { var v = +amt.value; if (!(v > 0)) { q.textContent = "Enter an amount."; return; } var r = DLRADAR.quote(p, "buy", v); q.innerHTML = "≈ <b>" + r.qty.toFixed(4) + " " + esc(p.sym) + "</b> at " + px(r.eff) + " · slippage <b class='" + (r.slip > 2 ? "dn" : "up") + "'>" + r.slip.toFixed(2) + "%</b> · fee + gas "+DLCUR.s()+DLCUR.c(r.fee).toFixed(2); }
+    function refresh() { var v = +amt.value; if (!(v > 0)) { q.textContent = window.DLI18N.t("42-cmc.56713b15e88d"); return; } var r = DLRADAR.quote(p, "buy", v); q.innerHTML = "≈ <b>" + r.qty.toFixed(4) + " " + esc(p.sym) + ("</b>" + window.DLI18N.t("42-cmc.086a519fdeed")) + px(r.eff) + " · slippage <b class='" + (r.slip > 2 ? "dn" : "up") + "'>" + r.slip.toFixed(2) + ("%</b>" + window.DLI18N.t("42-cmc.02b317c9589e")) + r.fee.toFixed(2); }
     amt.oninput = refresh; refresh();
     $("dlCmBuy").onclick = function () { if (DLRADAR.buy(p, +amt.value)) sand(body, p); };
     el.querySelectorAll("[data-csell]").forEach(function (b) { b.onclick = function () { if (DLRADAR.sell(p, +b.getAttribute("data-csell"))) sand(body, p); }; });
@@ -12129,21 +12186,21 @@ window.DLCMC = (function () {
   function ladderView(body) {
     body.innerHTML = C.skel(8);
     ladder(50).then(function (r) {
-      body.innerHTML = '<div class="dl154"><div class="h">CoinMarketCap’s own ladder <span class="dl-prov" id="dlCmLProv">CoinMarketCap</span></div><div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>#</th><th>Asset</th><th class="r">Price</th><th class="r">24h</th><th class="r">7d</th><th class="r">Cap</th></tr></thead><tbody>' +
+      body.innerHTML = ('<div class="dl154"><div class="h">' + window.DLI18N.t("42-cmc.51cf15de3859") + '<span class="dl-prov" id="dlCmLProv">' + window.DLI18N.t("42-cmc.f6b10e7f3354") + '</span></div><div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>#</th><th>' + window.DLI18N.t("42-cmc.80d298c9f240") + '</th><th class="r">' + window.DLI18N.t("42-cmc.93c91c851e7a") + '</th><th class="r">' + window.DLI18N.t("42-cmc.0b509e6d4c97") + '</th><th class="r">' + window.DLI18N.t("42-cmc.a7c742643c7c") + '</th><th class="r">' + window.DLI18N.t("42-cmc.1257ac04471d") + '</th></tr></thead><tbody>') +
         r.list.map(function (x) { return "<tr><td>" + x.rank + "</td><td><b>" + esc(x.sym) + '</b><br><span class="dlc-faint">' + esc(x.name) + '</span></td><td class="r">' + px(x.price) + '</td><td class="r ' + (x.c24 >= 0 ? "up" : "dn") + '">' + C.pct(x.c24, 1) + '</td><td class="r ' + (x.c7 >= 0 ? "up" : "dn") + '">' + C.pct(x.c7, 1) + '</td><td class="r">' + C.big(x.mcap) + "</td></tr>"; }).join("") +
-        '</tbody></table></div><div class="n">This is the ranking CoinMarketCap itself publishes, fetched with no account. DexLadder’s own ladder is built from a five-source hedge; when the two differ, neither is wrong — they are counting different venues.</div></div>';
+        ('</tbody></table></div><div class="n">' + window.DLI18N.t("42-cmc.15a546c165e9") + '</div></div>');
       var pv = $("dlCmLProv"); if (pv) pv.outerHTML = C.prov("CoinMarketCap", r.at, r.stale, { attr: 'id="dlCmLProv"', title: "CMC keyless " + PATHS.listings });
     }).catch(function (e) { dark(body, e.message || e); });
   }
   function globalView(body) {
     body.innerHTML = C.skel(5);
     globals().then(function (g) {
-      body.innerHTML = '<div class="dl154"><div class="h">The market, as CoinMarketCap counts it <span class="dl-prov" id="dlCmGProv">CoinMarketCap</span></div>' +
-        '<div class="kv"><span>Total market cap</span><b>' + C.big(g.mcap) + '</b></div><div class="kv"><span>24h volume</span><b>' + C.big(g.vol) + '</b></div>' +
-        '<div class="kv"><span>DeFi volume 24h</span><b>' + C.big(g.defi) + '</b></div><div class="kv"><span>Stablecoin volume 24h</span><b>' + C.big(g.stable) + '</b></div>' +
-        '<div class="kv"><span>BTC dominance</span><b>' + g.btc.toFixed(2) + '%</b></div><div class="kv"><span>ETH dominance</span><b>' + g.eth.toFixed(2) + '%</b></div>' +
-        '<div class="kv"><span>Assets tracked</span><b>' + C.big(g.active) + '</b></div><div class="kv"><span>Active market pairs</span><b>' + C.big(g.pairs) + '</b></div>' +
-        '<div class="n">Stablecoin volume against total volume is the honest read of how much of "crypto trading" is people moving between two dollars. DexLadder shows it because it is unflattering.</div></div>';
+      body.innerHTML = ('<div class="dl154"><div class="h">' + window.DLI18N.t("42-cmc.af0e10c98b1e") + '<span class="dl-prov" id="dlCmGProv">' + window.DLI18N.t("42-cmc.f6b10e7f3354") + '</span></div>') +
+        ('<div class="kv"><span>' + window.DLI18N.t("42-cmc.90d00bfcf760") + '</span><b>') + C.big(g.mcap) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("42-cmc.d290ad0bded9") + '</span><b>') + C.big(g.vol) + '</b></div>' +
+        ('<div class="kv"><span>' + window.DLI18N.t("42-cmc.5926c75c2931") + '</span><b>') + C.big(g.defi) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("42-cmc.19fcc915252a") + '</span><b>') + C.big(g.stable) + '</b></div>' +
+        ('<div class="kv"><span>' + window.DLI18N.t("42-cmc.4ac2a5661158") + '</span><b>') + g.btc.toFixed(2) + ('%</b></div><div class="kv"><span>' + window.DLI18N.t("42-cmc.9e0d445b09c4") + '</span><b>') + g.eth.toFixed(2) + '%</b></div>' +
+        ('<div class="kv"><span>' + window.DLI18N.t("42-cmc.7e09f17cf4f5") + '</span><b>') + C.big(g.active) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("42-cmc.42725b36ca10") + '</span><b>') + C.big(g.pairs) + '</b></div>' +
+        ('<div class="n">' + window.DLI18N.t("42-cmc.98298a0b7669") + '</div></div>');
       var pv = $("dlCmGProv"); if (pv) pv.outerHTML = C.prov("CoinMarketCap", g.at, g.stale, { attr: 'id="dlCmGProv"', title: "CMC keyless " + PATHS.global });
     }).catch(function (e) { dark(body, e.message || e); });
   }
@@ -12155,7 +12212,7 @@ window.DLCMC = (function () {
     listView(body);
   }
   function open(tab) {
-    var el = C.open("dlCmc", { title: "⚖ Spot Rail", sub: "CoinMarketCap keyless · second witness on every pool price", tabs: [["pairs", "Spot pairs"], ["ladder", "CMC ladder"], ["global", "Global"]], onTab: render }, tab);
+    var el = C.open("dlCmc", { title: window.DLI18N.t("42-cmc.b0f676007548"), sub: window.DLI18N.t("42-cmc.1989dc3fa012"), tabs: [["pairs", "Spot pairs"], ["ladder", "CMC ladder"], ["global", "Global"]], onTab: render }, tab);
     if (!el.__cwired) {
       el.__cwired = 1;
       el.addEventListener("click", function (e) {
