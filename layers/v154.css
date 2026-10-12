@@ -3169,3 +3169,6 @@ html.dla-colourblind .up::before, html.dla-colourblind .pos::before { content:"â
 html.dla-colourblind .down::before, html.dla-colourblind .dn::before, html.dla-colourblind .neg::before { content:"â–¼ "; }
 html.dla-colourblind .up, html.dla-colourblind .pos { text-decoration:underline solid; text-underline-offset:3px; }
 html.dla-colourblind .down, html.dla-colourblind .dn, html.dla-colourblind .neg { text-decoration:underline dashed; text-underline-offset:3px; }
+
+/* This Academy lab deliberately retains a dark stage in both themes. */
+html[data-mode="day"].dla-colourblind #knL0pct{color:#62b5ff}

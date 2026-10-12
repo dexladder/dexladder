@@ -53,7 +53,7 @@
 /* --- version ------------------------------------------------------------------------- */
 const SW_BUILD    = 'v166';    // asserted by build154.py to equal <meta name="cb:build">
 const SW_REV = 13;        // bump for worker-only changes (strategy, TTL, bounds)
-const PAYLOAD_SHA = 'b8ef19dfd0231383f8a7e669c91ed0df236dc508960f7420ef38852e948b6dfe';
+const PAYLOAD_SHA = 'eb0e6530b9adf54bcd07675db7207e58e12b5907aac1fb81bd4d6efe13857fd3';
 const V           = 'dl-' + SW_BUILD + '-r' + SW_REV + '-' + PAYLOAD_SHA.slice(0, 12);
 // Static content served beside the app: the SEO layer, the legal pages and the support page.
 // Never cached as the shell, never answered from it.
