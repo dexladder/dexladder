@@ -549,6 +549,7 @@
   "41-trust.022f9ede2d6a": "v154",
   "41-trust.05d4eabad5f6": "Model prose",
   "41-trust.06a7b164556d": "Feeds",
+  "41-trust.0cfacb5a20d0": "Cannot verify this copy yet. Reload after the update is ready.",
   "41-trust.0f2631095c26": " — all keyless, all requested from your device:",
   "41-trust.0f8cb76fc9cb": ": your questions are answered by an on-device composer and, when your browser has one, Chrome’s built-in model — nothing leaves the device. In Hybrid or Cloud mode, and only after you paste a gateway URL you deployed yourself, the question and the facts it needs are sent to ",
   "41-trust.1010777c577d": "Running build SHA-256",
