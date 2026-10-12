@@ -103,11 +103,11 @@
      the two desks cannot drift. A bookmark is a place to look; the label the
      desk prints beside it is what the MEASUREMENT says about it. */
   var BOOKMARKS = [
-    { id: "covid", label: "Mar 2020 · COVID crash", from: Date.UTC(2020, 1, 5), to: Date.UTC(2020, 3, 20) },
-    { id: "may21", label: "May 2021 · leverage flush", from: Date.UTC(2021, 4, 10), to: Date.UTC(2021, 5, 30) },
-    { id: "top21", label: "Nov 2021 · the cycle top", from: Date.UTC(2021, 9, 1), to: Date.UTC(2021, 11, 20) },
-    { id: "luna", label: "May 2022 · LUNA spiral", from: Date.UTC(2022, 4, 1), to: Date.UTC(2022, 4, 31) },
-    { id: "ftx", label: "Nov 2022 · FTX bank run", from: Date.UTC(2022, 10, 1), to: Date.UTC(2022, 10, 30) }
+    { id: "covid", label: window.DLI18N.t("61-replay.9f08de1131a2"), from: Date.UTC(2020, 1, 5), to: Date.UTC(2020, 3, 20) },
+    { id: "may21", label: window.DLI18N.t("61-replay.dd342bb250d3"), from: Date.UTC(2021, 4, 10), to: Date.UTC(2021, 5, 30) },
+    { id: "top21", label: window.DLI18N.t("61-replay.b73c9546e692"), from: Date.UTC(2021, 9, 1), to: Date.UTC(2021, 11, 20) },
+    { id: "luna", label: window.DLI18N.t("61-replay.5ede38f668ae"), from: Date.UTC(2022, 4, 1), to: Date.UTC(2022, 4, 31) },
+    { id: "ftx", label: window.DLI18N.t("61-replay.7e7d3cc72491"), from: Date.UTC(2022, 10, 1), to: Date.UTC(2022, 10, 30) }
   ];
 
   var ASSUMPTIONS = [
@@ -449,7 +449,7 @@
   var STRATS = {
     sma: {
       id: "sma", name: "SMA 10/30 cross",
-      note: "long while the 10-bar average is above the 30-bar one, flat otherwise. Decided on the close of bar t, filled at the open of bar t+1.",
+      note: window.DLI18N.t("61-replay.2a196ab22429"),
       decide: function (bars, t, st, cfg) {
         var I = IN();
         if (!I || typeof I.smaLast !== "function") return null;
@@ -462,7 +462,7 @@
     },
     breakout: {
       id: "breakout", name: "20-bar breakout",
-      note: "long on a close above the highest high of the previous 20 bars, flat on a close below the lowest low of the previous 10.",
+      note: window.DLI18N.t("61-replay.d72fa2f0080b"),
       decide: function (bars, t, st, cfg) {
         var up = cfg.up || 20, dn = cfg.down || 10, i, hi = 0, lo = Infinity;
         if (t < up) return null;
@@ -475,7 +475,7 @@
     },
     hold: {
       id: "hold", name: "Buy and hold",
-      note: "buy at the first tradable open and hold to the last bar. This is the benchmark every other run is measured against.",
+      note: window.DLI18N.t("61-replay.0c3d81a04e22"),
       decide: function (bars, t, st) { return st.qty <= 0 && !st.fills.length ? { buy: true } : null; }
     }
   };
@@ -1023,11 +1023,11 @@
   function headStrip() {
     var s = cfgState(), h = '<div class="rp-form dl-2">';
     h += field("Market", '<input id="rpSym" class="dl-inp" type="text" value="' + esc(s.sym) + '" autocomplete="off" spellcheck="false" aria-label="Market symbol">');
-    h += field("Bar size", '<select id="rpIv" class="dl-inp" aria-label="Bar size">' + opts(["1h", "4h", "1d"], s.interval) + "</select>");
-    h += field("Years back", '<select id="rpYears" class="dl-inp" aria-label="Years of history">' + opts([1, 2, 3, 6, 10], s.years) + "</select>");
-    h += field("Window (bars)", '<select id="rpWin" class="dl-inp" aria-label="Measurement window in bars">' + opts([30, 60, 90, 120], s.win) + "</select>");
+    h += field("Bar size", ('<select id="rpIv" class="dl-inp" aria-label="' + window.DLI18N.t("61-replay.7ee027db5f6a") + '">') + opts(["1h", "4h", "1d"], s.interval) + "</select>");
+    h += field("Years back", ('<select id="rpYears" class="dl-inp" aria-label="' + window.DLI18N.t("61-replay.406715c11bcf") + '">') + opts([1, 2, 3, 6, 10], s.years) + "</select>");
+    h += field("Window (bars)", ('<select id="rpWin" class="dl-inp" aria-label="' + window.DLI18N.t("61-replay.e0f59e72c595") + '">') + opts([30, 60, 90, 120], s.win) + "</select>");
     h += "</div>";
-    h += '<div class="rp-actions"><button class="go" id="rpMeasure" type="button">Measure the history</button>' +
+    h += ('<div class="rp-actions"><button class="go" id="rpMeasure" type="button">' + window.DLI18N.t("61-replay.00598b589a16") + '</button>') +
       '<span class="rp-note">' + (H.bars ? esc(H.src) + " · " + H.bars.length + " bars · first bar " + esc(day(H.bars[0].t)) + " · " + (H.gaps || 0) + " gap" + (H.gaps === 1 ? "" : "s") : "nothing fetched yet") + "</span></div>";
     return h;
   }
@@ -1035,7 +1035,7 @@
   function loadingOr(fn) {
     if (H.loading) return '<div class="rp-empty">' + (C.skel ? C.skel(6) : "fetching real candles…") + "</div>";
     if (H.err) return '<div class="rp-empty">' + esc(H.err) + "</div>";
-    if (!H.bars) return '<div class="rp-empty">No history fetched yet. Press <b>Measure the history</b> — the desk fetches real candles through the app\'s own data path and measures them; it never synthesises a bar.</div>';
+    if (!H.bars) return ('<div class="rp-empty">' + window.DLI18N.t("61-replay.bb6ecaff6767") + '<b>' + window.DLI18N.t("61-replay.00598b589a16") + '</b>' + window.DLI18N.t("61-replay.a112f44cb1f0") + '</div>');
     return fn();
   }
 
@@ -1052,15 +1052,15 @@
     var h = headStrip();
     h += loadingOr(function () {
       var set = regimeSet(), s = cfgState();
-      if (!set) return '<div class="rp-empty">Not enough bars to roll a ' + esc(s.win) + "-bar window across. Ask for more years or a smaller window.</div>";
+      if (!set) return ('<div class="rp-empty">' + window.DLI18N.t("61-replay.2f5ebc1f1282") + '') + esc(s.win) + (window.DLI18N.t("61-replay.7ac2c493c0a5") + "</div>");
       var t = set.thresholds, out = "";
-      out += '<div class="rp-thr"><b>Thresholds, printed because a regime is the label of a measurement.</b> ' +
+      out += ('<div class="rp-thr"><b>' + window.DLI18N.t("61-replay.3c223ab7c256") + '</b> ') +
         "Trend (convention): efficiency ratio ≥ " + t.erTrend + " is a trend, ≤ " + t.erChop + " is chop, between is drift. " +
         "This asset's own ER terciles came out at " + num(t.erTerciles ? t.erTerciles.lo : null) + " / " + num(t.erTerciles ? t.erTerciles.hi : null) + ". " +
         "Volatility (measured): the Garman-Klass terciles of these " + set.windows.length + " windows are " + pct((t.volLo || 0) * 100, 1) + " and " + pct((t.volHi || 0) * 100, 1) + " annualised — 'high vol' means high for " + esc(H.sym) + " in this sample, nothing more. " +
         "Drawdown (convention): under " + (DD_NEAR * 100) + "% of the running peak is near highs, under " + (DD_BEAR * 100) + "% is a correction, beyond it is a bear. " +
-        "Funding is MODELLED, never a historical feed.</div>";
-      out += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Regime (measured)</th><th class="r">Windows</th><th class="r">Independent</th><th class="r">Median ER</th><th class="r">Median GK vol</th><th class="r">Median move</th><th>Funding</th><th>Span</th><th></th></tr></thead><tbody>';
+        (window.DLI18N.t("61-replay.728d03d1ea43") + "</div>");
+      out += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("61-replay.a4f7986fb0c9") + '</th><th class="r">' + window.DLI18N.t("61-replay.d598026a9cbc") + '</th><th class="r">' + window.DLI18N.t("61-replay.6cbf0605ed3d") + '</th><th class="r">' + window.DLI18N.t("61-replay.f67855248fd3") + '</th><th class="r">' + window.DLI18N.t("61-replay.9a8e8aac98a8") + '</th><th class="r">' + window.DLI18N.t("61-replay.e222dbe26957") + '</th><th>' + window.DLI18N.t("61-replay.e93df741ad32") + '</th><th>' + window.DLI18N.t("61-replay.5b0e83c19eb4") + '</th><th></th></tr></thead><tbody>');
       var i, g;
       for (i = 0; i < set.groups.length; i++) {
         g = set.groups[i];
@@ -1069,19 +1069,19 @@
         var de = distribution(ers), dv = distribution(vols), dr = distribution(rets);
         out += "<tr><td class=\"rp-id\">" + esc(g.id) + "</td><td class=\"r\">" + g.all.length + '</td><td class="r">' + g.indep.length + '</td><td class="r">' + num(de ? de.median : null) +
           '</td><td class="r">' + pct(dv ? dv.median * 100 : null, 1) + '</td><td class="r">' + sgn(dr ? dr.median : null, 1) + "</td><td>" + esc(g.label.fund) + "</td><td>" +
-          esc(day(g.all[0].t0)) + " → " + esc(day(g.all[g.all.length - 1].t1)) + '</td><td><button class="rp-pick" type="button" data-rg="' + esc(g.id) + '">replay all</button></td></tr>';
+          esc(day(g.all[0].t0)) + " → " + esc(day(g.all[g.all.length - 1].t1)) + '</td><td><button class="rp-pick" type="button" data-rg="' + esc(g.id) + ('' + window.DLI18N.t("61-replay.04b5553d7d92") + '</button></td></tr>');
       }
       out += "</tbody></table></div>";
-      out += '<div class="rp-sub">Bookmarks — typed date ranges, not regimes</div>';
-      out += '<div class="rp-note">These five are dates somebody typed (they are the Rewind desk\'s own list). They are BOOKMARKS. What the measurement says about the windows inside each one is in the last column — that is the regime.</div>';
-      out += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Bookmark</th><th>From</th><th>To</th><th class="r">Windows in range</th><th>Measured labels</th></tr></thead><tbody>';
+      out += ('<div class="rp-sub">' + window.DLI18N.t("61-replay.7e6470a9b190") + '</div>');
+      out += ('<div class="rp-note">' + window.DLI18N.t("61-replay.a9be65fc3ab7") + '</div>');
+      out += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("61-replay.1bac4007880b") + '</th><th>' + window.DLI18N.t("61-replay.218197693424") + '</th><th>' + window.DLI18N.t("61-replay.f4b06ef6d3c8") + '</th><th class="r">' + window.DLI18N.t("61-replay.d135ca987280") + '</th><th>' + window.DLI18N.t("61-replay.5f2d001658f5") + '</th></tr></thead><tbody>');
       for (i = 0; i < BOOKMARKS.length; i++) {
         var bm = BOOKMARKS[i], inw = [], seen = {}, labs = [];
         for (j = 0; j < set.windows.length; j++) {
           var w = set.windows[j];
           if (w.t1 >= bm.from && w.t0 <= bm.to) { inw.push(w); if (!seen[w.label.id]) { seen[w.label.id] = 1; labs.push(w.label.id); } }
         }
-        out += "<tr><td>" + esc(bm.label) + " <span class=\"rp-tag\">BOOKMARK</span></td><td>" + esc(day(bm.from)) + "</td><td>" + esc(day(bm.to)) +
+        out += "<tr><td>" + esc(bm.label) + (" <span class=\"rp-tag\">" + window.DLI18N.t("61-replay.d6021fcf471e") + "</span></td><td>") + esc(day(bm.from)) + "</td><td>" + esc(day(bm.to)) +
           '</td><td class="r">' + inw.length + "</td><td class=\"rp-id\">" + (labs.length ? esc(labs.join(" · ")) : "outside the history this build fetched") + "</td></tr>";
       }
       out += "</tbody></table></div>";
@@ -1092,30 +1092,30 @@
 
   function paneWindow() {
     var s = cfgState(), h = "";
-    h += '<div class="rp-note">Pick a regime on the first tab, then run the strategy across <b>every</b> window that measured the same way. The headline is a distribution, because one window is an anecdote.</div>';
+    h += ('<div class="rp-note">' + window.DLI18N.t("61-replay.2776f861e3c7") + '<b>' + window.DLI18N.t("61-replay.66a424a9a958") + '</b>' + window.DLI18N.t("61-replay.0352ed42a20c") + '</div>');
     h += '<div class="rp-form dl-2">';
-    h += field("Strategy", '<select id="rpStrat" class="dl-inp" aria-label="Strategy">' + optsKV([["sma", STRATS.sma.name], ["breakout", STRATS.breakout.name], ["hold", STRATS.hold.name]], s.strat) + "</select>");
+    h += field("Strategy", ('<select id="rpStrat" class="dl-inp" aria-label="' + window.DLI18N.t("61-replay.6b27710dfaaf") + '">') + optsKV([["sma", STRATS.sma.name], ["breakout", STRATS.breakout.name], ["hold", STRATS.hold.name]], s.strat) + "</select>");
     h += field("Regime", '<input id="rpRg" class="dl-inp" type="text" value="' + esc(s.regime || "") + '" autocomplete="off" spellcheck="false" aria-label="Regime id">');
     h += "</div>";
-    h += '<div class="rp-actions"><button class="go" id="rpRun" type="button">Replay every window in this regime</button></div>';
+    h += ('<div class="rp-actions"><button class="go" id="rpRun" type="button">' + window.DLI18N.t("61-replay.5bca00f94fc0") + '</button></div>');
     h += loadingOr(function () {
       var set = regimeSet();
-      if (!set) return '<div class="rp-empty">No measurement yet.</div>';
-      if (!s.regime) return '<div class="rp-empty">No regime chosen. Go to <b>Regimes</b> and press “replay all” on one.</div>';
+      if (!set) return ('<div class="rp-empty">' + window.DLI18N.t("61-replay.39337ce503a8") + '</div>');
+      if (!s.regime) return ('<div class="rp-empty">' + window.DLI18N.t("61-replay.efd968049344") + '<b>' + window.DLI18N.t("61-replay.6f7bd73a7dda") + '</b>' + window.DLI18N.t("61-replay.148ed05727ba") + '</div>');
       var g = null, i;
       for (i = 0; i < set.groups.length; i++) if (set.groups[i].id === s.regime) g = set.groups[i];
-      if (!g) return '<div class="rp-empty">No window in this history carries the label “' + esc(s.regime) + "”.</div>";
+      if (!g) return ('<div class="rp-empty">' + window.DLI18N.t("61-replay.2bac2ae88371") + '') + esc(s.regime) + "”.</div>";
       var res = RUN.window && RUN.window.key === H.key + "|" + s.regime + "|" + s.strat ? RUN.window.res
         : (RUN.window = { key: H.key + "|" + s.regime + "|" + s.strat, res: replayRegime(H.bars, g, H.interval, s.strat, { fee: null }) }).res;
       if (!res.ok) return '<div class="rp-empty">' + esc(res.why || "no window replayed cleanly") + "</div>";
       var out = "";
-      out += '<div class="rp-head"><span class="rp-pair">' + esc(g.id) + '</span><span class="rp-mid">' + esc(STRATS[s.strat].name) + " · " + res.n + " independent window" + (res.n === 1 ? "" : "s") + " of " + res.nAll + " overlapping</span></div>";
-      if (res.overlapping) out += '<div class="rp-warn">This label is rare enough that no two windows carrying it are disjoint, so the rows below OVERLAP and share most of their bars. They are not independent draws and the quartiles are narrower than the evidence deserves.</div>';
-      if (res.anecdote) out += '<div class="rp-warn">' + res.n + " window" + (res.n === 1 ? " is an anecdote, not a sample" : "s is barely a sample") + ". Nothing below should move a position. Ask for more years, a smaller window or a looser regime.</div>";
+      out += '<div class="rp-head"><span class="rp-pair">' + esc(g.id) + '</span><span class="rp-mid">' + esc(STRATS[s.strat].name) + " · " + res.n + " independent window" + (res.n === 1 ? "" : "s") + " of " + res.nAll + (window.DLI18N.t("61-replay.24fd2c5d396d") + "</span></div>");
+      if (res.overlapping) out += ('<div class="rp-warn">' + window.DLI18N.t("61-replay.e030727188cc") + '</div>');
+      if (res.anecdote) out += '<div class="rp-warn">' + res.n + " window" + (res.n === 1 ? " is an anecdote, not a sample" : "s is barely a sample") + (window.DLI18N.t("61-replay.58eb2ba56b47") + "</div>");
       out += distTable("Edge over buy-and-hold, per window (percentage points)", res.edge);
       out += distTable("Strategy return per window", res.ret);
       out += distTable("Worst drawdown per window", res.dd);
-      out += '<div class="rp-sub">Every window, one row</div><div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>From</th><th>To</th><th class="r">ER</th><th class="r">GK vol</th><th class="r">Strategy</th><th class="r">Buy &amp; hold</th><th class="r">Edge</th><th class="r">Worst DD</th><th class="r">Trades</th><th>Law</th></tr></thead><tbody>';
+      out += ('<div class="rp-sub">' + window.DLI18N.t("61-replay.94e6115ba0be") + '</div><div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("61-replay.218197693424") + '</th><th>' + window.DLI18N.t("61-replay.f4b06ef6d3c8") + '</th><th class="r">' + window.DLI18N.t("61-replay.7a475a8b0a07") + '</th><th class="r">' + window.DLI18N.t("61-replay.6b6a05b4e39d") + '</th><th class="r">' + window.DLI18N.t("61-replay.6b27710dfaaf") + '</th><th class="r">' + window.DLI18N.t("61-replay.9aae8468ac00") + '</th><th class="r">' + window.DLI18N.t("61-replay.0f82fe727756") + '</th><th class="r">' + window.DLI18N.t("61-replay.33acd2feddcf") + '</th><th class="r">' + window.DLI18N.t("61-replay.8d13393cf84e") + '</th><th>' + window.DLI18N.t("61-replay.b78c1618fd97") + '</th></tr></thead><tbody>');
       for (i = 0; i < res.rows.length; i++) {
         var r = res.rows[i];
         if (!r.ok) { out += "<tr><td>" + esc(day(r.t0)) + "</td><td>" + esc(day(r.t1)) + '</td><td colspan="8">' + esc(r.why || "refused") + "</td></tr>"; continue; }
@@ -1125,10 +1125,10 @@
       }
       out += "</tbody></table></div>";
       var pr = lawProof();
-      out += '<div class="rp-legend"><b>The law, and the proof.</b> Every fill above went through DLAPP.backtest — the engine the Rewind desk runs. ' +
+      out += ('<div class="rp-legend"><b>' + window.DLI18N.t("61-replay.761ab96788b8") + '</b>' + window.DLI18N.t("61-replay.4b05cc88c080") + '') +
         esc(pr.note) + " Each run is audited afterwards: a fill must land on a bar strictly after the one the decision was made on, inside that bar's own high-low range, and a market fill must pay that bar's open exactly. " +
         (pr.ok ? "The engine in this build passes the constructed check." : "THE ENGINE IN THIS BUILD FAILED THE CHECK: " + esc(pr.why) + " — nothing above should be trusted.") +
-        " The close-out that measures a finished run flat is the one fill taken at the bar you were looking at; it is exempted by name and counted.</div>";
+        (window.DLI18N.t("61-replay.17dd08b2084c") + "</div>");
       return out;
     });
     return h;
@@ -1136,14 +1136,14 @@
 
   function distTable(title, d) {
     if (!d) return "";
-    return '<div class="rp-sub">' + esc(title) + '</div><div class="dl-tblw"><table class="dl-tbl rp-dist"><thead><tr><th class="r">Windows</th><th class="r">Worst</th><th class="r">Q1</th><th class="r">Median</th><th class="r">Q3</th><th class="r">Best</th><th class="r">IQR (spread)</th><th class="r">Above zero</th></tr></thead><tbody><tr>' +
+    return '<div class="rp-sub">' + esc(title) + ('</div><div class="dl-tblw"><table class="dl-tbl rp-dist"><thead><tr><th class="r">' + window.DLI18N.t("61-replay.d598026a9cbc") + '</th><th class="r">' + window.DLI18N.t("61-replay.0d7bf19de564") + '</th><th class="r">' + window.DLI18N.t("61-replay.32d833f348ce") + '</th><th class="r">' + window.DLI18N.t("61-replay.daab7c435134") + '</th><th class="r">' + window.DLI18N.t("61-replay.9fc58f1abf0d") + '</th><th class="r">' + window.DLI18N.t("61-replay.c47d21c643c0") + '</th><th class="r">' + window.DLI18N.t("61-replay.05cafbe33209") + '</th><th class="r">' + window.DLI18N.t("61-replay.2feb9441ea15") + '</th></tr></thead><tbody><tr>') +
       '<td class="r">' + d.n + '</td><td class="r">' + sgn(d.worst) + '</td><td class="r">' + sgn(d.q1) + '</td><td class="r rp-edge">' + sgn(d.median) + '</td><td class="r">' + sgn(d.q3) + '</td><td class="r">' + sgn(d.best) +
       '</td><td class="r">' + num(d.iqr, 2) + '</td><td class="r">' + (d.posShare == null ? "—" : Math.round(d.posShare * 100) + "%") + "</td></tr></tbody></table></div>";
   }
 
   function paneScenario() {
     var s = cfgState(), sh = s.shocks || DEFAULTS.shocks, h = "";
-    h += '<div class="rp-note">Shocks compose in a fixed order — <b>' + esc(SHOCK_ORDER.join(" → ")) + "</b> — and the desk prints what each one cost on its own, what it cost once the ones above it were already applied, and the residual between the two. A synthesised shock is a hypothesis, not a forecast.</div>";
+    h += ('<div class="rp-note">' + window.DLI18N.t("61-replay.84539dd52581") + '<b>') + esc(SHOCK_ORDER.join(" → ")) + ("</b>" + window.DLI18N.t("61-replay.4d55dcdfa240") + "</div>");
     h += '<div class="rp-shocks">';
     h += shockRow("vol", "Volatility regime", "multiplier on the return series, mean preserved", '<input id="rpVolM" class="dl-inp" type="number" step="0.1" min="0.1" value="' + esc(sh.vol.mult) + '" aria-label="Volatility multiplier">', sh.vol.on);
     h += shockRow("gap", "Overnight gap", "every bar from here on is multiplied by (1+g); a stop inside the gap fills at the open", '<input id="rpGapP" class="dl-inp" type="number" step="0.01" value="' + esc(sh.gap.pct) + '" aria-label="Gap size as a fraction">', sh.gap.on);
@@ -1152,18 +1152,18 @@
     h += shockRow("depth", "Depth collapse", "the app's depth anchor times this; every fill re-priced through the same pool math", '<input id="rpDepthM" class="dl-inp" type="number" step="0.05" min="0.01" value="' + esc(sh.depth.mult) + '" aria-label="Depth multiplier">', sh.depth.on);
     h += shockRow("cascade", "Liquidation cascade", "a trigger drop, then every leverage rung it crosses sells through the pool", '<input id="rpCascD" class="dl-inp" type="number" step="0.01" value="' + esc(sh.cascade.dropPct) + '" aria-label="Trigger drop as a fraction"><input id="rpCascOi" class="dl-inp" type="number" step="1000000" value="' + esc(sh.cascade.oiUSD) + '" aria-label="Long open interest in USD">', sh.cascade.on);
     h += "</div>";
-    h += '<div class="rp-actions"><button class="go" id="rpScen" type="button">Run the scenario on the latest window</button></div>';
+    h += ('<div class="rp-actions"><button class="go" id="rpScen" type="button">' + window.DLI18N.t("61-replay.403f8004e44d") + '</button></div>');
     h += loadingOr(function () {
       var set = regimeSet();
-      if (!set) return '<div class="rp-empty">No measurement yet.</div>';
+      if (!set) return ('<div class="rp-empty">' + window.DLI18N.t("61-replay.39337ce503a8") + '</div>');
       var r = RUN.scenario;
-      if (!r) return '<div class="rp-empty">No scenario run yet. Tick the shocks you want and press run — the window used is the most recent one in the measurement.</div>';
+      if (!r) return ('<div class="rp-empty">' + window.DLI18N.t("61-replay.7b6bba37a813") + '</div>');
       if (!r.ok) return '<div class="rp-empty">' + esc(r.why) + "</div>";
       var out = "";
-      out += '<div class="rp-head"><span class="rp-pair">seed ' + esc(r.seedHex) + '</span><span class="rp-mid">' + esc(r.key) + "</span></div>";
-      out += '<div class="rp-note">The seed is the scenario: symbol, bar size, both window edges and every parameter above, hashed (FNV-1a). Nothing here draws a random number, so this run is byte-identical the next time you press the button — and different the moment you change a parameter.</div>';
-      out += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Stage</th><th>Parameter</th><th class="r">Run after</th><th class="r">Marginal</th><th class="r">Alone</th><th class="r">Real (USD)</th><th class="r">Funding</th><th class="r">Impact</th><th class="r">Cascade</th></tr></thead><tbody>';
-      out += '<tr><td>base — no shocks</td><td>—</td><td class="r">' + sgn(r.base.pct) + '</td><td class="r">—</td><td class="r">—</td><td class="r">' + sgn(r.base.realPct) + '</td><td class="r">' + usd(r.base.costs.funding) + '</td><td class="r">' + usd(r.base.costs.impact) + '</td><td class="r">' + usd(r.base.costs.cascade) + "</td></tr>";
+      out += ('<div class="rp-head"><span class="rp-pair">' + window.DLI18N.t("61-replay.27bde8b1cd0d") + '') + esc(r.seedHex) + '</span><span class="rp-mid">' + esc(r.key) + "</span></div>";
+      out += ('<div class="rp-note">' + window.DLI18N.t("61-replay.a8313a79441a") + '</div>');
+      out += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("61-replay.de838855e4a6") + '</th><th>' + window.DLI18N.t("61-replay.dd066ec1bf1d") + '</th><th class="r">' + window.DLI18N.t("61-replay.6a64c9e2c3d8") + '</th><th class="r">' + window.DLI18N.t("61-replay.023f2ca37ae4") + '</th><th class="r">' + window.DLI18N.t("61-replay.13758a65cfcc") + '</th><th class="r">' + window.DLI18N.t("61-replay.7452f05d5d48") + '</th><th class="r">' + window.DLI18N.t("61-replay.e93df741ad32") + '</th><th class="r">' + window.DLI18N.t("61-replay.d1f23f0d1361") + '</th><th class="r">' + window.DLI18N.t("61-replay.9527fb2b3d5c") + '</th></tr></thead><tbody>');
+      out += ('<tr><td>' + window.DLI18N.t("61-replay.2bc40a26d6f3") + '</td><td>—</td><td class="r">') + sgn(r.base.pct) + '</td><td class="r">—</td><td class="r">—</td><td class="r">' + sgn(r.base.realPct) + '</td><td class="r">' + usd(r.base.costs.funding) + '</td><td class="r">' + usd(r.base.costs.impact) + '</td><td class="r">' + usd(r.base.costs.cascade) + "</td></tr>";
       var i;
       for (i = 0; i < r.stages.length; i++) {
         var st = r.stages[i];
@@ -1171,31 +1171,31 @@
           '</td><td class="r">' + sgn(st.alone) + '</td><td class="r">' + sgn(st.realPct) + '</td><td class="r">' + usd(st.costs.funding) + '</td><td class="r">' + usd(st.costs.impact) + '</td><td class="r">' + usd(st.costs.cascade) + "</td></tr>";
       }
       out += "</tbody></table></div>";
-      out += '<div class="rp-legend"><b>Why the depeg row can show a marginal of zero.</b> A depeg moves the QUOTE asset, and a percentage return measured in that quote asset does not notice: every price in the window is divided by the same (1+d). The nominal column is therefore flat by construction, and the <b>Real (USD)</b> column is where the depeg shows up — it is the same run marked back into dollars. If the two columns disagree, the difference is exactly what the quote asset lost.</div>';
-      out += '<div class="rp-legend">Total effect <b>' + sgn(r.total) + "</b>, and the marginals sum to " + sgn(r.sumMarginal) + " — they are the same number by construction, because each marginal is the difference between two runs. " +
-        "Pricing each shock <b>alone</b> instead gives " + sgn(r.sumAlone) + ", so the interaction residual is <b>" + sgn(r.residual) + "</b>: that is the part of the damage you would have missed by testing one shock at a time.</div>";
+      out += ('<div class="rp-legend"><b>' + window.DLI18N.t("61-replay.a11ff777b424") + '</b>' + window.DLI18N.t("61-replay.4ba87a98fe23") + '<b>' + window.DLI18N.t("61-replay.7452f05d5d48") + '</b>' + window.DLI18N.t("61-replay.c16a009b4eb3") + '</div>');
+      out += ('<div class="rp-legend">' + window.DLI18N.t("61-replay.5214a07a1f01") + '<b>') + sgn(r.total) + ("</b>" + window.DLI18N.t("61-replay.0b8270eb9b0e")) + sgn(r.sumMarginal) + " — they are the same number by construction, because each marginal is the difference between two runs. " +
+        (window.DLI18N.t("61-replay.df658c0d1764") + "<b>" + window.DLI18N.t("61-replay.facf8b54e5c0") + "</b>" + window.DLI18N.t("61-replay.5265a86fbe0b")) + sgn(r.sumAlone) + (window.DLI18N.t("61-replay.b5b5ff6e3d7a") + "<b>") + sgn(r.residual) + ("</b>" + window.DLI18N.t("61-replay.f40cfdb0ecc2") + "</div>");
       if (r.stages.length) {
         var last = r.stages[r.stages.length - 1].detail;
         if (last.cascade) {
-          out += '<div class="rp-sub">The cascade, round by round (' + esc(last.cascade.src) + ")</div>";
-          out += '<div class="rp-note">Trigger ' + pct((last.cascade.trigger / last.cascade.p0 - 1) * 100, 1) + " from " + usd(last.cascade.p0) + ". Every rung whose liquidation price the price crosses is force-sold through the app's own pool arithmetic, which moves the price onto the next rungs. The leverage split of open interest is an assumption, named on the Method tab.</div>";
-          out += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">Round</th><th class="r">Price at</th><th>Rungs liquidated</th><th class="r">Base sold</th><th class="r">USD</th><th class="r">Price after</th></tr></thead><tbody>';
+          out += ('<div class="rp-sub">' + window.DLI18N.t("61-replay.ecb39213da33") + '') + esc(last.cascade.src) + ")</div>";
+          out += ('<div class="rp-note">' + window.DLI18N.t("61-replay.dea0c40fc7ac") + '') + pct((last.cascade.trigger / last.cascade.p0 - 1) * 100, 1) + " from " + usd(last.cascade.p0) + (window.DLI18N.t("61-replay.95583ecf5431") + "</div>");
+          out += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">' + window.DLI18N.t("61-replay.cd9558acfc38") + '</th><th class="r">' + window.DLI18N.t("61-replay.1c562678b176") + '</th><th>' + window.DLI18N.t("61-replay.bb25facb6d2a") + '</th><th class="r">' + window.DLI18N.t("61-replay.34f7bdbb9385") + '</th><th class="r">' + window.DLI18N.t("61-replay.a26cdf3a6e70") + '</th><th class="r">' + window.DLI18N.t("61-replay.8c62edd3c91f") + '</th></tr></thead><tbody>');
           for (i = 0; i < last.cascade.rounds.length; i++) {
             var rd = last.cascade.rounds[i];
             out += '<tr><td class="r">' + rd.round + '</td><td class="r">' + usd(rd.at) + "</td><td>" + esc(rd.levs) + '</td><td class="r">' + num(rd.qty, 4) + '</td><td class="r">' + usd(rd.usd) + '</td><td class="r">' + usd(rd.to) + "</td></tr>";
           }
           out += "</tbody></table></div>";
-          out += '<div class="rp-legend">Trigger drop ' + pct(Math.abs((last.cascade.trigger / last.cascade.p0 - 1) * 100), 1) + ", total fall " + pct(last.cascade.totalDrop * 100, 1) +
+          out += ('<div class="rp-legend">' + window.DLI18N.t("61-replay.e9f7407aa909") + '') + pct(Math.abs((last.cascade.trigger / last.cascade.p0 - 1) * 100), 1) + ", total fall " + pct(last.cascade.totalDrop * 100, 1) +
             ", so the ladder itself added " + pct(Math.max(0, last.cascade.amplification) * 100, 1) + " on top of the shock you asked for. " +
             (last.cascade.soldOverTvl != null ? "The forced sales came to " + num(last.cascade.soldOverTvl, 2) + "x the modelled pool's whole TVL. " : "") +
-            (last.cascade.noBid ? "<b>Past that point there is no bid in this model</b>: the ladder still had " + usd(last.cascade.pendingUSD) + " of positions to liquidate and the pool had nothing left to buy them with, so the desk stops rather than printing a price that is arithmetic instead of a market." : "The pool absorbed every rung the drop crossed.") + "</div>";
+            (last.cascade.noBid ? ("<b>" + window.DLI18N.t("61-replay.f7a7d1469523") + "</b>" + window.DLI18N.t("61-replay.319f0e69ca46")) + usd(last.cascade.pendingUSD) + " of positions to liquidate and the pool had nothing left to buy them with, so the desk stops rather than printing a price that is arithmetic instead of a market." : "The pool absorbed every rung the drop crossed.") + "</div>";
         }
         if (last.impact && last.impact.rows.length) {
-          out += '<div class="rp-sub">Execution impact at this depth (pool TVL ' + usd(last.impact.tvlUSD) + ", depth × " + num(last.impact.depthMult, 2) + ")</div>";
-          out += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">Bar</th><th>Side</th><th class="r">Size</th><th class="r">Fill price</th><th class="r">Pool average</th><th class="r">Impact</th><th class="r">Cost</th></tr></thead><tbody>';
+          out += ('<div class="rp-sub">' + window.DLI18N.t("61-replay.2e021522b81a") + '') + usd(last.impact.tvlUSD) + ", depth × " + num(last.impact.depthMult, 2) + ")</div>";
+          out += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">' + window.DLI18N.t("61-replay.95d64cacce0f") + '</th><th>' + window.DLI18N.t("61-replay.630ef00b7c4f") + '</th><th class="r">' + window.DLI18N.t("61-replay.1af851907331") + '</th><th class="r">' + window.DLI18N.t("61-replay.bbcbf5d6ae2b") + '</th><th class="r">' + window.DLI18N.t("61-replay.680ec273bc97") + '</th><th class="r">' + window.DLI18N.t("61-replay.d1f23f0d1361") + '</th><th class="r">' + window.DLI18N.t("61-replay.204a5eb2cd28") + '</th></tr></thead><tbody>');
           for (i = 0; i < last.impact.rows.length && i < 24; i++) {
             var ir = last.impact.rows[i];
-            out += '<tr><td class="r">' + ir.bar + "</td><td>" + esc(ir.side) + '</td><td class="r">' + num(ir.qty, 4) + '</td><td class="r">' + usd(ir.px) + '</td><td class="r">' + usd(ir.avg) + '</td><td class="r">' + num(ir.bps, 1) + ' bp</td><td class="r">' + usd(ir.cost) + "</td></tr>";
+            out += '<tr><td class="r">' + ir.bar + "</td><td>" + esc(ir.side) + '</td><td class="r">' + num(ir.qty, 4) + '</td><td class="r">' + usd(ir.px) + '</td><td class="r">' + usd(ir.avg) + '</td><td class="r">' + num(ir.bps, 1) + ('' + window.DLI18N.t("61-replay.bddaf3853bd9") + '</td><td class="r">') + usd(ir.cost) + "</td></tr>";
           }
           out += "</tbody></table></div>";
         }
@@ -1212,24 +1212,24 @@
 
   function paneTape() {
     var s = cfgState(), h = "";
-    h += '<div class="rp-note">Funding is reconstructed, not fetched: the settlement <b>clock</b> is the real UTC one (00:00 / 08:00 / 16:00, hourly where a venue settles hourly), and the <b>rate</b> on every row is the app\'s own model evaluated on the measured 24h move at that instant. No venue published these numbers to this app.</div>';
+    h += ('<div class="rp-note">' + window.DLI18N.t("61-replay.3dfef2f87d16") + '<b>' + window.DLI18N.t("61-replay.d8198efa3604") + '</b>' + window.DLI18N.t("61-replay.6b74907ec087") + '<b>' + window.DLI18N.t("61-replay.c549779d79e5") + '</b>' + window.DLI18N.t("61-replay.56db74581643") + '</div>');
     h += '<div class="rp-form dl-2">';
     h += field("Position (base)", '<input id="rpQty" class="dl-inp" type="number" step="any" min="0" value="' + esc(s.fundQty) + '" aria-label="Position size in base units">');
-    h += field("Side", '<select id="rpSide" class="dl-inp" aria-label="Side">' + optsKV([["long", "Long"], ["short", "Short"]], s.fundSide) + "</select>");
-    h += field("Settles every", '<select id="rpHours" class="dl-inp" aria-label="Funding cadence">' + optsKV([[1, "1h (Hyperliquid)"], [8, "8h (most venues)"]], s.fundHours) + "</select>");
+    h += field("Side", ('<select id="rpSide" class="dl-inp" aria-label="' + window.DLI18N.t("61-replay.630ef00b7c4f") + '">') + optsKV([["long", "Long"], ["short", "Short"]], s.fundSide) + "</select>");
+    h += field("Settles every", ('<select id="rpHours" class="dl-inp" aria-label="' + window.DLI18N.t("61-replay.ad9f5c3f62c7") + '">') + optsKV([[1, "1h (Hyperliquid)"], [8, "8h (most venues)"]], s.fundHours) + "</select>");
     h += field("Ladder notional (USD)", '<input id="rpNot" class="dl-inp" type="number" step="1000" min="0" value="' + esc(s.notional) + '" aria-label="Notional for the liquidation ladder">');
     h += "</div>";
-    h += '<div class="rp-actions"><button class="go" id="rpTape" type="button">Rebuild the tape</button></div>';
+    h += ('<div class="rp-actions"><button class="go" id="rpTape" type="button">' + window.DLI18N.t("61-replay.528ba381554e") + '</button></div>');
     h += loadingOr(function () {
       var set = regimeSet();
-      if (!set) return '<div class="rp-empty">No measurement yet.</div>';
+      if (!set) return ('<div class="rp-empty">' + window.DLI18N.t("61-replay.39337ce503a8") + '</div>');
       var w = set.windows[set.windows.length - 1];
       var tape = fundingTape(H.bars, w.a, w.b, H.interval, +s.fundQty, s.fundSide, +s.fundHours);
       var out = "";
       if (!tape.ok) out += '<div class="rp-empty">' + esc(tape.why) + "</div>";
       else {
-        out += '<div class="rp-head"><span class="rp-pair">' + esc(H.sym) + " funding · " + esc(day(w.t0)) + " → " + esc(day(w.t1)) + '</span><span class="rp-mid">' + tape.count + " settlements · " + esc(s.fundSide) + " " + num(+s.fundQty, 4) + " · cumulative " + usd(-tape.total) + " to the position</span></div>";
-        out += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Settlement (UTC)</th><th class="r">Mark</th><th class="r">24h move</th><th class="r">Rate / 8h</th><th class="r">Interval rate</th><th>Arithmetic</th><th class="r">Paid</th><th class="r">Cumulative</th></tr></thead><tbody>';
+        out += '<div class="rp-head"><span class="rp-pair">' + esc(H.sym) + " funding · " + esc(day(w.t0)) + " → " + esc(day(w.t1)) + '</span><span class="rp-mid">' + tape.count + " settlements · " + esc(s.fundSide) + " " + num(+s.fundQty, 4) + " · cumulative " + usd(-tape.total) + (window.DLI18N.t("61-replay.5b312bda8ab5") + "</span></div>");
+        out += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("61-replay.d0b7c07a6186") + '</th><th class="r">' + window.DLI18N.t("61-replay.d7cda0ca2c85") + '</th><th class="r">' + window.DLI18N.t("61-replay.517bf6889ab7") + '</th><th class="r">' + window.DLI18N.t("61-replay.cc4b19350e9b") + '</th><th class="r">' + window.DLI18N.t("61-replay.c5ac4f893daf") + '</th><th>' + window.DLI18N.t("61-replay.641b3acc7139") + '</th><th class="r">' + window.DLI18N.t("61-replay.fb81b961af45") + '</th><th class="r">' + window.DLI18N.t("61-replay.cecf2aade089") + '</th></tr></thead><tbody>');
         var i, n = tape.rows.length, show = Math.min(n, 60), startAt = Math.max(0, n - show);
         for (i = startAt; i < n; i++) {
           var r = tape.rows[i];
@@ -1238,19 +1238,19 @@
         }
         out += "</tbody></table></div>";
         if (n > show) out += '<div class="rp-note">' + (n - show) + " earlier settlements are above this window of the table; the cumulative column carries all " + n + ".</div>";
-        out += '<div class="rp-legend">A positive rate means longs pay shorts. The cumulative column is the drag on a position carried through the whole window: ' +
-          usd(tape.total) + " paid (a negative figure means the position was paid). Every rate here is modelled — the clock is real, the number is not.</div>";
+        out += ('<div class="rp-legend">' + window.DLI18N.t("61-replay.b9078c8dfae3") + '') +
+          usd(tape.total) + (window.DLI18N.t("61-replay.df15a22f9564") + "</div>");
       }
       var st = statsOf(H.sym), lad = st ? liqLadder(H.sym, st.price, +s.notional, null) : { ok: false, why: "no live market for " + H.sym + ", so no ladder" };
-      out += '<div class="rp-sub">Liquidation ladder at ' + (st ? usd(st.price) : "—") + " on " + usd(+s.notional) + " of notional</div>";
+      out += ('<div class="rp-sub">' + window.DLI18N.t("61-replay.c7a03665e0cf") + '') + (st ? usd(st.price) : "—") + " on " + usd(+s.notional) + (window.DLI18N.t("61-replay.6116f844bde1") + "</div>");
       if (!lad.ok) out += '<div class="rp-empty">' + esc(lad.why) + "</div>";
       else {
-        out += '<div class="rp-note">Maintenance steps, the maintenance amount that keeps the requirement continuous, and the liquidation price itself all come from the engine (DLAPP.perps) — this desk does not keep a second copy. Long: (entry×qty − margin − cum) ÷ (qty×(1 − mmr)).</div>';
-        out += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">Leverage</th><th class="r">Margin</th><th class="r">Maint. rate</th><th class="r">Maint. amount</th><th class="r">Liq (long)</th><th class="r">Distance</th><th class="r">Liq (short)</th></tr></thead><tbody>';
+        out += ('<div class="rp-note">' + window.DLI18N.t("61-replay.9c036e990fa9") + '</div>');
+        out += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th class="r">' + window.DLI18N.t("61-replay.c9968747d776") + '</th><th class="r">' + window.DLI18N.t("61-replay.2bf63d817630") + '</th><th class="r">' + window.DLI18N.t("61-replay.4489bd5ee474") + '</th><th class="r">' + window.DLI18N.t("61-replay.f4ca02e6ee95") + '</th><th class="r">' + window.DLI18N.t("61-replay.aea19c27a854") + '</th><th class="r">' + window.DLI18N.t("61-replay.b7bdf7a2d6e7") + '</th><th class="r">' + window.DLI18N.t("61-replay.fdf93497997c") + '</th></tr></thead><tbody>');
         var j;
         for (j = 0; j < lad.rows.length; j++) {
           var lr = lad.rows[j];
-          out += '<tr><td class="r">' + lr.lev + 'x</td><td class="r">' + usd(lr.margin) + '</td><td class="r">' + pct(lr.mmr * 100, 3) + '</td><td class="r">' + usd(lr.cum) +
+          out += '<tr><td class="r">' + lr.lev + ('' + window.DLI18N.t("61-replay.2d711642b726") + '</td><td class="r">') + usd(lr.margin) + '</td><td class="r">' + pct(lr.mmr * 100, 3) + '</td><td class="r">' + usd(lr.cum) +
             '</td><td class="r">' + usd(lr.liqLong) + '</td><td class="r">' + pct(lr.distLong, 1) + '</td><td class="r">' + usd(lr.liqShort) + "</td></tr>";
         }
         out += "</tbody></table></div>";
@@ -1261,16 +1261,16 @@
   }
 
   function paneMethod() {
-    var h = '<div class="rp-note">Everything this desk does, in plain language. If a number on this desk cannot be traced to one of these paragraphs, it should not be on the screen.</div>';
+    var h = ('<div class="rp-note">' + window.DLI18N.t("61-replay.c47051ebefdc") + '</div>');
     var i;
     h += '<div class="rp-method">';
     for (i = 0; i < METHOD.length; i++) h += '<div class="rp-mrow"><b>' + esc(METHOD[i][0]) + "</b><span>" + esc(METHOD[i][1]) + "</span></div>";
     h += "</div>";
-    h += '<div class="rp-sub">What is assumed, and what is measured</div><ul class="rp-assume">';
+    h += ('<div class="rp-sub">' + window.DLI18N.t("61-replay.72575be9ba5c") + '</div><ul class="rp-assume">');
     for (i = 0; i < ASSUMPTIONS.length; i++) h += "<li>" + esc(ASSUMPTIONS[i]) + "</li>";
     h += "</ul>";
     var pr = lawProof();
-    h += '<div class="rp-legend"><b>The no-lookahead law, checked in this build:</b> ' + esc(pr.note) + " " +
+    h += ('<div class="rp-legend"><b>' + window.DLI18N.t("61-replay.0d11def94a31") + '</b> ') + esc(pr.note) + " " +
       (pr.ok ? "The engine passes the constructed check in this build." : "THE ENGINE FAILED: " + esc(pr.why)) + "</div>";
     return h;
   }
@@ -1360,8 +1360,8 @@
     var el = null;
     try {
       el = C.open("dlReplay", {
-        title: "⟲ Replay",
-        sub: "regimes you measured, every window that matched, and the shocks you can compose on top",
+        title: window.DLI18N.t("61-replay.83eaa682123d"),
+        sub: window.DLI18N.t("61-replay.77c12187e024"),
         tabs: [["regimes", "Regimes"], ["window", "Window"], ["scenario", "Scenario"], ["tape", "Tape"], ["method", "Method"]],
         onTab: bodyFor
       }, tab || "regimes");
