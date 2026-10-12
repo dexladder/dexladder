@@ -1803,7 +1803,18 @@
   "42-rewind.aab580ab9680": "BACKTEST",
   "42-rewind.bdacdeb9ca34": "Open Rewind",
   "43-fork.7eb798a22cf2": "🧪 Local fork sandbox",
-  "43-fork.aa208563557d": "YOUR NODE"
+  "43-fork.aa208563557d": "YOUR NODE",
+  "45-bots.02b899f6e08b": "0?x:0))/n;l=(l*(n-1)+(x",
+  "45-bots.1b5ae7b9979c": "Build a bot from rules and test it on real history, or bring your own — JavaScript in a sandbox, or your own program answering one URL. Each bot gets its own paper wallet and is scored against buy-and-hold. Your account is never touched.",
+  "45-bots.26cd649bab68": "build a bot from rules, or bring your own — each trades its own paper wallet against the live market",
+  "45-bots.46c7714c736e": "🤖 Bots",
+  "45-bots.a15a48e43398": "AUTOMATE",
+  "45-bots.ca99ed47cf2e": "for(i=n+1;i",
+  "45-bots.cc971dcab2f4": "function rsi(a,n){n=n||14;if(a.length",
+  "45-bots.d2330853b150": "=0?g+=d:l-=d}g/=n;l/=n;",
+  "45-bots.d5cec259290d": "Open Bots",
+  "45-bots.ead79ae82e1d": "n){s-=0}}return s/Math.max(1,c)}",
+  "45-bots.edab3274c82a": "function atr(bs,n){n=n||14;if(!bs.length)return 0;var p=null,s=0,c=0;for(var i=0;i"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -12630,9 +12641,9 @@ window.DLBOTS = (function () {
     "try{Object.defineProperty(g,k,{value:undefined,configurable:false,writable:false})}catch(e){try{g[k]=undefined}catch(e2){}}});})();",
     "var __ta=(function(){function sma(a,n){if(!a.length)return 0;var s=0,k=Math.min(n,a.length);for(var i=a.length-k;i<a.length;i++)s+=a[i];return s/k}",
     "function ema(a,n){if(!a.length)return 0;var k=2/(n+1),e=a[0];for(var i=1;i<a.length;i++)e=a[i]*k+e*(1-k);return e}",
-    "function rsi(a,n){n=n||14;if(a.length<n+1)return 50;var g=0,l=0,i;for(i=1;i<=n;i++){var d=a[i]-a[i-1];d>=0?g+=d:l-=d}g/=n;l/=n;",
-    "for(i=n+1;i<a.length;i++){var x=a[i]-a[i-1];g=(g*(n-1)+(x>0?x:0))/n;l=(l*(n-1)+(x<0?-x:0))/n}return l===0?100:100-100/(1+g/l)}",
-    "function atr(bs,n){n=n||14;if(!bs.length)return 0;var p=null,s=0,c=0;for(var i=0;i<bs.length;i++){var b=bs[i];var tr=p===null?b.h-b.l:Math.max(b.h-b.l,Math.abs(b.h-p),Math.abs(b.l-p));p=b.c;s+=tr;c++;if(c>n){s-=0}}return s/Math.max(1,c)}",
+    (window.DLI18N.t("45-bots.cc971dcab2f4") + "<n+1)return 50;var g=0,l=0,i;for(i=1;i<=n;i++){var d=a[i]-a[i-1];d>" + window.DLI18N.t("45-bots.d2330853b150")),
+    (window.DLI18N.t("45-bots.ca99ed47cf2e") + "<a.length;i++){var x=a[i]-a[i-1];g=(g*(n-1)+(x>" + window.DLI18N.t("45-bots.02b899f6e08b") + "<0?-x:0))/n}return l===0?100:100-100/(1+g/l)}"),
+    (window.DLI18N.t("45-bots.edab3274c82a") + "<bs.length;i++){var b=bs[i];var tr=p===null?b.h-b.l:Math.max(b.h-b.l,Math.abs(b.h-p),Math.abs(b.l-p));p=b.c;s+=tr;c++;if(c>" + window.DLI18N.t("45-bots.ead79ae82e1d")),
     "function hi(a,n){var k=Math.min(n,a.length),m=-Infinity;for(var i=a.length-k;i<a.length;i++)m=Math.max(m,a[i]);return m}",
     "function lo(a,n){var k=Math.min(n,a.length),m=Infinity;for(var i=a.length-k;i<a.length;i++)m=Math.min(m,a[i]);return m}",
     "function cross(f,s){return f>s?'up':f<s?'down':'flat'}",
@@ -12959,8 +12970,8 @@ window.DLBOTS = (function () {
 
   function open() {
     var el = C.open("dlBots", {
-      title: "🤖 Bots",
-      sub: "build a bot from rules, or bring your own — each trades its own paper wallet against the live market",
+      title: window.DLI18N.t("45-bots.46c7714c736e"),
+      sub: window.DLI18N.t("45-bots.26cd649bab68"),
       tabs: [], onTab: body
     });
     watch(el);
@@ -12975,12 +12986,12 @@ window.DLBOTS = (function () {
       var card = document.createElement("div");
       card.className = "card"; card.id = "dlBotCard";
       var hd = document.createElement("div"); hd.className = "ph";
-      var b = document.createElement("b"); b.textContent = "🤖 Bots";
-      var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = "AUTOMATE";
+      var b = document.createElement("b"); b.textContent = window.DLI18N.t("45-bots.46c7714c736e");
+      var tag = document.createElement("span"); tag.className = "tag"; tag.textContent = window.DLI18N.t("45-bots.a15a48e43398");
       hd.appendChild(b); hd.appendChild(tag);
       var note = document.createElement("div"); note.className = "fnote";
-      note.textContent = "Build a bot from rules and test it on real history, or bring your own — JavaScript in a sandbox, or your own program answering one URL. Each bot gets its own paper wallet and is scored against buy-and-hold. Your account is never touched.";
-      var go = document.createElement("button"); go.className = "btn"; go.type = "button"; go.textContent = "Open Bots";
+      note.textContent = window.DLI18N.t("45-bots.1b5ae7b9979c");
+      var go = document.createElement("button"); go.className = "btn"; go.type = "button"; go.textContent = window.DLI18N.t("45-bots.d5cec259290d");
       go.onclick = open;
       card.appendChild(hd); card.appendChild(note); card.appendChild(go);
       var rw = $("dlRwCard");
