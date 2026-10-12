@@ -1180,7 +1180,71 @@
   "31-sectors.bd5e68400ebe": "Open Sectors →",
   "31-sectors.dfbad8cb3d28": "Sector feed unreachable — retries on next visit.",
   "31-sectors.e3c3ac7bfca1": "Top 3 on the ladder",
-  "31-sectors.e879820037b4": " today)\nvol / cap = 24h volume ÷ market cap — the \"heat\" of a sector\nsectors under $200M are hidden from rotation to keep noise out; data: CoinGecko categories, keyless"
+  "31-sectors.e879820037b4": " today)\nvol / cap = 24h volume ÷ market cap — the \"heat\" of a sector\nsectors under $200M are hidden from rotation to keep noise out; data: CoinGecko categories, keyless",
+  "32-radar.04864c05049e": "Liquidity",
+  "32-radar.0675d5ff7d11": "⚠ That size is big for this pool — real traders split it.",
+  "32-radar.086a519fdeed": " at ",
+  "32-radar.1bd96f2a75e4": "Sell ½",
+  "32-radar.204a5eb2cd28": "Cost",
+  "32-radar.21eeee1c9961": "Scan token",
+  "32-radar.24eb1d8f7ca1": "\" data-pre=\"age\">Age ≥ 1h",
+  "32-radar.2980d356dea2": "GeckoTerminal · GoPlus · keyless · practise before you ape",
+  "32-radar.2a0f7ad1ebef": "P&amp;L",
+  "32-radar.2d84e2d9a290": "Holders",
+  "32-radar.310bd3e2078e": "\" style=\"cursor:pointer\">",
+  "32-radar.31b95e77bc19": "GeckoTerminal",
+  "32-radar.393fc414a352": "No pools match — loosen the presets or pick another network.",
+  "32-radar.3acb5d6696dd": "pool book ",
+  "32-radar.41dcc638de5a": "Mint authority",
+  "32-radar.489c9196e7a6": "📒 Pool book ",
+  "32-radar.49c266baaaa7": "Search",
+  "32-radar.4f8a65e2b990": "Enter an amount — the quote shows AMM slippage from this pool’s real liquidity.",
+  "32-radar.516b1d765487": "LP locked",
+  "32-radar.566a36dffd06": "5m · 1h · 6h · 24h",
+  "32-radar.56713b15e88d": "Enter an amount.",
+  "32-radar.5b382f501fff": "🛡 Security ",
+  "32-radar.62df2e1eca4c": "1h candles",
+  "32-radar.64e3cb0e4960": "Buy",
+  "32-radar.68cc104b22bd": " paper USDT",
+  "32-radar.6ae9eddc1ab9": "Token name, symbol or contract…",
+  "32-radar.6d031af10da7": "Position",
+  "32-radar.6e1a2b47df21": "\" data-pre=\"liq\">Liquidity ≥ $50k",
+  "32-radar.75ec156d6a5f": "Type a token and tap Search.",
+  "32-radar.817d2062da8e": "liq ",
+  "32-radar.8c8340c46487": "📡 Pool Radar",
+  "32-radar.90099c91e9c1": "Sell all",
+  "32-radar.94c9e3dc965e": "Unrealised",
+  "32-radar.96e7d034b800": "/100 · pattern-based",
+  "32-radar.9e0d84c0b9ee": "Closable",
+  "32-radar.a338a97c4f37": "Pool age",
+  "32-radar.a9be9c3e9ab6": "Qty",
+  "32-radar.ab45c9a75f98": "Pause / blacklist / cooldown",
+  "32-radar.ac1c19802d4b": "Freeze authority",
+  "32-radar.ade5880f369f": "1m",
+  "32-radar.b21242735eb2": "FDV",
+  "32-radar.b39efc736131": "x·y=k constant product on half the pool’s liquidity · LP fee 0.30% · gas $2.20 · marked to the live pool price. Paper only — nothing touches a chain.",
+  "32-radar.b84c6df9ef43": "Honeypot",
+  "32-radar.b9c50cd43245": "Buys / sells 24h",
+  "32-radar.bb4fc225decb": "← Back to radar",
+  "32-radar.bca095b157b3": "Marked to the live pool price on open · refreshes each time you look. The Coach reads slippage, sizing and hold-time from this book.",
+  "32-radar.c003278bdecb": "\">Open",
+  "32-radar.c8b145e63282": "Avg entry",
+  "32-radar.c8ca5ac6a864": " · LP fee + gas $",
+  "32-radar.ca9006bd3fb0": "USDT",
+  "32-radar.cbca80fc8cfa": "Recent pool trades",
+  "32-radar.d290ad0bded9": "24h volume",
+  "32-radar.d3e6b5ed0ef9": "Couldn’t reach the DEX feed — ",
+  "32-radar.d6918d40fff2": "Buy / sell tax",
+  "32-radar.d7cda0ca2c85": "Mark",
+  "32-radar.de3246094525": "1d",
+  "32-radar.e4127a3e7a71": "Tap Scan — GoPlus checks honeypot, mint, pause/blacklist, taxes, source, LP lock. A clean scan is not a guarantee.",
+  "32-radar.e7ea4a2a8acb": "Owner can mint",
+  "32-radar.e839ad8a7b06": "Source verified",
+  "32-radar.f13024272c38": "Pool",
+  "32-radar.f1e448a4f5e0": "No position in this pool yet. Buy a little, watch the slippage, sell, then let the Coach read it.",
+  "32-radar.f26bfd03bb8f": "🧪 Practise this pool ",
+  "32-radar.f44873a0a838": "No pool positions. Practise one from the radar.",
+  "32-radar.feecb2a92fd5": " Nothing here is a recommendation; every trade in the sandbox is simulated."
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -9290,22 +9354,22 @@ window.DLRADAR = (function () {
   function security(net, tokAddr) {
     if (net === "solana") return C.jget("https://api.gopluslabs.io/api/v1/solana/token_security?contract_addresses=" + tokAddr, { key: "gp.sol." + tokAddr, ttl: 6e5, ms: 9000 }).then(function (r) { var res = r.data && r.data.result || {}; var k = Object.keys(res)[0]; var t = k ? res[k] : null; if (!t) throw new Error("not found");
       return { chain: "solana", raw: t, flags: [
-        { k: "mint", label: "Mint authority", bad: !!(t.mintable && t.mintable.status === "1"), txt: (t.mintable && t.mintable.status === "1") ? "enabled — supply can grow" : "disabled" },
-        { k: "freeze", label: "Freeze authority", bad: !!(t.freezable && t.freezable.status === "1"), txt: (t.freezable && t.freezable.status === "1") ? "enabled — your tokens can be frozen" : "disabled" },
-        { k: "close", label: "Closable", bad: !!(t.closable && t.closable.status === "1"), txt: (t.closable && t.closable.status === "1") ? "yes" : "no" },
-        { k: "holders", label: "Holders", bad: false, txt: String(t.holder_count || "—") } ], name: t.metadata && t.metadata.name, sym: t.metadata && t.metadata.symbol }; });
+        { k: "mint", label: window.DLI18N.t("32-radar.41dcc638de5a"), bad: !!(t.mintable && t.mintable.status === "1"), txt: (t.mintable && t.mintable.status === "1") ? "enabled — supply can grow" : "disabled" },
+        { k: "freeze", label: window.DLI18N.t("32-radar.ac1c19802d4b"), bad: !!(t.freezable && t.freezable.status === "1"), txt: (t.freezable && t.freezable.status === "1") ? "enabled — your tokens can be frozen" : "disabled" },
+        { k: "close", label: window.DLI18N.t("32-radar.9e0d84c0b9ee"), bad: !!(t.closable && t.closable.status === "1"), txt: (t.closable && t.closable.status === "1") ? "yes" : "no" },
+        { k: "holders", label: window.DLI18N.t("32-radar.2d84e2d9a290"), bad: false, txt: String(t.holder_count || "—") } ], name: t.metadata && t.metadata.name, sym: t.metadata && t.metadata.symbol }; });
     var cid = GOPLUS[net]; if (!cid) return Promise.reject(new Error("No keyless scanner for " + net + " yet"));
     return C.jget("https://api.gopluslabs.io/api/v1/token_security/" + cid + "?contract_addresses=" + tokAddr, { key: "gp." + cid + "." + tokAddr, ttl: 6e5, ms: 9000 }).then(function (r) { var res = r.data && r.data.result || {}; var t = res[tokAddr.toLowerCase()] || res[Object.keys(res)[0]]; if (!t) throw new Error("not found on GoPlus");
       var honey = t.is_honeypot === "1", mint = t.is_mintable === "1", pause = t.transfer_pausable === "1" || t.trading_cooldown === "1" || t.is_blacklisted === "1", bt = 100 * (+t.buy_tax || 0), stx = 100 * (+t.sell_tax || 0), open = t.is_open_source === "1";
       var lpLocked = (t.lp_holders || []).some(function (h) { return +h.is_locked === 1 && +h.percent > 0.5; });
       return { chain: net, raw: t, name: t.token_name, sym: t.token_symbol, flags: [
-        { k: "honeypot", label: "Honeypot", bad: honey, txt: honey ? "YES — buys that cannot be sold" : "no" },
-        { k: "mint", label: "Owner can mint", bad: mint, txt: mint ? "yes — supply can be inflated on you" : "no" },
-        { k: "pause", label: "Pause / blacklist / cooldown", bad: pause, txt: pause ? "yes — trading can be switched off for you" : "no" },
-        { k: "tax", label: "Buy / sell tax", bad: bt > 10 || stx > 10, txt: bt.toFixed(0) + "% / " + stx.toFixed(0) + "%" },
-        { k: "source", label: "Source verified", bad: !open, txt: open ? "yes" : "no — unreadable contract" },
-        { k: "lp", label: "LP locked", bad: !lpLocked, txt: lpLocked ? "majority locked" : "not locked — liquidity can leave" },
-        { k: "holders", label: "Holders", bad: false, txt: String(t.holder_count || "—") } ] }; });
+        { k: "honeypot", label: window.DLI18N.t("32-radar.b84c6df9ef43"), bad: honey, txt: honey ? "YES — buys that cannot be sold" : "no" },
+        { k: "mint", label: window.DLI18N.t("32-radar.e7ea4a2a8acb"), bad: mint, txt: mint ? "yes — supply can be inflated on you" : "no" },
+        { k: "pause", label: window.DLI18N.t("32-radar.ab45c9a75f98"), bad: pause, txt: pause ? "yes — trading can be switched off for you" : "no" },
+        { k: "tax", label: window.DLI18N.t("32-radar.d6918d40fff2"), bad: bt > 10 || stx > 10, txt: bt.toFixed(0) + "% / " + stx.toFixed(0) + "%" },
+        { k: "source", label: window.DLI18N.t("32-radar.e839ad8a7b06"), bad: !open, txt: open ? "yes" : "no — unreadable contract" },
+        { k: "lp", label: window.DLI18N.t("32-radar.516b1d765487"), bad: !lpLocked, txt: lpLocked ? "majority locked" : "not locked — liquidity can leave" },
+        { k: "holders", label: window.DLI18N.t("32-radar.2d84e2d9a290"), bad: false, txt: String(t.holder_count || "—") } ] }; });
   }
   function verdict(sec) { var risk = 0; sec.flags.forEach(function (f) { if (!f.bad) return; risk += f.k === "honeypot" ? 100 : f.k === "mint" ? 30 : f.k === "pause" ? 25 : f.k === "tax" ? 20 : f.k === "source" ? 15 : f.k === "lp" ? 20 : f.k === "freeze" ? 40 : 10; }); var cls = risk >= 60 ? "dang" : risk >= 25 ? "warn" : "safe"; return { risk: Math.min(100, risk), cls: cls, em: cls === "dang" ? "⛔" : cls === "warn" ? "⚠️" : "✅", label: cls === "dang" ? "High risk" : cls === "warn" ? "Caution" : "No red flags found" }; }
 
@@ -9359,7 +9423,7 @@ window.DLRADAR = (function () {
 
   /* ---------------------------------------------------------- UI */
   function rowHTML(p) {
-    return '<div class="dl-row click" data-pool="' + esc(p.id) + '" style="cursor:pointer"><div class="nm"><b>' + esc(p.name) + '</b><span>liq ' + C.big(p.liq) + " · vol " + C.big(p.vol) + " · " + p.buys + "↑ " + p.sells + "↓ · " + ageOf(p.created) + " old" + (p.fdv ? " · FDV " + C.big(p.fdv) : "") + '</span></div><div class="rt">' + fmtPx(p.price) + '<br><span style="font-size:10.5px">' + ["m5", "h1", "h6", "h24"].map(function (k) { return '<span class="' + (p[k] >= 0 ? "up" : "dn") + '" title="' + k + '">' + C.pct(p[k], 1) + "</span>"; }).join(" ") + "</span></div></div>";
+    return '<div class="dl-row click" data-pool="' + esc(p.id) + ('' + window.DLI18N.t("32-radar.310bd3e2078e") + '<div class="nm"><b>') + esc(p.name) + ('</b><span>' + window.DLI18N.t("32-radar.817d2062da8e") + '') + C.big(p.liq) + " · vol " + C.big(p.vol) + " · " + p.buys + "↑ " + p.sells + "↓ · " + ageOf(p.created) + " old" + (p.fdv ? " · FDV " + C.big(p.fdv) : "") + '</span></div><div class="rt">' + fmtPx(p.price) + '<br><span style="font-size:10.5px">' + ["m5", "h1", "h6", "h24"].map(function (k) { return '<span class="' + (p[k] >= 0 ? "up" : "dn") + '" title="' + k + '">' + C.pct(p[k], 1) + "</span>"; }).join(" ") + "</span></div></div>";
   }
   function filterList(list) {
     var pr = ST.preset; return list.filter(function (p) { if (pr.liq && p.liq < pr.liq) return false; if (pr.age) { var t = Date.parse(p.created || ""); if (t && Date.now() - t < pr.age) return false; } return true; });
@@ -9367,24 +9431,24 @@ window.DLRADAR = (function () {
   function listView(body) {
     var kind = ST.tab === "fresh" ? "fresh" : ST.tab === "search" ? "search" : "trend";
     var head = '<div class="dl-chips" id="dlRdNets">' + NETS.map(function (n) { return '<button class="dl-chip' + (n[0] === ST.net ? " on" : "") + '" data-net="' + n[0] + '">' + esc(n[1]) + "</button>"; }).join("") + "</div>" +
-      '<div class="dl-chips" id="dlRdPre"><button class="dl-chip' + (ST.preset.liq ? " on" : "") + '" data-pre="liq">Liquidity ≥ $50k</button><button class="dl-chip' + (ST.preset.age ? " on" : "") + '" data-pre="age">Age ≥ 1h</button><span style="flex:1"></span><span class="dl-prov recent" id="dlRdProv">GeckoTerminal</span></div>' +
-      (kind === "search" ? '<div class="dl-in"><input id="dlRdQ" placeholder="Token name, symbol or contract…" value="' + esc(ST.q) + '"><button id="dlRdGo">Search</button></div>' : "") + '<div id="dlRdList">' + C.skel(6) + "</div>" +
-      '<div class="dl-note">' + (kind === "fresh" ? "Freshly created pools, age to the second. Most new pools die; the point is to learn to tell which — scan before you practise." : kind === "trend" ? "Trending pools on this network · GeckoTerminal · keyless. Tap a pool for candles, a security scan and the AMM sandbox." : "Search pools by name, symbol or contract on the selected network.") + " Nothing here is a recommendation; every trade in the sandbox is simulated.</div>";
+      '<div class="dl-chips" id="dlRdPre"><button class="dl-chip' + (ST.preset.liq ? " on" : "") + ('' + window.DLI18N.t("32-radar.6e1a2b47df21") + '</button><button class="dl-chip') + (ST.preset.age ? " on" : "") + ('' + window.DLI18N.t("32-radar.24eb1d8f7ca1") + '</button><span style="flex:1"></span><span class="dl-prov recent" id="dlRdProv">' + window.DLI18N.t("32-radar.31b95e77bc19") + '</span></div>') +
+      (kind === "search" ? ('<div class="dl-in"><input id="dlRdQ" placeholder="' + window.DLI18N.t("32-radar.6ae9eddc1ab9") + '" value="') + esc(ST.q) + ('"><button id="dlRdGo">' + window.DLI18N.t("32-radar.49c266baaaa7") + '</button></div>') : "") + '<div id="dlRdList">' + C.skel(6) + "</div>" +
+      '<div class="dl-note">' + (kind === "fresh" ? "Freshly created pools, age to the second. Most new pools die; the point is to learn to tell which — scan before you practise." : kind === "trend" ? "Trending pools on this network · GeckoTerminal · keyless. Tap a pool for candles, a security scan and the AMM sandbox." : "Search pools by name, symbol or contract on the selected network.") + (window.DLI18N.t("32-radar.feecb2a92fd5") + "</div>");
     body.innerHTML = head;
-    if (kind === "search" && !ST.q) { $("dlRdList").innerHTML = '<div class="dl-empty">Type a token and tap Search.</div>'; return; }
+    if (kind === "search" && !ST.q) { $("dlRdList").innerHTML = ('<div class="dl-empty">' + window.DLI18N.t("32-radar.75ec156d6a5f") + '</div>'); return; }
     fetchList(kind, ST.net, ST.q).then(function (r) {
       var list = filterList(r.list); if (kind === "movers") list.sort(function (a, b) { return b.h24 - a.h24; });
       if (ST.tab === "movers") list = filterList(r.list).sort(function (a, b) { return Math.abs(b.h24) - Math.abs(a.h24); });
       var el = $("dlRdList"); if (!el) return;
-      el.innerHTML = list.length ? list.map(rowHTML).join("") : '<div class="dl-empty">No pools match — loosen the presets or pick another network.</div>';
+      el.innerHTML = list.length ? list.map(rowHTML).join("") : ('<div class="dl-empty">' + window.DLI18N.t("32-radar.393fc414a352") + '</div>');
       var pv = $("dlRdProv"); if (pv) pv.outerHTML = C.prov("GeckoTerminal", r.at, r.stale, { attr: 'id="dlRdProv"' });
       el.__list = list;
-    }).catch(function (e) { var el = $("dlRdList"); if (el) el.innerHTML = '<div class="dl-empty">Couldn’t reach the DEX feed — ' + esc(e.message || e) + "</div>"; });
+    }).catch(function (e) { var el = $("dlRdList"); if (el) el.innerHTML = ('<div class="dl-empty">' + window.DLI18N.t("32-radar.d3e6b5ed0ef9") + '') + esc(e.message || e) + "</div>"; });
   }
   function poolView(body, p) {
-    body.innerHTML = '<button class="dl-b" id="dlRdBack">← Back to radar</button><div class="dl154" style="margin-top:10px"><div class="h">' + esc(p.name) + ' <span class="dl-prov recent" id="dlRdPProv">' + esc(NETS.filter(function (n) { return n[0] === p.net; }).map(function (n) { return n[1]; })[0] || p.net) + '</span><span class="sp"></span><b id="dlRdPx">' + fmtPx(p.price) + '</b></div><canvas class="dl-cv" id="dlRdCv"></canvas><div class="dl-chips" style="margin:8px 0 0"><button class="dl-chip on" data-tf="hour">1h candles</button><button class="dl-chip" data-tf="minute">1m</button><button class="dl-chip" data-tf="day">1d</button></div>' +
-      '<div class="dl-2" style="margin-top:10px"><div><div class="kv"><span>Liquidity</span><b>' + C.big(p.liq) + '</b></div><div class="kv"><span>24h volume</span><b>' + C.big(p.vol) + '</b></div><div class="kv"><span>Buys / sells 24h</span><b>' + p.buys + " / " + p.sells + '</b></div><div class="kv"><span>FDV</span><b>' + (p.fdv ? C.big(p.fdv) : "—") + '</b></div><div class="kv"><span>Pool age</span><b>' + ageOf(p.created) + '</b></div><div class="kv"><span>5m · 1h · 6h · 24h</span><b>' + ["m5", "h1", "h6", "h24"].map(function (k) { return '<span class="' + (p[k] >= 0 ? "up" : "dn") + '">' + C.pct(p[k], 1) + "</span>"; }).join(" · ") + "</b></div></div>" +
-      '<div><div class="h" style="margin-bottom:6px">🛡 Security <span class="sp"></span><button class="dl-b" id="dlRdScan">Scan token</button></div><div id="dlRdSec" class="dl-note" style="margin:0">Tap Scan — GoPlus checks honeypot, mint, pause/blacklist, taxes, source, LP lock. A clean scan is not a guarantee.</div></div></div></div>' +
+    body.innerHTML = ('<button class="dl-b" id="dlRdBack">' + window.DLI18N.t("32-radar.bb4fc225decb") + '</button><div class="dl154" style="margin-top:10px"><div class="h">') + esc(p.name) + ' <span class="dl-prov recent" id="dlRdPProv">' + esc(NETS.filter(function (n) { return n[0] === p.net; }).map(function (n) { return n[1]; })[0] || p.net) + '</span><span class="sp"></span><b id="dlRdPx">' + fmtPx(p.price) + ('</b></div><canvas class="dl-cv" id="dlRdCv"></canvas><div class="dl-chips" style="margin:8px 0 0"><button class="dl-chip on" data-tf="hour">' + window.DLI18N.t("32-radar.62df2e1eca4c") + '</button><button class="dl-chip" data-tf="minute">' + window.DLI18N.t("32-radar.ade5880f369f") + '</button><button class="dl-chip" data-tf="day">' + window.DLI18N.t("32-radar.de3246094525") + '</button></div>') +
+      ('<div class="dl-2" style="margin-top:10px"><div><div class="kv"><span>' + window.DLI18N.t("32-radar.04864c05049e") + '</span><b>') + C.big(p.liq) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("32-radar.d290ad0bded9") + '</span><b>') + C.big(p.vol) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("32-radar.b9c50cd43245") + '</span><b>') + p.buys + " / " + p.sells + ('</b></div><div class="kv"><span>' + window.DLI18N.t("32-radar.b21242735eb2") + '</span><b>') + (p.fdv ? C.big(p.fdv) : "—") + ('</b></div><div class="kv"><span>' + window.DLI18N.t("32-radar.a338a97c4f37") + '</span><b>') + ageOf(p.created) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("32-radar.566a36dffd06") + '</span><b>') + ["m5", "h1", "h6", "h24"].map(function (k) { return '<span class="' + (p[k] >= 0 ? "up" : "dn") + '">' + C.pct(p[k], 1) + "</span>"; }).join(" · ") + "</b></div></div>" +
+      ('<div><div class="h" style="margin-bottom:6px">' + window.DLI18N.t("32-radar.5b382f501fff") + '<span class="sp"></span><button class="dl-b" id="dlRdScan">' + window.DLI18N.t("32-radar.21eeee1c9961") + '</button></div><div id="dlRdSec" class="dl-note" style="margin:0">' + window.DLI18N.t("32-radar.e4127a3e7a71") + '</div></div></div></div>') +
       sandboxHTML(p);
     $("dlRdBack").onclick = function () { ST.sel = null; listView(body); };
     var cv = $("dlRdCv"); var loadTf = function (tf) { fetchOhlcv(p.net, p.addr, tf).then(function (r) { drawCandles(cv, r.rows); }).catch(function () { var g = cv.getContext("2d"); g.fillStyle = "#8b97ad"; g.font = "600 12px system-ui"; g.fillText("Candles unavailable for this pool right now.", 12, 24); }); };
@@ -9394,7 +9458,7 @@ window.DLRADAR = (function () {
       var out = $("dlRdSec"); out.innerHTML = C.skel(2);
       security(p.net, p.tokAddr).then(function (sec) {
         var v = verdict(sec); ST.lastSec = { pool: p, sec: sec, v: v };
-        out.innerHTML = '<div class="sec-verdict ' + v.cls + '"><span class="em">' + v.em + '</span><div><b>' + v.label + '</b><span>' + esc(sec.name || p.sym) + " · risk " + v.risk + '/100 · pattern-based</span></div></div><div class="sec-grid">' + sec.flags.map(function (f) { return '<div class="sec-item"><span>' + esc(f.label) + '</span><span class="' + (f.bad ? "bad" : f.k === "holders" ? "neu" : "ok") + '">' + esc(f.txt) + "</span></div>"; }).join("") + '</div><div id="dlRdExplain" style="margin-top:8px"></div>';
+        out.innerHTML = '<div class="sec-verdict ' + v.cls + '"><span class="em">' + v.em + '</span><div><b>' + v.label + '</b><span>' + esc(sec.name || p.sym) + " · risk " + v.risk + ('' + window.DLI18N.t("32-radar.96e7d034b800") + '</span></div></div><div class="sec-grid">') + sec.flags.map(function (f) { return '<div class="sec-item"><span>' + esc(f.label) + '</span><span class="' + (f.bad ? "bad" : f.k === "holders" ? "neu" : "ok") + '">' + esc(f.txt) + "</span></div>"; }).join("") + '</div><div id="dlRdExplain" style="margin-top:8px"></div>';
         try { window.DEXAI && DEXAI.scan && DEXAI.scan(ST.lastSec, $("dlRdExplain")); } catch (e) {}
       }).catch(function (e) { out.innerHTML = '<div class="dl-empty">' + esc(e.message || e) + "</div>"; });
     };
@@ -9402,23 +9466,23 @@ window.DLRADAR = (function () {
   }
   function sandboxHTML(p) {
     var B = X() || { cash: 0, pos: [] }, pos = B.pos.filter(function (x) { return x.id === p.id; })[0];
-    return '<div class="dl154" id="dlRdSand"><div class="h">🧪 Practise this pool ' + C.simTag() + '<span class="sp"></span><span style="font:600 11.5px var(--ui-sans,sans-serif);color:var(--muted)">pool book <b id="dlRdCash">' + C.money(B.cash, 2) + "</b> paper USDT</span></div>" +
-      '<div class="dl-2"><div><div style="display:flex;gap:6px;margin-bottom:6px"><input class="dl-inp" id="dlRdAmt" type="number" min="1" step="1" value="100" placeholder="USDT"><button class="dl-b pri" id="dlRdBuy">Buy</button></div><div id="dlRdQuote" class="dl-formula" style="margin:0">Enter an amount — the quote shows AMM slippage from this pool’s real liquidity.</div></div>' +
-      '<div>' + (pos ? '<div class="kv"><span>Position</span><b id="dlRdPosQ">' + pos.qty.toFixed(4) + " " + esc(p.sym) + '</b></div><div class="kv"><span>Avg entry</span><b>' + fmtPx(pos.cost / pos.qty) + '</b></div><div class="kv"><span>Unrealised</span><b id="dlRdUpl">' + uplHTML(pos, p) + '</b></div><div style="display:flex;gap:6px;margin-top:8px"><button class="dl-b" data-sell="0.5">Sell ½</button><button class="dl-b warn" data-sell="1">Sell all</button></div>' : '<div class="dl-empty" style="padding:10px">No position in this pool yet. Buy a little, watch the slippage, sell, then let the Coach read it.</div>') + "</div></div>" +
-      '<div class="n">x·y=k constant product on half the pool’s liquidity · LP fee 0.30% · gas $2.20 · marked to the live pool price. Paper only — nothing touches a chain.</div></div>';
+    return ('<div class="dl154" id="dlRdSand"><div class="h">' + window.DLI18N.t("32-radar.f26bfd03bb8f") + '') + C.simTag() + ('<span class="sp"></span><span style="font:600 11.5px var(--ui-sans,sans-serif);color:var(--muted)">' + window.DLI18N.t("32-radar.3acb5d6696dd") + '<b id="dlRdCash">') + C.money(B.cash, 2) + ("</b>" + window.DLI18N.t("32-radar.68cc104b22bd") + "</span></div>") +
+      ('<div class="dl-2"><div><div style="display:flex;gap:6px;margin-bottom:6px"><input class="dl-inp" id="dlRdAmt" type="number" min="1" step="1" value="100" placeholder="' + window.DLI18N.t("32-radar.ca9006bd3fb0") + '"><button class="dl-b pri" id="dlRdBuy">' + window.DLI18N.t("32-radar.64e3cb0e4960") + '</button></div><div id="dlRdQuote" class="dl-formula" style="margin:0">' + window.DLI18N.t("32-radar.4f8a65e2b990") + '</div></div>') +
+      '<div>' + (pos ? ('<div class="kv"><span>' + window.DLI18N.t("32-radar.6d031af10da7") + '</span><b id="dlRdPosQ">') + pos.qty.toFixed(4) + " " + esc(p.sym) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("32-radar.c8b145e63282") + '</span><b>') + fmtPx(pos.cost / pos.qty) + ('</b></div><div class="kv"><span>' + window.DLI18N.t("32-radar.94c9e3dc965e") + '</span><b id="dlRdUpl">') + uplHTML(pos, p) + ('</b></div><div style="display:flex;gap:6px;margin-top:8px"><button class="dl-b" data-sell="0.5">' + window.DLI18N.t("32-radar.1bd96f2a75e4") + '</button><button class="dl-b warn" data-sell="1">' + window.DLI18N.t("32-radar.90099c91e9c1") + '</button></div>') : ('<div class="dl-empty" style="padding:10px">' + window.DLI18N.t("32-radar.f1e448a4f5e0") + '</div>')) + "</div></div>" +
+      ('<div class="n">' + window.DLI18N.t("32-radar.b39efc736131") + '</div></div>');
   }
   function uplHTML(pos, p) { var q = quote(p, "sell", 0, pos.qty); var pl = q.usd - GAS - pos.cost; return '<span class="' + (pl >= 0 ? "up" : "dn") + '">' + (pl >= 0 ? "+" : "−") + DLCUR.s()+Math.abs(DLCUR.c(pl)).toFixed(2) + " (" + C.pct(pl / pos.cost * 100, 1) + ")</span>"; }
   function wireSandbox(body, p) {
     var amt = $("dlRdAmt"), qEl = $("dlRdQuote");
-    function refreshQ() { var v = +amt.value; if (!(v > 0)) { qEl.textContent = "Enter an amount."; return; } var q = quote(p, "buy", v); qEl.innerHTML = "≈ <b>" + q.qty.toFixed(4) + " " + esc(p.sym) + "</b> at " + fmtPx(q.eff) + " · slippage <b class='" + (q.slip > 2 ? "dn" : "up") + "'>" + q.slip.toFixed(2) + "%</b> · LP fee + gas "+DLCUR.s()+DLCUR.c(q.fee).toFixed(2) + (q.slip > 5 ? "<br>⚠ That size is big for this pool — real traders split it." : ""); }
+    function refreshQ() { var v = +amt.value; if (!(v > 0)) { qEl.textContent = window.DLI18N.t("32-radar.56713b15e88d"); return; } var q = quote(p, "buy", v); qEl.innerHTML = "≈ <b>" + q.qty.toFixed(4) + " " + esc(p.sym) + ("</b>" + window.DLI18N.t("32-radar.086a519fdeed")) + fmtPx(q.eff) + " · slippage <b class='" + (q.slip > 2 ? "dn" : "up") + "'>" + q.slip.toFixed(2) + ("%</b>" + window.DLI18N.t("32-radar.c8ca5ac6a864")) + q.fee.toFixed(2) + (q.slip > 5 ? ("<br>" + window.DLI18N.t("32-radar.0675d5ff7d11")) : ""); }
     amt.oninput = refreshQ; refreshQ();
     $("dlRdBuy").onclick = function () { faucet(); if (buy(p, +amt.value)) { var s = $("dlRdSand"); s.outerHTML = sandboxHTML(p); wireSandbox(body, p); } };
     body.querySelectorAll("[data-sell]").forEach(function (b) { b.onclick = function () { if (sell(p, +b.getAttribute("data-sell"))) { var s = $("dlRdSand"); s.outerHTML = sandboxHTML(p); wireSandbox(body, p); } }; });
   }
   function bookView(body) {
     var B = X() || { cash: 0, pos: [], hist: [] };
-    body.innerHTML = '<div class="dl154"><div class="h">📒 Pool book ' + C.simTag() + '<span class="sp"></span><b>' + C.money(B.cash, 2) + '</b> paper USDT</div>' + (B.pos.length ? '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Pool</th><th class="r">Qty</th><th class="r">Cost</th><th class="r">Mark</th><th class="r">P&amp;L</th><th></th></tr></thead><tbody id="dlRdBookRows">' + B.pos.map(function (x) { return '<tr data-pos="' + esc(x.id) + '"><td><b>' + esc(x.name) + '</b><br><span style="opacity:.6">' + esc(x.net) + '</span></td><td class="r">' + x.qty.toFixed(4) + '</td><td class="r">' + C.money(x.cost, 2) + '</td><td class="r" data-mark>…</td><td class="r" data-pl>…</td><td><button class="dl-b" data-open="' + esc(x.id) + '">Open</button></td></tr>'; }).join("") + "</tbody></table></div>" : '<div class="dl-empty">No pool positions. Practise one from the radar.</div>') +
-      (B.hist.length ? '<div class="h" style="margin-top:12px">Recent pool trades</div>' + B.hist.slice(0, 8).map(function (h) { return '<div class="kv"><span>' + (h.side === "buy" ? "🟢 Buy" : "🔴 Sell") + " " + esc(h.sym) + " · " + C.ago(h.t) + '</span><b>' + C.money(h.usd, 2) + " · slip " + h.slip.toFixed(2) + "%" + (h.pl != null ? ' · <span class="' + (h.pl >= 0 ? "up" : "dn") + '">' + (h.pl >= 0 ? "+" : "−") + DLCUR.s()+Math.abs(DLCUR.c(h.pl)).toFixed(2) + "</span>" : "") + "</b></div>"; }).join("") : "") + '<div class="n">Marked to the live pool price on open · refreshes each time you look. The Coach reads slippage, sizing and hold-time from this book.</div></div>';
+    body.innerHTML = ('<div class="dl154"><div class="h">' + window.DLI18N.t("32-radar.489c9196e7a6") + '') + C.simTag() + '<span class="sp"></span><b>' + C.money(B.cash, 2) + ('</b>' + window.DLI18N.t("32-radar.68cc104b22bd") + '</div>') + (B.pos.length ? ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("32-radar.f13024272c38") + '</th><th class="r">' + window.DLI18N.t("32-radar.a9be9c3e9ab6") + '</th><th class="r">' + window.DLI18N.t("32-radar.204a5eb2cd28") + '</th><th class="r">' + window.DLI18N.t("32-radar.d7cda0ca2c85") + '</th><th class="r">' + window.DLI18N.t("32-radar.2a0f7ad1ebef") + '</th><th></th></tr></thead><tbody id="dlRdBookRows">') + B.pos.map(function (x) { return '<tr data-pos="' + esc(x.id) + '"><td><b>' + esc(x.name) + '</b><br><span style="opacity:.6">' + esc(x.net) + '</span></td><td class="r">' + x.qty.toFixed(4) + '</td><td class="r">' + C.money(x.cost, 2) + '</td><td class="r" data-mark>…</td><td class="r" data-pl>…</td><td><button class="dl-b" data-open="' + esc(x.id) + ('' + window.DLI18N.t("32-radar.c003278bdecb") + '</button></td></tr>'); }).join("") + "</tbody></table></div>" : ('<div class="dl-empty">' + window.DLI18N.t("32-radar.f44873a0a838") + '</div>')) +
+      (B.hist.length ? ('<div class="h" style="margin-top:12px">' + window.DLI18N.t("32-radar.cbca80fc8cfa") + '</div>') + B.hist.slice(0, 8).map(function (h) { return '<div class="kv"><span>' + (h.side === "buy" ? "🟢 Buy" : "🔴 Sell") + " " + esc(h.sym) + " · " + C.ago(h.t) + '</span><b>' + C.money(h.usd, 2) + " · slip " + h.slip.toFixed(2) + "%" + (h.pl != null ? ' · <span class="' + (h.pl >= 0 ? "up" : "dn") + '">' + (h.pl >= 0 ? "+" : "−") + DLCUR.s()+Math.abs(DLCUR.c(h.pl)).toFixed(2) + "</span>" : "") + "</b></div>"; }).join("") : "") + ('<div class="n">' + window.DLI18N.t("32-radar.bca095b157b3") + '</div></div>');
     B.pos.forEach(function (x) { fetchPool(x.net, x.addr).then(function (r) { var tr = body.querySelector('tr[data-pos="' + x.id + '"]'); if (!tr) return; var p = r.pool; tr.querySelector("[data-mark]").textContent = fmtPx(p.price); tr.querySelector("[data-pl]").innerHTML = uplHTML(x, p); tr.__pool = p; }).catch(function () {}); });
     body.querySelectorAll("[data-open]").forEach(function (b) { b.onclick = function () { var id = b.getAttribute("data-open"), tr = body.querySelector('tr[data-pos="' + id + '"]'); var p = tr && tr.__pool; if (p) { ST.sel = p; poolView(body, p); } else { var x = B.pos.filter(function (z) { return z.id === id; })[0]; fetchPool(x.net, x.addr).then(function (r) { ST.sel = r.pool; poolView(body, r.pool); }); } }; });
   }
@@ -9429,7 +9493,7 @@ window.DLRADAR = (function () {
     ST.sel = null; listView(body);
   }
   function open(tab) {
-    var el = C.open("dlRadar", { title: "📡 Pool Radar", sub: "GeckoTerminal · GoPlus · keyless · practise before you ape", tabs: [["trend", "Trending"], ["fresh", "Fresh"], ["movers", "Movers"], ["search", "Search"], ["book", "Pool book"]], onTab: render }, tab);
+    var el = C.open("dlRadar", { title: window.DLI18N.t("32-radar.8c8340c46487"), sub: window.DLI18N.t("32-radar.2980d356dea2"), tabs: [["trend", "Trending"], ["fresh", "Fresh"], ["movers", "Movers"], ["search", "Search"], ["book", "Pool book"]], onTab: render }, tab);
     if (!el.__wired) { el.__wired = 1; el.addEventListener("click", function (e) {
       var body = el.querySelector(".dls-body");
       var n = e.target.closest("[data-net]"); if (n) { ST.net = n.getAttribute("data-net"); return listView(body); }
