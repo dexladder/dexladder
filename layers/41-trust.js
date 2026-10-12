@@ -101,16 +101,16 @@ window.DLTRUST154 = (function () {
   function post(tab, body) {
     if (!body) return;
     if (!body.querySelector('#dlBuildHash')) {
-      var card = document.createElement('div'); card.className = 'dlt-card';
-      card.innerHTML = '<h3>Running build SHA-256</h3><code id="dlBuildHash" style="overflow-wrap:anywhere">Checking…</code><p><button type="button" id="dlCopyHash" disabled>Copy build hash</button> · <a href="https://github.com/dexladder/dexladder/blob/main/docs/VERIFY.md" target="_blank" rel="noopener">How to verify</a></p><p id="dlHashStatus" role="status"></p>';
-      body.appendChild(card);
+      var hashCard = document.createElement('div'); hashCard.className = 'dlt-card';
+      hashCard.innerHTML = '<h3>Running build SHA-256</h3><code id="dlBuildHash" style="overflow-wrap:anywhere">Checking…</code><p><button type="button" id="dlCopyHash" disabled>Copy build hash</button> · <a href="https://github.com/dexladder/dexladder/blob/main/docs/VERIFY.md" target="_blank" rel="noopener">How to verify</a></p><p id="dlHashStatus" role="status"></p>';
+      body.appendChild(hashCard);
       buildHash().then(function (hash) {
-        card.querySelector('#dlBuildHash').textContent = hash;
-        var button = card.querySelector('#dlCopyHash'); button.disabled = false;
+        hashCard.querySelector('#dlBuildHash').textContent = hash;
+        var button = hashCard.querySelector('#dlCopyHash'); button.disabled = false;
         button.onclick = function () {
-          navigator.clipboard.writeText(hash).then(function () { card.querySelector('#dlHashStatus').textContent = 'Copied.'; }, function () { card.querySelector('#dlHashStatus').textContent = 'Clipboard unavailable. Select and copy the hash above.'; });
+          navigator.clipboard.writeText(hash).then(function () { hashCard.querySelector('#dlHashStatus').textContent = 'Copied.'; }, function () { hashCard.querySelector('#dlHashStatus').textContent = 'Clipboard unavailable. Select and copy the hash above.'; });
         };
-      }).catch(function () { card.querySelector('#dlBuildHash').textContent = 'Unavailable'; card.querySelector('#dlHashStatus').textContent = 'Open this build over HTTPS or localhost to verify its bytes.'; });
+      }).catch(function () { hashCard.querySelector('#dlBuildHash').textContent = 'Unavailable'; hashCard.querySelector('#dlHashStatus').textContent = 'Open this build over HTTPS or localhost to verify its bytes.'; });
     }
     if (tab === "sources" && !body.querySelector(".v154-src")) { var card = body.querySelector(".dlt-card"); if (card) card.insertAdjacentHTML("afterend", '<div class="dlt-card v154-src"><b>Added in v154</b> — all keyless, all requested from your device:<br>Coinlore (price rung 3) · Kraken &amp; Coinbase Exchange (candle history) · Wikimedia page views (Attention pulse) · The Block RSS (news) · GeckoTerminal networks, trending, new pools, OHLCV · GoPlus EVM + Solana (token security) · DefiLlama chains, DEX volumes, fees, stablecoin chains, yields · Hyperliquid, OKX, Binance Futures (perps, funding, long/short, liquidations) · Deribit DVOL · Polymarket Gamma + CLOB (odds) · mempool.space &amp; Blockstream (difficulty, tip height) · open.er-api (32 fiats) · CoinGecko categories, coin detail, tickers, history, public treasuries.<br><b>DeXaI:</b> the on-device composer needs nothing; Chrome’s built-in model runs on-device when the browser has it; a gateway is optional and only used when you paste its URL.</div>'); }
     if (tab === "changelog" && !body.querySelector(".v154-row")) { var c2 = body.querySelector(".dlt-card"); if (c2) c2.insertAdjacentHTML("afterbegin", '<div class="dlt-vrow v154-row"><span class="n"><b style="color:var(--ink)">v154</b> · dexai</span><span class="val" style="color:var(--muted);font-weight:400;max-width:62%">' + CHANGES.map(function (c) { return c[0]; }).join(" · ") + ' — see the v154 tab</span></div>'); }

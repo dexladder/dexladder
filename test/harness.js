@@ -152,7 +152,7 @@ async function launch(indexPath, opts){
   const ctx = await browser.newContext({ viewport: opts.viewport || { width: 1280, height: 900 } });
   const page = await ctx.newPage();
   const errors = [], consoleErr = [], net = [];
-  page.on('pageerror', e => errors.push(String(e && e.message || e)));
+  page.on('pageerror', e => errors.push(String(e && e.stack || e)));
   page.on('console', m => { if (m.type() === 'error') consoleErr.push(m.text()); });
   await mockNetwork(page, net);
   await page.goto(`http://127.0.0.1:${port}/${path.basename(indexPath)}`, { waitUntil: 'load', timeout: 120000 });

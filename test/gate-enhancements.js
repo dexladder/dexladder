@@ -27,6 +27,8 @@ const file = process.argv[2] || path.join(__dirname, '../dist/index.html');
     await page.context().grantPermissions(['clipboard-read','clipboard-write']);
     await page.locator('#dlCopyHash').click();
     assert.equal(await page.evaluate(() => navigator.clipboard.readText()),hash); checks++;
+    await page.evaluate(() => { ['sources','changelog','privacy','dexai','laws','v154'].forEach(tab => DLTRUST.open(tab)); });
+    await page.waitForTimeout(100); checks++;
     await page.evaluate(() => { if (DLTRUST.hide) DLTRUST.hide(); });
     const csv = await page.evaluate(() => DLVAULT.journalCsv([{t:0,sym:'=HYPERLINK("bad")',side:'sell',qty:2,exit:12,fee:0,slip:0,pl:-5},{sym:'a,b\n"c"',pl:0}]));
     assert.ok(csv.startsWith('\ufefftimestamp,symbol,side,type,qty,price,fee,slippage,pnl\r\n')); checks++;
