@@ -1246,7 +1246,7 @@ window.DXC = (function () {
         if (!g) return { rows: [] };
         var a = Math.max(0, Math.floor(g.i0)), z = Math.min(bs.length, Math.ceil(g.i0 + g.n)), hi = -Infinity, lo = Infinity, i;
         for (i = a; i < z; i++) { if (bs[i].h > hi) hi = bs[i].h; if (bs[i].l < lo) lo = bs[i].l; }
-        return { rows: [], levels: [{ v: hi, c: "#FF5A78", dash: 4, label: "range high" }, { v: lo, c: "#22D39A", dash: 4, label: "range low" }] };
+        return { rows: [], levels: [{ v: hi, c: "#FF5A78", dash: 4, label: window.DLI18N.t("46-dexchart.a7b291e437ff") }, { v: lo, c: "#22D39A", dash: 4, label: window.DLI18N.t("46-dexchart.1f0d3448a4be") }] };
       }
     },
 
