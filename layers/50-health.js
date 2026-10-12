@@ -219,23 +219,23 @@ window.DLHEALTH = (function () {
 
   function skeleton() {
     return (
-      '<div class="dl154"><div class="h">Which build is this?<span class="sp"></span>' +
+      ('<div class="dl154"><div class="h">' + window.DLI18N.t("50-health.3f677f61c458") + '<span class="sp"></span>') +
       '<span id="dlhBuildV">\u2014</span></div>' +
-      '<div class="n">The build stamp below is read from this document\u2019s own &lt;meta name="cb:build"&gt;, not written into this panel, so it cannot drift from what shipped. The worker\u2019s build is read the same way \u2014 by asking the worker, on the version channel it already answers. Anything not actually read reads \u2014.</div>' +
+      ('<div class="n">' + window.DLI18N.t("50-health.fd0c31820fc2") + '</div>') +
       '<div id="dlhBuild"></div></div>' +
-      '<div class="dl154"><div class="h">Can this desk still write?<span class="sp"></span>' +
-      '<span id="dlhVerdict">checking…</span></div>' +
-      '<div class="n">The half of desk health that loses data when it is wrong. A full origin is not a fault: a save replaces its key and needs only the delta, so the verdict below fires on one signal — a write that actually threw.</div>' +
+      ('<div class="dl154"><div class="h">' + window.DLI18N.t("50-health.ae1092dafd54") + '<span class="sp"></span>') +
+      ('<span id="dlhVerdict">' + window.DLI18N.t("50-health.a0ec28fd51bd") + '</span></div>') +
+      ('<div class="n">' + window.DLI18N.t("50-health.de4023aeb0b2") + '</div>') +
       '<div id="dlhVault"></div></div>' +
-      '<div class="dl154"><div class="h">Market cache</div>' +
-      '<div class="n">The 500-coin screener snapshot. It is a cache: losing it costs one round trip. Since v164 it lives in the vault database, not in the localStorage budget the desk needs, and it is no longer swept into exports.</div>' +
+      ('<div class="dl154"><div class="h">' + window.DLI18N.t("50-health.ceb3c32078a3") + '</div>') +
+      ('<div class="n">' + window.DLI18N.t("50-health.79994a9ae54f") + '</div>') +
       '<div id="dlhMxc"></div></div>' +
-      '<div class="dl154"><div class="h">Last known good</div>' +
-      '<div class="n">The snapshot that carries a cold visit when every rung is down — 60 coins with real sparklines, kept 7 days in IndexedDB.</div>' +
+      ('<div class="dl154"><div class="h">' + window.DLI18N.t("50-health.f352aca110ce") + '</div>') +
+      ('<div class="n">' + window.DLI18N.t("50-health.47f9c05c151d") + '</div>') +
       '<div id="dlhSnap"></div></div>' +
-      '<div class="dl154"><div class="h">Price quorum<span class="sp"></span>' +
+      ('<div class="dl154"><div class="h">' + window.DLI18N.t("50-health.a95cdb796828") + '<span class="sp"></span>') +
       '<span id="dlhQState">—</span></div>' +
-      '<div class="n">One source can lie, lag, or die, so the number on screen is a median across independent witnesses. <a href="#" id="dlhQOpen">Open the consensus panel</a> for the per-witness reads.</div>' +
+      ('<div class="n">' + window.DLI18N.t("50-health.ef19e2405940") + '<a href="#" id="dlhQOpen">' + window.DLI18N.t("50-health.b2c9fd6f99df") + '</a>' + window.DLI18N.t("50-health.f22f0839e714") + '</div>') +
       '<div id="dlhQuorum"></div></div>'
     );
   }
@@ -272,14 +272,14 @@ window.DLHEALTH = (function () {
         : (w.update === "none" ? good("no") : "\u2014")));
       set("dlhBuild", r);
     }, function () {
-      set("dlhBuild", '<div class="n">The build identity could not be read on this page.</div>');
+      set("dlhBuild", ('<div class="n">' + window.DLI18N.t("50-health.ba9b1fa3c76e") + '</div>'));
     });
 
     /* --- vault / storage --- */
     vaultRead().then(function (v) {
       if (!v.ok) {
         set("dlhVerdict", bad("vault unreadable here"));
-        set("dlhVault", '<div class="n">DLVAULT is absent or its stats call was refused — private mode and blocked storage both land here, and the app runs exactly as it did before the archive existed.</div>');
+        set("dlhVault", ('<div class="n">' + window.DLI18N.t("50-health.9ff75127f996") + '</div>'));
         return;
       }
       var st = v.st || {}, L = st.local || {}, Q = st.quota || null;
@@ -304,7 +304,7 @@ window.DLHEALTH = (function () {
     try {
       var M = window.DLMXC ? DLMXC.stats() : null;
       if (!M) {
-        set("dlhMxc", '<div class="n">DLMXC is not on this page — the screener is still using the localStorage key.</div>');
+        set("dlhMxc", ('<div class="n">' + window.DLI18N.t("50-health.aac9e3bdec79") + '</div>'));
       } else {
         var r = "";
         r += kv("Coins held", M.coins || 0);
@@ -318,7 +318,7 @@ window.DLHEALTH = (function () {
 
     /* --- last known good --- */
     snapRead().then(function (p) {
-      if (!p || !p.t) { set("dlhSnap", '<div class="n">Nothing stored yet — it is written once a live load succeeds.</div>'); return; }
+      if (!p || !p.t) { set("dlhSnap", ('<div class="n">' + window.DLI18N.t("50-health.6fbbe8d465c7") + '</div>')); return; }
       var age = Date.now() - p.t, left = SNAP_TTL - age;
       var r = "";
       r += kv("Coins", (p.list || []).length);
