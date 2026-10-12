@@ -397,7 +397,7 @@
         pessimistic: true,
         stopQty: stopQty,
         effect: eff,
-        note: "both legs were touched inside one bar. OHLC cannot say which came first, so the desk fills the STOP and reduces the take-profit by exactly what the stop took. This is a labelled choice, not a measurement."
+        note: window.DLI18N.t("58-orders.59c83401f2bb")
       };
     }
     out.note = "parent filled " + trim(filled) + " of " + trim(total) + " — each child armed at " + trim(armedQty) + ", sized to the fill and not to the order.";
@@ -642,7 +642,7 @@
     var all = priceOrder(req, { spread: 1, depth: 1, lat: 1, rej: 1 }, s);
     if (!base || !all) return null;
     if (base.cost == null || all.cost == null) {
-      return { ok: false, needsEnd: true, note: "part of this order did not fill, and without an end price the opportunity cost of that remainder cannot be priced. The desk will not price it at zero drift, because that reports a reject as a saving. Set an end price on the Build tab." };
+      return { ok: false, needsEnd: true, note: window.DLI18N.t("58-orders.54275d588001") };
     }
     var parts = [], i, on, r, sum = 0, k;
     for (i = 0; i < CHANNELS.length; i++) {
@@ -669,7 +669,7 @@
   function simulate(t) {
     var req = normalise(t);
     var p = P();
-    if (!p) return { ok: false, note: "the paper engine is not loaded, so this desk has no book to model — every figure below would be invented." };
+    if (!p) return { ok: false, note: window.DLI18N.t("58-orders.fa12ebcf9d31") };
     var book = bookOf(req.sym, req.quote, req.at, 1, 1);
     var flow = flowPerStep(req.sym);
     var mid = book ? book.mid : null;
@@ -927,42 +927,42 @@
   /* ---------------------------------------------------------------- Build */
   function paneBuild() {
     var t = ticket(), h = "";
-    h += '<div class="ord-note">Build one order, then price the things a ticket never shows you: the queue you joined, the wick that took you out, the child that was sized to a partial fill, and the part of the order that never filled at all. Nothing here touches the account.</div>';
+    h += ('<div class="ord-note">' + window.DLI18N.t("58-orders.7368983b8297") + '</div>');
     h += '<div class="dl-2 ord-form">';
     h += field("Symbol", '<input id="ordSym" class="dl-inp" type="text" value="' + esc(t.sym) + '" autocomplete="off" spellcheck="false" aria-label="Symbol">');
-    h += field("Side", '<select id="ordSide" class="dl-inp" aria-label="Side">' + sel([["buy", "Buy"], ["sell", "Sell"]], t.side) + '</select>');
+    h += field("Side", ('<select id="ordSide" class="dl-inp" aria-label="' + window.DLI18N.t("58-orders.630ef00b7c4f") + '">') + sel([["buy", "Buy"], ["sell", "Sell"]], t.side) + '</select>');
     h += field("Size (base)", '<input id="ordBase" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.base) + '" aria-label="Size in base units">');
     h += field("Iceberg clip", '<input id="ordClip" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.clip) + '" aria-label="Displayed clip size">');
     h += '</div>';
 
-    h += '<div class="ord-sub">Trailing stop</div><div class="dl-2 ord-form">';
-    h += field("Trail by", '<select id="ordTMode" class="dl-inp" aria-label="Trail mode">' + sel([["pct", "Percent"], ["abs", "Absolute offset"]], t.trailMode) + '</select>');
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.99bdef936602") + '</div><div class="dl-2 ord-form">');
+    h += field("Trail by", ('<select id="ordTMode" class="dl-inp" aria-label="' + window.DLI18N.t("58-orders.aefe0dfc60ce") + '">') + sel([["pct", "Percent"], ["abs", "Absolute offset"]], t.trailMode) + '</select>');
     h += field("Trail %", '<input id="ordTPct" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.trailPct) + '" aria-label="Trail percent">');
     h += field("Trail offset", '<input id="ordTAbs" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.trailAbs) + '" aria-label="Trail absolute offset">');
     h += field("Activation price", '<input id="ordAct" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.activation) + '" aria-label="Activation price">');
     h += '</div>';
-    h += '<div class="ord-rule">The stop is checked against the bar\'s <b>wick</b>, not its close, and the trail ratchets one way only. When a bar could both extend the trail and hit the stop, this desk takes the <b>pessimistic</b> branch: the stop fires at the level that existed before the bar. The engine\'s own trigger() does the opposite; both answers are printed on Simulate.</div>';
+    h += ('<div class="ord-rule">' + window.DLI18N.t("58-orders.fb361325ecd4") + '<b>' + window.DLI18N.t("58-orders.9702d9de8539") + '</b>' + window.DLI18N.t("58-orders.ef001c711387") + '<b>' + window.DLI18N.t("58-orders.a53503b0a4c1") + '</b>' + window.DLI18N.t("58-orders.e4540719c4fa") + '</div>');
 
-    h += '<div class="ord-sub">Bracket · parent fill</div><div class="dl-2 ord-form">';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.0f8dac002d7b") + '</div><div class="dl-2 ord-form">');
     h += field("Parent filled", '<input id="ordPF" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.parentFilled) + '" aria-label="Parent filled quantity">');
     h += field("Take-profit", '<input id="ordTP" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.tpPx || "") + '" aria-label="Take profit price">');
     h += field("Stop", '<input id="ordSL" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.slPx || "") + '" aria-label="Stop price">');
-    h += field("Parent cancelled", '<select id="ordPC" class="dl-inp" aria-label="Parent cancelled">' + sel([["", "No"], ["1", "Yes — cancel the children"]], t.parentCancelled ? "1" : "") + '</select>');
+    h += field("Parent cancelled", ('<select id="ordPC" class="dl-inp" aria-label="' + window.DLI18N.t("58-orders.0760931c36c7") + '">') + sel([["", "No"], ["1", "Yes — cancel the children"]], t.parentCancelled ? "1" : "") + '</select>');
     h += '</div>';
 
-    h += '<div class="ord-sub">Peg</div><div class="dl-2 ord-form">';
-    h += field("Anchor", '<select id="ordPegA" class="dl-inp" aria-label="Peg anchor">' + sel([["mid", "Mid"], ["bid", "Bid"], ["offer", "Offer"]], t.pegAnchor) + '</select>');
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.7743acb06502") + '</div><div class="dl-2 ord-form">');
+    h += field("Anchor", ('<select id="ordPegA" class="dl-inp" aria-label="' + window.DLI18N.t("58-orders.66a273ec807e") + '">') + sel([["mid", "Mid"], ["bid", "Bid"], ["offer", "Offer"]], t.pegAnchor) + '</select>');
     h += field("Offset (bp)", '<input id="ordPegO" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.pegOffBps) + '" aria-label="Peg offset in basis points">');
     h += field("Limit cap", '<input id="ordPegC" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.pegCapPx || "") + '" aria-label="Peg limit cap">');
-    h += field("Re-peg every", '<select id="ordPegE" class="dl-inp" aria-label="Re-peg cadence">' + opts([0, 2, 4, 8, 16], t.pegEvery, " steps") + '</select>');
+    h += field("Re-peg every", ('<select id="ordPegE" class="dl-inp" aria-label="' + window.DLI18N.t("58-orders.20b69c7b913a") + '">') + opts([0, 2, 4, 8, 16], t.pegEvery, " steps") + '</select>');
     h += '</div>';
 
-    h += '<div class="ord-sub">Implementation shortfall — the two prices only you know</div><div class="dl-2 ord-form">';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.8b70a2d9ed50") + '</div><div class="dl-2 ord-form">');
     h += field("Decision price", '<input id="ordDec" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.decisionPx || "") + '" aria-label="Decision price">');
     h += field("End price", '<input id="ordEnd" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.endPx || "") + '" aria-label="End price">');
     h += '</div>';
-    h += '<div class="ord-rule">Left blank, both default to the arrival mid — which makes the <b>delay</b> term structurally zero and the <b>opportunity</b> term price the unfilled remainder at zero drift. Neither is a claim that they cost nothing; it is the desk refusing to invent the one price it cannot see. Put in what was on the screen when you decided, and what it ended at, and the decomposition becomes real.</div>';
-    h += '<div class="ord-actions"><button class="go" id="ordGo">Simulate this order</button><span class="ord-sendnote">Pure arithmetic — no balance moves until you send from the Ledger tab.</span></div>';
+    h += ('<div class="ord-rule">' + window.DLI18N.t("58-orders.057d9730d5b3") + '<b>' + window.DLI18N.t("58-orders.6e16db102267") + '</b>' + window.DLI18N.t("58-orders.a9825837c44d") + '<b>' + window.DLI18N.t("58-orders.04b447783afe") + '</b>' + window.DLI18N.t("58-orders.0ab1b56ce1aa") + '</div>');
+    h += ('<div class="ord-actions"><button class="go" id="ordGo">' + window.DLI18N.t("58-orders.f35b0a38a9e8") + '</button><span class="ord-sendnote">' + window.DLI18N.t("58-orders.51a0f36bc274") + '</span></div>');
     return h;
   }
 
@@ -972,11 +972,11 @@
     if (!R.ok) return '<div class="ord-empty">' + esc(R.note) + '</div>';
     var q = R.req.quote, h = "";
     h += '<div class="ord-head"><span class="ord-pair">' + esc(R.req.side.toUpperCase()) + " " + fmtNum(R.req.base) + " " + esc(R.req.sym) + " / " + esc(q) +
-      '</span><span class="ord-mid">mid ' + fmtQuote(R.mid, q) + ' · resting at ' + fmtQuote(R.restPx, q) + ' · ' + (R.ahead == null ? "queue unknown" : fmtNum(R.ahead) + " " + esc(R.req.sym) + " ahead of you") + '</span></div>';
+      ('</span><span class="ord-mid">' + window.DLI18N.t("58-orders.0d402749749f") + '') + fmtQuote(R.mid, q) + ' · resting at ' + fmtQuote(R.restPx, q) + ' · ' + (R.ahead == null ? "queue unknown" : fmtNum(R.ahead) + " " + esc(R.req.sym) + " ahead of you") + '</span></div>';
 
     /* ---- iceberg */
-    h += '<div class="ord-sub">Iceberg — what the hiding costs</div>';
-    if (!R.iceberg) h += '<div class="ord-empty">No queue figure for this order, so no iceberg arithmetic. A missing figure stays missing.</div>';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.330218a5d7ad") + '</div>');
+    if (!R.iceberg) h += ('<div class="ord-empty">' + window.DLI18N.t("58-orders.8a733a751c66") + '</div>');
     else {
       var I = R.iceberg;
       h += '<div class="ord-kpis">' +
@@ -987,20 +987,20 @@
         kpi("Refresh penalty", fmtMs(I.penaltyMs) + (I.penaltyPct == null ? "" : " · +" + I.penaltyPct.toFixed(0) + "%"), "bad") +
         kpi("Clip entropy", I.entropy == null || I.entropy.score == null ? "—" : I.entropy.bits.toFixed(2) + " bits · signature " + (I.entropy.score * 100).toFixed(0) + "%", I.entropy && I.entropy.score != null && I.entropy.score > 0.8 ? "bad" : "") +
         '</div>';
-      h += '<div class="ord-legend">Every refresh re-joins a replenished level, so it waits the same ' + (R.ahead == null ? "queue" : fmtNum(R.ahead) + " " + esc(R.req.sym)) + ' again. The penalty is the sum over clips minus the steps one resting order of the full size would have taken. Clip entropy is Shannon\'s H over the distinct clip sizes: a signature of 100% means every clip was identical and the iceberg is legible on the tape.</div>';
+      h += ('<div class="ord-legend">' + window.DLI18N.t("58-orders.b9005d4ef05a") + '') + (R.ahead == null ? "queue" : fmtNum(R.ahead) + " " + esc(R.req.sym)) + ('' + window.DLI18N.t("58-orders.c4cdee2185fe") + '</div>');
       if (R.clipCurve && R.clipCurve.length) {
-        h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Clips</th><th class="r">Clip size</th><th class="r">Displayed</th><th class="r">Penalty</th><th class="r">Signature</th></tr></thead><tbody>';
+        h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("58-orders.4b782ddc92a5") + '</th><th class="r">' + window.DLI18N.t("58-orders.3915dc6884f3") + '</th><th class="r">' + window.DLI18N.t("58-orders.c9a4af5f6825") + '</th><th class="r">' + window.DLI18N.t("58-orders.241c75409278") + '</th><th class="r">' + window.DLI18N.t("58-orders.f1a73e2204a1") + '</th></tr></thead><tbody>');
         var ci;
         for (ci = 0; ci < R.clipCurve.length; ci++) {
           var cc = R.clipCurve[ci];
           h += '<tr' + (cc.n === I.clips ? ' data-best="1"' : '') + '><td>' + cc.n + '</td><td class="r">' + fmtNum(cc.clip) + '</td><td class="r">' + fmtPct(cc.displayFrac, 1) + '</td><td class="r">' + fmtMs(cc.penaltyMs) + '</td><td class="r">' + (cc.score == null ? "—" : (cc.score * 100).toFixed(0) + "%") + '</td></tr>';
         }
-        h += '</tbody></table></div><div class="ord-legend">What a bigger clip buys you: fewer refreshes, less time in the queue — and a larger print every time. The row you built is highlighted.</div>';
+        h += ('</tbody></table></div><div class="ord-legend">' + window.DLI18N.t("58-orders.f35243d5a9f4") + '</div>');
       }
     }
 
     /* ---- trailing */
-    h += '<div class="ord-sub">Trailing stop — the wick, and the tie-break</div>';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.c915b463d402") + '</div>');
     var T = R.trail, O = R.optimistic;
     h += '<div class="ord-kpis">' +
       kpi("Pessimistic", T && T.hit ? "stopped at " + fmtQuote(T.px, q) + " on bar " + (T.index + 1) : "never stopped · trail resting at " + fmtQuote(T && T.resting, q)) +
@@ -1009,11 +1009,11 @@
       kpi("Tie-break bar", T && T.tie ? "yes — this bar could have done both" : "no", T && T.tie ? "bad" : "") +
       '</div>';
     h += '<div class="ord-rule">' + (T && T.tie
-      ? 'The bar that stopped you could also have extended the trail. This desk fires the stop at the level that existed <b>before</b> the bar — the pessimistic branch — and the optimistic answer beside it is what the engine\'s own trigger() would have given. Intrabar order is not in OHLC, so neither is a measurement.'
+      ? ('' + window.DLI18N.t("58-orders.d0c2308507ec") + '<b>' + window.DLI18N.t("58-orders.6db7d803e74f") + '</b>' + window.DLI18N.t("58-orders.bb7150dcb0b7") + '')
       : 'No bar in this series could have both extended the trail and hit the stop, so the two resolutions agree here. They will not always.') + '</div>';
 
-    h += '<div class="ord-sub">Path dependence — the same series, three bar sizes</div>';
-    h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Bar size</th><th class="r">Bars</th><th>Outcome</th><th class="r">Price</th></tr></thead><tbody>';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.b14501319a92") + '</div>');
+    h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("58-orders.7ee027db5f6a") + '</th><th class="r">' + window.DLI18N.t("58-orders.f2c3526915d3") + '</th><th>' + window.DLI18N.t("58-orders.4e80abb5b146") + '</th><th class="r">' + window.DLI18N.t("58-orders.93c91c851e7a") + '</th></tr></thead><tbody>');
     var si;
     for (si = 0; si < R.scales.length; si++) {
       var sc = R.scales[si];
@@ -1022,12 +1022,12 @@
     h += '</tbody></table></div>';
     h += '<div class="ord-rule ' + (R.scalesAgree ? "" : "ord-dis") + '">' + (R.scalesAgree
       ? 'All three bar sizes agree on this series. That is luck, not a property: coarsening merges the bar that ratcheted the trail with the bar that dipped, and under the pessimistic rule the merged bar is tested against the OLD stop.'
-      : 'The three bar sizes <b>disagree</b>. Coarsening merged the bar that ratcheted the trail with the bar that dipped, and the merged bar is tested against the stop that existed before it — which the dip did not reach. Same prices, same rule, different answer. That disagreement is the honest result, not a bug to tune away.') + '</div>';
+      : ('' + window.DLI18N.t("58-orders.b888c36d642a") + '<b>' + window.DLI18N.t("58-orders.67656def000f") + '</b>' + window.DLI18N.t("58-orders.776596d3a7b6") + '')) + '</div>';
 
     /* ---- bracket */
-    h += '<div class="ord-sub">Bracket · OTO · OTOCO</div>';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.95e92fe100f4") + '</div>');
     var B = R.bracket;
-    if (!B) h += '<div class="ord-empty">No bracket to arm.</div>';
+    if (!B) h += ('<div class="ord-empty">' + window.DLI18N.t("58-orders.2eee82a908e8") + '</div>');
     else {
       h += '<div class="ord-kpis">' +
         kpi("Parent", fmtNum(B.filled) + " of " + fmtNum(B.total) + (B.ratio == null ? "" : " · " + fmtPct(B.ratio, 1))) +
@@ -1044,8 +1044,8 @@
     }
 
     /* ---- peg */
-    h += '<div class="ord-sub">Peg — the queue cost of tracking</div>';
-    if (!R.peg) h += '<div class="ord-empty">No queue figure, so no peg arithmetic.</div>';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.3c1c0ecc6279") + '</div>');
+    if (!R.peg) h += ('<div class="ord-empty">' + window.DLI18N.t("58-orders.8b3fc8b90e15") + '</div>');
     else {
       var G = R.peg;
       h += '<div class="ord-kpis">' +
@@ -1054,7 +1054,7 @@
         kpi("Re-pegs", G.repegs + "") +
         kpi("Queue cost of re-pegging", fmtMs(G.repegMs), G.repegs > 0 ? "bad" : "") +
         '</div>';
-      h += '<div class="ord-legend">' + esc(G.note) + ' Each re-peg is a cancel-replace, which is a new order at the back of a replenished level — so the cost is the re-peg count times one full queue wait. A fast cadence tracks the market and never fills; a slow one fills and drifts.</div>';
+      h += '<div class="ord-legend">' + esc(G.note) + ('' + window.DLI18N.t("58-orders.bcbae51e1b46") + '</div>');
     }
     h += assumptionStrip();
     return h;
@@ -1069,14 +1069,14 @@
     var t = ticket(), R = simulate(null), h = "";
     if (!R.ok) return '<div class="ord-empty">' + esc(R.note) + '</div>';
     var q = R.req.quote;
-    h += '<div class="ord-note">One dial moves spread, depth, latency and reject rate together, because under real load they never move alone. The table below re-prices the same order with exactly one channel moved so you can see which of the four actually cost you — and names the interaction it cannot assign.</div>';
+    h += ('<div class="ord-note">' + window.DLI18N.t("58-orders.4f50078e0f69") + '</div>');
     h += '<div class="dl-2 ord-form">';
-    h += field("Stress", '<select id="ordStress" class="dl-inp" aria-label="Stress level">' + opts([0, 0.2, 0.4, 0.6, 0.8, 1], t.stress, "") + '</select>');
-    h += field("Venue", '<select id="ordVenue" class="dl-inp" aria-label="Venue">' + sel(venueOpts(), t.venue) + '</select>');
-    h += field("30-day volume", '<select id="ordVol" class="dl-inp" aria-label="30 day volume">' + sel(volOpts(), String(t.vol30 || 0)) + '</select>');
+    h += field("Stress", ('<select id="ordStress" class="dl-inp" aria-label="' + window.DLI18N.t("58-orders.5193bb0193a4") + '">') + opts([0, 0.2, 0.4, 0.6, 0.8, 1], t.stress, "") + '</select>');
+    h += field("Venue", ('<select id="ordVenue" class="dl-inp" aria-label="' + window.DLI18N.t("58-orders.aea1b15df626") + '">') + sel(venueOpts(), t.venue) + '</select>');
+    h += field("30-day volume", ('<select id="ordVol" class="dl-inp" aria-label="' + window.DLI18N.t("58-orders.d177e16a4688") + '">') + sel(volOpts(), String(t.vol30 || 0)) + '</select>');
     h += field("Orders / second", '<input id="ordRate" class="dl-inp" type="number" min="0" step="any" value="' + esc(t.ratePerSec) + '" aria-label="Order rate per second">');
     h += '</div>';
-    h += '<div class="ord-actions"><button class="go" id="ordStressGo">Re-price at this stress</button></div>';
+    h += ('<div class="ord-actions"><button class="go" id="ordStressGo">' + window.DLI18N.t("58-orders.ea2363685535") + '</button></div>');
 
     var pf = stressProfile(R.req.stress);
     h += '<div class="ord-kpis">' +
@@ -1087,31 +1087,31 @@
       kpi("Throttle cap", pf.throttleCap + " /s") +
       '</div>';
 
-    h += '<div class="ord-sub">Latency by venue — shifted exponential, hashed, never random</div>';
-    h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Venue</th><th class="r">Calm mean</th><th class="r">Stressed mean</th><th class="r">This order\'s draw</th><th>Accepted</th></tr></thead><tbody>';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.22075996e62a") + '</div>');
+    h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("58-orders.aea1b15df626") + '</th><th class="r">' + window.DLI18N.t("58-orders.943dae369794") + '</th><th class="r">' + window.DLI18N.t("58-orders.27d014b697ac") + '</th><th class="r">' + window.DLI18N.t("58-orders.4703c32a8a7d") + '</th><th>' + window.DLI18N.t("58-orders.a00fb0c50741") + '</th></tr></thead><tbody>');
     var i;
     for (i = 0; i < R.latency.length; i++) {
       var L = R.latency[i];
-      h += '<tr><td class="ord-n">' + esc(vname(L.key)) + '</td><td class="r">' + fmtMs(L.calmMs) + '</td><td class="r">' + fmtMs(L.stressMs) + '</td><td class="r">' + fmtMs(L.drawMs) + '</td><td>' + (L.rejected ? '<span class="ord-bad">rejected</span>' : "accepted") + '</td></tr>';
+      h += '<tr><td class="ord-n">' + esc(vname(L.key)) + '</td><td class="r">' + fmtMs(L.calmMs) + '</td><td class="r">' + fmtMs(L.stressMs) + '</td><td class="r">' + fmtMs(L.drawMs) + '</td><td>' + (L.rejected ? ('<span class="ord-bad">' + window.DLI18N.t("58-orders.20cd938a2ea6") + '</span>') : "accepted") + '</td></tr>';
     }
     h += '</tbody></table></div>';
-    h += '<div class="ord-legend">Latency is floor + excess × (−ln(1 − u)), with u the top 24 bits of an FNV-1a hash of (venue | order id | tick). Same inputs, same millisecond, forever. The floors and excess means are this desk\'s assumption — only the AMM\'s floor has a source, one block off the engine\'s BLOCK_SECONDS (' + blockSecs() + ' s). Under stress the excess mean is multiplied by ' + pf.latMult.toFixed(2) + '.</div>';
+    h += ('<div class="ord-legend">' + window.DLI18N.t("58-orders.a13bbdec6cf5") + '') + blockSecs() + ' s). Under stress the excess mean is multiplied by ' + pf.latMult.toFixed(2) + '.</div>';
 
-    h += '<div class="ord-sub">Fees — the engine\'s published rate, times a 30-day-volume tier</div>';
-    h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Venue</th><th class="r">Published taker</th><th class="r">Your taker</th><th class="r">Published maker</th><th class="r">Your maker</th><th class="r">Rebate</th></tr></thead><tbody>';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.62695b840951") + '</div>');
+    h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("58-orders.aea1b15df626") + '</th><th class="r">' + window.DLI18N.t("58-orders.0fff0e409810") + '</th><th class="r">' + window.DLI18N.t("58-orders.3badfdd1305b") + '</th><th class="r">' + window.DLI18N.t("58-orders.1ae80e4d731a") + '</th><th class="r">' + window.DLI18N.t("58-orders.a83ce4d361b8") + '</th><th class="r">' + window.DLI18N.t("58-orders.606d230ed1cc") + '</th></tr></thead><tbody>');
     for (i = 0; i < R.fees.length; i++) {
       var F = R.fees[i];
       h += '<tr' + (F.key === R.req.venue ? ' data-best="1"' : '') + '><td class="ord-n">' + esc(F.name) + '</td><td class="r">' + fmtPct(F.baseTaker) + '</td><td class="r">' + fmtPct(F.taker) + '</td><td class="r">' + fmtPct(F.baseMaker) + '</td><td class="r">' + fmtPct(F.maker) + '</td><td class="r">' + (F.rebate == null ? "—" : fmtPct(F.rebate)) + '</td></tr>';
     }
     h += '</tbody></table></div>';
-    h += '<div class="ord-legend">The published columns are read from the engine\'s own VENUES table — this desk keeps no second copy of any schedule. The tier is a multiplier on that base and is an assumption (Method tab). <b>A rebate is a negative maker rate, and no venue in the engine\'s table publishes one</b>, so that column is empty rather than invented.</div>';
+    h += ('<div class="ord-legend">' + window.DLI18N.t("58-orders.a0769bd6b727") + '<b>' + window.DLI18N.t("58-orders.6d1a3e36778d") + '</b>' + window.DLI18N.t("58-orders.b76b87eddaf7") + '</div>');
 
     /* ---- attribution */
-    h += '<div class="ord-sub">Implementation shortfall — and which channel cost it</div>';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.387786c71e95") + '</div>');
     var SF = R.shortfall, A = R.attribution;
-    if (!SF) h += '<div class="ord-empty">Nothing filled at this size and stress, so there is no shortfall to decompose.</div>';
+    if (!SF) h += ('<div class="ord-empty">' + window.DLI18N.t("58-orders.44ee7cb0a244") + '</div>');
     else {
-      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Component</th><th class="r">Cost (' + esc(q) + ')</th><th class="r">Share</th><th>What it is</th></tr></thead><tbody>';
+      h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("58-orders.ce54f0e22dbb") + '</th><th class="r">' + window.DLI18N.t("58-orders.168038b4a502") + '') + esc(q) + (')</th><th class="r">' + window.DLI18N.t("58-orders.29887a5ff984") + '</th><th>' + window.DLI18N.t("58-orders.1f36becc3aa7") + '</th></tr></thead><tbody>');
       var comps = [
         ["Delay", SF.delay, "the market moved between your decision price and the price when your order arrived"],
         ["Impact", SF.impact, "your own order walking the book away from the arrival price"],
@@ -1121,24 +1121,24 @@
       for (i = 0; i < comps.length; i++) {
         h += '<tr><td class="ord-n">' + esc(comps[i][0]) + '</td><td class="r">' + fmtQuote(comps[i][1], q) + '</td><td class="r">' + (SF.totalCost && comps[i][1] != null ? (comps[i][1] / SF.totalCost * 100).toFixed(1) + "%" : "—") + '</td><td class="ord-why">' + esc(comps[i][2]) + '</td></tr>';
       }
-      h += '<tr data-best="1"><td class="ord-n">Total</td><td class="r">' + fmtQuote(SF.totalCost, q) + '</td><td class="r">' + (SF.bps == null ? "—" : fmtBps(SF.bps)) + '</td><td class="ord-why">' + (SF.totalCost == null ? "withheld — the opportunity cost of the unfilled remainder cannot be priced without an end price." : "delay + impact + fee + opportunity, and the four sum to it by construction — the identity is asserted, not assumed (residual " + SF.identity.toExponential(1) + ").") + '</td></tr>';
+      h += ('<tr data-best="1"><td class="ord-n">' + window.DLI18N.t("58-orders.c9b3c38247f7") + '</td><td class="r">') + fmtQuote(SF.totalCost, q) + '</td><td class="r">' + (SF.bps == null ? "—" : fmtBps(SF.bps)) + '</td><td class="ord-why">' + (SF.totalCost == null ? "withheld — the opportunity cost of the unfilled remainder cannot be priced without an end price." : "delay + impact + fee + opportunity, and the four sum to it by construction — the identity is asserted, not assumed (residual " + SF.identity.toExponential(1) + ").") + '</td></tr>';
       h += '</tbody></table></div>';
-      h += '<div class="ord-legend">Perold, <i>The Implementation Shortfall: Paper Versus Reality</i> (Journal of Portfolio Management, 1988). Filled ' + fmtNum(SF.filled) + ' of ' + fmtNum(SF.total) + '; ' + fmtNum(SF.unfilled) + ' never filled.' + (SF.needsEnd ? ' <b>That remainder has no end price</b>, so its opportunity cost is missing rather than set to zero — pricing it at no drift would report a reject as a saving. Set an end price on the Build tab.' : ' The remainder is charged as opportunity cost rather than quietly dropped.') + '</div>';
+      h += ('<div class="ord-legend">' + window.DLI18N.t("58-orders.8ac3395d7b39") + '<i>' + window.DLI18N.t("58-orders.4fd7d7be0fc1") + '</i>' + window.DLI18N.t("58-orders.426113d221d8") + '') + fmtNum(SF.filled) + ' of ' + fmtNum(SF.total) + '; ' + fmtNum(SF.unfilled) + ' never filled.' + (SF.needsEnd ? (' <b>' + window.DLI18N.t("58-orders.0f11ce83975d") + '</b>' + window.DLI18N.t("58-orders.a823ab875933") + '') : ' The remainder is charged as opportunity cost rather than quietly dropped.') + '</div>';
     }
 
     if (A && !A.ok) {
-      h += '<div class="ord-sub">Attribution — one channel at a time</div>';
+      h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.76a544ef98d2") + '</div>');
       h += '<div class="ord-empty">' + esc(A.note) + '</div>';
     } else if (A) {
-      h += '<div class="ord-sub">Attribution — one channel at a time</div>';
-      h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>Channel</th><th class="r">Cost it added (' + esc(q) + ')</th><th class="r">Share of the dial</th></tr></thead><tbody>';
+      h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.76a544ef98d2") + '</div>');
+      h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("58-orders.ce4683e7013a") + '</th><th class="r">' + window.DLI18N.t("58-orders.7f5077dfa568") + '') + esc(q) + (')</th><th class="r">' + window.DLI18N.t("58-orders.737519222b98") + '</th></tr></thead><tbody>');
       for (i = 0; i < A.parts.length; i++) {
         h += '<tr><td class="ord-n">' + esc(A.parts[i].label) + '</td><td class="r">' + fmtQuote(A.parts[i].cost, q) + '</td><td class="r">' + (A.total ? (A.parts[i].cost / A.total * 100).toFixed(1) + "%" : "—") + '</td></tr>';
       }
-      h += '<tr><td class="ord-n">Interaction (residual)</td><td class="r">' + fmtQuote(A.residual, q) + '</td><td class="r">' + (A.total ? (A.residual / A.total * 100).toFixed(1) + "%" : "—") + '</td></tr>';
-      h += '<tr data-best="1"><td class="ord-n">Total cost of the dial</td><td class="r">' + fmtQuote(A.total, q) + '</td><td class="r">100.0%</td></tr>';
+      h += ('<tr><td class="ord-n">' + window.DLI18N.t("58-orders.30ae5a230cad") + '</td><td class="r">') + fmtQuote(A.residual, q) + '</td><td class="r">' + (A.total ? (A.residual / A.total * 100).toFixed(1) + "%" : "—") + '</td></tr>';
+      h += ('<tr data-best="1"><td class="ord-n">' + window.DLI18N.t("58-orders.ff03e3b6263b") + '</td><td class="r">') + fmtQuote(A.total, q) + '</td><td class="r">100.0%</td></tr>';
       h += '</tbody></table></div>';
-      h += '<div class="ord-legend">Each channel is priced with exactly one thing moved and the other three calm, so the four figures are FIRST-ORDER effects. They do not add to the total on their own — wider spread hurts more when depth is thinner — and the gap is printed as the interaction rather than smeared across the four. It is not a Shapley value and the desk does not call it one.</div>';
+      h += ('<div class="ord-legend">' + window.DLI18N.t("58-orders.c46bf250972b") + '</div>');
     }
     h += assumptionStrip();
     return h;
@@ -1153,10 +1153,10 @@
   /* ---------------------------------------------------------------- Ledger */
   function paneLedger() {
     var rows = log(), h = "", i, e;
-    h += '<div class="ord-note">A simulation is a question. This is where it costs you something — and it goes through the same execFill the trading ticket uses, on paper money, at a price re-taken now rather than remembered from the simulation.</div>';
-    h += '<div class="ord-actions"><button class="go" id="ordSend">Send the simulated order as a paper fill</button></div>';
-    if (!rows.length) return h + '<div class="ord-empty">Nothing sent yet. Every send stores its shortfall decomposition, so this tab becomes the scoreboard for the arithmetic above.</div>';
-    h += '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>When</th><th>Order</th><th>Venue</th><th class="r">Filled</th><th class="r">Avg</th><th class="r">Delay</th><th class="r">Impact</th><th class="r">Fee</th><th class="r">Opp.</th><th class="r">Total</th></tr></thead><tbody>';
+    h += ('<div class="ord-note">' + window.DLI18N.t("58-orders.52475b848f39") + '</div>');
+    h += ('<div class="ord-actions"><button class="go" id="ordSend">' + window.DLI18N.t("58-orders.22edefa7d006") + '</button></div>');
+    if (!rows.length) return h + ('<div class="ord-empty">' + window.DLI18N.t("58-orders.ba7e9c7e0d71") + '</div>');
+    h += ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>' + window.DLI18N.t("58-orders.cf9c7aa24a26") + '</th><th>' + window.DLI18N.t("58-orders.6be090825c99") + '</th><th>' + window.DLI18N.t("58-orders.aea1b15df626") + '</th><th class="r">' + window.DLI18N.t("58-orders.3a1bc53ffcdf") + '</th><th class="r">' + window.DLI18N.t("58-orders.41835ff14ac6") + '</th><th class="r">' + window.DLI18N.t("58-orders.fd9b6df3cdbc") + '</th><th class="r">' + window.DLI18N.t("58-orders.d1f23f0d1361") + '</th><th class="r">' + window.DLI18N.t("58-orders.f842c3e1858d") + '</th><th class="r">' + window.DLI18N.t("58-orders.35ad5041aabb") + '</th><th class="r">' + window.DLI18N.t("58-orders.c9b3c38247f7") + '</th></tr></thead><tbody>');
     for (i = 0; i < rows.length; i++) {
       e = rows[i];
       var s = e.shortfall;
@@ -1172,24 +1172,24 @@
 
   /* ---------------------------------------------------------------- Method */
   function paneMethod() {
-    var h = '<div class="ord-note">Everything this desk does, in plain language. If a number on any tab cannot be traced to one of these paragraphs, it should not be on the screen.</div>';
+    var h = ('<div class="ord-note">' + window.DLI18N.t("58-orders.1c3677bef725") + '</div>');
     var i;
     h += '<div class="ord-method">';
     for (i = 0; i < METHOD.length; i++) h += '<div class="ord-mrow"><b>' + esc(METHOD[i][0]) + '</b><span>' + esc(METHOD[i][1]) + '</span></div>';
     h += '</div>';
-    h += '<div class="ord-sub">What is assumed, and what is measured</div><ul class="ord-assume">';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.72575be9ba5c") + '</div><ul class="ord-assume">');
     for (i = 0; i < ASSUMPTIONS.length; i++) h += '<li>' + esc(ASSUMPTIONS[i]) + '</li>';
     h += '</ul>';
-    h += '<div class="ord-sub">What this desk deliberately does not do</div><ul class="ord-assume">';
-    h += '<li>It does not fork market, limit, stop, stop-limit, OCO, TWAP, DCA or grid. The app already ships those and they stay where they are — this desk only prices what they cost in the queue, the wick and the millisecond.</li>';
-    h += '<li>It does not model a venue\'s real matching engine, its real queue, or its real latency. Every one of those is the app\'s own model, named in the list above.</li>';
-    h += '<li>It does not claim an intrabar order of events. OHLC does not carry one, which is exactly why the tie-break is a stated rule and not a measurement.</li>';
+    h += ('<div class="ord-sub">' + window.DLI18N.t("58-orders.27e28ac8b975") + '</div><ul class="ord-assume">');
+    h += ('<li>' + window.DLI18N.t("58-orders.209049bfc7f4") + '</li>');
+    h += ('<li>' + window.DLI18N.t("58-orders.28b2c46e0949") + '</li>');
+    h += ('<li>' + window.DLI18N.t("58-orders.9d2c2627569a") + '</li>');
     h += '</ul>';
     return h;
   }
 
   function assumptionStrip() {
-    return '<div class="ord-strip">The queue model is the app\'s own, not a venue\'s. Latency and fee tiers are modelled; the base fee schedules are the engine\'s published ones. The trailing stop\'s tie-break is a stated rule, not a measurement. Full detail on the Method tab.</div>';
+    return ('<div class="ord-strip">' + window.DLI18N.t("58-orders.ffbd903af6b3") + '</div>');
   }
 
   /* ---------------------------------------------------------------- wiring */
@@ -1259,8 +1259,8 @@
     var el = null;
     try {
       el = C.open("dlOrd", {
-        title: "⌁ Order Lab",
-        sub: "Iceberg, trailing stops, brackets and pegs — priced where the cost actually hides",
+        title: window.DLI18N.t("58-orders.ab256d988180"),
+        sub: window.DLI18N.t("58-orders.25170e7ff68b"),
         tabs: [["build", "Build"], ["sim", "Simulate"], ["stress", "Stress"], ["ledger", "Ledger"], ["method", "Method"]],
         onTab: onTab
       }, tab || "build");
