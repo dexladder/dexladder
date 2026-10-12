@@ -4,9 +4,9 @@ on:
   push:
     branches: [main]
   pull_request:
+  workflow_dispatch:
   schedule:
     - cron: "17 4 * * *"
-  workflow_dispatch:
 
 jobs:
   reproducible-build:
@@ -45,6 +45,8 @@ jobs:
           (cd test && npx playwright install --with-deps chromium)
           python3 test/gate-build-check.py
           python3 tools/layer-index.py --check
+          node tools/generate-i18n.cjs --check
+          node test/gate-i18n.js
           node test/gate-aria.js dist/index.html
           node test/gate-enhancements.js dist/index.html
           node test/gate-running-hash.js dist/index.html

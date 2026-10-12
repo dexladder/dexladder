@@ -6,6 +6,7 @@ Output: dist/index.html (v154)  — v153 + exact text patches (manifest below, e
 Deterministic: same inputs → same bytes. Prints the SHA-256 of the output.
 """
 import hashlib, os, re, sys, glob
+from buildlib.i18n_source import english_source
 
 # v162 · Every gate in this file is a bare `assert`: the input-hash lock, ~250
 # patch-count checks, the dead-CSS accounting and the worker version lock. Python
@@ -1212,7 +1213,7 @@ assert out.count('Biggest 24h moves · whole ladder') == 1 and out.count('Top 30
 assert out.count('function heatState(s)') == 1 and out.count('heatState("empty")') == 2 and out.count('heatState("ok")') == 1, \
     'the heatmap no longer reports whether it drew anything'
 # the lens half of the same panel (layers/39b-ledgers.js) states it too — no data, no blank frame
-_lens = open(os.path.join(ROOT, 'layers', '39b-ledgers.js'), encoding='utf-8').read()
+_lens = english_source(os.path.join(ROOT, 'layers', '39b-ledgers.js'))
 assert _lens.count('function heatState(s)') == 1 and _lens.count('heatState("empty")') >= 5, \
     'the heatmap lenses no longer declare an empty state — an empty lens would paint nothing'
 assert 'window.DLHEATX = { paint: lensPaint }' in _lens, \
@@ -1486,7 +1487,7 @@ assert out.count('icoFg(c.color)') == 6, 'not every glyph site takes its foregro
 
 # ---- the layer halves. layers/*.js are appended after every assert in this file runs, so
 #      they are read from disk here and guarded again, at runtime, by test/gate154.js. -----
-_core = open(os.path.join(ROOT, 'layers', '20-core.js'), encoding='utf-8').read()
+_core = english_source(os.path.join(ROOT, 'layers', '20-core.js'))
 assert _core.count('var PROV = { now: 0 };') == 1 and _core.count('function provRefresh()') == 1, \
     'the provenance chip has no shared clock — two surfaces can print two ages for one timestamp again'
 assert _core.count('age < 6e4 ? "live"') == 1, \
@@ -1499,7 +1500,7 @@ _pw = _core[_core.index('var PROV = { now: 0 };'):_core.index('function coinsAll
 assert not re.search(r'setInterval|requestAnimationFrame|new\s+(Mutation|Intersection|Resize)Observer\b', _pw), \
     'the freshness refresh added a timer or an observer — it must ride the paths that already run'
 
-_snap = open(os.path.join(ROOT, 'layers', '21-snapshot.js'), encoding='utf-8').read()
+_snap = english_source(os.path.join(ROOT, 'layers', '21-snapshot.js'))
 assert _snap.count('function contested(f)') == 1 and _snap.count('function witText(') == 1 \
    and _snap.count('function dis(f, what)') == 1 and _snap.count('function disagreements()') == 1, \
     'the snapshot computes a disagreement it cannot render'
@@ -1539,7 +1540,7 @@ assert not re.search(r'setInterval\(|requestAnimationFrame\(|new\s+(Mutation|Int
     'the snapshot layer added a timer, loop or observer'
 
 # --- P1 · Polymarket asked for 60 events (7.14 MB in ONE request) and rendered at most 30.
-_odds = open(os.path.join(ROOT, 'layers', '36-odds.js'), encoding='utf-8').read()
+_odds = english_source(os.path.join(ROOT, 'layers', '36-odds.js'))
 assert 'limit=60' not in _odds, 'the odds board asks for twice the events it can render'
 assert _odds.count('&limit=30') == 1 and _odds.count('list.slice(0, 30)') == 1, \
     'the odds request and the odds render disagree about how many events there are'
@@ -1663,7 +1664,7 @@ assert '.dl154 .dn,.dl-tbl .dn,.dl-row .dn{color:var(--down)}' in _csslayer_f an
        '.dx-slot .dn{color:var(--down)}' in _csslayer_f, \
     'the down marks are back on a Night-only literal that reads 2.5 on a Day panel'
 # the runtime sweep's second half: a light foreground on a rule with no opaque background
-_dsurf = open(os.path.join(ROOT, 'layers', 'zz-day-surfaces.js'), encoding='utf-8').read()
+_dsurf = english_source(os.path.join(ROOT, 'layers', 'zz-day-surfaces.js'))
 assert _dsurf.count('function dayFg(') == 1 and _dsurf.count('function darkenTo(') == 1, \
     'the Day sweep repairs a foreground only when the same rule paints a dark background — '\
     'a rule that sets ONLY a colour is walked straight past again'
@@ -1688,7 +1689,7 @@ assert '|kn-agree|' in _dsurf, \
 assert "if (bg && /var\\(/i.test(stripWashes(bg))) continue;" in _dsurf, \
     'the sweep re-casts a foreground whose rule paints a THEMED background — that pairing '\
     'inverts with the mode and is already answered'
-assert open(os.path.join(ROOT, 'layers', '40-dexai.js'), encoding='utf-8').read().count(
+assert english_source(os.path.join(ROOT, 'layers', '40-dexai.js')).count(
     'color:var(--muted,#8fa4c4)') == 3, \
     'the AI console writes its notes with an inline literal no stylesheet can reach (2.54 in Day)'
 assert _dsurf.count('function stripWashes(') == 1 and 'darkness(stripWashes(bg))' in _dsurf, \
@@ -1708,7 +1709,7 @@ assert out.count('.pairlbl{font-weight:700;font-size:14px;letter-spacing:-.01em;
 #      scroller clipped at 388px and PRICE, VALUE and 24H sat outside the card. A card with
 #      a hard minimum wider than a column does not belong in the columns — it stays on the
 #      full-width head, where 640px fits inside 1298px with room to spare.
-_cols = open(os.path.join(ROOT, 'layers', 'zzz-columns.js'), encoding='utf-8').read()
+_cols = english_source(os.path.join(ROOT, 'layers', 'zzz-columns.js'))
 assert _cols.count('function tooWideForColumn(') == 1 and _cols.count('tooWideForColumn(') == 2, \
     'the masonry no longer keeps a card wider than a column out of the columns'
 assert _cols.count('function minNeed(') == 1 and 'getComputedStyle(n[i]).minWidth' in _cols, \
@@ -1722,7 +1723,7 @@ assert not re.search(r'setInterval\(|requestAnimationFrame\(|new\s+(Mutation|Int
 #      with no guard, so on a device where eraRecord() has bailed (fewer than 50 coins loaded)
 #      keys is empty, keys[-1] is undefined, and the sheet read "week of undefined (latest)"
 #      over an empty table with a scrubber whose max was -1. Missing data reads "Unavailable".
-_led = open(os.path.join(ROOT, 'layers', '39b-ledgers.js'), encoding='utf-8').read()
+_led = english_source(os.path.join(ROOT, 'layers', '39b-ledgers.js'))
 assert _led.count('      if (!keys.length) {\n        body.innerHTML') == 1, \
     'eraSheet() paints an index into an empty key list again'
 assert _led.count('<span id="dlEraLbl">Unavailable</span>') == 1, \
@@ -1834,7 +1835,7 @@ assert '#dlGstat' not in re.sub(r'/\*[\s\S]*?\*/', '', _css_g), \
 assert ':has(' not in re.sub(r'/\*[\s\S]*?\*/', '', _css_g), \
     'a :has() selector is back in the layer stylesheet — anchored at the root over a 2.7MB '\
     'document it re-runs on every mutation and took the renderer down in the render walk'
-_snap_g = open(os.path.join(ROOT, 'layers', '21-snapshot.js'), encoding='utf-8').read()
+_snap_g = english_source(os.path.join(ROOT, 'layers', '21-snapshot.js'))
 assert _snap_g.count('function stampRoute()') == 1 and _snap_g.count('w.__dlroute = 1') == 1, \
     'the route is no longer stamped on <html>, so the rule above is aimed at nothing'
 assert _snap_g.count('function uniSwitch(which)') == 1 and _snap_g.count('uniSwitch("cb")') == 1 \
@@ -1867,7 +1868,7 @@ assert '#mktpro .mx-glob{\n  display:grid!important;grid-template-columns:repeat
 # G3 · a band of sibling cards is a row, and a row ends on one line.
 assert '#mktpro .mx-top,.pulse,.front-pkg,.mkt-hero,.sec-grid,.cbb-venues{align-items:stretch!important}' in _css_g, \
     'the card-band family lost the rows the rhythm audit measured ragged'
-_bal = open(os.path.join(ROOT, 'layers', 'zz-layout-balance.js'), encoding='utf-8').read()
+_bal = english_source(os.path.join(ROOT, 'layers', 'zz-layout-balance.js'))
 assert "g.style.alignItems = g.style.alignItems || 'stretch';" in _bal, \
     'the packer chooses the column count and then declines to answer for the bottom edge again'
 assert "|| 'start';" not in _bal, 'the packer top-aligns a card band again'
@@ -2037,6 +2038,7 @@ for f in layers:
     body = open(f, encoding='utf-8').read()
     assert '</script' not in body, f'layer {f} contains </script'
     m = re.search(r'//@inject-before:\s*(.+)', body)
+    body = re.sub(r'^[ \t]*//@inject-before:[^\n]*\n?', '', body, flags=re.M)
     blk = '<script>\n' + body + '\n</script>'
     if m: early.append((m.group(1).strip(), blk))
     else: blocks.append(blk)
