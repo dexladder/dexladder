@@ -616,8 +616,8 @@
       rows.push(line(wt2, C_GOLD, 1.2, 0, "WT2"));
       return {
         rows: rows, zero: true,
-        levels: [{ v: 60, c: C_DN, dash: 4, label: "OB" }, { v: 53, c: C_DN, dash: 2 }, { v: 0, dash: 2 },
-          { v: -53, c: C_UP, dash: 2 }, { v: -60, c: C_UP, dash: 4, label: "OS" }]
+        levels: [{ v: 60, c: C_DN, dash: 4, label: window.DLI18N.t("51-dxstudies.a6d3e4189677") }, { v: 53, c: C_DN, dash: 2 }, { v: 0, dash: 2 },
+          { v: -53, c: C_UP, dash: 2 }, { v: -60, c: C_UP, dash: 4, label: window.DLI18N.t("51-dxstudies.343d012d58b2") }]
       };
     })
   });
@@ -645,7 +645,7 @@
         }
         hi[i] = bh; lo[i] = bl;
       }
-      return { rows: [line(hi, C_UP, 1.4, 0, "RWI high"), line(lo, C_DN, 1.4, 0, "RWI low")], levels: [{ v: 1, dash: 4, label: "random walk" }] };
+      return { rows: [line(hi, C_UP, 1.4, 0, "RWI high"), line(lo, C_DN, 1.4, 0, "RWI low")], levels: [{ v: 1, dash: 4, label: window.DLI18N.t("51-dxstudies.8bf4756bf7f1") }] };
     })
   });
 
@@ -951,7 +951,7 @@
       var nm = slotted ? "RVOL · same slot, " + L + " sessions" : "RVOL · trailing mean of " + L + " bars";
       var cols = new Array(n);
       for (i = 0; i < n; i++) cols[i] = o[i] == null ? pal().faint : o[i] >= 1 ? C_UP : C_DN;
-      return { rows: [{ kind: "cols", data: o, cols: cols, base: 0, c: C_BLUE, name: nm }], levels: [{ v: 1, dash: 2, label: "normal" }, { v: 2, dash: 4 }] };
+      return { rows: [{ kind: "cols", data: o, cols: cols, base: 0, c: C_BLUE, name: nm }], levels: [{ v: 1, dash: 2, label: window.DLI18N.t("51-dxstudies.317b32c14369") }, { v: 2, dash: 4 }] };
     })
   });
 
@@ -1215,7 +1215,7 @@
       var L = clamp(num(p, "len", 20), 3, 600);
       return {
         rows: [line(regWin(M.src(bs, p.src || "close"), L).r2, s.c || C_MINT, 1.4, 0, "R² " + L)],
-        range: [0, 1], levels: [{ v: 0.8, dash: 4, label: "strong fit" }, { v: 0.2, dash: 4 }]
+        range: [0, 1], levels: [{ v: 0.8, dash: 4, label: window.DLI18N.t("51-dxstudies.74f5c23efc4b") }, { v: 0.2, dash: 4 }]
       };
     })
   });
@@ -1594,7 +1594,7 @@
       var n = bs.length, L = clamp(num(p, "len", 120), 10, 1500), from = Math.max(0, n - L);
       var hi = -Infinity, lo = Infinity, i;
       for (i = from; i < n; i++) { if (bs[i].h > hi) hi = bs[i].h; if (bs[i].l < lo) lo = bs[i].l; }
-      if (!(hi > lo)) return { rows: [], note: "range has no height" };
+      if (!(hi > lo)) return { rows: [], note: window.DLI18N.t("51-dxstudies.bdb3673a614c") };
       var eq = (hi + lo) / 2, rows = [];
       rows.push({ kind: "band", a: flat(n, from, n - 1, hi), b: flat(n, from, n - 1, eq), c: C_DN, fill: 0.09, name: "Premium" });
       rows.push({ kind: "band", a: flat(n, from, n - 1, eq), b: flat(n, from, n - 1, lo), c: C_UP, fill: 0.09, name: "Discount" });
@@ -1604,7 +1604,7 @@
       }
       return {
         rows: rows,
-        levels: [{ v: hi, c: C_DN, dash: 2, label: "range high" }, { v: eq, c: pal().faint, dash: 4, label: "equilibrium" }, { v: lo, c: C_UP, dash: 2, label: "range low" }]
+        levels: [{ v: hi, c: C_DN, dash: 2, label: window.DLI18N.t("51-dxstudies.a7b291e437ff") }, { v: eq, c: pal().faint, dash: 4, label: window.DLI18N.t("51-dxstudies.43136a6b3dca") }, { v: lo, c: C_UP, dash: 2, label: window.DLI18N.t("51-dxstudies.1f0d3448a4be") }]
       };
     })
   });
@@ -1621,9 +1621,9 @@
          the ZigZag itself confirms a new leg — the same evidence the drawing tool
          would use if the leg were placed by hand. */
       var n = bs.length, pts = M.zigzag(bs, +p.pct || 5);
-      if (pts.length < 2) return { rows: [], note: "no confirmed swing at this deviation" };
+      if (pts.length < 2) return { rows: [], note: window.DLI18N.t("51-dxstudies.bba9de032bd9") };
       var b = pts[pts.length - 1], a = pts[pts.length - 2], rng = b.p - a.p;
-      if (!rng) return { rows: [], note: "the last swing has no height" };
+      if (!rng) return { rows: [], note: window.DLI18N.t("51-dxstudies.7d1fc3bc50f6") };
       var fr = [0, 0.236, 0.382, 0.5, 0.618, 0.786, 1];
       if (on(p, "ext")) fr = fr.concat([1.272, 1.618]);
       var lv = [], i, cs = [C_UP, C_MINT, C_TEAL, pal().text, C_SAND, C_CORAL, C_DN, C_VIOLET, C_MAGENTA];
@@ -1650,7 +1650,7 @@
         if (sw.ph[i] != null) pts.push(sw.ph[i]);
         if (sw.pl[i] != null) pts.push(sw.pl[i]);
       }
-      if (!pts.length) return { rows: [], note: "no confirmed pivot in the lookback" };
+      if (!pts.length) return { rows: [], note: window.DLI18N.t("51-dxstudies.375c8cb1f89f") };
       pts.sort(function (x, y) { return x - y; });
       var tol = (a[n - 1] == null ? (pts[pts.length - 1] - pts[0]) / 40 : a[n - 1]) * tolM;
       var groups = [], cur = [pts[0]];
@@ -1689,7 +1689,7 @@
          convention every desk uses for the London/New York hours. */
       var n = bs.length, bg = nulls(n), i;
       var ms = barMs(bs);
-      if (ms >= 864e5) return { rows: [], note: "sessions need an intraday bar size" };
+      if (ms >= 864e5) return { rows: [], note: window.DLI18N.t("51-dxstudies.d361f471e429") };
       function hrOf(t) { return ((t % 864e5) + 864e5) % 864e5 / 36e5; }
       function within(h, s2, e) {
         s2 = clamp(+s2 || 0, 0, 24); e = clamp(+e || 0, 0, 24);
@@ -1815,8 +1815,8 @@
       rows.push(line(r.all, C_BLUE, 1.6, 0, "All"));
       return {
         rows: rows, range: [-1, 1],
-        levels: [{ v: 0.5, c: C_UP, dash: 4, label: "strong buy" }, { v: 0.1, c: C_UP, dash: 2, label: "buy" },
-          { v: 0, dash: 2 }, { v: -0.1, c: C_DN, dash: 2, label: "sell" }, { v: -0.5, c: C_DN, dash: 4, label: "strong sell" }]
+        levels: [{ v: 0.5, c: C_UP, dash: 4, label: window.DLI18N.t("51-dxstudies.e23996b059b0") }, { v: 0.1, c: C_UP, dash: 2, label: window.DLI18N.t("51-dxstudies.e8197b20f8e7") },
+          { v: 0, dash: 2 }, { v: -0.1, c: C_DN, dash: 2, label: window.DLI18N.t("51-dxstudies.c0f21d451463") }, { v: -0.5, c: C_DN, dash: 4, label: window.DLI18N.t("51-dxstudies.12267fc3498c") }]
       };
     })
   });
@@ -1966,7 +1966,7 @@
         function (raw) { return numArr(raw, "timestamp", "longShortRatio", 1); },
         function (out, pts) {
           out.rows = [line(alignTo(bs, pts, DV_MS[per] * 2), C_VIOLET, 1.5, 0, "Long/short accounts · " + per)];
-          out.levels = [{ v: 1, dash: 2, label: "even" }];
+          out.levels = [{ v: 1, dash: 2, label: window.DLI18N.t("51-dxstudies.ec38063c881f") }];
         }, sym + " long/short");
     })
   });

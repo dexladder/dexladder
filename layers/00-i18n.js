@@ -842,7 +842,25 @@
   "50-health.ef19e2405940": "One source can lie, lag, or die, so the number on screen is a median across independent witnesses. ",
   "50-health.f22f0839e714": " for the per-witness reads.",
   "50-health.f352aca110ce": "Last known good",
-  "50-health.fd0c31820fc2": "The build stamp below is read from this document’s own &lt;meta name=\"cb:build\"&gt;, not written into this panel, so it cannot drift from what shipped. The worker’s build is read the same way — by asking the worker, on the version channel it already answers. Anything not actually read reads —."
+  "50-health.fd0c31820fc2": "The build stamp below is read from this document’s own &lt;meta name=\"cb:build\"&gt;, not written into this panel, so it cannot drift from what shipped. The worker’s build is read the same way — by asking the worker, on the version channel it already answers. Anything not actually read reads —.",
+  "51-dxstudies.12267fc3498c": "strong sell",
+  "51-dxstudies.1f0d3448a4be": "range low",
+  "51-dxstudies.317b32c14369": "normal",
+  "51-dxstudies.343d012d58b2": "OS",
+  "51-dxstudies.375c8cb1f89f": "no confirmed pivot in the lookback",
+  "51-dxstudies.43136a6b3dca": "equilibrium",
+  "51-dxstudies.74f5c23efc4b": "strong fit",
+  "51-dxstudies.7d1fc3bc50f6": "the last swing has no height",
+  "51-dxstudies.8bf4756bf7f1": "random walk",
+  "51-dxstudies.a6d3e4189677": "OB",
+  "51-dxstudies.a7b291e437ff": "range high",
+  "51-dxstudies.bba9de032bd9": "no confirmed swing at this deviation",
+  "51-dxstudies.bdb3673a614c": "range has no height",
+  "51-dxstudies.c0f21d451463": "sell",
+  "51-dxstudies.d361f471e429": "sessions need an intraday bar size",
+  "51-dxstudies.e23996b059b0": "strong buy",
+  "51-dxstudies.e8197b20f8e7": "buy",
+  "51-dxstudies.ec38063c881f": "even"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
