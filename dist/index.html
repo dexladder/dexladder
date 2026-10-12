@@ -1112,7 +1112,11 @@
   'use strict';
   var en = {
   "00-astra-boot.bff91a49cd13": "live markets · paper money · zero stakes",
-  "11-newsfeed.d57cda15bac6": " via "
+  "11-newsfeed.d57cda15bac6": " via ",
+  "20-core.08190d892c18": " · sources differ",
+  "20-core.7d9eb7acb13e": "Close",
+  "20-core.7e8920d19ec8": "paper money — simulated",
+  "20-core.daeb30e06dcf": "simulated"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -7827,7 +7831,7 @@ window.DLCORE = (function () {
       (stale ? ' data-stale="1"' : "") + (o.contested ? ' data-contested="1"' : "") +
       ' title="' + esc(o.title || "source · freshness") + '">' + esc(src) + " · " +
       '<span class="dl-age">' + provAge(at) + "</span>" +
-      (stale ? " · stale" : "") + (o.contested ? '<span class="dl-dis-w"> · sources differ</span>' : "") + "</span>";
+      (stale ? " · stale" : "") + (o.contested ? ('<span class="dl-dis-w">' + window.DLI18N.t("20-core.08190d892c18") + '</span>') : "") + "</span>";
   }
   function provRefresh() {
     PROV.now = now();
@@ -7844,7 +7848,7 @@ window.DLCORE = (function () {
     }
     return ns.length;
   }
-  function simTag() { return '<span class="dl-sim" title="paper money — simulated">simulated</span>'; }
+  function simTag() { return ('<span class="dl-sim" title="' + window.DLI18N.t("20-core.7e8920d19ec8") + '">' + window.DLI18N.t("20-core.daeb30e06dcf") + '</span>'); }
 
   /* ---------------------------------------------------------- coins */
   function coinsAll() { try { if (window.MXP && MXP.state && MXP.state.coins && MXP.state.coins.length) return MXP.state.coins; } catch (e) {} try { return typeof coins !== "undefined" ? coins : []; } catch (e) { return []; } }
@@ -7867,7 +7871,7 @@ window.DLCORE = (function () {
     var el = $(id);
     if (!el) {
       el = doc.createElement("div"); el.id = id; el.className = "dls"; el.setAttribute("role", "dialog"); el.setAttribute("aria-modal", "true"); el.setAttribute("aria-label", o.title || id);
-      el.innerHTML = '<div class="dls-head"><b class="dls-t"></b><span class="dls-sub"></span><button class="dls-x" aria-label="Close">✕</button></div><div class="dls-tabs"></div><div class="dls-body"></div>';
+      el.innerHTML = ('<div class="dls-head"><b class="dls-t"></b><span class="dls-sub"></span><button class="dls-x" aria-label="' + window.DLI18N.t("20-core.7d9eb7acb13e") + '">✕</button></div><div class="dls-tabs"></div><div class="dls-body"></div>');
       doc.body.appendChild(el);
       el.querySelector(".dls-x").onclick = function () { closeSheet(id); };
       el.addEventListener("click", function (e) { var b = e.target.closest(".dls-tabs button[data-t]"); if (b) { el.dataset.tab = b.getAttribute("data-t"); paintTabs(el); o.onTab && o.onTab(el.dataset.tab, el.querySelector(".dls-body"), el); } });
