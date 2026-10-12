@@ -1408,7 +1408,13 @@
   "37-coinpage.edc548583a42": "🏦 Venues · tradeability",
   "37-coinpage.ee5741c7d8d0": "Contracts ",
   "37-coinpage.efb13468b132": "Holder",
-  "37-coinpage.f469beecc6e7": "Crowd"
+  "37-coinpage.f469beecc6e7": "Crowd",
+  "38-sentinel.028ca0bba150": "Kinds: price above/below · moves N% · drops/rises N% in a window · volume doubles · funding flips/level · depeg · RSI cross · weather level · a Rung mostly red/green. Rules stay editable in this list.",
+  "38-sentinel.5a29165eebc4": "· say it, we compile it",
+  "38-sentinel.8253905e7fe2": "Arm ",
+  "38-sentinel.a11360825850": "Compile",
+  "38-sentinel.bd1b3d9a1150": "🛰 Sentinel ",
+  "38-sentinel.bec31052ea21": "e.g. SOL drops 5% in 1h · funding flips negative on ETH · USDT depegs · BTC rsi above 70"
 };
   window.DLI18N = Object.freeze({ en: Object.freeze(en), t: function (id) {
     if (!Object.prototype.hasOwnProperty.call(en, id)) throw new Error('Unknown UI string: ' + id);
@@ -10381,12 +10387,12 @@ window.DLSENTINEL = (function () {
   function describe(r) { if (r.err) return r.err; if (r.kind && r.kind.indexOf("v154:") === 0) return r.sym + " · " + desc(r); try { return r.sym + " · " + alertDesc(r); } catch (e) { return r.sym + " · " + r.kind + " " + r.val; } }
   /* ---------------------------------------------------------- UI: composer inside the alert centre */
   function composerHTML() {
-    return '<div class="dl154" id="dlSentinel" style="margin:0 0 12px"><div class="h">🛰 Sentinel <span style="font:500 11px var(--ui-sans,sans-serif);color:var(--muted)">· say it, we compile it</span></div><div class="dl-in" style="margin-bottom:6px"><input id="dlSnIn" placeholder="e.g. SOL drops 5% in 1h · funding flips negative on ETH · USDT depegs · BTC rsi above 70"><button id="dlSnGo">Compile</button></div><div id="dlSnOut"></div><div class="n" style="margin-top:6px">Kinds: price above/below · moves N% · drops/rises N% in a window · volume doubles · funding flips/level · depeg · RSI cross · weather level · a Rung mostly red/green. Rules stay editable in this list.</div></div>';
+    return ('<div class="dl154" id="dlSentinel" style="margin:0 0 12px"><div class="h">' + window.DLI18N.t("38-sentinel.bd1b3d9a1150") + '<span style="font:500 11px var(--ui-sans,sans-serif);color:var(--muted)">' + window.DLI18N.t("38-sentinel.5a29165eebc4") + '</span></div><div class="dl-in" style="margin-bottom:6px"><input id="dlSnIn" placeholder="' + window.DLI18N.t("38-sentinel.bec31052ea21") + '"><button id="dlSnGo">' + window.DLI18N.t("38-sentinel.a11360825850") + '</button></div><div id="dlSnOut"></div><div class="n" style="margin-top:6px">' + window.DLI18N.t("38-sentinel.028ca0bba150") + '</div></div>');
   }
   function wireComposer() {
     var inp = $("dlSnIn"), go = $("dlSnGo"), out = $("dlSnOut"); if (!inp || !go) return;
     var pending = [];
-    function show() { out.innerHTML = pending.length ? pending.map(function (r, i) { return '<div class="kv"><span>' + (r.err ? "⚠ " : "✓ ") + esc(describe(r)) + "</span>" + (r.err ? "" : '<button class="dl-b" data-drop="' + i + '">✕</button>') + "</div>"; }).join("") + (pending.some(function (r) { return !r.err; }) ? '<button class="dl-b pri" id="dlSnArm" style="margin-top:8px">Arm ' + pending.filter(function (r) { return !r.err; }).length + "</button>" : "") : ""; var armB = $("dlSnArm"); if (armB) armB.onclick = function () { var n = arm(pending); pending = []; C.toast("good", "Sentinel armed", n + " rule" + (n === 1 ? "" : "s") + " watching the live feed"); try { openAlerts(); } catch (e) {} }; out.querySelectorAll("[data-drop]").forEach(function (b) { b.onclick = function () { pending.splice(+b.getAttribute("data-drop"), 1); show(); }; }); }
+    function show() { out.innerHTML = pending.length ? pending.map(function (r, i) { return '<div class="kv"><span>' + (r.err ? "⚠ " : "✓ ") + esc(describe(r)) + "</span>" + (r.err ? "" : '<button class="dl-b" data-drop="' + i + '">✕</button>') + "</div>"; }).join("") + (pending.some(function (r) { return !r.err; }) ? ('<button class="dl-b pri" id="dlSnArm" style="margin-top:8px">' + window.DLI18N.t("38-sentinel.8253905e7fe2") + '') + pending.filter(function (r) { return !r.err; }).length + "</button>" : "") : ""; var armB = $("dlSnArm"); if (armB) armB.onclick = function () { var n = arm(pending); pending = []; C.toast("good", "Sentinel armed", n + " rule" + (n === 1 ? "" : "s") + " watching the live feed"); try { openAlerts(); } catch (e) {} }; out.querySelectorAll("[data-drop]").forEach(function (b) { b.onclick = function () { pending.splice(+b.getAttribute("data-drop"), 1); show(); }; }); }
     go.onclick = function () { pending = compile(inp.value); show(); }; inp.addEventListener("keydown", function (e) { if (e.key === "Enter") go.onclick(); });
   }
   (function hookAlerts() {
