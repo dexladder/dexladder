@@ -89,9 +89,14 @@ ok('verify · the desk registers on the desks rail and the command palette',
 /* ---------------------------------------------- the registry, out of the payload text */
 const IDS = [];
 {
-  const re = /\bid:\s*"([A-Za-z0-9._]+)",\s*\n\s*label:\s*"/g;
+  const table = html.match(/var en = (\{[\s\S]*?\});\s*window\.DLI18N =/);
+  const english = table ? JSON.parse(table[1]) : {};
+  const re = /\bid:\s*"([A-Za-z0-9._]+)",\s*\n\s*label:\s*(?:"[^"\n]+"|window\.DLI18N\.t\("([^"]+)"\))/g;
   let m;
-  while ((m = re.exec(L))) IDS.push(m[1]);
+  while ((m = re.exec(L))) {
+    if (m[2] && !(typeof english[m[2]] === 'string' && english[m[2]].trim())) continue;
+    IDS.push(m[1]);
+  }
 }
 ok('verify · the registry seeds a meaningful number of formulas (>= 15 registered in the payload)',
   IDS.length >= 15, { found: IDS.length, ids: IDS });
