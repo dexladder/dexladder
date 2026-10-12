@@ -45,10 +45,10 @@ window.DLSECTORS = (function () {
     rungFor(sec).then(function (r) { C.close("dlSectors"); nav("markets"); setTimeout(function () { DLRUNGS.apply(r.id); }, 500); C.xp("sector.rung", 10, "Turned a sector into a Rung"); }).catch(function (e) { C.toast("bad", "Sector unavailable", String(e.message || e)); });
   }
   function rowsHTML(list) {
-    return '<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>#</th><th>Sector</th><th class="r">Market cap</th><th class="r">24h</th><th class="r">vs market</th><th class="r">Vol / cap</th><th>Top 3 on the ladder</th><th></th></tr></thead><tbody>' +
+    return ('<div class="dl-tblw"><table class="dl-tbl"><thead><tr><th>#</th><th>' + window.DLI18N.t("31-sectors.31a231c06e6d") + '</th><th class="r">' + window.DLI18N.t("31-sectors.8c68e22ab378") + '</th><th class="r">' + window.DLI18N.t("31-sectors.0b509e6d4c97") + '</th><th class="r">' + window.DLI18N.t("31-sectors.804a248f930d") + '</th><th class="r">' + window.DLI18N.t("31-sectors.7cf5d711fc4c") + '</th><th>' + window.DLI18N.t("31-sectors.e3c3ac7bfca1") + '</th><th></th></tr></thead><tbody>') +
       list.map(function (c, i) {
         var tops = c.top.map(symOf).filter(Boolean).slice(0, 3);
-        return '<tr class="click" data-sec="' + esc(c.id) + '"><td>' + (i + 1) + "</td><td><b>" + esc(c.name) + '</b></td><td class="r">' + C.big(c.mcap) + '</td><td class="r">' + C.chg(c.ch) + '</td><td class="r">' + C.chg(c.rel) + '</td><td class="r">' + (100 * c.heat).toFixed(1) + "%</td><td>" + (tops.length ? tops.map(function (s) { return '<button class="dl-b" data-coin="' + esc(s) + '" style="min-height:24px;padding:0 8px">' + esc(s) + "</button>"; }).join(" ") : '<span style="opacity:.5">off-ladder</span>') + '</td><td><button class="dl-b" data-rung="' + esc(c.id) + '">🪜 Rung</button></td></tr>';
+        return '<tr class="click" data-sec="' + esc(c.id) + '"><td>' + (i + 1) + "</td><td><b>" + esc(c.name) + '</b></td><td class="r">' + C.big(c.mcap) + '</td><td class="r">' + C.chg(c.ch) + '</td><td class="r">' + C.chg(c.rel) + '</td><td class="r">' + (100 * c.heat).toFixed(1) + "%</td><td>" + (tops.length ? tops.map(function (s) { return '<button class="dl-b" data-coin="' + esc(s) + '" style="min-height:24px;padding:0 8px">' + esc(s) + "</button>"; }).join(" ") : ('<span style="opacity:.5">' + window.DLI18N.t("31-sectors.6a93eb76a385") + '</span>')) + '</td><td><button class="dl-b" data-rung="' + esc(c.id) + ('' + window.DLI18N.t("31-sectors.a9068f16ef52") + '</button></td></tr>');
       }).join("") + "</tbody></table></div>";
   }
   function rotationHTML(list, med) {
@@ -56,8 +56,8 @@ window.DLSECTORS = (function () {
     var inn = byRel.slice(0, 8), out = byRel.slice(-8).reverse();
     var maxAbs = Math.max(1, Math.abs(inn[0] ? inn[0].rel : 1), Math.abs(out[0] ? out[0].rel : 1));
     function bar(c, dir) { var w = Math.min(100, Math.abs(c.rel) / maxAbs * 100); return '<div class="kv" style="border:0;padding:5px 0;align-items:center;gap:8px"><span style="flex:0 0 42%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">' + esc(c.name) + '</span><span style="flex:1;height:8px;border-radius:99px;background:rgba(255,255,255,.05);position:relative"><i style="position:absolute;top:0;bottom:0;' + (dir > 0 ? "left:0" : "right:0") + ";width:" + w.toFixed(0) + "%;border-radius:99px;background:" + (dir > 0 ? "#3ae58f" : "#ff6b87") + '"></i></span><b style="flex:0 0 64px;text-align:right">' + C.pct(c.rel, 1) + "</b></div>"; }
-    return '<div class="dl-2"><div class="dl154"><div class="h">🟢 Rotating in</div>' + inn.map(function (c) { return bar(c, 1); }).join("") + '</div><div class="dl154"><div class="h">🔴 Rotating out</div>' + out.map(function (c) { return bar(c, -1); }).join("") + "</div></div>" +
-      '<div class="dl-formula">rotation = sector 24h market-cap change − median 24h change across all sectors (' + C.pct(med, 2) + ' today)\nvol / cap = 24h volume ÷ market cap — the "heat" of a sector\nsectors under $200M are hidden from rotation to keep noise out; data: CoinGecko categories, keyless</div>';
+    return ('<div class="dl-2"><div class="dl154"><div class="h">' + window.DLI18N.t("31-sectors.5ff4c161c44b") + '</div>') + inn.map(function (c) { return bar(c, 1); }).join("") + ('</div><div class="dl154"><div class="h">' + window.DLI18N.t("31-sectors.5122edb00dcc") + '</div>') + out.map(function (c) { return bar(c, -1); }).join("") + "</div></div>" +
+      ('<div class="dl-formula">' + window.DLI18N.t("31-sectors.1d203447d84d") + '') + C.pct(med, 2) + ('' + window.DLI18N.t("31-sectors.e879820037b4") + '</div>');
   }
   function render(tab, body, el) {
     body.innerHTML = C.skel(6);
@@ -67,10 +67,10 @@ window.DLSECTORS = (function () {
       var head = '<div class="dl-in" style="margin-bottom:10px"><input id="dlSecQ" placeholder="Search ' + d.list.length + ' sectors…" value="' + esc(Q) + '">' + C.prov(d.src, d.at, d.stale, { attr: 'style="align-self:center"' }) + "</div>";
       body.innerHTML = head + (tab === "rot" ? rotationHTML(d.list, d.med) : rowsHTML(list.slice(0, 200)));
       var q = $("dlSecQ"); if (q) { q.oninput = function () { Q = q.value; render(el.dataset.tab, body, el); }; if (Q) { q.focus(); q.setSelectionRange(Q.length, Q.length); } }
-    }).catch(function (e) { body.innerHTML = '<div class="dl-empty">Sectors unreachable right now — ' + esc(e.message || e) + "</div>"; });
+    }).catch(function (e) { body.innerHTML = ('<div class="dl-empty">' + window.DLI18N.t("31-sectors.b8d85b1398e7") + '') + esc(e.message || e) + "</div>"; });
   }
   function open(tab) {
-    var el = C.open("dlSectors", { title: "◈ Sectors & Narrative Rotation", sub: "500+ sectors · each one a tap from becoming a Rung", tabs: [["list", "Sectors"], ["rot", "Rotation"]], onTab: render }, tab);
+    var el = C.open("dlSectors", { title: window.DLI18N.t("31-sectors.8b9971aba32c"), sub: window.DLI18N.t("31-sectors.6b3255aa7b04"), tabs: [["list", "Sectors"], ["rot", "Rotation"]], onTab: render }, tab);
     if (!el.__wired) { el.__wired = 1; el.addEventListener("click", function (e) {
       var r = e.target.closest("[data-rung]"); if (r) return openAsRung(r.getAttribute("data-rung"));
       var c = e.target.closest("[data-coin]"); if (c) { C.close("dlSectors"); return openCoin(c.getAttribute("data-coin")); }
@@ -81,14 +81,14 @@ window.DLSECTORS = (function () {
   function mount() {
     var rail = $("dlRungRail"); if (!rail || $("dlNarr")) return;
     var box = document.createElement("div"); box.id = "dlNarr"; box.className = "dl154";
-    box.innerHTML = '<div class="h">🌀 Narrative rotation <span class="sp"></span><button data-open="rot">Open Sectors →</button></div><div class="dl-chips" id="dlNarrChips" style="margin:0">' + C.skel(1) + "</div>";
+    box.innerHTML = ('<div class="h">' + window.DLI18N.t("31-sectors.8828c95b69ca") + '<span class="sp"></span><button data-open="rot">' + window.DLI18N.t("31-sectors.bd5e68400ebe") + '</button></div><div class="dl-chips" id="dlNarrChips" style="margin:0">') + C.skel(1) + "</div>";
     rail.parentNode.insertBefore(box, rail.nextSibling);
     box.addEventListener("click", function (e) { var b = e.target.closest("[data-open]"); if (b) return open(b.getAttribute("data-open")); var s = e.target.closest("[data-sec]"); if (s) return open("list"), setTimeout(function () { openAsRung(s.getAttribute("data-sec")); }, 50); });
     load(false).then(function (d) {
       var byRel = d.list.filter(function (c) { return c.mcap > 2e8; }).sort(function (a, b) { return b.rel - a.rel; });
       var picks = byRel.slice(0, 5).concat(byRel.slice(-3).reverse());
       $("dlNarrChips").innerHTML = picks.map(function (c) { return '<button class="dl-chip" data-sec="' + esc(c.id) + '" title="' + esc(c.name) + " · vs market " + C.pct(c.rel, 1) + '">' + (c.rel >= 0 ? "🟢" : "🔴") + " " + esc(c.name.replace(/\s*\(.*?\)\s*/g, " ").trim().slice(0, 22)) + " " + C.chg(c.rel, 1) + "</button>"; }).join("") + C.prov("CoinGecko", d.at, d.stale, { attr: 'style="align-self:center"' });
-    }).catch(function () { var el = $("dlNarrChips"); if (el) el.innerHTML = '<span class="dl-empty" style="padding:6px">Sector feed unreachable — retries on next visit.</span>'; });
+    }).catch(function () { var el = $("dlNarrChips"); if (el) el.innerHTML = ('<span class="dl-empty" style="padding:6px">' + window.DLI18N.t("31-sectors.dfbad8cb3d28") + '</span>'); });
   }
   C.cmd("sectors", "Sectors & Narrative Rotation — which narrative is capturing the tape", "◈", function () { open("rot"); });
   C.onPage("markets", mount);
