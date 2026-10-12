@@ -1,3 +1,6 @@
+// owns: sector browser and narrative rotation
+// reads: DLCORE, DLRUNGS, browser DOM
+// emits: DLSECTORS
 /* ============================================================
    DLSECTORS · v154 — Sectors + Narrative Rotation
    500+ CoinGecko categories (keyless) as a browsable sheet, each one a

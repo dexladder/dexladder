@@ -1,3 +1,6 @@
+// owns: smart order routing comparison
+// reads: DLAPP, DLCORE, DLDESKS, browser DOM
+// emits: DLSOR
 /* ============================================================================
    DexLadder — DLSOR · layer 53 · v165 "the route"
    SMART ORDER ROUTING + EXECUTION COMPARISON

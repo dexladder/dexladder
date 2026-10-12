@@ -1,3 +1,6 @@
+// owns: strategy bot desk and controls
+// reads: DLAPP, DLCORE, DLDESKS, browser DOM
+// emits: DLBOTS
 /* ============================================================================
    DLBOTS · v160 — BUILD YOUR OWN BOT and BRING YOUR OWN BOT.
    ---------------------------------------------------------------------------

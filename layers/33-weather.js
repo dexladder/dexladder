@@ -1,3 +1,6 @@
+// owns: leverage weather, funding and cycle dials
+// reads: DLCORE, DLINTEL, DLSIM, browser DOM
+// emits: DLWEATHER
 /* ============================================================
    DLWEATHER · v154 — Leverage Weather + Weather composite + Attention
    + Cycle Dials.

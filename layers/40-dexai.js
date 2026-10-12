@@ -1,3 +1,6 @@
+// owns: tool-grounded copilot and provider selection
+// reads: DLBX, DLCORE, DLDESKS, DLFORECAST, DLINTEL, DLLEDGERS, DLODDS, DLOMNI, DLRADAR, DLRUNGS, DLSECTORS, DLSENTINEL, DLSIM, DLTRUST, DLWEATHER, LanguageModel, NXCHAT, ORACLE, S paper state, browser DOM
+// emits: DEXAI
 /* ============================================================
    DEXAI · v154 — DeXaI, the sovereign copilot
    Laws it is built on:

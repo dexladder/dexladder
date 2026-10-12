@@ -1,3 +1,6 @@
+// owns: theme migration and card grid balance
+// reads: DLMODE, browser DOM
+// emits: DOM presentation updates
 /* v154j — (1) Night is forced on, once, for every existing visitor.
             (2) Grid orphan-row killer: no card grid may end with empty tracks. */
 (function () {

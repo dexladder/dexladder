@@ -1,3 +1,6 @@
+// owns: portable account bundles and signed proof cards
+// reads: DLAPP, DLCORE, DLDESKS, DLLEDG, browser DOM
+// emits: DLCARRY
 /* ============================================================================
    DexLadder — DLCARRY · layer 62 · v166 "⇄ Carry"
    CONTINUITY + PROOF CARDS — two gaps, one layer, zero network

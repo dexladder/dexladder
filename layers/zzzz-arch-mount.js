@@ -1,3 +1,6 @@
+// owns: typed navigation and blog installation
+// reads: DLAPP
+// emits: DOM presentation updates
 /* Phase-1 architecture mount (web/app → DLAPP). Runs after every legacy script and layer has
    defined and wrapped nav(), so the navigation presenter sees the final router. */
 (function () { try { window.DLAPP && DLAPP.nav.install(); } catch (e) {} })();

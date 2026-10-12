@@ -1,3 +1,6 @@
+// owns: supply, era and basket ledgers
+// reads: DLCORE, DLDESKS, DLOMNI, DLRUNGS, S paper state, browser DOM
+// emits: DLHEATX, DLLEDGERS
 /* ============================================================
    DLLEDGERS · v154 — Supply Drift · Era Ledger · Baskets · Heat lenses
    · Supply Drift: the sovereign answer to "token unlocks" (no free

@@ -1,3 +1,6 @@
+// owns: paper lending and liquidation cascade models
+// reads: DLAPP, DLCORE, DLDESKS, browser DOM
+// emits: DLLEND
 /* ============================================================================
    DexLadder — DLLEND · layer 55 · v166 "the ladder under the ladder"
    LENDING, LIQUIDATION CASCADES AND RESTAKING

@@ -1,3 +1,6 @@
+// owns: portfolio covariance and risk desk
+// reads: DLAPP, DLCORE, DLDEFI, DLDESKS, DLH7, DLOPT, S paper state, browser DOM
+// emits: DLRISK
 /* ============================================================================
    DexLadder — DLRISK · layer 59 · v166 "the book, priced for what it can lose"
    PORTFOLIO RISK DESK — covariance, VaR, margin, stress, drawdown

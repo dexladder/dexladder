@@ -1,3 +1,6 @@
+// owns: historical rewind desk
+// reads: DLAPP, DLCORE, DLDESKS, browser DOM
+// emits: DLREWIND
 /* ============================================================
    DLREWIND · v157 — the Rewind desk (bar-by-bar backtester)
    · Real candles for a market, a bar size and a stretch of history

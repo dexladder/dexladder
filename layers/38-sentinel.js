@@ -1,3 +1,6 @@
+// owns: human-readable alert rules
+// reads: DEXAI, DLCORE, DLRUNGS, DLWEATHER, S paper state, browser DOM
+// emits: DLSENTINEL
 /* ============================================================
    DLSENTINEL · v154 — Sentinel: alerts you say in words, compiled into
    rules you can read. New rule kinds on the existing alert engine:

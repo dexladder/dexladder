@@ -1,3 +1,6 @@
+// owns: chain and derivatives event clock
+// reads: DLCORE, DLODDS, browser DOM
+// emits: DLCLOCK
 /* ============================================================
    DLCLOCK · v154 — Chain Clock: events that cannot go stale because
    the chain (or a published rule) is the source. No editorial calendar,

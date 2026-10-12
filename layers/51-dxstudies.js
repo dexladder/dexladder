@@ -1,3 +1,6 @@
+// owns: additional chart indicator registry
+// reads: browser runtime
+// emits: DOM presentation updates
 /* ============================================================================
    DXSTUDIES · layer 51 — the indicators DexChart Pro did not ship with
    ----------------------------------------------------------------------------

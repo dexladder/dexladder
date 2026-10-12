@@ -1,3 +1,6 @@
+// owns: portfolio card arrangement and metric animation
+// reads: IntersectionObserver, browser DOM
+// emits: DOM presentation updates
 /* v154l — Portfolio: curation + motion.
    The page was thirteen full-width cards stacked vertically. At >=1400px it now
    reads as a workbench (ledger on the left, automation and context on the right)

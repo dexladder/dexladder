@@ -1,3 +1,6 @@
+// owns: independent arithmetic verification desk
+// reads: DLAPP, DLCORE, DLDESKS, S paper state, browser DOM
+// emits: DLVERIFY
 /* ============================================================================
    DexLadder — DLVERIFY · layer 64 · v166 "check it yourself"
    THE VERIFY DESK

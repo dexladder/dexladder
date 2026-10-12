@@ -1,3 +1,6 @@
+// owns: additional drawing tools and chart objects
+// reads: S paper state, browser DOM
+// emits: DXTOOLS
 /* ============================================================
    DXTOOLS · v165 — the drawing tools DexChart did not have, and the
    object layer that manages what is on the chart.

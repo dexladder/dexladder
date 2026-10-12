@@ -1,3 +1,6 @@
+// owns: DexScript editor and workspace
+// reads: S paper state, browser DOM
+// emits: DXSCRIPTUI
 /* ============================================================================
    DXSCRIPTUI · layer 54 — the human half of DexScript
    ----------------------------------------------------------------------------

@@ -1,3 +1,6 @@
+// owns: DEX pool discovery and security screening
+// reads: DEXAI, DLCORE
+// emits: DLRADAR
 /* ============================================================
    DLRADAR · v154 — Pool Radar (the DEX screener, renamed from the
    CMC trademark "DexScan"): Trending · Fresh · Movers · Search over

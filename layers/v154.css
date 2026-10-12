@@ -727,7 +727,7 @@ html[data-mode=day] .c3coin .c3l{
    draws its volume and RSI panes inside it. */
 #page-coin #coinHost{flex:0 0 auto;height:560px;min-height:0;border:1px solid var(--line);border-radius:12px;
   background:#141619;box-shadow:inset 0 0 0 1px #2A2E39;overflow:hidden}
-#page-coin #coinHost>#coinChart{flex:1 1 auto;height:100%!important;min-height:0;border-radius:11px}
+#page-coin #coinHost>#coinChart{position:absolute;inset:0;display:block;box-sizing:border-box;width:100%;height:100%!important;min-height:0;border-radius:11px}
 /* the same box as the TradingView panel (#tvChart: #141619 ground, var(--line) frame, and the
    widget's own #2A2E39 inner line), so switching engines changes the chart, not the panel */
 @media(max-width:760px){#page-coin #coinHost{height:430px}}
@@ -3161,3 +3161,14 @@ html[data-mode="day"] #dlVerify .v-empty{color:#5a6274;border-color:rgba(0,0,0,.
   #dlVerify .v-actions .dl-b{flex:1 1 auto}
 }
 
+
+/* Direction tokens: blue/orange plus redundant shape cues, across all themes. */
+html.dla-colourblind { --up:#62b5ff; --down:#ffb86b; --up-soft:rgba(98,181,255,.12); --down-soft:rgba(255,184,107,.12); }
+html[data-mode="day"].dla-colourblind { --up:#004c99; --down:#873c00; --up-soft:rgba(0,76,153,.12); --down-soft:rgba(135,60,0,.12); }
+html.dla-colourblind .up::before, html.dla-colourblind .pos::before { content:"▲ "; }
+html.dla-colourblind .down::before, html.dla-colourblind .dn::before, html.dla-colourblind .neg::before { content:"▼ "; }
+html.dla-colourblind .up, html.dla-colourblind .pos { text-decoration:underline solid; text-underline-offset:3px; }
+html.dla-colourblind .down, html.dla-colourblind .dn, html.dla-colourblind .neg { text-decoration:underline dashed; text-underline-offset:3px; }
+
+/* This Academy lab deliberately retains a dark stage in both themes. */
+html[data-mode="day"].dla-colourblind #knL0pct{color:#62b5ff}

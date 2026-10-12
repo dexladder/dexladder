@@ -1,3 +1,6 @@
+// owns: public feed compatibility and provider fallbacks
+// reads: AbortSignal, CBDATA
+// emits: DLFEEDS, DLLIFE
 /* ============================================================
    DLFEEDS · v154 — ladder hygiene + compatibility shims
    //@inject-before: window.DLLIFE=function()

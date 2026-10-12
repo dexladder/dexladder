@@ -1,3 +1,6 @@
+// owns: curriculum graph and evidence-based mastery
+// reads: DLAPP, DLBOTS, DLCORE, DLDESKS, browser DOM
+// emits: DLPATH
 /* ============================================================================
    DexLadder — DLPATH · layer 60 · v166 "the path"
    CURRICULUM GRAPH · EVIDENCE-BASED MASTERY · ADAPTIVE SCHEDULING

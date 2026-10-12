@@ -1,3 +1,6 @@
+// owns: forecast journal and calibration scoring
+// reads: DEXAI, DLCORE, S paper state, browser DOM
+// emits: DLFORECAST
 /* ============================================================
    DLFORECAST · v154 — Forecast Journal + Scenario Cone
    CMC tallies the crowd's price estimates; DexLadder grades YOU. Log a

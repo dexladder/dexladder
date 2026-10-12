@@ -1,3 +1,6 @@
+// owns: footer navigation and social links
+// reads: browser DOM
+// emits: DLFOOT
 /* ============================================================
    DLFOOT · v162 — the footer, rebuilt to the shape a footer is
    supposed to have (owner report, 13 Sep 2026, two screenshots).

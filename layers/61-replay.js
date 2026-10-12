@@ -1,3 +1,6 @@
+// owns: historical strategy and scenario replay
+// reads: DLAPP, DLCORE, DLDESKS, DLLEND, browser DOM
+// emits: DLREPLAY
 /* ============================================================================
    DexLadder — DLREPLAY · layer 61 · v166 "⟲ Replay"
    MULTI-REGIME HISTORICAL REPLAY · SCENARIO BUILDER · FUNDING & LIQUIDATION TAPE

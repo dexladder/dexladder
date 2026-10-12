@@ -1,3 +1,6 @@
+// owns: native chart, studies and drawings
+// reads: S paper state, browser DOM
+// emits: DXC
 /* ============================================================================
    DXC · DexChart Pro — layer 46 · the DexLadder charting engine
    ----------------------------------------------------------------------------

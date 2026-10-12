@@ -1,3 +1,6 @@
+// owns: IndexedDB market cache
+// reads: DLVAULT, MXP, browser DOM
+// emits: DLMXC
 /* ============================================================
    DLMXC · v164 — the market cache leaves localStorage.
 

@@ -1,3 +1,6 @@
+// owns: paper chain fork sandbox
+// reads: DLAPP, browser DOM
+// emits: DLFORK
 /* ============================================================================
    DLFORK · v157 — LOCAL NETWORK FORKING: the advanced sandbox.
    ---------------------------------------------------------------------------

@@ -1,3 +1,6 @@
+// owns: shared extension state, fetch ladder, commands and sheets
+// reads: AbortSignal, DLAPP, MXP, S paper state, browser DOM
+// emits: DLCORE
 /* ============================================================
    DLCORE · v154 — shared substrate for the v154 layers
    · persisted extension bucket S.v154 (+ S.dlsim / S.jnotes, which

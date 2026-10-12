@@ -398,6 +398,7 @@ async function runSteps(page, steps) {
 async function collectAll(file, log) {
   const h = await launch(file, { viewport: { width: 1440, height: 900 } });
   const page = h.page;
+  if (process.argv.includes('--colourblind')) await page.evaluate(() => DLACCESS.setPref('colourblind', 1));
   await page.waitForTimeout(20000);
   // the boot welcome sheet would otherwise sit over every route in the walk; it is measured
   // deliberately, as its own surface, in both modes.

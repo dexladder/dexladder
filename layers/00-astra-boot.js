@@ -1,3 +1,6 @@
+// owns: opening particle animation and logo reveal
+// reads: browser DOM
+// emits: DLASTRA
 /* ============================================================================
    DexLadder — ASTRA BOOT  ·  "Ladder Nebula"  ·  layer 00  ·  2026-09-07
    Self-mounting opening animation. Particle galaxy → condenses into the

@@ -15,6 +15,10 @@ if not __debug__:
     raise SystemExit('build154: refusing to build with assertions disabled (-O / PYTHONOPTIMIZE) '
                      '- every gate in this pipeline is an assert')
 
+CHECK = '--check' in sys.argv
+if any(a != '--check' for a in sys.argv[1:]):
+    raise SystemExit('usage: python3 build154.py [--check]')
+
 ROOT = os.path.dirname(os.path.abspath(__file__))
 SRC = next((p for p in [os.path.join(ROOT, 'src', 'index.v153.html'), os.path.join(ROOT, 'index.v153.html')] if os.path.exists(p)), os.path.join(ROOT, 'src', 'index.v153.html'))
 OUT_DIR = os.path.join(ROOT, 'dist')
@@ -34,6 +38,8 @@ RELEASE = {'build': 'v166', 'name': 'the depth', 'updated': 'September 18, 2026'
 # ------------------------------------------------------------------ patch manifest
 # (id, find, replace, expected count)
 PATCHES = [
+ ('fee-slider-name', 'id="raceFee" min="2"', 'id="raceFee" aria-label="Transaction fee" min="2"', 1),
+ ('tax-slider-name', 'oninput="TAX.rate=+this.value;renderTax()"', 'aria-label="Tax rate percentage" oninput="TAX.rate=+this.value;renderTax()"', 1),
  # ---- 2026-09-13 · trust-centre rewrite + internal tokens renamed off another platform
  # ---- 2026-09-14 · the two social profiles that existed but were nowhere in the product
  # Instagram is already in the site's JSON-LD sameAs and Medium (@dexladder, personal profile —
@@ -553,7 +559,7 @@ def _recolor_decl(body):
 def _day_rule(m):
     return m.group(1) + _recolor_decl(m.group(2)) + '}'
 
-out = re.sub(r'([^{}]*\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}', _day_rule, out)
+out = re.sub(r'(\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}', _day_rule, out)
 print(f'warm-day purge: {_WARMED["n"]} colours re-cast to cool')
 assert _WARMED['n'] > 40, f'warm-day purge found too little: {_WARMED["n"]}'
 
@@ -584,7 +590,7 @@ def _accent_decl(body):
     body = re.sub(r'#[0-9A-Fa-f]{6}\b', hx, body)
     return re.sub(r'rgba?\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*(?:,\s*([\d.]+))?\s*\)', rg, body)
 
-out = re.sub(r'([^{}]*\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}',
+out = re.sub(r'(\[data-mode=["\']?day["\']?\][^{}]*\{)([^{}]*)\}',
              lambda m: m.group(1) + _accent_decl(m.group(2)) + '}', out)
 print(f'warm-day accent purge: {_ACC["n"]} declarations re-cast to the Day accent')
 assert _ACC['n'] >= 24, f'the retired warm accent map found too little: {_ACC["n"]}'
@@ -2262,14 +2268,14 @@ assert "PAYLOAD_SHA.slice(0, 12)" in swtxt and re.search(r"const V\s*=\s*'dl-'\s
 
 _sha = hashlib.sha256(out.encode('utf-8')).hexdigest()
 _lock = _swconst('PAYLOAD_SHA')
-if os.environ.get('DL_MINT') == '1' and _lock != _sha:
+if not CHECK and os.environ.get('DL_MINT') == '1' and _lock != _sha:
     # Deliberate re-mint (buildlib/build.sh sets this): point the worker at the payload being built.
     swtxt, _n = re.subn(r"const PAYLOAD_SHA = '[0-9a-f]{64}';", "const PAYLOAD_SHA = '%s';" % _sha, swtxt)
     assert _n == 1, 'PAYLOAD_SHA constant not found exactly once in dist/sw.js'
     open(SW_PATH, 'w', encoding='utf-8', newline='\n').write(swtxt)
     _lock = _sha
     print('worker re-minted for payload', _sha[:12])
-assert _lock == _sha, (
+assert CHECK or _lock == _sha, (
     'VERSION-BUMP GATE — dist/index.html changed but dist/sw.js was not re-minted.\n'
     '  payload is now : %s\n'
     '  sw.js names    : %s\n'
@@ -2299,9 +2305,9 @@ print(f"worker lock: {_swconst('SW_BUILD')} rev {_rev} minted for payload {_sha[
       f"\u2014 cache dl-{_swconst('SW_BUILD')}-r{_rev}-{_sha[:12]}")
 
 
-os.makedirs(OUT_DIR, exist_ok=True)
-os.makedirs(OUT_DIR, exist_ok=True)
-open(OUT, 'w', encoding='utf-8', newline='\n').write(out)
+if not CHECK:
+    os.makedirs(OUT_DIR, exist_ok=True)
+    open(OUT, 'w', encoding='utf-8', newline='\n').write(out)
 sha = hashlib.sha256(out.encode('utf-8')).hexdigest()
 print(f'v154 built: {OUT}  bytes={len(out.encode("utf-8"))}  layers={len(layers)}  sha256={sha}')
 for f in layers: print('  +', os.path.basename(f), len(open(f,encoding="utf-8").read()), 'chars')
