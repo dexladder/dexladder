@@ -228,7 +228,7 @@
       'position:absolute;left:0;right:0;bottom:12%;text-align:center;font:500 11px/1.6 ' +
       'ui-monospace,SFMono-Regular,Menlo,monospace;letter-spacing:.22em;text-transform:uppercase;' +
       'color:' + pal.ink + ';opacity:0;transition:opacity 520ms ease 760ms';
-    cap.textContent = 'live markets · paper money · zero stakes';
+    cap.textContent = window.DLI18N.t("00-astra-boot.bff91a49cd13");
     host.appendChild(cap);
 
     (document.body || document.documentElement).appendChild(host);
