@@ -776,5 +776,7 @@
   "45-defi.f491860bbc6e": "0.05% · correlated",
   "45-defi.f681f8a464cb": "% APR. Sorted outcomes, worst on the left. Re-running gives the same picture: the seed is fixed so the lab can be argued with.",
   "45-defi.f9e759eeb278": "Run 2,000 simulated paths",
-  "45-defi.fc2ac0b67884": "imbalanced deposit fee = f·n / (4(n−1))     ·     virtual price = D / LP supply"
+  "45-defi.fc2ac0b67884": "imbalanced deposit fee = f·n / (4(n−1))     ·     virtual price = D / LP supply",
+  "46-dexchart.1f0d3448a4be": "range low",
+  "46-dexchart.a7b291e437ff": "range high"
 }
