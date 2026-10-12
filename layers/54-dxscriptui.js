@@ -1850,9 +1850,9 @@ window.DXSCRIPTUI = (function () {
           overlay: "overlay", precision: "precision", pyramiding: "pyramiding",
           initial_capital: "initial_capital", slippage: "slippage",
           default_qty_value: "default_qty", commission_value: "commission",
-          title: "title", shorttitle: "shorttitle"
+          title: window.DLI18N.t("54-dxscriptui.aaf232064610"), shorttitle: "shorttitle"
         }
-        : { overlay: "overlay", precision: "precision", title: "title", shorttitle: "shorttitle" };
+        : { overlay: "overlay", precision: "precision", title: window.DLI18N.t("54-dxscriptui.aaf232064610"), shorttitle: "shorttitle" };
       var got = {};
       for (i = 0; i < args.length; i++) {
         n = argName(args[i]);
@@ -2447,12 +2447,12 @@ window.DXSCRIPTUI = (function () {
   function buildResults(c, r) {
     clear(ED.res);
     if (!c.ok || c.meta.kind !== "strategy") {
-      ED.resHead.textContent = "study";
+      ED.resHead.textContent = window.DLI18N.t("54-dxscriptui.0c87ed818fb9");
       ED.res.appendChild(el("div", "dxc-empty", "Only a strategy() script has a backtest. This one is a study."));
       return;
     }
     if (!r || !r.strategy) {
-      ED.resHead.textContent = "no bars";
+      ED.resHead.textContent = window.DLI18N.t("54-dxscriptui.75c1ff8646dc");
       ED.res.appendChild(el("div", "dxc-empty", "There are no bars loaded to run the backtest over."));
       return;
     }
