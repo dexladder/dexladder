@@ -25,6 +25,8 @@ const {chromium}=require('playwright');
  await page.waitForFunction(hasDeferred=>typeof window.nav==='function'&&window.DLHOSTED?.ready&&(!hasDeferred||window.DLIDLE?.ready),hasDeferred,{timeout:30000});
  await page.waitForTimeout(2000);
  await page.evaluate(()=>nav('markets'));
+ const protectedAssets=await page.evaluate(()=>Array.from(document.querySelectorAll('script[src^="/assets/"],link[href^="/assets/"]')).map(node=>({url:new URL(node.src||node.href).pathname,integrity:node.integrity})));
+ for(const url of manifest.assets){const expected='sha256-'+Buffer.from(path.basename(url).split('.')[0],'hex').toString('base64');assert.ok(protectedAssets.some(item=>item.url===url&&item.integrity===expected),'Browser-enforced integrity missing: '+url);}
  const badge=await page.locator('#sv82-chip .sv82-b img').evaluate(img=>({w:img.getBoundingClientRect().width,h:img.getBoundingClientRect().height}));
  assert.ok(badge.w>0&&badge.w<=22&&badge.h>0&&badge.h<=22,JSON.stringify(badge));
  assert.equal(await page.locator('[data-dl-guide-start]').count(),1);

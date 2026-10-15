@@ -7,7 +7,7 @@ order, without eval or a CSP change.
 """
 from html.parser import HTMLParser
 from pathlib import Path
-import hashlib, json, re, shutil, sys
+import base64, hashlib, json, re, shutil, sys
 class Elements(HTMLParser):
     def __init__(self, text):
         super().__init__(convert_charrefs=False)
@@ -40,6 +40,8 @@ def build(source, target):
         url='/assets/'+name
         assets.append(url)
         return url
+    def integrity(url):
+        return 'sha256-'+base64.b64encode(bytes.fromhex(Path(url).stem)).decode('ascii')
     body_start=parsed.body_start
     assert body_start is not None, 'Document body missing'
     for tag,attrs,start,end,body in nodes:
@@ -71,7 +73,7 @@ def build(source, target):
     }
     var source = node.getAttribute('data-dl-src');
     if (source) {
-      script.src = source; script.async = false; script.onload = loaded;
+      script.src = source; script.integrity = node.getAttribute('data-dl-integrity') || ''; script.async = false; script.onload = loaded;
       script.onerror = function () { window.DLIDLE.error = node.getAttribute('data-dl-layer'); console.error('[DexLadder] Desk failed to load', source); };
     } else script.text = node.textContent || '';
     document.body.appendChild(script);
@@ -82,19 +84,19 @@ def build(source, target):
         url=asset(body,'js')
         if typ=='application/x-dl-deferred':
             layer=attrs['data-dl-layer']
-            replacement=f'<script type="application/x-dl-deferred" data-dl-layer="{layer}" data-dl-src="{url}"></script>'
+            replacement=f'<script type="application/x-dl-deferred" data-dl-layer="{layer}" data-dl-src="{url}" data-dl-integrity="{integrity(url)}"></script>'
         else:
             identity=' id="'+attrs['id']+'"' if 'id' in attrs else ''
-            replacement=f'<script defer{identity} src="{url}"></script>'
+            replacement=f'<script defer{identity} src="{url}" integrity="{integrity(url)}"></script>'
         replacements.append((start,end,replacement))
     if body_styles:
         url=asset('\n'.join(body_styles),'css')
         anchor=body_style_anchor
-        replacements=[(a,b,(f'<link id="v154css" rel="stylesheet" href="{url}">' if (a,b)==anchor else r)) for a,b,r in replacements]
+        replacements=[(a,b,(f'<link id="v154css" rel="stylesheet" href="{url}" integrity="{integrity(url)}">' if (a,b)==anchor else r)) for a,b,r in replacements]
     for start,end,replacement in reversed(sorted(replacements)): html=html[:start]+replacement+html[end:]
     if head_styles:
         url=asset('\n'.join(head_styles),'css')
-        html=html.replace('</head>',f'<link rel="stylesheet" href="{url}">\n</head>',1)
+        html=html.replace('</head>',f'<link rel="stylesheet" href="{url}" integrity="{integrity(url)}">\n</head>',1)
     # Body CSS stays after runtime-injected head CSS in the cascade.
 
     # Native deferred scripts preserve global boundaries and order. The normal

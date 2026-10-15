@@ -2,7 +2,7 @@
 
 The production homepage is a small learning page. It offers a risk exercise, calculators, guides, and an explicit simulator entry. It does not download or execute simulator chunks. Existing `/#/…` links redirect to `/app/#/…`, preserving the query and simulator destination.
 
-The full simulator lives at `/app/`. Its classic scripts retain their global boundaries and order and use native deferred loading. The loader exposes readiness after the initial scripts complete and the normal load event fires. Optional production layers retain their idle order. Head and body stylesheets keep their cascade relationship to runtime-injected styles.
+The full simulator lives at `/app/`. Its classic scripts retain their global boundaries and order and use native deferred loading. The loader exposes readiness after the initial scripts complete and the normal load event fires. Optional production layers retain their idle order. Browser Subresource Integrity covers every owned script and stylesheet, including dynamically loaded optional layers. Head and body stylesheets keep their cascade relationship to runtime-injected styles.
 
 The single-file offline artifact remains `dist/index.html` and is published as an explicit attachment at `/downloads/dexladder-offline`, without converting that archive into a split bundle. Package the verified source build with:
 
