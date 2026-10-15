@@ -79,7 +79,7 @@ def build(source, target):
             replacement=f'<script type="application/x-dl-deferred" data-dl-layer="{layer}" data-dl-src="{url}"></script>'
         else:
             identity=' id="'+attrs['id']+'"' if 'id' in attrs else ''
-            replacement=f'<script defer{identity} src="{url}"></script>'
+            replacement=f'<script type="application/x-dl-boot"{identity} data-dl-src="{url}"></script>'
         replacements.append((start,end,replacement))
     if body_styles:
         url=asset('\n'.join(body_styles),'css')
@@ -91,6 +91,21 @@ def build(source, target):
         html=html.replace('</head>',f'<link rel="stylesheet" href="{url}">\n</head>',1)
     # Body CSS stays after runtime-injected head CSS in the cascade.
 
+    # Two animation frames leave one complete rendering opportunity before any
+    # desk code executes. Dynamic classic scripts with async=false still execute
+    # in insertion order, even when their downloads finish out of order.
+    loader = """<script id="dl-hosted-loader">
+(function(){
+  function boot(){
+    var nodes=Array.prototype.slice.call(document.querySelectorAll('script[type="application/x-dl-boot"]'));
+    var remaining=nodes.length;
+    function loaded(){if(--remaining===0){window.DLHOSTED={ready:true};window.dispatchEvent(new Event('load'));}}
+    nodes.forEach(function(node){var script=document.createElement('script');script.async=false;script.src=node.getAttribute('data-dl-src');script.onload=loaded;script.onerror=function(){window.DLHOSTED={ready:false,error:script.src};console.error('[DexLadder] App code failed to load',script.src);};document.body.appendChild(script);});
+  }
+  requestAnimationFrame(function(){requestAnimationFrame(boot);});
+})();
+</script>"""
+    html=html.replace('</body>',loader+'\n</body>',1)
     (target/'index.html').write_text(html)
     digest=hashlib.sha256(html.encode()).hexdigest()
     worker=(target/'sw.js').read_text()

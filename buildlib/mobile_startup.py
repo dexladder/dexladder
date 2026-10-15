@@ -27,6 +27,6 @@ def apply(html):
     boot = 'function boot(){if(mount()){if(updFeed()'
     assert html.count(boot) == 1
     html = html.replace(boot, 'function boot(){if(mount()){var slot=document.getElementById("dlCommandPending");if(slot)slot.remove();if(updFeed()')
-    css = '<style id="dl-mobile-startup">#dlCommandPending{height:34px}@media(max-width:640px){#dlCommandPending{height:32px}}body #sv82-chip{filter:none!important;box-shadow:0 6px 16px rgba(0,229,255,.22)}#sv82-chip .sv82-b{width:22px;height:22px}#sv82-chip .sv82-b img{display:block;width:100%;height:100%;object-fit:contain}@media(max-width:760px){#sv82-chip .sv82-b{width:18px;height:18px}}</style>'
+    css = '<style id="dl-mobile-startup">#page-markets .hero-copy>*{animation:none!important;opacity:1!important;transform:none!important}#dlCommandPending{height:34px}@media(max-width:640px){#dlCommandPending{height:32px}}body #sv82-chip{filter:none!important;box-shadow:0 6px 16px rgba(0,229,255,.22)}#sv82-chip .sv82-b{width:22px;height:22px}#sv82-chip .sv82-b img{display:block;width:100%;height:100%;object-fit:contain}@media(max-width:760px){#sv82-chip .sv82-b{width:18px;height:18px}}</style>'
     html = html.replace('</head>', css + '\n</head>', 1)
     return html

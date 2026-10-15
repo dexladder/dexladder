@@ -15,7 +15,7 @@ const {chromium}=require('playwright');
  try{
  const context=await browser.newContext({viewport:{width:393,height:852}});await context.route(/^https?:\/\/(?!dexladder\.localhost)/,r=>r.abort());const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
  await page.goto(origin,{waitUntil:'load'});
- await page.waitForFunction(hasDeferred=>typeof window.nav==='function'&&(!hasDeferred||window.DLIDLE?.ready),hasDeferred,{timeout:30000});
+ await page.waitForFunction(hasDeferred=>typeof window.nav==='function'&&window.DLHOSTED?.ready&&(!hasDeferred||window.DLIDLE?.ready),hasDeferred,{timeout:30000});
  await page.waitForTimeout(2000);
  const badge=await page.locator('#sv82-chip .sv82-b img').evaluate(img=>({w:img.getBoundingClientRect().width,h:img.getBoundingClientRect().height}));
  assert.ok(badge.w>0&&badge.w<=22&&badge.h>0&&badge.h<=22,JSON.stringify(badge));
@@ -32,7 +32,7 @@ const {chromium}=require('playwright');
  await page.waitForFunction(()=>!!navigator.serviceWorker.controller,null,{timeout:30000});
  assert.equal(await page.evaluate(async assets=>{const keys=await caches.keys();const cache=await caches.open(keys.find(k=>k.endsWith('-shell')));return (await Promise.all(assets.map(url=>cache.match(url)))).every(Boolean);},manifest.assets),true);
  await page.evaluate(()=>nav('markets'));await context.setOffline(true);await page.reload({waitUntil:'load'});
- await page.waitForFunction(hasDeferred=>typeof window.nav==='function'&&(!hasDeferred||window.DLIDLE?.ready),hasDeferred,{timeout:30000});
+ await page.waitForFunction(hasDeferred=>typeof window.nav==='function'&&window.DLHOSTED?.ready&&(!hasDeferred||window.DLIDLE?.ready),hasDeferred,{timeout:30000});
  assert.ok(await page.evaluate(keys=>keys.every(k=>typeof window[k]?.open==='function'),desks));
  assert.equal(errors.length,0,errors.join('\n'));
  console.log('PASS: content hashes, bounded HTML, opt-in guide, mobile Trade/Learn, all desks, automatic worker installation, full offline reload');

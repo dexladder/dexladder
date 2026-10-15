@@ -1,6 +1,6 @@
 # Hosted mobile build
 
-The offline download remains `dist/index.html`. The hosted packager splits that verified artifact into content-addressed scripts and two stylesheets, without changing the desk engines. Classic scripts retain their order and global script boundaries. Optional production layers retain their idle loading order. Body styles remain after dynamically injected head styles in the cascade.
+The offline download remains `dist/index.html`. The hosted packager splits that verified artifact into content-addressed scripts and two stylesheets, without changing the desk engines. Classic scripts start after an initial rendering opportunity and retain their order and global script boundaries. The loader signals readiness after all initial scripts finish; existing load handlers then run. Optional production layers retain their idle loading order. Body styles remain after dynamically injected head styles in the cascade.
 
 Run after the source build and browser checks:
 
