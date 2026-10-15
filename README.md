@@ -12,6 +12,29 @@
 
 **[Open the live app](https://dexladder.com)** · **[Download the single file](https://github.com/dexladder/dexladder/releases/latest)** · **[Verify the build](docs/VERIFY.md)** · **[Discussions](https://github.com/dexladder/dexladder/discussions)**
 <!-- /badges -->
+
+## Start with one learning exercise
+
+DexLadder is for learning crypto market mechanics with virtual money. Pick one
+question, change one input, and inspect what happens:
+
+1. **How does risk change position size?** Open the
+   [position size calculator](https://www.dexladder.com/tools/position-size-calculator/).
+   Keep the account and risk percentage fixed, then move the stop farther from
+   the entry. Compare the units and position value. The calculation is a model;
+   fees, slippage and gaps can increase a real loss.
+2. **What changes when I choose a limit order?** Open the
+   [paper-trading terminal](https://www.dexladder.com/#/terminal), compare Market
+   and Limit, and inspect the limit-price field before submitting anything.
+   A limit sets a price boundary; it does not guarantee a fill.
+3. **What does a hash demonstrate?** Open the
+   [Academy](https://www.dexladder.com/#/learn), choose **Fingerprints (hashing)**,
+   and edit one character. The lesson uses an illustrative hash to show the
+   idea; it is not a SHA-256 implementation.
+
+No real-money order is placed by these exercises. For more worked explanations,
+start with the [trading guides](https://www.dexladder.com/guides/).
+
 <p align="center">
   <img src="brand/desks-contact-sheet.jpg" alt="Pool Radar, Liquidity Desk, Leverage Weather, Rewind, Bots and the Odds Desk, captured live on dexladder.com" width="100%">
 </p>
