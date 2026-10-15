@@ -104,6 +104,7 @@ def validate(origin, path, response, baseline, fetcher=fetch):
         require(sha == baseline['app_sha256'], 'Simulator normalized SHA differs')
         return {'normalized_sha256': sha, 'delivered_sha256': hashlib.sha256(body).hexdigest()}
     if path == '/' and baseline.get('app_path'):
+        require('noindex' not in headers.get('x-robots-tag', '').lower(), 'Production homepage is blocked from indexing')
         require('<title>' + baseline['homepage_title'] + '</title>' in text, 'Learning homepage title differs')
         require(f'<meta name="cb:build" content="{baseline["build"]}">' in text, 'Homepage build differs')
         require('Learn crypto mechanics.' in text and '/app/#/terminal' in text and '/tools/position-size-calculator/' in text, 'Homepage entry points are missing')

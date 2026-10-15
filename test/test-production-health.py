@@ -39,6 +39,8 @@ class ProductionHealth(unittest.TestCase):
     def test_hosted_home_and_app_cannot_replace_each_other(self):
         home, app, manifest, baseline, fetcher = self.hosted_fixture()
         health.validate(ORIGIN, '/', response(home + RUM), baseline)
+        blocked = response(home); blocked['headers']['x-robots-tag'] = 'noindex'
+        with self.assertRaises(ValueError): health.validate(ORIGIN, '/', blocked, baseline)
         health.validate(ORIGIN, '/app/', response(app + RUM, path='/app/'), baseline)
         with self.assertRaises(ValueError): health.validate(ORIGIN, '/', response(app), baseline)
         with self.assertRaises(ValueError): health.validate(ORIGIN, '/app/', response(home, path='/app/'), baseline)
