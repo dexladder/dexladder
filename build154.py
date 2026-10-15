@@ -2247,6 +2247,9 @@ def seo_inject(h):
 out = seo_inject(out)
 print('seo injection: entry links, site JSON-LD and msvalidate meta applied to the payload')
 
+from buildlib import mobile_startup
+out = mobile_startup.apply(out)
+
 # ------------------------------------------------------------------ worker / payload version lock
 # Defect 4 of the same audit: nothing forced the worker's version to move when the payload did,
 # so a deploy could ship a new index.html behind a worker whose cache name had not changed —
