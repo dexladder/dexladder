@@ -1,11 +1,16 @@
 {
   "build": "v167",
-  "worker_revision": 26,
-  "artifact_sha256": "501b625e6e19bbd4b883c5364c285cbd979584a0d5986edf502421da218e2831",
+  "worker_revision": 27,
+  "artifact_sha256": "081c83a82c3f2dfe0d03afc7354f8fefdcc985db98903aec11e0cd1a0f0906b2",
+  "worker_sha256": "5c1869b8fa0f09a78f15a315d0069cdffa57b657d30b7ec558b464710fda402b",
+  "app_path": "/app/",
+  "app_sha256": "600d91477da8c7690c82d5895770e0555fbf3d5f28df85f5e89c10f6514212eb",
+  "hosted_manifest_sha256": "f2c0e43d566aa681f41234385839c742abd142d6dd25b4e2e01a00813dc8c233",
+  "asset_count": 127,
+  "homepage_title": "Crypto Paper Trading &amp; Free Risk Calculators | DexLadder",
   "origins": [
     "https://dexladder.com",
     "https://www.dexladder.com"
   ],
-  "source": "Verified canonical v167 release published on 2026-10-12; independent of public repository v166 build",
-  "worker_sha256": "279082a54a01e08ce1f4bf4528e3cafe185bd7b96fc761fbc3ac9ccf95824b2e"
+  "source": "Canonical v167 mobile homepage release 2026-10-15; public v166 artifact was not deployed"
 }
