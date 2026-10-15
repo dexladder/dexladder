@@ -26,6 +26,7 @@ const {chromium}=require('playwright');
  await early.waitForFunction(()=>window.DLHOSTED?.coreReady,null,{timeout:15000});
  assert.equal(await early.evaluate(()=>window.DLHOSTED.ready),false,'Do not label extensions ready before they load');
  assert.ok(await early.evaluate(()=>typeof window.CBX?.preview==='function'&&typeof window.SV82?.exportBundle==='function'),'Paper engine and ledger must exist in the usable core');
+ assert.equal(await early.locator('#cbCmd').count(),1,'Connection status must be available in the usable core');
  const cashBefore=await early.evaluate(()=>S.bal.USDT);
  await early.locator('#amt').fill('0.001');
  await early.locator('#placeBtn').click();

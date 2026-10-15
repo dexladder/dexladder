@@ -31,6 +31,11 @@ def apply(html):
     before=html.rfind('<script',0,catalogue)
     activate="""<script id="dl-entry-activate">(function(){var v=document.documentElement.dataset.dlEntry;if(v)document.querySelectorAll('.page').forEach(function(p){p.classList.toggle('active',p.id==='page-'+v);});})();</script>"""
     html=html[:before]+activate+'\n'+html[before:]
+    # The command pill owns the connecting state. Keep actual cached/simulated
+    # feed warnings; only the redundant boot banner stops moving the document.
+    boot_banner='var s=ST.state;if("live"===s)return el.className="cbnet",void(el.innerHTML="")'
+    assert html.count(boot_banner)==1
+    html=html.replace(boot_banner,boot_banner.replace('if("live"===s)','if("live"===s||"boot"===s)'))
     # Keep the floating brand mark bounded and avoid a costly blur filter at boot.
     # Reserve the command toolbar while its legacy initializer runs.
     assert html.count('</head>\n<body>') == 1

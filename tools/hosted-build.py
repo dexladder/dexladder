@@ -89,7 +89,7 @@ def build(source, target):
             body=body.replace(old,new)
         # Unconditional legacy load callbacks still receive the real load event
         # when their module arrives after it. Guarded DOM-ready paths stay native.
-        stage=(start>core_end or 'owns: shared English UI string catalogue' in body) and 'navigator.serviceWorker.register(' not in body and 'Launch surface retired.' not in body and 'window.CBX=(DLAPP.legacy.bind(' not in body and 'window.DLBX=(function(){' not in body and 'window.DLRX=(function(){' not in body and not body.lstrip().startswith('window.SV82=function')
+        stage=(start>core_end or 'owns: shared English UI string catalogue' in body) and 'navigator.serviceWorker.register(' not in body and 'Launch surface retired.' not in body and 'window.CBX=(DLAPP.legacy.bind(' not in body and 'window.__CBBAR=1' not in body and not body.lstrip().startswith('window.SV82=function')
         if stage:
             body=body.replace('window.addEventListener("load",','window.DLBOOT.onLoad(')
         if 'function scheduleNext()' in body and 'window.DLIDLE' in body:
