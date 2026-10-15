@@ -112,6 +112,8 @@ window.addEventListener('load',function(){
     html=html.replace('</body>',readiness+'\n</body>',1)
     appdir=target/'app'; appdir.mkdir(exist_ok=True)
     (appdir/'index.html').write_text(html)
+    downloads=target/'downloads';downloads.mkdir(exist_ok=True)
+    shutil.copy2(source/'index.html',downloads/'dexladder-offline')
     app_digest=hashlib.sha256(html.encode()).hexdigest()
     # Preserve the app's existing relative icons, manifest and recorded narration.
     for file in source.iterdir():
@@ -187,8 +189,8 @@ self.addEventListener('message', event => {
         rules=rules.replace(anchor,route+anchor,1) if anchor else rules+'\n'+route
         redirects.write_text(rules)
     headers=target/'_headers'
-    headers.write_text(headers.read_text()+'\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/app/\n  Cache-Control: no-cache\n/app/index.html\n  Cache-Control: no-cache\n/app/manifest.webmanifest\n  Content-Type: application/manifest+json\n  Cache-Control: no-cache\n')
-    manifest={'index_sha256':digest,'assets':assets,'offline_bytes':len((source/'index.html').read_bytes()),'hosted_html_bytes':len(home.encode()),'app_html_bytes':len(html.encode()),'app_sha256':app_digest}
+    headers.write_text(headers.read_text()+'\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/app/\n  Cache-Control: no-cache\n/app/index.html\n  Cache-Control: no-cache\n/app/manifest.webmanifest\n  Content-Type: application/manifest+json\n  Cache-Control: no-cache\n/downloads/dexladder-offline\n  Content-Type: application/octet-stream\n  Content-Disposition: attachment; filename="DexLadder-offline.html"\n  X-Robots-Tag: noindex\n  Cache-Control: no-cache\n')
+    manifest={'index_sha256':digest,'assets':assets,'offline_bytes':len((source/'index.html').read_bytes()),'offline_sha256':hashlib.sha256((source/'index.html').read_bytes()).hexdigest(),'offline_path':'/downloads/dexladder-offline','hosted_html_bytes':len(home.encode()),'app_html_bytes':len(html.encode()),'app_sha256':app_digest}
     (target/'hosted-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print(json.dumps(manifest | {'assets':len(assets)}))
 if __name__=='__main__': build(Path(sys.argv[1]),Path(sys.argv[2]))

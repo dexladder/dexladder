@@ -4,7 +4,7 @@ The production homepage is a small learning page. It offers a risk exercise, cal
 
 The full simulator lives at `/app/`. Its classic scripts retain their global boundaries and order and use native deferred loading. The loader exposes readiness after the initial scripts complete and the normal load event fires. Optional production layers retain their idle order. Head and body stylesheets keep their cascade relationship to runtime-injected styles.
 
-The single-file offline artifact remains `dist/index.html`. Package the verified source build with:
+The single-file offline artifact remains `dist/index.html` and is published as an explicit attachment at `/downloads/dexladder-offline`, without converting that archive into a split bundle. Package the verified source build with:
 
 ```sh
 python3 tools/hosted-build.py dist /tmp/dexladder-hosted
