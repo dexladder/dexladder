@@ -51,6 +51,7 @@ jobs:
         run: |
           npm --prefix test ci --no-audit --no-fund
           (cd test && npx playwright install --with-deps chromium)
+          python3 test/test-production-health.py
           python3 test/gate-build-check.py
           python3 tools/layer-index.py --check
           node tools/generate-i18n.cjs --check

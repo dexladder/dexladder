@@ -1,4 +1,5 @@
 import hashlib
+import json
 import importlib.util
 from pathlib import Path
 import unittest
@@ -18,6 +19,48 @@ class ProductionHealth(unittest.TestCase):
     def setUp(self):
         self.home = b'<title>Crypto Paper Trading &amp; Free Calculators | DexLadder</title><meta name="cb:build" content="v167"><nav id="dl-resource-links"></nav><nav id="dl-resource-hubs"></nav>DLPRACTICE DLGASLAB DLFLOW DLSHORTCUTS dlExecutionLessons dlBuildHash'
         self.baseline = {'build': 'v167', 'artifact_sha256': hashlib.sha256(self.home).hexdigest(), 'worker_revision': 26}
+
+    def hosted_fixture(self):
+        home = b'<title>Crypto Paper Trading &amp; Free Risk Calculators | DexLadder</title><meta name="cb:build" content="v167"><h1>Learn crypto mechanics.</h1><a href="/app/#/terminal">App</a><a href="/tools/position-size-calculator/">Exercise</a>'
+        app = b'<meta name="cb:build" content="v167"><script defer id="dl-hosted-loader" src="/assets/test.js"></script>'
+        js = b'DLPRACTICE DLGASLAB DLFLOW DLSHORTCUTS dlExecutionLessons dlBuildHash'
+        css = b'body{color:white}'
+        assets = {'/assets/' + hashlib.sha256(js).hexdigest() + '.js': js, '/assets/' + hashlib.sha256(css).hexdigest() + '.css': css}
+        baseline = {'build': 'v167', 'app_path': '/app/', 'homepage_title': 'Crypto Paper Trading &amp; Free Risk Calculators | DexLadder', 'artifact_sha256': hashlib.sha256(home).hexdigest(), 'app_sha256': hashlib.sha256(app).hexdigest(), 'asset_count': 2}
+        manifest = json.dumps({'index_sha256': baseline['artifact_sha256'], 'app_sha256': baseline['app_sha256'], 'assets': list(assets)}).encode()
+        baseline['hosted_manifest_sha256'] = hashlib.sha256(manifest).hexdigest()
+        def fetcher(origin, path):
+            body = assets[path]
+            data = response(body, content_type='text/css' if path.endswith('.css') else 'application/javascript', path=path)
+            data['headers']['cache-control'] = 'public,max-age=31536000,immutable'
+            return data
+        return home, app, manifest, baseline, fetcher
+
+    def test_hosted_home_and_app_cannot_replace_each_other(self):
+        home, app, manifest, baseline, fetcher = self.hosted_fixture()
+        health.validate(ORIGIN, '/', response(home + RUM), baseline)
+        health.validate(ORIGIN, '/app/', response(app + RUM, path='/app/'), baseline)
+        with self.assertRaises(ValueError): health.validate(ORIGIN, '/', response(app), baseline)
+        with self.assertRaises(ValueError): health.validate(ORIGIN, '/app/', response(home, path='/app/'), baseline)
+
+    def test_hosted_assets_are_verified_and_corruption_fails(self):
+        home, app, manifest, baseline, fetcher = self.hosted_fixture()
+        data = response(manifest, content_type='application/json', path='/hosted-manifest.json')
+        self.assertEqual(health.validate(ORIGIN, '/hosted-manifest.json', data, baseline, fetcher)['assets_verified'], 2)
+        def corrupt(origin, path):
+            item = fetcher(origin, path); item['body'] += b'corrupted'; return item
+        with self.assertRaises(ValueError): health.validate(ORIGIN, '/hosted-manifest.json', data, baseline, corrupt)
+        def wrong_type(origin, path):
+            item = fetcher(origin, path); item['headers']['content-type'] = 'text/html'; return item
+        with self.assertRaises(ValueError): health.validate(ORIGIN, '/hosted-manifest.json', data, baseline, wrong_type)
+
+    def test_hosted_manifest_rejects_external_paths_before_fetch(self):
+        home, app, manifest, baseline, fetcher = self.hosted_fixture()
+        bad = json.loads(manifest);bad['assets'][0] = 'https://elsewhere.example/script.js'
+        body = json.dumps(bad).encode();baseline['hosted_manifest_sha256'] = hashlib.sha256(body).hexdigest()
+        blocked = Mock(side_effect=AssertionError('Must not fetch unvalidated paths'))
+        with self.assertRaises(ValueError): health.validate(ORIGIN, '/hosted-manifest.json', response(body, content_type='application/json', path='/hosted-manifest.json'), baseline, blocked)
+        blocked.assert_not_called()
 
     def test_exact_known_rum_and_multiple_insertions(self):
         self.assertEqual(health.normalize_home(self.home + RUM + RUM, ORIGIN), self.home)

@@ -80,7 +80,7 @@ def build(source, target):
             replacement=f'<script type="application/x-dl-deferred" data-dl-layer="{layer}" data-dl-src="{url}"></script>'
         else:
             identity=' id="'+attrs['id']+'"' if 'id' in attrs else ''
-            replacement=f'<script type="application/x-dl-boot"{identity} data-dl-src="{url}"></script>'
+            replacement=f'<script defer{identity} src="{url}"></script>'
         replacements.append((start,end,replacement))
     if body_styles:
         url=asset('\n'.join(body_styles),'css')
@@ -92,21 +92,19 @@ def build(source, target):
         html=html.replace('</head>',f'<link rel="stylesheet" href="{url}">\n</head>',1)
     # Body CSS stays after runtime-injected head CSS in the cascade.
 
-    # Two animation frames leave one complete rendering opportunity before any
-    # desk code executes. Dynamic classic scripts with async=false still execute
-    # in insertion order, even when their downloads finish out of order.
-    loader = """<script id="dl-hosted-loader">
-(function(){
-  function boot(){
-    var nodes=Array.prototype.slice.call(document.querySelectorAll('script[type="application/x-dl-boot"]'));
-    var remaining=nodes.length;
-    function loaded(){if(--remaining===0){window.DLHOSTED={ready:true};window.dispatchEvent(new Event('load'));if('serviceWorker' in navigator)navigator.serviceWorker.ready.then(function(reg){var ch=new MessageChannel();ch.port1.onmessage=function(e){window.DLHOSTED.offlineReady=!!e.data.ready;if(e.data.error)window.DLHOSTED.offlineError=e.data.error;ch.port1.close();};reg.active.postMessage({dl:'cache-app'},[ch.port2]);}).catch(function(){});}}
-    nodes.forEach(function(node){var script=document.createElement('script');script.async=false;script.src=node.getAttribute('data-dl-src');script.onload=loaded;script.onerror=function(){window.DLHOSTED={ready:false,error:script.src};console.error('[DexLadder] App code failed to load',script.src);};document.body.appendChild(script);});
-  }
-  requestAnimationFrame(function(){requestAnimationFrame(boot);});
-})();
+    # Native deferred scripts preserve global boundaries and order. The normal
+    # load event is retained; no synthetic lifecycle event is dispatched.
+    readiness = """<script id="dl-hosted-loader">
+window.DLHOSTED={ready:false};
+window.addEventListener('load',function(){
+  window.DLHOSTED.ready=true;
+  if('serviceWorker' in navigator)navigator.serviceWorker.ready.then(function(reg){
+    var ch=new MessageChannel();ch.port1.onmessage=function(e){window.DLHOSTED.offlineReady=!!e.data.ready;if(e.data.error)window.DLHOSTED.offlineError=e.data.error;ch.port1.close();};
+    reg.active.postMessage({dl:'cache-app'},[ch.port2]);
+  }).catch(function(){});
+},{once:true});
 </script>"""
-    html=html.replace('</body>',loader+'\n</body>',1)
+    html=html.replace('</body>',readiness+'\n</body>',1)
     appdir=target/'app'; appdir.mkdir(exist_ok=True)
     (appdir/'index.html').write_text(html)
     app_digest=hashlib.sha256(html.encode()).hexdigest()
@@ -128,6 +126,9 @@ def build(source, target):
     worker=(source/'sw.js').read_text()
     worker=re.sub(r"const PAYLOAD_SHA = '[a-f0-9]{64}';",f"const PAYLOAD_SHA = '{digest}';",worker)
     worker=re.sub(r'const SW_REV = (\d+);',lambda m:f'const SW_REV = {int(m[1])+1};',worker)
+    version_line=next(line for line in worker.splitlines() if line.startswith('const V '))
+    assert 'PAYLOAD_SHA.slice(0, 12)' in version_line and version_line.endswith(';')
+    worker=worker.replace(version_line, "const APP_PAYLOAD_SHA = '"+app_digest+"';\n"+version_line[:-1]+" + '-' + APP_PAYLOAD_SHA.slice(0, 12);")
     worker=worker.replace("const SHELL_REQUIRED = ['./index.html'];", "const SHELL_REQUIRED = ['./index.html'];\nconst HOSTED_ASSETS = "+json.dumps(assets)+";")
     assert 'async function navigateFirst(e, req) {' in worker
     worker=worker.replace('async function navigateFirst(e, req) {', "async function navigateFirst(e, req, shellKey = './index.html') {")
@@ -135,10 +136,11 @@ def build(source, target):
     worker=worker.replace("cache.match('./index.html')", "cache.match(shellKey)")
     guard="""  if (req.mode === 'navigate' && url.origin === self.location.origin &&
       url.pathname !== '/' && url.pathname !== '/index.html') return;"""
-    worker=worker.replace(guard,'')
+    worker=worker.replace(guard,'').replace('  // Only app entry points may fall back to the offline app shell.\n','')
     nav="  if (req.mode === 'navigate') { e.respondWith(navigateFirst(e, req).then(response => { rememberNavigation(e, response); return response; })); return; }"
     assert worker.count(nav)==1
-    worker=worker.replace(nav,"""  if (req.mode === 'navigate' && url.origin === self.location.origin &&
+    worker=worker.replace(nav,"""  // Only app entry points may fall back to the offline app shell.
+  if (req.mode === 'navigate' && url.origin === self.location.origin &&
       !['/', '/index.html', '/app/', '/app/index.html'].includes(url.pathname)) return;
   if (req.mode === 'navigate') { const key = url.pathname.startsWith('/app/') ? './app/index.html' : './index.html'; e.respondWith(navigateFirst(e, req, key).then(response => { rememberNavigation(e, response); return response; })); return; }""")
     worker+="""
@@ -151,11 +153,18 @@ self.addEventListener('message', event => {
   event.waitUntil((async()=>{
     try {
       const cache=await caches.open(SHELL_CACHE);
-      const app=await netFetch('./app/index.html',STATIC_HARD_MS);
+      let app=await cache.match('./app/index.html');
+      if(!app)app=await netFetch('./app/index.html',STATIC_HARD_MS);
+      const appText=await app.clone().text();
+      const normalized=appText.replace(/\\n<script async id="netlify-rum-container" src="\\/\\.netlify\\/scripts\\/rum" data-netlify-rum-site-id="7f8be369-fe1c-4277-9cad-ff33c1b9f840" data-netlify-deploy-branch="[^"]*" data-netlify-deploy-context="[^"]*" data-netlify-cwv-token="[A-Za-z0-9_.-]+"><\\/script>\\n/g,'');
+      const appSha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',new TextEncoder().encode(normalized)))).map(b=>b.toString(16).padStart(2,'0')).join('');
+      if(appSha!==APP_PAYLOAD_SHA)throw new Error('App shell integrity mismatch');
       if (!(await store(cache,'./app/index.html',app,'shell'))) throw new Error('App shell unavailable');
       for (const url of HOSTED_ASSETS) {
         let response=await cache.match(url);
         if (!response) response=await netFetch(url,STATIC_HARD_MS);
+        const type=ctOf(response);
+        if(url.endsWith('.css')?!type.includes('text/css'):!type.includes('javascript'))throw new Error('App asset MIME mismatch');
         const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await response.clone().arrayBuffer()))).map(b=>b.toString(16).padStart(2,'0')).join('');
         if (!url.endsWith('/'+sha+(url.endsWith('.css')?'.css':'.js'))) throw new Error('App asset integrity mismatch');
         if (!(await store(cache,url,response,'static'))) throw new Error('App asset unavailable');
@@ -173,7 +182,7 @@ self.addEventListener('message', event => {
         rules=rules.replace(anchor,route+anchor,1) if anchor else rules+'\n'+route
         redirects.write_text(rules)
     headers=target/'_headers'
-    headers.write_text(headers.read_text()+'\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n')
+    headers.write_text(headers.read_text()+'\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/app/\n  Cache-Control: no-cache\n/app/index.html\n  Cache-Control: no-cache\n/app/manifest.webmanifest\n  Content-Type: application/manifest+json\n  Cache-Control: no-cache\n')
     manifest={'index_sha256':digest,'assets':assets,'offline_bytes':len((source/'index.html').read_bytes()),'hosted_html_bytes':len(home.encode()),'app_html_bytes':len(html.encode()),'app_sha256':app_digest}
     (target/'hosted-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print(json.dumps(manifest | {'assets':len(assets)}))

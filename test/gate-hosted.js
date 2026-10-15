@@ -3,13 +3,14 @@
 const assert=require('node:assert/strict'),fs=require('fs'),path=require('path'),http=require('http'),crypto=require('crypto');
 const {chromium}=require('playwright');
 (async()=>{
+ const RUM='\n<script async id="netlify-rum-container" src="/.netlify/scripts/rum" data-netlify-rum-site-id="7f8be369-fe1c-4277-9cad-ff33c1b9f840" data-netlify-deploy-branch="" data-netlify-deploy-context="production" data-netlify-cwv-token="abc.def-ghi"></script>\n';
  const file=path.resolve(process.argv[2]);const root=path.dirname(file);const manifest=JSON.parse(fs.readFileSync(path.join(root,'hosted-manifest.json')));
  const hasDeferred=fs.readFileSync(path.join(root,'app/index.html'),'utf8').includes('<script type="application/x-dl-deferred"');
  const hash=bytes=>crypto.createHash('sha256').update(bytes).digest('hex');
  assert.equal(hash(fs.readFileSync(file)),manifest.index_sha256);assert.equal(hash(fs.readFileSync(path.join(root,'app/index.html'))),manifest.app_sha256);assert.ok(manifest.hosted_html_bytes<25000);
  assert.ok(!fs.readFileSync(file,'utf8').includes('nvVeilAuto'));
  for(const url of manifest.assets) assert.equal(hash(fs.readFileSync(path.join(root,url))),path.basename(url).split('.')[0]);
- const server=http.createServer((req,res)=>{let p=new URL(req.url,'http://local').pathname;let f=path.join(root,p==='/'?'index.html':p);if(fs.existsSync(f)&&fs.statSync(f).isDirectory())f=path.join(f,'index.html');if(!fs.existsSync(f)||!fs.statSync(f).isFile()){res.writeHead(404);return res.end('Not found');}let ext=path.extname(f);res.writeHead(200,{'content-type':({'.js':'text/javascript','.css':'text/css','.html':'text/html','.svg':'image/svg+xml','.webmanifest':'application/manifest+json'})[ext]||'application/octet-stream','cache-control':p.startsWith('/assets/')?'public,max-age=31536000,immutable':'no-cache'});fs.createReadStream(f).pipe(res);});
+ const server=http.createServer((req,res)=>{let p=new URL(req.url,'http://local').pathname;if(p==='/.netlify/scripts/rum'){res.writeHead(200,{'content-type':'text/javascript'});return res.end('');}let f=path.join(root,p==='/'?'index.html':p);if(fs.existsSync(f)&&fs.statSync(f).isDirectory())f=path.join(f,'index.html');if(!fs.existsSync(f)||!fs.statSync(f).isFile()){res.writeHead(404);return res.end('Not found');}let ext=path.extname(f);res.writeHead(200,{'content-type':({'.js':'text/javascript','.css':'text/css','.html':'text/html','.svg':'image/svg+xml','.webmanifest':'application/manifest+json'})[ext]||'application/octet-stream','cache-control':p.startsWith('/assets/')?'public,max-age=31536000,immutable':'no-cache'});if(f===path.join(root,'app/index.html'))return res.end(fs.readFileSync(f,'utf8').replace('</body>',RUM+'</body>'));fs.createReadStream(f).pipe(res);});
  await new Promise(resolve=>server.listen(0,'127.0.0.1',resolve));const origin='http://dexladder.localhost:'+server.address().port;
  const browser=await chromium.launch({args:['--no-proxy-server','--host-resolver-rules=MAP dexladder.localhost 127.0.0.1']});
  try{
@@ -40,6 +41,9 @@ const {chromium}=require('playwright');
  await page.evaluate(()=>nav('markets'));await context.setOffline(true);await page.reload({waitUntil:'load'});
  await page.waitForFunction(hasDeferred=>typeof window.nav==='function'&&window.DLHOSTED?.ready&&(!hasDeferred||window.DLIDLE?.ready),hasDeferred,{timeout:30000});
  assert.ok(await page.evaluate(keys=>keys.every(k=>typeof window[k]?.open==='function'),desks));
+ const witness=await page.evaluate(()=>new Promise((resolve,reject)=>{const channel=new MessageChannel();const timer=setTimeout(()=>reject(new Error('Navigation witness timed out')),6000);channel.port1.onmessage=event=>{clearTimeout(timer);channel.port1.close();resolve(event.data);};navigator.serviceWorker.controller.postMessage({dl:'running-build-hash'},[channel.port2]);}));
+ assert.equal(witness.sha256,hash(Buffer.from(fs.readFileSync(path.join(root,'app/index.html'),'utf8').replace('</body>',RUM+'</body>'))),'Trust must describe the actual app response including hosting RUM');
+ const cachesInUse=await page.evaluate(()=>caches.keys());assert.ok(cachesInUse.some(key=>key.endsWith(manifest.app_sha256.slice(0,12)+'-shell')),'App-only changes must version the cache group');
  await page.goto(origin+'/#/learn',{waitUntil:'load'});
  await page.waitForFunction(hasDeferred=>typeof window.nav==='function'&&window.DLHOSTED?.ready&&(!hasDeferred||window.DLIDLE?.ready),hasDeferred,{timeout:30000});
  assert.ok(page.url().includes('/app/#/learn'),'Existing deep links must reach the app');

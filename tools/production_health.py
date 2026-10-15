@@ -40,7 +40,7 @@ def require(condition, message):
         raise ValueError(message)
 
 
-def validate(origin, path, response, baseline):
+def validate(origin, path, response, baseline, fetcher=fetch):
     status, body, headers = response['status'], response['body'], response['headers']
     expected = 404 if path == '/production-health-missing-page' else 503 if path == '/api/unknown' else 200
     require(status == expected, f'HTTP {status}, expected {expected}')
@@ -60,11 +60,35 @@ def validate(origin, path, response, baseline):
         require('javascript' in content_type, 'Worker is not JavaScript')
         require(hashlib.sha256(body).hexdigest() == baseline['worker_sha256'], 'Worker bytes differ from verified release')
         require('no-store' in headers.get('cache-control', '').lower(), 'Worker lacks no-store')
-        for key, value in [('SW_BUILD', baseline['build']), ('SW_REV', str(baseline['worker_revision'])), ('PAYLOAD_SHA', baseline['artifact_sha256'])]:
+        expected_constants = [('SW_BUILD', baseline['build']), ('SW_REV', str(baseline['worker_revision'])), ('PAYLOAD_SHA', baseline['artifact_sha256'])]
+        if baseline.get('app_path'): expected_constants.append(('APP_PAYLOAD_SHA', baseline['app_sha256']))
+        for key, value in expected_constants:
             match = re.search(rb'const\s+' + key.encode() + rb'\s*=\s*[\x27\x22]?([\w-]+)', body)
             require(match is not None and match.group(1).decode() == value, f'Worker {key} differs from baseline')
         require(b'// Only app entry points may fall back to the offline app shell.' in body, 'Worker missing 404 navigation guard')
         return {'sha256': hashlib.sha256(body).hexdigest()}
+    if path == '/hosted-manifest.json':
+        require('application/json' in content_type, 'Hosted manifest is not JSON')
+        require(hashlib.sha256(body).hexdigest() == baseline['hosted_manifest_sha256'], 'Hosted manifest digest differs')
+        manifest = json.loads(body)
+        require(manifest['index_sha256'] == baseline['artifact_sha256'] and manifest['app_sha256'] == baseline['app_sha256'], 'Hosted manifest entry digests differ')
+        assets = manifest['assets']
+        require(len(assets) == baseline['asset_count'] and len(set(assets)) == len(assets), 'Hosted asset count differs')
+        require(all(re.fullmatch(r'/assets/[0-9a-f]{64}\.(?:js|css)', item) for item in assets), 'Hosted asset path is invalid')
+        def verify_asset(asset):
+            data = fetcher(origin, asset)
+            require(data['status'] == 200 and data['url'].startswith(origin + '/assets/'), 'Hosted asset status or origin differs: ' + asset)
+            kind = data['headers'].get('content-type', '').lower()
+            require(('text/css' in kind) if asset.endswith('.css') else ('javascript' in kind), 'Hosted asset MIME differs: ' + asset)
+            require(hashlib.sha256(data['body']).hexdigest() == asset.rsplit('/', 1)[1].rsplit('.', 1)[0], 'Hosted asset digest differs: ' + asset)
+            require('immutable' in data['headers'].get('cache-control', ''), 'Hosted asset cache policy differs: ' + asset)
+            return data['body']
+        with ThreadPoolExecutor(max_workers=4) as executor:
+            payloads = list(executor.map(verify_asset, assets))
+        combined = b'\n'.join(payloads)
+        for marker in ['DLPRACTICE', 'DLGASLAB', 'DLFLOW', 'DLSHORTCUTS', 'dlExecutionLessons', 'dlBuildHash']:
+            require(marker.encode() in combined, 'Simulator feature missing: ' + marker)
+        return {'assets_verified': len(assets), 'asset_bytes': sum(map(len, payloads))}
     if path == '/sitemap.xml':
         import xml.etree.ElementTree as ET
         root = ET.fromstring(body)
@@ -73,6 +97,20 @@ def validate(origin, path, response, baseline):
         return {'locations': len(locations)}
     require('text/html' in content_type, 'Page is not HTML')
     text = body.decode('utf-8')
+    if baseline.get('app_path') and path == baseline['app_path']:
+        require(f'<meta name="cb:build" content="{baseline["build"]}">' in text, 'Simulator build differs')
+        require('<script defer' in text and 'dl-hosted-loader' in text, 'Simulator loader is missing')
+        sha = hashlib.sha256(normalize_home(body, origin)).hexdigest()
+        require(sha == baseline['app_sha256'], 'Simulator normalized SHA differs')
+        return {'normalized_sha256': sha, 'delivered_sha256': hashlib.sha256(body).hexdigest()}
+    if path == '/' and baseline.get('app_path'):
+        require('<title>' + baseline['homepage_title'] + '</title>' in text, 'Learning homepage title differs')
+        require(f'<meta name="cb:build" content="{baseline["build"]}">' in text, 'Homepage build differs')
+        require('Learn crypto mechanics.' in text and '/app/#/terminal' in text and '/tools/position-size-calculator/' in text, 'Homepage entry points are missing')
+        require('application/x-dl-boot' not in text, 'Homepage contains simulator boot code')
+        sha = hashlib.sha256(normalize_home(body, origin)).hexdigest()
+        require(sha == baseline['artifact_sha256'], 'Homepage normalized SHA differs from baseline')
+        return {'normalized_sha256': sha, 'delivered_sha256': hashlib.sha256(body).hexdigest()}
     if path == '/':
         require('<title>Crypto Paper Trading &amp; Free Calculators | DexLadder</title>' in text, 'Homepage title changed')
         require(f'<meta name="cb:build" content="{baseline["build"]}">' in text, 'Homepage build differs')
@@ -93,7 +131,7 @@ def check(origin, path, baseline, fetcher=fetch, sleeper=time.sleep):
     errors = []
     for attempt in range(1, ATTEMPTS + 1):
         try:
-            details = validate(origin, path, fetcher(origin, path), baseline)
+            details = validate(origin, path, fetcher(origin, path), baseline, fetcher=fetcher)
             return {'origin': origin, 'path': path, 'passed': True, 'attempts': attempt, **details}
         except Exception as error:
             errors.append(str(error))
@@ -109,6 +147,8 @@ def main():
     args = parser.parse_args()
     baseline = json.loads(args.baseline.read_text())
     paths = ['/', '/sw.js', '/tools/dca-calculator/', '/guides/', '/privacy/', '/sitemap.xml', '/production-health-missing-page', '/api/news', '/api/unknown']
+    if baseline.get('app_path'):
+        paths += [baseline['app_path'], '/hosted-manifest.json']
     targets = [(origin, path) for origin in baseline['origins'] for path in paths]
     with ThreadPoolExecutor(max_workers=4) as executor:
         results = list(executor.map(lambda target: check(*target, baseline), targets))
