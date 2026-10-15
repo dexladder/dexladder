@@ -17,6 +17,8 @@ const {chromium}=require('playwright');
  await page.goto(origin,{waitUntil:'load'});
  await page.waitForFunction(hasDeferred=>typeof window.nav==='function'&&(!hasDeferred||window.DLIDLE?.ready),hasDeferred,{timeout:30000});
  await page.waitForTimeout(2000);
+ const badge=await page.locator('#sv82-chip .sv82-b img').evaluate(img=>({w:img.getBoundingClientRect().width,h:img.getBoundingClientRect().height}));
+ assert.ok(badge.w>0&&badge.w<=22&&badge.h>0&&badge.h<=22,JSON.stringify(badge));
  assert.equal(await page.locator('[data-dl-guide-start]').count(),1);
  assert.equal(await page.locator('.tour-tip').count(),0);
  assert.equal(await page.locator('#dlStartHere').count(),0);

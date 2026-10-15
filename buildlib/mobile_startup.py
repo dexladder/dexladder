@@ -17,4 +17,16 @@ def apply(html):
     anchor = '<div class="wsbar" id="wsbar">'
     assert html.count(anchor) == 1
     html = html.replace(anchor, '<a class="btn primary" href="#/learn" data-dl-guide-start onclick="if(window.DLGUIDE){DLGUIDE.show();return false}">Start a guided lesson</a>\n' + anchor)
+    # The floating sovereign chip used to contain a text glyph. Its replacement
+    # image needs explicit bounds or its 512px intrinsic size becomes a late LCP.
+    # Reserve the command toolbar while its legacy initializer runs.
+    assert html.count('</head>\n<body>') == 1
+    html = html.replace('</head>\n<body>', '</head>\n<body class="cbbar">')
+    assert html.count('</header>') == 1
+    html = html.replace('</header>', '</header><div id="dlCommandPending" aria-hidden="true"></div>')
+    boot = 'function boot(){if(mount()){if(updFeed()'
+    assert html.count(boot) == 1
+    html = html.replace(boot, 'function boot(){if(mount()){var slot=document.getElementById("dlCommandPending");if(slot)slot.remove();if(updFeed()')
+    css = '<style id="dl-mobile-startup">#dlCommandPending{height:34px}@media(max-width:640px){#dlCommandPending{height:32px}}body #sv82-chip{filter:none!important;box-shadow:0 6px 16px rgba(0,229,255,.22)}#sv82-chip .sv82-b{width:22px;height:22px}#sv82-chip .sv82-b img{display:block;width:100%;height:100%;object-fit:contain}@media(max-width:760px){#sv82-chip .sv82-b{width:18px;height:18px}}</style>'
+    html = html.replace('</head>', css + '\n</head>', 1)
     return html
