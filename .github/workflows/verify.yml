@@ -62,6 +62,7 @@ jobs:
           node test/gate-contrast.js dist/index.html --colourblind
           node test/gate154.js dist/index.html
           python3 test/gate-mobile-startup.py dist/index.html
+          npm --prefix app ci --ignore-scripts --no-audit --no-fund
           python3 tools/hosted-build.py dist /tmp/dexladder-hosted
           node test/gate-hosted.js /tmp/dexladder-hosted/index.html
 
