@@ -1,8 +1,10 @@
 # Hosted mobile build
 
-The offline download remains `dist/index.html`. The hosted packager splits that verified artifact into content-addressed scripts and two stylesheets, without changing the desk engines. Classic scripts start after an initial rendering opportunity and retain their order and global script boundaries. The loader signals readiness after all initial scripts finish; existing load handlers then run. Optional production layers retain their idle loading order. Body styles remain after dynamically injected head styles in the cascade.
+The production homepage is a small learning page. It offers a risk exercise, calculators, guides, and an explicit simulator entry. It does not download or execute simulator chunks. Existing `/#/…` links redirect to `/app/#/…`, preserving the query and simulator destination.
 
-Run after the source build and browser checks:
+The full simulator lives at `/app/`. Its classic scripts retain their global boundaries and order and start after an initial rendering opportunity. The loader exposes readiness after the initial scripts complete. Optional production layers retain their idle order. Head and body stylesheets keep their cascade relationship to runtime-injected styles.
+
+The single-file offline artifact remains `dist/index.html`. Package the verified source build with:
 
 ```sh
 python3 tools/hosted-build.py dist /tmp/dexladder-hosted
@@ -10,6 +12,8 @@ python3 test/gate-mobile-startup.py dist/index.html
 node test/gate-hosted.js /tmp/dexladder-hosted/index.html
 ```
 
-The hosted worker is minted for the hosted HTML and caches every asset before installation completes. A missing or invalid response rejects installation, so the previous worker can remain usable. Keep all assets, `_headers`, routing rules, legal pages and host-specific APIs together when packaging. `/assets/*` files are immutable because their names contain their content hashes.
+The root worker keeps separate cache keys for the homepage and simulator. It warms and verifies the simulator's content-addressed chunks only after the visitor opens the app. Missing or corrupted assets cannot produce an offline-ready result. Hash witnesses continue to describe the actual navigation response. Unknown paths and public resource pages never fall back to either app shell.
 
-The production source is newer than the public source in this repository. Do not deploy this repository's older application over production. Apply and verify the same bounded change in the canonical production source, then package the existing host-specific deployment artifacts. Update the production-health baseline only after both origins and their hosted assets have been verified.
+Deploy the complete output, including `/app/`, `/assets/`, routing, headers and host-specific APIs. Asset filenames contain content hashes and receive immutable cache headers. The app retains relative icons, manifest and narration files.
+
+Production is newer v167, while public source still builds v166. Do not deploy the public application over production. Apply and verify this bounded change in the canonical production source, preserve host-specific deployment files, and update the health baseline only after verifying both origins.

@@ -73,6 +73,7 @@ def build(source, target):
     if (!source) loaded();"""
             assert body.count(old)==1, 'Optional layer coordinator changed; review transform'
             body=body.replace(old,new)
+        body=body.replace('navigator.serviceWorker.register("sw.js")','navigator.serviceWorker.register("/sw.js")')
         url=asset(body,'js')
         if typ=='application/x-dl-deferred':
             layer=attrs['data-dl-layer']
@@ -99,32 +100,77 @@ def build(source, target):
   function boot(){
     var nodes=Array.prototype.slice.call(document.querySelectorAll('script[type="application/x-dl-boot"]'));
     var remaining=nodes.length;
-    function loaded(){if(--remaining===0){window.DLHOSTED={ready:true};window.dispatchEvent(new Event('load'));}}
+    function loaded(){if(--remaining===0){window.DLHOSTED={ready:true};window.dispatchEvent(new Event('load'));if('serviceWorker' in navigator)navigator.serviceWorker.ready.then(function(reg){var ch=new MessageChannel();ch.port1.onmessage=function(e){window.DLHOSTED.offlineReady=!!e.data.ready;if(e.data.error)window.DLHOSTED.offlineError=e.data.error;ch.port1.close();};reg.active.postMessage({dl:'cache-app'},[ch.port2]);}).catch(function(){});}}
     nodes.forEach(function(node){var script=document.createElement('script');script.async=false;script.src=node.getAttribute('data-dl-src');script.onload=loaded;script.onerror=function(){window.DLHOSTED={ready:false,error:script.src};console.error('[DexLadder] App code failed to load',script.src);};document.body.appendChild(script);});
   }
   requestAnimationFrame(function(){requestAnimationFrame(boot);});
 })();
 </script>"""
     html=html.replace('</body>',loader+'\n</body>',1)
-    (target/'index.html').write_text(html)
-    digest=hashlib.sha256(html.encode()).hexdigest()
-    worker=(target/'sw.js').read_text()
+    appdir=target/'app'; appdir.mkdir(exist_ok=True)
+    (appdir/'index.html').write_text(html)
+    app_digest=hashlib.sha256(html.encode()).hexdigest()
+    # Preserve the app's existing relative icons, manifest and recorded narration.
+    for file in source.iterdir():
+        if file.is_file() and file.suffix in ('.svg','.png','.ico','.webmanifest'):
+            shutil.copy2(file,appdir/file.name)
+    if (source/'voice').is_dir(): shutil.copytree(source/'voice',appdir/'voice',dirs_exist_ok=True)
+    build_name=re.search(r'<meta name="cb:build" content="([^"]+)"',html).group(1)
+    logo=(source/'icon.svg').read_text()
+    logo=logo[logo.index('<svg'):]
+    home=(Path(__file__).parent/'mobile-home.html').read_text().replace('__BUILD__',build_name).replace('__LOGO__',logo)
+    (target/'index.html').write_text(home)
+    digest=hashlib.sha256(home.encode()).hexdigest()
+    worker=(source/'sw.js').read_text()
     worker=re.sub(r"const PAYLOAD_SHA = '[a-f0-9]{64}';",f"const PAYLOAD_SHA = '{digest}';",worker)
     worker=re.sub(r'const SW_REV = (\d+);',lambda m:f'const SW_REV = {int(m[1])+1};',worker)
-    # Installation is atomic: a successful new worker guarantees all desk code
-    # is cached. Existing users keep their old worker until accepting the update.
-    anchor="const SHELL_REQUIRED = ['./index.html'];"
-    assert anchor in worker
-    worker=worker.replace(anchor,anchor+'\nconst HOSTED_ASSETS = '+json.dumps(assets)+';')
-    anchor2='    // missing decorative icon threw away the whole offline install.'
-    # Insert before the optional loop; use the existing checked store choke point.
-    mark='    for (const u of SHELL_OPTIONAL) {'
-    assert mark in worker
-    worker=worker.replace(mark,"    for (const u of HOSTED_ASSETS) {\n      const response = await netFetch(u, STATIC_HARD_MS);\n      if (!(await store(cache, u, response, 'static'))) throw new Error(\'asset not cacheable: \' + u);\n    }\n"+mark)
+    worker=worker.replace("const SHELL_REQUIRED = ['./index.html'];", "const SHELL_REQUIRED = ['./index.html'];\nconst HOSTED_ASSETS = "+json.dumps(assets)+";")
+    assert 'async function navigateFirst(e, req) {' in worker
+    worker=worker.replace('async function navigateFirst(e, req) {', "async function navigateFirst(e, req, shellKey = './index.html') {")
+    worker=worker.replace("store(cache, './index.html', res, 'shell')", "store(cache, shellKey, res, 'shell')")
+    worker=worker.replace("cache.match('./index.html')", "cache.match(shellKey)")
+    guard="""  if (req.mode === 'navigate' && url.origin === self.location.origin &&
+      url.pathname !== '/' && url.pathname !== '/index.html') return;"""
+    worker=worker.replace(guard,'')
+    nav="  if (req.mode === 'navigate') { e.respondWith(navigateFirst(e, req).then(response => { rememberNavigation(e, response); return response; })); return; }"
+    assert worker.count(nav)==1
+    worker=worker.replace(nav,"""  if (req.mode === 'navigate' && url.origin === self.location.origin &&
+      !['/', '/index.html', '/app/', '/app/index.html'].includes(url.pathname)) return;
+  if (req.mode === 'navigate') { const key = url.pathname.startsWith('/app/') ? './app/index.html' : './index.html'; e.respondWith(navigateFirst(e, req, key).then(response => { rememberNavigation(e, response); return response; })); return; }""")
+    worker+="""
+// Warm the simulator only after the visitor opens it. The homepage never runs
+// desk code or downloads its chunks. Both navigation keys remain independent.
+self.addEventListener('message', event => {
+  if (!event.data || event.data.dl !== 'cache-app') return;
+  const port=event.ports && event.ports[0];
+  if (!event.source || !new URL(event.source.url).pathname.startsWith('/app/')) return;
+  event.waitUntil((async()=>{
+    try {
+      const cache=await caches.open(SHELL_CACHE);
+      const app=await netFetch('./app/index.html',STATIC_HARD_MS);
+      if (!(await store(cache,'./app/index.html',app,'shell'))) throw new Error('App shell unavailable');
+      for (const url of HOSTED_ASSETS) {
+        let response=await cache.match(url);
+        if (!response) response=await netFetch(url,STATIC_HARD_MS);
+        const sha=Array.from(new Uint8Array(await crypto.subtle.digest('SHA-256',await response.clone().arrayBuffer()))).map(b=>b.toString(16).padStart(2,'0')).join('');
+        if (!url.endsWith('/'+sha+(url.endsWith('.css')?'.css':'.js'))) throw new Error('App asset integrity mismatch');
+        if (!(await store(cache,url,response,'static'))) throw new Error('App asset unavailable');
+      }
+      if(port)port.postMessage({ready:true});
+    } catch(error) {if(port)port.postMessage({ready:false,error:String(error)});}
+  })());
+});
+"""
     (target/'sw.js').write_text(worker)
+    redirects=target/'_redirects'
+    if redirects.exists():
+        rules=redirects.read_text(); route='/app /app/ 301\n/app/ /app/index.html 200\n'
+        anchor=next((line for line in rules.splitlines() if line.strip().startswith('/* ')),None)
+        rules=rules.replace(anchor,route+anchor,1) if anchor else rules+'\n'+route
+        redirects.write_text(rules)
     headers=target/'_headers'
     headers.write_text(headers.read_text()+'\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n')
-    manifest={'index_sha256':digest,'assets':assets,'offline_bytes':len((source/'index.html').read_bytes()),'hosted_html_bytes':len(html.encode())}
+    manifest={'index_sha256':digest,'assets':assets,'offline_bytes':len((source/'index.html').read_bytes()),'hosted_html_bytes':len(home.encode()),'app_html_bytes':len(html.encode()),'app_sha256':app_digest}
     (target/'hosted-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
     print(json.dumps(manifest | {'assets':len(assets)}))
 if __name__=='__main__': build(Path(sys.argv[1]),Path(sys.argv[2]))
