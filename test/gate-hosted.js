@@ -16,6 +16,24 @@ const {chromium}=require('playwright');
  const browser=await chromium.launch({args:['--no-proxy-server','--host-resolver-rules=MAP dexladder.localhost 127.0.0.1']});
  try{
  const context=await browser.newContext({viewport:{width:393,height:852}});await context.route(/^https?:\/\/(?!dexladder\.localhost)/,r=>r.abort());const page=await context.newPage();const errors=[];page.on('pageerror',e=>errors.push(e.message));
+ // Hold the first extension in the network. Core trading must work before
+ // the catalogue, assistants and optional desks finish; no metrics-only shell.
+ const early=await context.newPage();
+ const firstStage=fs.readFileSync(path.join(root,'app/index.html'),'utf8').match(/type="application\/x-dl-boot" data-dl-src="([^"]+)"/)[1];
+ const pending=[];let held=true;
+ await early.route(origin+firstStage,r=>held?pending.push(r):r.continue());
+ await early.goto(origin+'/app/#/terminal',{waitUntil:'load'});
+ await early.waitForFunction(()=>window.DLHOSTED?.coreReady,null,{timeout:15000});
+ assert.equal(await early.evaluate(()=>window.DLHOSTED.ready),false,'Do not label extensions ready before they load');
+ assert.ok(await early.evaluate(()=>typeof window.CBX?.preview==='function'&&typeof window.SV82?.exportBundle==='function'),'Paper engine and ledger must exist in the usable core');
+ const cashBefore=await early.evaluate(()=>S.bal.USDT);
+ await early.locator('#amt').fill('0.001');
+ await early.locator('#placeBtn').click();
+ assert.ok(await early.evaluate(before=>S.bal.USDT<before&&S.txns.length===1,cashBefore),'A real simulated order must fill before extensions are available');
+ held=false;for(const route of pending)await route.continue();
+ await early.waitForFunction(()=>window.DLHOSTED.ready,null,{timeout:30000});
+ assert.ok(await early.evaluate(()=>S.txns.length===1),'Completing startup must preserve the early paper trade');
+ await early.close();
  const homeRequests=[];page.on('request',request=>homeRequests.push(new URL(request.url()).pathname));
  await page.goto(origin,{waitUntil:'load'});await page.waitForTimeout(1500);
  assert.equal(await page.locator('h1').count(),1);

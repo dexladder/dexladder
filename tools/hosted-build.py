@@ -7,7 +7,7 @@ order, without eval or a CSP change.
 """
 from html.parser import HTMLParser
 from pathlib import Path
-import base64, hashlib, json, re, shutil, sys
+import base64, hashlib, json, re, shutil, sys, subprocess
 class Elements(HTMLParser):
     def __init__(self, text):
         super().__init__(convert_charrefs=False)
@@ -34,7 +34,13 @@ def build(source, target):
     html=(source/'index.html').read_text(); parsed=Elements(html); nodes=parsed.nodes
     replacements=[]; assets=[]; head_styles=[]; body_styles=[]; body_style_anchor=None
     assetdir=target/'assets'; assetdir.mkdir(exist_ok=True)
+    core_end=next(end for tag,attrs,start,end,body in nodes if tag=='script' and body.lstrip().startswith('"use strict";const CG='))
+    staged_count=0
+    minifier=subprocess.Popen(['node',str(Path(__file__).parent/'minify-hosted.cjs')],stdin=subprocess.PIPE,stdout=subprocess.PIPE,text=True)
     def asset(body,ext):
+        minifier.stdin.write(json.dumps({'body':body,'loader':ext})+'\n');minifier.stdin.flush()
+        result=json.loads(minifier.stdout.readline());assert 'code' in result,result
+        body=result['code']
         name=hashlib.sha256(body.encode()).hexdigest()+'.'+ext
         (assetdir/name).write_text(body)
         url='/assets/'+name
@@ -69,6 +75,7 @@ def build(source, target):
     function loaded() {
       node.remove();
       window.DLIDLE.loaded = index;
+      if(window.DLBOOT)window.DLBOOT.preloadOptional(index);
       scheduleNext();
     }
     var source = node.getAttribute('data-dl-src');
@@ -80,11 +87,23 @@ def build(source, target):
     if (!source) loaded();"""
             assert body.count(old)==1, 'Optional layer coordinator changed; review transform'
             body=body.replace(old,new)
+        # Unconditional legacy load callbacks still receive the real load event
+        # when their module arrives after it. Guarded DOM-ready paths stay native.
+        stage=(start>core_end or 'owns: shared English UI string catalogue' in body) and 'navigator.serviceWorker.register(' not in body and 'Launch surface retired.' not in body and 'window.CBX=(DLAPP.legacy.bind(' not in body and 'window.DLBX=(function(){' not in body and 'window.DLRX=(function(){' not in body and not body.lstrip().startswith('window.SV82=function')
+        if stage:
+            body=body.replace('window.addEventListener("load",','window.DLBOOT.onLoad(')
+        if 'function scheduleNext()' in body and 'window.DLIDLE' in body:
+            old_ready="if (document.readyState === 'complete') schedule();\n  else window.addEventListener('load', schedule, { once: true });"
+            assert old_ready in body
+            body=body.replace(old_ready,"if(window.DLBOOT&&!window.DLBOOT.ready)window.addEventListener('dl:boot-ready',schedule,{once:true});\n  else if (document.readyState === 'complete') schedule();\n  else window.addEventListener('load', schedule, { once: true });")
         body=body.replace('navigator.serviceWorker.register("sw.js")','navigator.serviceWorker.register("/sw.js")')
         url=asset(body,'js')
         if typ=='application/x-dl-deferred':
             layer=attrs['data-dl-layer']
             replacement=f'<script type="application/x-dl-deferred" data-dl-layer="{layer}" data-dl-src="{url}" data-dl-integrity="{integrity(url)}"></script>'
+        elif stage:
+            staged_count+=1
+            replacement=f'<script type="application/x-dl-boot" data-dl-src="{url}" data-dl-integrity="{integrity(url)}"></script>'
         else:
             identity=' id="'+attrs['id']+'"' if 'id' in attrs else ''
             replacement=f'<script defer{identity} src="{url}" integrity="{integrity(url)}"></script>'
@@ -99,11 +118,15 @@ def build(source, target):
         html=html.replace('</head>',f'<link rel="stylesheet" href="{url}" integrity="{integrity(url)}">\n</head>',1)
     # Body CSS stays after runtime-injected head CSS in the cascade.
 
+    assert staged_count>60, 'Expected staged legacy modules'
+    startup_url=asset((Path(__file__).parent/'hosted-startup.js').read_text(),'js')
+    startup=f'<script defer src="{startup_url}" integrity="{integrity(startup_url)}"></script>'
+    html=html.replace('</body>',startup+'\n</body>',1)
     # Native deferred scripts preserve global boundaries and order. The normal
     # load event is retained; no synthetic lifecycle event is dispatched.
     readiness = """<script id="dl-hosted-loader">
-window.DLHOSTED={ready:false};
-window.addEventListener('load',function(){
+window.DLHOSTED={ready:false,coreReady:false};
+window.addEventListener('dl:boot-ready',function(){
   window.DLHOSTED.ready=true;
   if('serviceWorker' in navigator)navigator.serviceWorker.ready.then(function(reg){
     var ch=new MessageChannel();ch.port1.onmessage=function(e){window.DLHOSTED.offlineReady=!!e.data.ready;if(e.data.error)window.DLHOSTED.offlineError=e.data.error;ch.port1.close();};
@@ -194,5 +217,6 @@ self.addEventListener('message', event => {
     headers.write_text(headers.read_text()+'\n/assets/*\n  Cache-Control: public, max-age=31536000, immutable\n/app/\n  Cache-Control: no-cache\n/app/index.html\n  Cache-Control: no-cache\n/app/manifest.webmanifest\n  Content-Type: application/manifest+json\n  Cache-Control: no-cache\n/downloads/dexladder-offline\n  Content-Type: application/octet-stream\n  Content-Disposition: attachment; filename="DexLadder-offline.html"\n  X-Robots-Tag: noindex\n  Cache-Control: no-cache\n')
     manifest={'index_sha256':digest,'assets':assets,'offline_bytes':len((source/'index.html').read_bytes()),'offline_sha256':hashlib.sha256((source/'index.html').read_bytes()).hexdigest(),'offline_path':'/downloads/dexladder-offline','hosted_html_bytes':len(home.encode()),'app_html_bytes':len(html.encode()),'app_sha256':app_digest}
     (target/'hosted-manifest.json').write_text(json.dumps(manifest,indent=2)+'\n')
+    minifier.stdin.close();assert minifier.wait()==0, 'Hosted minifier failed'
     print(json.dumps(manifest | {'assets':len(assets)}))
 if __name__=='__main__': build(Path(sys.argv[1]),Path(sys.argv[2]))
