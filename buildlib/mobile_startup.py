@@ -1,4 +1,4 @@
-"""Remove the CSS fallback for the retired Nova launch screen."""
+"""Keep the first-use presentation visible, bounded and user-initiated."""
 import re
 
 def apply(html):
@@ -17,8 +17,7 @@ def apply(html):
     anchor = '<div class="wsbar" id="wsbar">'
     assert html.count(anchor) == 1
     html = html.replace(anchor, '<a class="btn primary" href="#/learn" data-dl-guide-start onclick="if(window.DLGUIDE){DLGUIDE.show();return false}">Start a guided lesson</a>\n' + anchor)
-    # The floating sovereign chip used to contain a text glyph. Its replacement
-    # image needs explicit bounds or its 512px intrinsic size becomes a late LCP.
+    # Keep the floating brand mark bounded and avoid a costly blur filter at boot.
     # Reserve the command toolbar while its legacy initializer runs.
     assert html.count('</head>\n<body>') == 1
     html = html.replace('</head>\n<body>', '</head>\n<body class="cbbar">')

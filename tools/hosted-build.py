@@ -114,6 +114,10 @@ def build(source, target):
     for file in source.iterdir():
         if file.is_file() and file.suffix in ('.svg','.png','.ico','.webmanifest'):
             shutil.copy2(file,appdir/file.name)
+    manifest_file=appdir/'manifest.webmanifest'
+    if manifest_file.exists():
+        app_manifest=json.loads(manifest_file.read_text());app_manifest['start_url']='/app/';app_manifest['scope']='/app/'
+        manifest_file.write_text(json.dumps(app_manifest,ensure_ascii=False,indent=2)+'\n')
     if (source/'voice').is_dir(): shutil.copytree(source/'voice',appdir/'voice',dirs_exist_ok=True)
     build_name=re.search(r'<meta name="cb:build" content="([^"]+)"',html).group(1)
     logo=(source/'icon.svg').read_text()
