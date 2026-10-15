@@ -1,8 +1,9 @@
 """Package the verified offline artifact as cacheable, ordered hosted assets.
 
-Only HTMLParser-recognized script/style elements are rewritten. Source strings,
-JSON-LD and the offline artifact are unchanged. Deferred classic scripts retain
-separate global-script boundaries and execution order (no eval or CSP changes).
+HTMLParser preserves script/string boundaries and JSON-LD. The offline artifact
+is unchanged. The two explicit runtime adapters are root-worker registration and
+the optional-layer loader. Classic scripts retain their global boundaries and
+order, without eval or a CSP change.
 """
 from html.parser import HTMLParser
 from pathlib import Path
@@ -10,12 +11,15 @@ import hashlib, json, re, shutil, sys
 class Elements(HTMLParser):
     def __init__(self, text):
         super().__init__(convert_charrefs=False)
-        self.text=text; self.lines=[0]; self.nodes=[]; self.current=None
+        self.text=text; self.lines=[0]; self.nodes=[]; self.current=None; self.body_start=None
         for line in text.splitlines(keepends=True): self.lines.append(self.lines[-1]+len(line))
         self.feed(text)
     def pos(self):
         line,col=self.getpos(); return self.lines[line-1]+col
     def handle_starttag(self, tag, attrs):
+        if tag == 'body':
+            assert self.body_start is None, 'Expected one document body'
+            self.body_start=self.pos()
         if tag in ('style','script'):
             self.current=(tag,dict(attrs),self.pos(),self.pos()+len(self.get_starttag_text()))
     def handle_endtag(self,tag):
@@ -25,9 +29,9 @@ class Elements(HTMLParser):
             self.current=None
 
 def build(source, target):
-    assert source.resolve()!=target.resolve()
+    assert source.resolve()!=target.resolve() and source.resolve() not in target.resolve().parents and target.resolve() not in source.resolve().parents, 'Source and output must be disjoint directories'
     shutil.copytree(source,target,dirs_exist_ok=True)
-    html=(source/'index.html').read_text(); nodes=Elements(html).nodes
+    html=(source/'index.html').read_text(); parsed=Elements(html); nodes=parsed.nodes
     replacements=[]; assets=[]; head_styles=[]; body_styles=[]; body_style_anchor=None
     assetdir=target/'assets'; assetdir.mkdir(exist_ok=True)
     def asset(body,ext):
@@ -36,7 +40,8 @@ def build(source, target):
         url='/assets/'+name
         assets.append(url)
         return url
-    body_start=html.index('<body')
+    body_start=parsed.body_start
+    assert body_start is not None, 'Document body missing'
     for tag,attrs,start,end,body in nodes:
         if tag=='style':
             if start < body_start: head_styles.append(body)
