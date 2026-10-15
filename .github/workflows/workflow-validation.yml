@@ -1,0 +1,26 @@
+name: workflow validation
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: workflow-validation-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  validate:
+    name: workflow validation
+    runs-on: ubuntu-24.04
+    timeout-minutes: 5
+    steps:
+      - uses: actions/checkout@v7
+      - name: Validate all GitHub Actions workflows
+        run: bash tools/check-workflows.sh
+      - name: Test production health failure detection
+        run: python3 test/test-production-health.py

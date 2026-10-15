@@ -1,0 +1,11 @@
+{
+  "build": "v167",
+  "worker_revision": 26,
+  "artifact_sha256": "501b625e6e19bbd4b883c5364c285cbd979584a0d5986edf502421da218e2831",
+  "origins": [
+    "https://dexladder.com",
+    "https://www.dexladder.com"
+  ],
+  "source": "Verified canonical v167 release published on 2026-10-12; independent of public repository v166 build",
+  "worker_sha256": "279082a54a01e08ce1f4bf4528e3cafe185bd7b96fc761fbc3ac9ccf95824b2e"
+}
