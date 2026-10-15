@@ -1,16 +1,16 @@
 {
   "build": "v167",
-  "worker_revision": 27,
+  "worker_revision": 28,
   "artifact_sha256": "081c83a82c3f2dfe0d03afc7354f8fefdcc985db98903aec11e0cd1a0f0906b2",
-  "worker_sha256": "5c1869b8fa0f09a78f15a315d0069cdffa57b657d30b7ec558b464710fda402b",
+  "worker_sha256": "51b050292570c7ec3a2143ff5530904f949bb09a300be789b5b72ab43adc16de",
   "app_path": "/app/",
-  "app_sha256": "600d91477da8c7690c82d5895770e0555fbf3d5f28df85f5e89c10f6514212eb",
-  "hosted_manifest_sha256": "f2c0e43d566aa681f41234385839c742abd142d6dd25b4e2e01a00813dc8c233",
-  "asset_count": 127,
+  "app_sha256": "eb63f632b3b5488e2550c9c99fac1a86584d5323965cae8f42371944d05ead40",
+  "hosted_manifest_sha256": "1c652f9841ca5e47e3db49edecffaa59cc11ef4804a5ff8a4bdb6ca6115aaeff",
+  "asset_count": 129,
   "homepage_title": "Crypto Paper Trading &amp; Free Risk Calculators | DexLadder",
   "origins": [
     "https://dexladder.com",
     "https://www.dexladder.com"
   ],
-  "source": "Canonical v167 mobile homepage release 2026-10-15; public v166 artifact was not deployed"
+  "source": "Canonical v167 simulator startup release2026-10-15; public v166 dist not deployed"
 }
